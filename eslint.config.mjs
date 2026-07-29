@@ -38,4 +38,39 @@ export default defineConfig(
       '@typescript-eslint/prefer-readonly': 'error',
     },
   },
+  {
+    files: ['src/**/*.ts'],
+    ignores: ['src/parsing/babel/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@babel/*'],
+              message:
+                'Babel imports must remain inside src/parsing/babel; other modules consume UXAudit-owned contracts.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/domain/**/*.ts', 'src/rules/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@babel/*', '**/parsing/babel/**'],
+              message:
+                'Domain and rule modules must consume the AST-free UXAudit analysis model, never Babel or its adapter.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

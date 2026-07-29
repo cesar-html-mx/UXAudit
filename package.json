@@ -31,6 +31,9 @@
     "verify": "node .github/harness/scripts/check-quality.mjs"
   },
   "dependencies": {
+    "@babel/parser": "8.0.4",
+    "@babel/traverse": "8.0.4",
+    "@babel/types": "8.0.4",
     "commander": "15.0.0"
   },
   "devDependencies": {

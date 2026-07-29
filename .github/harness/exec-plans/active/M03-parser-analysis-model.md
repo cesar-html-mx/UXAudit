@@ -72,6 +72,13 @@ repository tests.
 
 Support JS, JSX, TS, and TSX with source type behavior and plugins verified by fixtures.
 
+Status: completed. Exact Babel `8.0.4` runtime packages are locked, Babel imports are forbidden from
+domain/rule modules, and the internal adapter uses per-kind plugins, unambiguous source type,
+relative filenames, locations, and no partial recovery. Ten focused tests cover the four-kind
+matrix, plugin mismatches, normalized malformed syntax, CRLF/astral UTF-16 offsets, deterministic
+AST output, direct dependency boundaries, and inert target text. All 84 repository tests, build,
+dependency tree, and a zero-vulnerability audit passed on Node.js 24.
+
 ### M03-T03 — Extract JSX and components
 
 Traverse without evaluating code. Preserve intrinsic versus custom element distinction and attribute
@@ -130,12 +137,20 @@ and coverage.
 - M03-T01 added only UXAudit-owned contracts; a boundary scan found no Babel reference in
   `src/domain/` or the public parser contract. The source corpus for T02/T03 uses inert `.fixture`
   suffixes so TypeScript, Node, and test discovery cannot execute or compile target samples.
+- Babel 8 locations expose `line`, `column`, and zero-based `index`; syntax failures also carry this
+  position. The adapter copies only those numeric coordinates and replaces native messages,
+  filenames, reason codes, and code frames with one stable UXAudit error.
+- Babel's direct parser API does not load `.babelrc` or execute imports. The controlled
+  no-execution fixture contains a top-level filesystem write and throw, yet parsing it as supplied
+  text leaves the sentinel absent.
 
 ## Decision log
 
 - Record the exact Babel 8 runtime dependencies, AST-free contracts, coordinate convention,
   bounded secure-reader policy, component heuristics, and model invariants in `DECISIONS.md` as
   their tasks are implemented.
+- D-019 fixes the exact Babel 8 dependency/configuration boundary; D-020 fixes the AST-free model
+  and confidence semantics.
 
 ## Risks and recovery
 

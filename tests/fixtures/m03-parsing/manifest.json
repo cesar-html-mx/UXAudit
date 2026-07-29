@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "fixtures": [
+    {
+      "file": "javascript-commonjs.js.fixture",
+      "logicalName": "javascript-commonjs.js",
+      "sourceKind": "javascript",
+      "purpose": "CommonJS script syntax without JSX or side effects."
+    },
+    {
+      "file": "javascript-jsx.jsx.fixture",
+      "logicalName": "javascript-jsx.jsx",
+      "sourceKind": "javascript-jsx",
+      "purpose": "ECMAScript module syntax containing JSX and a dynamic text expression."
+    },
+    {
+      "file": "typescript-modern.ts.fixture",
+      "logicalName": "typescript-modern.ts",
+      "sourceKind": "typescript",
+      "purpose": "Modern TypeScript syntax with interfaces, generics, readonly fields, and satisfies, without JSX."
+    },
+    {
+      "file": "typescript-modern.tsx.fixture",
+      "logicalName": "typescript-modern.tsx",
+      "sourceKind": "typescript-jsx",
+      "purpose": "Modern TypeScript and JSX syntax with typed component properties."
+    },
+    {
+      "file": "malformed.tsx.fixture",
+      "logicalName": "malformed.tsx",
+      "sourceKind": "typescript-jsx",
+      "purpose": "Malformed TSX with an unclosed span for typed parse-error and location tests."
+    },
+    {
+      "file": "component-styles.tsx.fixture",
+      "logicalName": "component-styles.tsx",
+      "sourceKind": "typescript-jsx",
+      "purpose": "Function, arrow, function-expression, and class components plus lowercase and non-JSX negatives."
+    },
+    {
+      "file": "jsx-shapes.tsx.fixture",
+      "logicalName": "jsx-shapes.tsx",
+      "sourceKind": "typescript-jsx",
+      "purpose": "Intrinsic, custom, member, and fragment JSX with named and spread attributes, literal and dynamic values, text, and multiline locations."
+    },
+    {
+      "file": "no-execution.js.fixture",
+      "logicalName": "no-execution.js",
+      "sourceKind": "javascript",
+      "purpose": "Sentinel write and throw retained only as source text to prove that analysis never executes target code."
+    }
+  ]
+}

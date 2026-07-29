@@ -126,6 +126,12 @@ recoverable error with the portable file path, stage, code, and optional source 
 filesystem/Babel causes, code frames, absolute paths, source text, and AST values are not part of
 the contract.
 
+The Babel 8 adapter is isolated under `src/parsing/babel/`. It parses exactly one supplied string,
+does not load project or host Babel configuration, and selects plugins from the classified source
+kind: JavaScript, JavaScript with JSX, TypeScript, or TypeScript with JSX. It uses unambiguous
+script/module detection, retains locations and the relative filename, disables partial error
+recovery, and normalizes thrown parser failures before they leave the adapter boundary.
+
 ### AnalysisModelBuilder
 
 Converts parser output into UXAudit domain models containing only justified information needed by

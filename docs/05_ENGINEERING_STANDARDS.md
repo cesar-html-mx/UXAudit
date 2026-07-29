@@ -14,9 +14,8 @@
 Production:
 
 - `commander`
-- `@babel/parser`
-- `@babel/traverse`
-- `@babel/types` when required by traversal types
+- aligned, exact `@babel/parser`, `@babel/traverse`, and `@babel/types` `8.0.4` packages, isolated
+  inside the M03 parsing boundary
 
 Development:
 

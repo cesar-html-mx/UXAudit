@@ -1,0 +1,5 @@
+export const Broken = () => (
+  <section>
+    <span>Missing closing tag
+  </section>
+);

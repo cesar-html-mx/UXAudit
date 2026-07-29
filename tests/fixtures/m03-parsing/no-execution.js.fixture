@@ -1,0 +1,6 @@
+import { writeFileSync } from 'node:fs';
+
+writeFileSync(new URL('./TARGET_CODE_EXECUTED', import.meta.url), 'executed');
+throw new Error('Target source code must never execute during static analysis.');
+
+export const unreachableValue = 1;

@@ -109,7 +109,9 @@
         {
           "id": "M03-T02",
           "title": "Implement Babel parser adapter",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: 10 focused parser/dependency tests, 84 total tests, format, lint, typecheck, build, Babel 8 tree and npm audit PASS",
+          "completedAt": "2026-07-29T19:45:42.768Z"
         },
         {
           "id": "M03-T03",

@@ -1,0 +1,31 @@
+import React from 'react';
+
+const caption = 'Dynamic caption';
+const imageProps = {};
+const dangerous = () => 'Not evaluated';
+
+export const Shapes = () => (
+  <>
+    <img
+      alt=""
+      loading="lazy"
+      width={320}
+      height={180}
+      hidden={false}
+      style={{ fontSize: 11, lineHeight: 1.2 }}
+      title={caption}
+      data-risk={dangerous()}
+      {...imageProps}
+    />
+    <Button disabled aria-label="Save">
+      Save
+    </Button>
+    <UI.Icon name="check" />
+    <React.Fragment>
+      <a href="/more">
+        Read more
+        {caption}
+      </a>
+    </React.Fragment>
+  </>
+);

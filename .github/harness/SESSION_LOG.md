@@ -136,3 +136,14 @@
 - Verified T01 under Node.js `24.18.0`: formatting, strict lint, typecheck, eight focused contract
   tests, all 74 repository tests across 12 files, harness integrity, and the Babel-boundary scan
   passed with no skipped tests.
+- Completed M03-T02 with exact `@babel/parser`, `@babel/traverse`, and `@babel/types` `8.0.4`
+  production dependencies and an internal Babel adapter. Source kinds select only JavaScript, JSX,
+  TypeScript, or TSX syntax; source type is unambiguous; locations and relative filenames are
+  retained; partial recovery, comments, and tokens are disabled.
+- Added an inert fixture corpus plus tests for the four language kinds, script/module behavior,
+  negative plugin boundaries, stable malformed-file coordinates, CRLF/astral UTF-16 offsets,
+  deterministic reruns, direct dependency declarations, and target-code non-execution. ESLint now
+  prevents Babel imports from entering domain or rule modules.
+- Verified T02 on Node.js `24.18.0`: ten focused tests and all 84 tests across 14 files passed,
+  together with formatting, strict lint, typecheck, build, an exact top-level Babel dependency
+  tree, and an npm audit reporting zero vulnerabilities.
