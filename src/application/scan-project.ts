@@ -1,4 +1,4 @@
-import { resolve } from 'node:path';
+import { validateProjectPath, type ValidateProjectPath } from '../project/validate-project-path.js';
 
 export interface ScanProjectRequest {
   readonly projectPath: string;
@@ -10,7 +10,10 @@ export interface ScanProjectResult {
 
 export type ScanProject = (request: ScanProjectRequest) => Promise<ScanProjectResult>;
 
-export const scanProject: ScanProject = (request) =>
-  Promise.resolve({
-    projectPath: resolve(request.projectPath),
+export const createScanProject =
+  (validatePath: ValidateProjectPath): ScanProject =>
+  async (request) => ({
+    projectPath: await validatePath(request.projectPath),
   });
+
+export const scanProject = createScanProject(validateProjectPath);

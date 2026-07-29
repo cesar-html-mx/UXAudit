@@ -78,6 +78,8 @@ logic must be callable from tests without spawning a shell.
 - Use typed errors and path APIs.
 - Cover valid directory, missing path, regular file, and access/error behavior where portable.
 - Do not traverse project content yet.
+- Status: completed on 2026-07-29. Canonicalization, directory/access checks, typed error mapping,
+  portable injected failures, CLI exit behavior, and built valid/invalid-path smokes passed.
 
 ### M01-T05 — Establish CI, documentation, and evidence baseline
 
@@ -152,6 +154,15 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - The M01-T03 application action only normalizes the requested path and reports that a scan request
   was prepared. It deliberately does not claim the path is valid or that discovery occurred; path
   validation remains M01-T04 and traversal remains M02.
+- A review found that M01-T03 had left two root `dependencies` keys in `package.json` after npm and
+  the implementation patch both added Commander. npm resolved the same effective dependency, but
+  duplicate JSON keys are ambiguous for other consumers; T04 removed the duplicate before closure.
+- `fs.access` is a preflight check, not a durable authorization guarantee. `X_OK` also has different
+  effective semantics on Windows. M02 must handle real operation failures and re-check canonical
+  descendant containment while traversing.
+- A user may deliberately select a root through `..` or a symlink. M01 returns that root's exact
+  canonical `realpath`; it does not confine the chosen root to the current working directory.
+  Path-escape protection applies to descendants of this selected canonical root in M02.
 
 ## Decision log
 
@@ -169,6 +180,10 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - Keep process arguments, streams, and `exitCode` in `src/cli/index.ts`. Make `runCli` depend on
   injected I/O and an application-level `ScanProject` function, with exit codes 0 for success/help,
   2 for command/input errors, and 3 for unexpected application failures.
+- Validate the selected root with `resolve` → `realpath` → `stat` → `access(R_OK | X_OK)`. Map
+  missing/non-directory/inaccessible input to stable typed errors and exit 2; map unknown filesystem
+  failures to a safe validation error and exit 3. Preserve native causes for programmatic diagnosis
+  but never print them at the CLI boundary.
 
 ## Risks and recovery
 

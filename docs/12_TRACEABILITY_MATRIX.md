@@ -5,7 +5,7 @@ This table is updated when implementation and exact test filenames exist.
 | Requirement | Primary component                                      | Milestone   | Planned verification                                                                         |
 | ----------- | ------------------------------------------------------ | ----------- | -------------------------------------------------------------------------------------------- |
 | RF-01       | `src/cli/run-cli.ts` and `src/cli/index.ts`            | M01         | `tests/cli/run-cli.test.ts`: help, version, scan delegation, and exit codes                  |
-| RF-02       | Path validation                                        | M01         | missing/file/unreadable/valid directory tests                                                |
+| RF-02       | `src/project/validate-project-path.ts`                 | M01         | `tests/project/validate-project-path.test.ts` and typed CLI error tests                      |
 | RF-03       | ProjectDiscovery                                       | M02         | controlled recursive tree                                                                    |
 | RF-04       | Discovery configuration                                | M02         | excluded directory and file tests                                                            |
 | RF-05       | FileInventory                                          | M02         | normalization, deduplication, ordering                                                       |

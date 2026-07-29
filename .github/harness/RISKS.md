@@ -16,3 +16,4 @@
 | R-012 | GitHub push or PR automation unavailable                           |    Low | Local commits, explicit blocker record, no false success claims                                                                   |
 | R-013 | Current toolchain packages have incompatible engine or peer ranges | Medium | Pin exact reviewed versions, enforce Node.js 24/npm engines and strict peers, preserve the lockfile, and verify the resolved tree |
 | R-014 | CLI error handling exposes stack traces or unstructured values     | Medium | Typed input errors, injected streams, no stack output, sanitized non-Error rejections, and exit-code tests                        |
+| R-015 | Root permissions or canonical target change after preflight        | Medium | Treat access as advisory, handle real operation errors, and confine every M02 descendant to the selected canonical root           |

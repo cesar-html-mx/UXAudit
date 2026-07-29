@@ -43,8 +43,5 @@
   },
   "allowScripts": {
     "esbuild@0.28.1": true
-  },
-  "dependencies": {
-    "commander": "15.0.0"
   }
 }

@@ -5,11 +5,11 @@
 - Project: UXAudit
 - Harness status: ready
 - Active milestone: **M01 — Repository bootstrap and CLI foundation**
-- Active task: **M01-T04 — Implement input and project-path validation**
+- Active task: **M01-T05 — Establish CI, documentation, and evidence baseline**
 - Completed milestones: None
 - Current branch: milestone/m01-bootstrap-cli
 - Last verification: PASS
-- Last verified at: 2026-07-29T14:41:25.508Z
+- Last verified at: 2026-07-29T14:48:39.701Z
 - Last commit: Not recorded
 
 ## Blockers

@@ -94,3 +94,23 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Requirements/contracts affected: RF-01, RNF-01, RNF-03, and the M01 CLI contract.
 - Evidence: `src/cli/run-cli.ts`, `src/application/scan-project.ts`, CLI/application unit tests, and
   built `--help`, `--version`, `scan .`, and missing-argument checks.
+
+## D-012 — Canonical project-root validation
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: RF-02 requires early, portable validation without traversing the project or executing
+  target code, while native filesystem errors and paths must not leak through the CLI.
+- Decision: Resolve and canonicalize the requested root, require directory status, and preflight
+  read/search access through an injectable Node filesystem adapter. Map `ENOENT`/`ENOTDIR` and
+  access-denial codes to stable typed input errors; map unknown filesystem failures to a typed
+  operational error and exit 3. Return the canonical path exactly as supplied by `realpath`.
+- Alternatives considered: Synchronous filesystem calls; validating inside Commander; testing
+  permissions with `chmod`; comparing native error text; or constraining the selected root to the
+  current working directory.
+- Consequences: Tests are portable across Linux, Windows, and macOS and the CLI does not expose
+  native causes. The access check remains susceptible to TOCTOU, and M02 must enforce canonical
+  containment and handle failures during actual traversal.
+- Requirements/contracts affected: RF-02, RNF-01, RNF-03, and the M01 path/exit contract.
+- Evidence: `src/project/validate-project-path.ts`, application/CLI integration, focused path tests,
+  100% measured unit coverage, and built valid/missing/file/empty-path checks.

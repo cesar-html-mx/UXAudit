@@ -1,15 +1,18 @@
-import { resolve } from 'node:path';
-
 import { describe, expect, it } from 'vitest';
 
-import { scanProject } from '../../src/application/scan-project.js';
+import { createScanProject } from '../../src/application/scan-project.js';
 
 describe('scanProject', () => {
-  it('prepares an absolute project path without traversing it', async () => {
+  it('delegates path validation and returns its canonical path', async () => {
+    const requestedPaths: string[] = [];
+    const scanProject = createScanProject((projectPath) => {
+      requestedPaths.push(projectPath);
+      return Promise.resolve('/canonical/project');
+    });
+
     const result = await scanProject({ projectPath: 'relative-project' });
 
-    expect(result).toEqual({
-      projectPath: resolve('relative-project'),
-    });
+    expect(requestedPaths).toEqual(['relative-project']);
+    expect(result).toEqual({ projectPath: '/canonical/project' });
   });
 });

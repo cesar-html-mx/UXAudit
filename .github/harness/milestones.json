@@ -33,7 +33,9 @@
         {
           "id": "M01-T04",
           "title": "Implement input and project-path validation",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify && npm run test:coverage; 23 tests; built valid/empty/missing/file CLI smokes",
+          "completedAt": "2026-07-29T14:48:39.701Z"
         },
         {
           "id": "M01-T05",

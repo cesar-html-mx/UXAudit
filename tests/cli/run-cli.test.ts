@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 import type { ScanProject, ScanProjectRequest } from '../../src/application/scan-project.js';
 import { EXIT_CODES, runCli } from '../../src/cli/run-cli.js';
 import { PRODUCT_VERSION } from '../../src/index.js';
+import {
+  PROJECT_PATH_ERROR_CODES,
+  ProjectPathError,
+} from '../../src/project/validate-project-path.js';
 
 const createIo = () => {
   const stdout: string[] = [];
@@ -64,7 +68,7 @@ describe('runCli', () => {
 
     expect(exitCode).toBe(EXIT_CODES.success);
     expect(requests).toEqual([{ projectPath: './project' }]);
-    expect(output.stdout.join('')).toBe('Scan request prepared: /canonical/project\n');
+    expect(output.stdout.join('')).toBe('Project path validated: /canonical/project\n');
     expect(output.stderr).toEqual([]);
   });
 
@@ -92,6 +96,40 @@ describe('runCli', () => {
     expect(exitCode).toBe(EXIT_CODES.internal);
     expect(output.stdout).toEqual([]);
     expect(output.stderr.join('')).toBe('Internal error: application failed\n');
+  });
+
+  it('maps typed project-path failures to an input error', async () => {
+    const output = createIo();
+    const scanProject: ScanProject = () =>
+      Promise.reject(
+        new ProjectPathError(
+          PROJECT_PATH_ERROR_CODES.notFound,
+          new Error('native details must stay hidden'),
+        ),
+      );
+
+    const exitCode = await runCli(['scan', 'missing'], { io: output.io, scanProject });
+
+    expect(exitCode).toBe(EXIT_CODES.input);
+    expect(output.stdout).toEqual([]);
+    expect(output.stderr.join('')).toBe('Project path does not exist.\n');
+  });
+
+  it('maps an unknown path-validation failure to an internal error', async () => {
+    const output = createIo();
+    const scanProject: ScanProject = () =>
+      Promise.reject(
+        new ProjectPathError(
+          PROJECT_PATH_ERROR_CODES.validationFailed,
+          new Error('native details must stay hidden'),
+        ),
+      );
+
+    const exitCode = await runCli(['scan', 'project'], { io: output.io, scanProject });
+
+    expect(exitCode).toBe(EXIT_CODES.internal);
+    expect(output.stdout).toEqual([]);
+    expect(output.stderr.join('')).toBe('Project path could not be validated.\n');
   });
 
   it('does not expose unstructured rejection values', async () => {

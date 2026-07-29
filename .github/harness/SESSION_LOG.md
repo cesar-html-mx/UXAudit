@@ -25,3 +25,9 @@
   request contract, npm executable mapping, and a process-only entry point.
 - Verified help/version output, application delegation, missing-argument exit 2, unexpected-error
   exit 3, built `scan .`, eight tests, and 100% measured unit coverage under Node.js `24.18.0`.
+- Completed M01-T04 with canonical project-root validation, typed and sanitized path errors,
+  application integration, and portable filesystem injection. Corrected the duplicate
+  `dependencies` key discovered in the committed T03 package metadata.
+- Verified valid, empty, missing, file, denied, race, and unknown-error paths; exit 2 versus 3
+  mapping; hidden native causes; built CLI smokes; 23 tests; and 100% measured unit coverage under
+  Node.js `24.18.0`.

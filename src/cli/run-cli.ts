@@ -2,6 +2,7 @@ import { Command, CommanderError } from 'commander';
 
 import type { ScanProject } from '../application/scan-project.js';
 import { PRODUCT_NAME, PRODUCT_VERSION } from '../index.js';
+import { PROJECT_PATH_ERROR_CODES, ProjectPathError } from '../project/validate-project-path.js';
 
 export const EXIT_CODES = {
   success: 0,
@@ -38,11 +39,11 @@ export const createProgram = ({ io, scanProject }: CliDependencies): Command => 
 
   program
     .command('scan')
-    .description('Prepare a static-analysis request for a project path.')
+    .description('Validate a project directory for static analysis.')
     .argument('<project-path>', 'React or TypeScript project directory')
     .action(async (projectPath: string) => {
       const result = await scanProject({ projectPath });
-      io.writeOut(`Scan request prepared: ${result.projectPath}\n`);
+      io.writeOut(`Project path validated: ${result.projectPath}\n`);
     });
 
   return program;
@@ -58,6 +59,13 @@ export const runCli = async (
   } catch (error) {
     if (error instanceof CommanderError) {
       return error.exitCode === EXIT_CODES.success ? EXIT_CODES.success : EXIT_CODES.input;
+    }
+
+    if (error instanceof ProjectPathError) {
+      dependencies.io.writeErr(`${error.message}\n`);
+      return error.code === PROJECT_PATH_ERROR_CODES.validationFailed
+        ? EXIT_CODES.internal
+        : EXIT_CODES.input;
     }
 
     dependencies.io.writeErr(`Internal error: ${getErrorMessage(error)}\n`);
