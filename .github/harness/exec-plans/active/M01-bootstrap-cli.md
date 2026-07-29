@@ -52,6 +52,7 @@ logic must be callable from tests without spawning a shell.
 - Define supported Node engine without inventing infrastructure.
 - Add build, dev, typecheck, and clean scripts.
 - Verify a minimal build.
+- Status: completed on 2026-07-29 with Node.js `24.18.0`. Typecheck and build passed.
 
 ### M01-T02 — Configure quality and test toolchain
 
@@ -111,8 +112,8 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 
 ## Progress
 
-- [ ] Milestone started.
-- [ ] Repository inspected and plan reconciled with reality.
+- [x] Milestone started.
+- [x] Repository inspected and plan reconciled with reality.
 - [ ] Tasks completed.
 - [ ] Quality gate passed.
 - [ ] Evidence collected.
@@ -121,18 +122,44 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 
 ## Discoveries
 
-Record implementation facts, library behavior, and assumptions discovered during work.
+- At the owner's explicit request, the first unpublished M01 attempt was discarded and the local
+  milestone branch was restored to the clean harness commit `4959dba`. Generated `node_modules/`,
+  `dist/`, and `coverage/` artifacts from that attempt were removed.
+- Node.js `24.18.0` (Krypton LTS) and npm `11.16.0` are installed locally. The interactive shell
+  default remains Node.js 22, so every M01 command will explicitly select the Node.js 24 toolchain.
+- Registry metadata checked on 2026-07-29 identifies Commander `15.0.0`, ESLint `10.8.0`,
+  TypeScript ESLint `8.65.0`, Vitest/coverage `4.1.10`, Prettier `3.9.6`, Husky `9.1.7`, and tsx
+  `4.23.1` as current stable releases.
+- TypeScript `7.0.2` is current, but TypeScript ESLint `8.65.0` supports TypeScript
+  `>=4.8.4 <6.1.0`. TypeScript `6.0.3` is therefore the newest stable mutually compatible compiler;
+  forcing TypeScript 7 would violate npm's peer contract.
+- The newest Node.js 24 declarations are `@types/node` `24.13.3`.
+- npm `11.16.0` reports dependency install scripts that have not been reviewed. The only T01 script
+  belongs to esbuild `0.28.1`, pulled by tsx, and is explicitly approved at that exact version in
+  `package.json`; no unreviewed install scripts remain.
 
 ## Decision log
 
-Record decisions made within the authority allowed by `AGENTS.md`.
+- Raise the project baseline to Node.js 24 at the owner's explicit direction. Pin the development
+  runtime in `.nvmrc`, declare Node.js `>=24` in package metadata, and use Node.js 24 in CI and
+  evidence.
+- Select current stable dependency releases from registry metadata, constrained by declared engine
+  and peer compatibility. Use TypeScript `6.0.3` until stable TypeScript ESLint supports 7.
+- Keep Commander as the only M01 production dependency and defer Babel packages to M03.
+- Pin direct dependencies exactly and commit the npm lockfile. Dependabot remains responsible for
+  proposing reviewed updates instead of allowing installation-time range drift.
 
 ## Risks and recovery
 
-Maintain task-specific risks, rollback steps, and any remaining debt.
+- Raising the minimum runtime intentionally drops Node.js 20/22 support from the original default.
+  The owner approved this M01 contract change, and documentation, CI, and evidence must remain
+  consistent with Node.js 24.
+- Fast-moving toolchain majors can conflict even when individually current. The lockfile, strict
+  peer-resolution, dependency audit, and recorded registry metadata are the recovery controls.
+- Never store or interpolate GitHub credentials in repository files, command arguments, logs, or
+  evidence. Remote publication must use a safely configured credential helper or GitHub CLI.
 
 ## Outcomes and retrospective
 
 At closure, describe what now works, what was actually verified, remaining limitations, commits, and
 the next milestone.
-

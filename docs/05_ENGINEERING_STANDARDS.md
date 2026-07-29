@@ -2,8 +2,8 @@
 
 ## Runtime and language
 
-- Node.js-compatible local CLI, with `engines` supporting Node 20 or later unless M01 proves a
-  justified alternative.
+- Node.js-compatible local CLI using Node.js 24 LTS or later. M01 adopted this owner-approved
+  baseline because Node.js 20 is end-of-life and Node.js 24 is the current LTS line.
 - TypeScript strict mode.
 - ESM modules.
 - `npm` and a committed lockfile.

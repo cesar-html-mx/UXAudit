@@ -39,3 +39,20 @@ verifiable working capability.
 
 The root `AGENTS.md` is the entry point. Orchestration lives under `.github/harness`, reusable Codex
 skills under `.agents/skills`, and durable product knowledge under `docs/`.
+
+## D-009 — Node.js 24 and current compatible toolchain
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: The owner explicitly requested a clean M01 restart using Node.js 24 and the best current
+  stable industry tooling. Node.js 20 is end-of-life, while Node.js 24 is the current LTS line.
+- Decision: Require Node.js `>=24` and npm `>=11.16.0`, pin local development to Node.js `24.18.0`,
+  compile ESM for ES2024, and pin direct dependencies exactly. Use the latest stable package version
+  only when its declared engine and peer contracts are satisfied.
+- Alternatives considered: Retaining Node.js 20 compatibility; using the shell-default Node.js 22;
+  or forcing TypeScript 7 despite TypeScript ESLint's `<6.1.0` peer range.
+- Consequences: The project intentionally drops Node.js 20/22 support. TypeScript remains on 6.0.3
+  until stable TypeScript ESLint supports 7. npm install scripts are explicitly reviewed and pinned.
+- Requirements/contracts affected: RNF-03, RNF-09, and the M01 runtime contract.
+- Evidence: `.nvmrc`, `.npmrc`, `package.json`, `package-lock.json`, registry metadata, and passing
+  Node.js 24 typecheck/build commands.

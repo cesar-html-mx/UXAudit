@@ -21,11 +21,11 @@ This table is updated when implementation and exact test filenames exist.
 | RF-15 | Reporters | M05 | terminal/JSON/HTML consistency test |
 | RNF-01 | Package architecture | All | architecture conformance review |
 | RNF-02 | Rule/Reporter interfaces | M04/M05 | add test implementation without core modification |
-| RNF-03 | Toolchain and modules | All | lint/typecheck/tests/docs |
+| RNF-03 | `package.json`, strict TypeScript, and focused modules | All | Node.js 24 typecheck, lint, tests, and documentation gate |
 | RNF-04 | Pipeline | M02-M06 | repeated-run deterministic comparisons |
 | RNF-05 | Finding/Rule | M04 | rule and source trace assertions |
 | RNF-06 | CLI and reports | M05/M06 | usability tasks and heuristic review |
 | RNF-07 | Discovery/parser | M02/M03/M06 | counters and benchmark evidence |
 | RNF-08 | Parser/classifier | M02/M03 | extension and syntax matrix |
-| RNF-09 | Runtime/build | M01/M06 | CI Node/platform evidence |
+| RNF-09 | Node.js 24 package engines and ES2024 build | M01/M06 | Node.js 24 CI and local build evidence |
 | RNF-10 | Rule engine/reporters | M04/M05 | reporter consistency without reevaluation |

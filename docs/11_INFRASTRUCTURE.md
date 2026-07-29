@@ -2,8 +2,9 @@
 
 ## Runtime
 
-UXAudit runs locally in Node.js. It reads project files and writes optional local reports. No backend,
-container, database, cloud service, or network connection is required by the product.
+UXAudit runs locally on Node.js 24 LTS or later. It reads project files and writes optional local
+reports. No backend, container, database, cloud service, or network connection is required by the
+product.
 
 ## Development
 

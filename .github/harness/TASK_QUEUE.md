@@ -2,7 +2,7 @@
 
 ## M01 — Repository bootstrap and CLI foundation
 
-- [ ] M01-T01 Initialize Node and TypeScript project.
+- [x] M01-T01 Initialize Node and TypeScript project.
 - [ ] M01-T02 Configure ESLint, Prettier, Vitest, coverage, and Husky.
 - [ ] M01-T03 Create the `ux-audit scan <project>` CLI contract and help output.
 - [ ] M01-T04 Implement project-path validation and typed errors.

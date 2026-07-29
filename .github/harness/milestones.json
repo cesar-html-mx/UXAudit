@@ -12,7 +12,9 @@
         {
           "id": "M01-T01",
           "title": "Initialize Node and TypeScript project",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run typecheck && npm run build",
+          "completedAt": "2026-07-29T14:27:17.101Z"
         },
         {
           "id": "M01-T02",

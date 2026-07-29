@@ -14,3 +14,4 @@
 | R-010 | Dependency or supply-chain vulnerability | High | Lockfile, Dependabot, audit evidence, minimal dependencies |
 | R-011 | UX rule claims exceed static-analysis capability | High | Stable/experimental/deferred status and evidence-based promotion |
 | R-012 | GitHub push or PR automation unavailable | Low | Local commits, explicit blocker record, no false success claims |
+| R-013 | Current toolchain packages have incompatible engine or peer ranges | Medium | Pin exact reviewed versions, enforce Node.js 24/npm engines, preserve the lockfile, and reject peer overrides |
