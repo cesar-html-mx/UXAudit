@@ -254,8 +254,28 @@ The executed counter records every attempted enabled rule and equals succeeded p
 
 ### RuleEvaluator
 
-Runs enabled rules in deterministic order, isolates rule failures when safe, and returns findings plus
-execution errors.
+M04-T02 separates registry, loading, and evaluation:
+
+- `createRuleRegistry` validates and defensively copies an explicit rule list, rejects malformed
+  metadata, unsafe/non-HTTP(S) references, deferred executable rules, or duplicate IDs through
+  stable fatal errors; it freezes the registered contracts and orders them ordinally by rule ID.
+- `loadRules` validates optional category and rule-ID allowlists. When both exist they intersect;
+  an empty allowlist selects no rules, an unknown rule ID is an error, and absent filters select the
+  stable/required portion of the explicit registry. Experimental rules require exact rule-ID
+  opt-in. Invalid containers, unknown keys, and throwing accessors fail closed.
+- `evaluateRules` calls every loaded rule exactly once over the same trusted `AnalysisModel`.
+  Thrown evaluation failures and malformed results become stable recoverable per-rule errors. A
+  malformed rule's entire candidate batch is discarded before safe sibling results are accepted.
+
+Every non-null finding location must exactly match a file, component, JSX node, attribute, or
+retained object-property location in the model. This prevents a rule result from introducing an
+absolute or otherwise untraceable path. Accepted findings sort by rule ID, portable file path,
+start/end offset, and message; execution errors sort by rule ID. The result records
+available, enabled, executed, succeeded, failed, and finding counts.
+
+Isolation assumes the M03 model remains valid and rules respect the readonly contract. The engine
+deep-freezes that model once before evaluation so an unsafe runtime cast cannot mutate it and
+contaminate a later rule. It does not clone or reparse the project per rule.
 
 ### Reporter
 

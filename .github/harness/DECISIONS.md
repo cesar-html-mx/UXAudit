@@ -420,3 +420,37 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   the rule/finding schemas.
 - Evidence: `tests/domain/rules/rule-contracts.test.ts`, focused typecheck/lint, and the eventual
   `evidence/m04-rules/` package.
+
+## D-025 — Validated deterministic rule execution
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: RF-09 through RF-11 require configurable rule selection and independent zero/one/multiple
+  results, while RNF-04/RNF-05 require deterministic traceable output. A thrown rule or malformed
+  extension result must not discard unrelated valid findings or introduce an untrusted path.
+- Decision: Build an explicit registry that validates, copies, freezes, deduplicates, and ordinally
+  sorts rules by ID. Permit only nullable credential-free HTTP(S) references and reject deferred
+  executable rules. Treat category and ID allowlists as fail-closed validated intersections;
+  absent filters enable required/stable rules, empty filters enable none, unknown IDs fail clearly,
+  and experimental rules require exact ID opt-in. Deep-freeze the trusted model once, then execute
+  each loaded rule synchronously exactly once. Validate its complete returned batch before accepting
+  any finding, require every non-null location to equal a canonical location already present in the
+  M03 model, and treat the same rule/message/location as duplicate regardless of confidence.
+  Collapse thrown versus invalid-result failures into separate stable recoverable codes. Sort
+  normalized findings by rule ID, portable path, source range, and message, and retain explicit
+  available/enabled/executed/succeeded/failed/finding counters.
+- Alternatives considered: Implicit filesystem discovery; registry insertion order; locale-aware
+  sorting; silently ignoring unknown filters; accepting partial results before a malformed
+  candidate; copying native exception messages; synthesizing arbitrary finding ranges; reparsing or
+  cloning the full model per rule; permitting executable deferred rules or implicit experimental
+  rules; accepting arbitrary URL schemes; or terminating on the first failure.
+- Consequences: Equivalent registry/filter/model input produces stable normalized output, extension
+  failures are isolated transactionally, and every source finding is traceable to trusted model
+  evidence. One deep-freeze enforces the readonly model contract at runtime without duplicating the
+  model per rule. Reference strings remain owned metadata, and future reporters still must escape
+  them for their output context.
+- Requirements/contracts affected: RF-09 through RF-12, RNF-02 through RNF-05, RNF-07, RNF-10,
+  R-007, R-008, and R-014.
+- Evidence: `tests/rules/rule-registry.test.ts`, `tests/rules/load-rules.test.ts`,
+  `tests/rules/evaluate-rules.test.ts`, repeated serialization, full coverage gate, and the eventual
+  `evidence/m04-rules/` package.

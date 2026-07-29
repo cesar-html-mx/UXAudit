@@ -61,6 +61,12 @@ trusted analysis model exactly once per enabled rule. Rule and finding order mus
 duplicate identities and malformed outputs must fail closed at their boundary, and one thrown rule
 must produce a stable execution error without discarding safe sibling findings.
 
+Status: completed. The registry validates, copies, freezes, deduplicates, and ordinally orders
+rules; filters fail closed and intersect; experimental rules require exact opt-in; the evaluator
+deep-freezes the model, validates complete per-rule batches, requires canonical model locations,
+isolates failures, sorts normalized output, and reports all counters. Fifty-three focused tests and
+the 261-test coverage gate pass.
+
 ### M04-T03 — Accessibility rules
 
 Implement A11Y-001 through A11Y-003 with comprehensive fixtures.
@@ -129,6 +135,11 @@ Record implementation facts, library behavior, and assumptions discovered during
 - The normalized finding must be self-contained because M05 reporters consume one result and cannot
   rely on a live rule registry. Copying metadata and the complete location also prevents later rule
   mutation from altering an already accepted result.
+- Model locations form an inexpensive provenance allowlist for rule outputs. This prevents an
+  invalid extension result from adding an absolute path or invented range without cloning or
+  reparsing the model per rule.
+- A single recursive freeze is sufficient to enforce M03's readonly graph during rule execution;
+  it avoids the much larger cost of cloning or serializing the complete model once per rule.
 
 ## Decision log
 
@@ -138,6 +149,8 @@ Record decisions made within the authority allowed by `AGENTS.md`.
   `.github/harness/DECISIONS.md` as each corresponding task is completed.
 - D-024 fixes the model-only synchronous rule boundary, self-contained finding shape, preserved M03
   coordinates, independent confidence/severity/status, stable execution error, and counters.
+- D-025 fixes validated explicit registration, filter intersection, exact-once transactional
+  evaluation, source-location provenance, stable isolation, canonical ordering, and counters.
 
 ## Risks and recovery
 

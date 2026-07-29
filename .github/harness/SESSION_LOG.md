@@ -239,3 +239,13 @@
   counter contracts. Finding normalization defensively copies limitations, the M03 half-open
   location, and the structured reference without report-specific coordinate conversion.
 - Focused T01 verification passed seven contract tests, strict TypeScript, and ESLint.
+- Implemented M04-T02's explicit validated registry, category/ID intersection loader, exact-once
+  evaluator, transactional result validation, stable per-rule isolation, canonical model-location
+  provenance, deterministic finding/error order, and complete counters.
+- Independent T02 review found fail-open filter containers, runtime model-mutation exposure, unsafe
+  reference schemes, confidence-sensitive duplicate identity, and implicit experimental/deferred
+  execution. The implementation now fails filters closed, deep-freezes the model once, admits only
+  safe HTTP(S) references, rejects contradictory duplicates/deferred rules, and requires exact ID
+  opt-in for experiments.
+- T02's 53 focused contract/registry/loader/evaluator tests passed. The full 261-test coverage run
+  passed with 97.34% statements, 91.72% branches, 99.62% functions, and 97.35% lines.

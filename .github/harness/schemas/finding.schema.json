@@ -61,7 +61,9 @@
               "minLength": 1
             },
             "url": {
-              "type": ["string", "null"]
+              "type": ["string", "null"],
+              "pattern": "^https?://",
+              "description": "Nullable absolute HTTP(S) URL without embedded credentials."
             }
           },
           "additionalProperties": false

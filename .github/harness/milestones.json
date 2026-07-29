@@ -154,7 +154,9 @@
         {
           "id": "M04-T02",
           "title": "Implement rule registry, loader, and evaluator",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0: 53 focused engine tests and 261 full tests pass; coverage 97.34% statements, 91.72% branches, 99.62% functions, 97.35% lines; strict typecheck, lint, format, schema, isolation review, and diff checks pass",
+          "completedAt": "2026-07-29T22:20:17.138Z"
         },
         {
           "id": "M04-T03",
