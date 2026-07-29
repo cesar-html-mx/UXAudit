@@ -26,7 +26,8 @@
   separate inventory locations, conventionally named configuration sources are conservatively
   omitted, and source parsing/component semantics are not part of M02. Remote Windows/macOS CI
   execution remains unverified until the branch is published.
-- Push/PR status: local milestone complete. No successful automated publication is claimed; the
-  repository has not exposed a non-interactive Git credential to this process. The final branch push
-  will be retried after the closure commit without embedding credentials.
+- Push/PR status: local milestone complete. Automated HTTPS push attempts after closure failed
+  because this process has no non-interactive GitHub username/credential. No remote branch, pull
+  request, or hosted M02 CI result is claimed; publication remains an authenticated interactive
+  owner action.
 - Next active milestone: M03 — Source parser and analysis model

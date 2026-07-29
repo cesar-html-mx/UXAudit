@@ -116,3 +116,6 @@
 - Closed M02 against verified task commit `5ffbd14` and activated M03-T01. The finalized milestone
   report, source digest, expected/actual scenario, measurements, raw records, and SHA-256 manifest
   remain under `evidence/m02-discovery/`.
+- Created closure commit `868442a`. Automated HTTPS publication then failed because Git had no
+  non-interactive GitHub username/credential, so no remote M02 branch, pull request, or hosted
+  Windows/macOS result is claimed.
