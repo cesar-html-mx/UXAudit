@@ -75,6 +75,14 @@ Objective: implement the three required intrinsic-element checks using only exac
 by the analysis model. Cover zero, one, and multiple findings plus supported, dynamic, wrapper,
 association, and abstraction limitations without inferring custom components.
 
+Status: implementation and verification complete; independent semantic re-review found no
+remaining blocker. A11Y-001 through A11Y-003 are stable intrinsic-only rules with right-to-left spread
+handling, conservative unknown suppression, exact locations, complete metadata, and committed TSX
+integration coverage. Review-driven fixtures cover uncertain external labels, exact ID equality,
+recognized-component isolation, explicit/null nested-label targets, known-null ARIA values, and the
+documented multi-control limit. Twenty-five focused and 286 full tests pass; the full coverage gate
+records 96.85% statements, 92.01% branches, 99.65% functions, and 96.85% lines.
+
 ### M04-T04 — SEO, performance, and UX rules
 
 Implement required stable rules from the catalog. Keep advisory wording conservative.
@@ -140,6 +148,9 @@ Record implementation facts, library behavior, and assumptions discovered during
   reparsing the model per rule.
 - A single recursive freeze is sufficient to enforce M03's readonly graph during rule execution;
   it avoids the much larger cost of cloning or serializing the complete model once per rule.
+- JSX spreads cannot be treated as ordinary missing attributes: resolving from right to left
+  distinguishes an explicit value that overrides an earlier spread from an earlier value that a
+  later spread may replace.
 
 ## Decision log
 
@@ -151,6 +162,8 @@ Record decisions made within the authority allowed by `AGENTS.md`.
   coordinates, independent confidence/severity/status, stable execution error, and counters.
 - D-025 fixes validated explicit registration, filter intersection, exact-once transactional
   evaluation, source-location provenance, stable isolation, canonical ordering, and counters.
+- D-026 fixes the stable intrinsic accessibility scopes, ordered-spread semantics, supported label
+  associations/input types, conservative unknown suppression, and planning-status distinction.
 
 ## Risks and recovery
 

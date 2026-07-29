@@ -249,3 +249,13 @@
   opt-in for experiments.
 - T02's 53 focused contract/registry/loader/evaluator tests passed. The full 261-test coverage run
   passed with 97.34% statements, 91.72% branches, 99.62% functions, and 97.35% lines.
+- Implemented M04-T03's three stable intrinsic accessibility rules with ordered JSX-spread
+  semantics, conservative unknown-case handling, exact source ranges, complete metadata, committed
+  TSX integration input, and documented custom/dynamic/accessibility-algorithm limitations.
+- Twenty-five focused accessibility tests cover positive, negative, multiple, boundary,
+  association, unsupported, metadata, and engine-integration behavior. Review-driven cases now
+  prove conservative dynamic/spread association handling, exact ID equality, component isolation,
+  explicit and null nested-label targets, known-null ARIA values, and the documented multi-control
+  limit.
+- The post-review full run passed all 286 tests with 96.85% statements, 92.01% branches, 99.65%
+  functions, and 96.85% lines.

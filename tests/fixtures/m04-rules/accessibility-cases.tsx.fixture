@@ -1,0 +1,15 @@
+export const AccessibilityCases = ({ dynamicName, imageProps }) => (
+  <>
+    <img src="missing-alt.png" />
+    <img alt="Quarterly revenue chart" src="chart.png" />
+    <img {...imageProps} />
+    <input />
+    <label>
+      Email
+      <input type="email" />
+    </label>
+    <button />
+    <button>Save changes</button>
+    <button>{dynamicName}</button>
+  </>
+);

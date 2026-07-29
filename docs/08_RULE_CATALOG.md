@@ -11,29 +11,70 @@ Rule status:
 ### A11Y-001 — Image alternative text
 
 - ID: `accessibility/img-alt`
-- Status: required
+- Status: stable (required for M04)
 - Severity: high
-- Detect: intrinsic `<img>` without an `alt` attribute.
-- Valid: descriptive `alt` or `alt=""` for a decorative image.
-- Limitation: custom image components are not inferred unless the model later supports aliases.
+- Finding confidence: high when the effective `alt` attribute is provably absent.
+- Scope and trigger: intrinsic `<img>` nodes only. Resolve JSX attributes from right to left; emit
+  one finding at the element range when no named `alt` and no later unresolved spread exists.
+- Valid examples: `<img alt="Quarterly revenue chart" />` and `<img alt="" />` for a decorative
+  image.
+- Unsupported/boundary behavior: an effective spread is unknown and produces no finding. Any
+  explicit named `alt`, including a dynamic value, satisfies this initial presence-only check; the
+  rule does not claim that its value is descriptive.
+- Recommendation: add descriptive `alt`, or `alt=""` for an intentionally decorative image.
+- Limitations: custom image components/aliases are not inferred, runtime spread values are not
+  evaluated, and alternative-text quality is not scored.
 - Reference: WCAG 1.1.1 concept.
+- Verification: `tests/rules/accessibility/img-alt.test.ts` and the committed accessibility
+  integration fixture.
 
 ### A11Y-002 — Form input label
 
 - ID: `accessibility/input-label`
-- Status: required
+- Status: stable (required for M04)
 - Severity: high
-- Detect: intrinsic form input without an associated `<label>`, `aria-label`, or `aria-labelledby`.
-- Initial scope: `input`, `select`, and `textarea` may be phased separately if documented.
-- Limitation: dynamic IDs and wrapper abstractions may require review.
+- Finding confidence: high inside the documented static association scope.
+- Scope and trigger: intrinsic `input`, `select`, and `textarea` nodes. Emit when a label-required
+  control has no intrinsic ancestor `<label>`, no exact same-component `htmlFor`/`for` plus `id`
+  association, and no exact non-empty `aria-label` or `aria-labelledby`.
+- Valid examples: `<label>Email <input /></label>`, `<label htmlFor="email">…</label>` plus
+  `<input id="email" />`, and a control with a non-empty ARIA naming attribute.
+- Exclusions: exact case-insensitive input types `hidden`, `button`, `submit`, `reset`, and `image`.
+- Unsupported/boundary behavior: dynamic type/ID/ARIA values and effective JSX spreads produce no
+  finding because association or label applicability cannot be proved. Empty IDs/ARIA strings and
+  exact `null` ARIA values remain label-required. The default/null input type remains
+  label-required. External labels require exact, untrimmed literal `htmlFor`/`for` and `id` equality
+  inside one recognized component; labels are not paired across component boundaries or unowned JSX
+  scopes.
+- Recommendation: use intrinsic label nesting, exact `htmlFor`/`id`, or a non-empty ARIA name.
+- Limitations: custom label/control abstractions, dynamic associations, referenced ARIA target
+  existence, and the complete accessible-name algorithm are not resolved. The rule deliberately
+  excludes `hidden`, `button`, `submit`, `reset`, and `image` input types and does not validate the
+  one-labelable-descendant constraint of a nested label.
+- Reference: WCAG 1.3.1 concept.
+- Verification: `tests/rules/accessibility/input-label.test.ts` and the committed accessibility
+  integration fixture.
 
 ### A11Y-003 — Button accessible name
 
 - ID: `accessibility/button-name`
-- Status: required
+- Status: stable (required for M04)
 - Severity: high
-- Detect: intrinsic `<button>` lacking non-empty text, `aria-label`, or `aria-labelledby`.
-- Limitation: icon components with hidden accessible text require model support.
+- Finding confidence: high when text and supported ARIA naming evidence are all provably empty or
+  absent.
+- Scope and trigger: intrinsic `<button>` nodes only. Emit at the button range when retained text is
+  exactly empty and both `aria-label` and `aria-labelledby` are absent or exact empty strings.
+- Valid examples: visible static text, known static text combined with dynamic content, or an exact
+  non-empty supported ARIA naming attribute.
+- Unsupported/boundary behavior: dynamic-only text, a custom icon child, dynamic ARIA values, or
+  an effective JSX spread produces no finding. Exact `null` ARIA values are treated as absent.
+  Custom `<Button>` components are not inferred.
+- Recommendation: provide visible descriptive text or a non-empty supported ARIA name.
+- Limitations: the complete accessible-name computation, referenced target existence, CSS-hidden
+  content, and custom icon semantics are not resolved.
+- Reference: WCAG 4.1.2 concept.
+- Verification: `tests/rules/accessibility/button-name.test.ts` and the committed accessibility
+  integration fixture.
 
 ## Performance
 

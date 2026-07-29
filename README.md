@@ -3,12 +3,13 @@
 UXAudit is a local, static-analysis CLI for React and TypeScript projects. The current Node.js 24
 implementation safely discovers and classifies `.js`, `.jsx`, `.ts`, and `.tsx` source candidates,
 parses them through an internal Babel boundary, and builds a deterministic parser-independent
-analysis model.
+analysis model. The active M04 domain layer now adds a deterministic isolated rule engine and three
+stable accessibility rules.
 
 The `scan` command validates and canonicalizes the selected root, discovers files, analyzes safe
-source candidates without executing target code, and prints discovery and parsing counts. Rules and
-terminal/JSON/HTML finding reports are later milestones, so a successful M03 scan must not be
-interpreted as a completed audit.
+source candidates without executing target code, and prints discovery and parsing counts. The CLI
+does not invoke the new rule layer yet, and terminal/JSON/HTML finding reports remain later
+milestones, so a successful scan must not be interpreted as a completed audit.
 
 ## Requirements
 
@@ -65,7 +66,7 @@ text, absolute paths, and AST values do not leave their boundaries. Control and 
 characters, including injected line breaks, are rendered as visible Unicode escapes before reaching
 the terminal.
 
-Current M03 exit codes:
+Current CLI exit codes:
 
 | Code | Meaning                                                                               |
 | ---: | ------------------------------------------------------------------------------------- |
@@ -111,7 +112,7 @@ pinned to immutable release SHAs and Dependabot tracks updates. Dependency Revie
 for public repositories; private repositories can enable them with `DEPENDENCY_REVIEW_ENABLED=true`
 and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
 
-## M03 boundaries
+## Current boundaries
 
 - Local CLI only; no service, database, telemetry, or product network dependency.
 - Static analysis only; analyzed code is never executed or imported.
@@ -119,11 +120,12 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
   internal opt-in follows only canonical in-root targets and prevents cycles.
 - Discovery and inventory remain candidate-producing stages, not permanent file authorization.
   Source opening revalidates root, path, regular-file identity, and bounded descriptor content.
-- Babel AST and source text remain internal to the parsing package. Rules will consume only the
+- Babel AST and source text remain internal to the parsing package. Rules consume only the
   normalized `AnalysisModel`.
 - Component recognition is intentionally syntactic and conservative; it does not resolve runtime
   aliases, higher-order abstractions, imports, or rendered behavior.
-- No rule decisions, findings, finding-failure policy, or terminal/JSON/HTML audit reports yet.
+- The domain engine can produce normalized findings and isolated rule errors, but the CLI does not
+  expose them yet. Finding-failure policy and terminal/JSON/HTML audit reports remain M05/M06 work.
 
 ## Repository map
 
@@ -133,7 +135,9 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
 - `src/parsing/`: bounded source reader, Babel-only AST adapter, extraction, and error-isolated
   candidate batch.
 - `src/domain/models/`: parser-independent normalized analysis contracts and builder.
-- `tests/`: focused domain, parser, application, CLI, and project tests.
+- `src/domain/rules/`, `findings/`, and `errors/`: report-independent rule result contracts.
+- `src/rules/`: validated engine plus category-organized static rules.
+- `tests/`: focused domain, parser, rule, application, CLI, and project tests.
 - `.github/harness/`: milestone state, plans, decisions, risks, and lifecycle scripts.
 - `.github/workflows/`: quality, harness, CodeQL, and dependency-review automation.
 - `docs/`: product and engineering system of record.
@@ -146,4 +150,5 @@ node .github/harness/scripts/validate-harness.mjs
 node .github/harness/scripts/show-status.mjs
 ```
 
-This implementation slice prepares the parser-independent input consumed by M04 rules.
+This implementation slice evaluates M04 rules over parser-independent input without changing the
+current CLI contract.

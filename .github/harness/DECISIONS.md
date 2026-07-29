@@ -454,3 +454,36 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Evidence: `tests/rules/rule-registry.test.ts`, `tests/rules/load-rules.test.ts`,
   `tests/rules/evaluate-rules.test.ts`, repeated serialization, full coverage gate, and the eventual
   `evidence/m04-rules/` package.
+
+## D-026 — Conservative intrinsic accessibility scope
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: A11Y-001 through A11Y-003 must identify useful review situations without evaluating React
+  or turning dynamic JSX, spreads, and component abstractions into false certainty. The catalog's
+  `required` label expresses M04 delivery selection, while runtime metadata needs to express the
+  validated maturity reached after implementation.
+- Decision: Publish all three implemented accessibility rules with `stable` runtime status and keep
+  “required for M04” as catalog planning provenance. Analyze exact intrinsic tag names only. Resolve
+  attributes from right to left so a later spread makes an earlier value unknown. A11Y-001 is an
+  explicit-`alt` presence check and does not score value quality. A11Y-002 covers intrinsic
+  `input`/`select`/`textarea`, excludes exact hidden/button/submit/reset/image input types, accepts
+  nested labels, recognized-same-component exact untrimmed `htmlFor`/`for` plus `id`, and exact
+  non-empty ARIA names. Known `null` ARIA values are absence, while dynamic values remain unknown.
+  A11Y-003 accepts retained non-empty static text or exact non-empty supported ARIA names. Suppress
+  findings whenever dynamic-only evidence or a spread could satisfy the supported condition; keep
+  excluded input types and unsupported nested-label cardinality in metadata, fixtures, and catalog
+  documentation.
+- Alternatives considered: Inferring custom components by name; ignoring JSX override order;
+  flagging every dynamic or spread case; validating alternative-text quality; pairing labels across
+  components; treating all input types as text controls; or claiming the complete accessible-name
+  algorithm.
+- Consequences: Findings are high-confidence inside a narrow reproducible static scope, while
+  wrapper/alias/dynamic cases can remain false negatives and require review. The complete
+  accessible-name algorithm, CSS visibility, runtime spread values, and ARIA target resolution
+  remain explicit limitations rather than implicit claims.
+- Requirements/contracts affected: RF-09 through RF-14, RNF-02 through RNF-07, R-001, R-002,
+  R-007, and the A11Y-001/A11Y-002/A11Y-003 catalog contracts.
+- Evidence: focused rule tests, `tests/fixtures/m04-rules/accessibility-cases.tsx.fixture`,
+  `tests/rules/accessibility/accessibility-rules.integration.test.ts`, and the eventual
+  `evidence/m04-rules/` package.

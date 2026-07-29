@@ -161,7 +161,9 @@
         {
           "id": "M04-T03",
           "title": "Implement accessibility rules",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0: 25 focused accessibility tests, 286-test full verify, and coverage 96.85% statements / 92.01% branches / 99.65% functions / 96.85% lines PASS; independent semantic re-review found no blockers.",
+          "completedAt": "2026-07-29T22:36:46.478Z"
         },
         {
           "id": "M04-T04",
