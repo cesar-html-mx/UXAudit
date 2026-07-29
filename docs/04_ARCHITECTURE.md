@@ -132,6 +132,27 @@ kind: JavaScript, JavaScript with JSX, TypeScript, or TypeScript with JSX. It us
 script/module detection, retains locations and the relative filename, disables partial error
 recovery, and normalizes thrown parser failures before they leave the adapter boundary.
 
+M03-T03 adds the internal Babel-to-domain extraction adapter. It visits the AST once, up to 100,000
+nodes, and then orders extracted records by source offset with ordinal tie-breakers. The adapter
+recognizes syntactically justified PascalCase function declarations, arrow/function expressions,
+supported `Component`/`PureComponent` class forms, and anonymous default exports. A class owns JSX
+only through its instance `render` method; nested functions and class members form ownership
+boundaries. JSX inside an attribute is retained as a separate relationship root rather than as a
+rendered child of the receiving element.
+
+Intrinsic, custom, member/namespaced, shorthand-fragment, and `React.Fragment` syntax is projected
+to UXAudit names and node kinds. Named and spread attributes preserve source order. Finite primitive
+and static-template values are exact; bounded object properties are retained as ordered data;
+computed, spread, non-finite, deep, or otherwise unresolved values remain partial or dynamic.
+Descendant text is whitespace-normalized with exact, partial, or dynamic confidence and retains at
+most 256 UTF-16 code units per JSX node. Custom descendants and dynamic expressions cannot be
+promoted to exact text.
+
+Expected missing-location or resource-limit cases become stable recoverable extraction errors.
+Broken internal traversal or relationship invariants are fatal and expose only the stable
+`BabelAnalysisInvariantError`, not parser-native details. Babel nodes, source strings, native causes,
+and absolute paths remain inside the adapter boundary.
+
 ### AnalysisModelBuilder
 
 Converts parser output into UXAudit domain models containing only justified information needed by
@@ -146,6 +167,11 @@ initial catalog can inspect `style.fontSize` without retaining an expression tre
 Every location contains a portable project-relative file path and a half-open range. Lines are
 one-based; columns and offsets are zero-based UTF-16 code-unit indexes. The model contains neither
 the absolute project root nor complete source content.
+
+M03-T03 implements the per-file extraction half of this boundary: file, component, JSX, attribute,
+object-property, relationship, confidence, and location records are AST-free and deterministic.
+Cross-file validation and aggregation into the normalized project `AnalysisModel` remain the
+responsibility of M03-T04.
 
 ### Rule
 

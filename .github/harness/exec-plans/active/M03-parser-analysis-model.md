@@ -84,6 +84,19 @@ dependency tree, and a zero-vulnerability audit passed on Node.js 24.
 Traverse without evaluating code. Preserve intrinsic versus custom element distinction and attribute
 value confidence.
 
+Status: completed. The internal Babel boundary now performs one bounded AST traversal and emits only
+UXAudit-owned records. It recognizes PascalCase function declarations, arrow/function expressions,
+supported React class components, and anonymous default exports; extracts intrinsic, custom,
+member, namespaced, shorthand-fragment, and `React.Fragment` JSX; and retains deterministic
+component, parent, child, and root relationships. Attribute and nested-function boundaries prevent
+non-rendered or independently executed JSX from being attached to a rendered child tree. Named and
+spread attributes, exact primitive/structured-object values, conservative dynamic/partial values,
+static-text confidence, and half-open UTF-16 locations are retained without evaluating expressions.
+Extraction is limited to 100,000 visited Babel nodes and 256 UTF-16 code units of static text per JSX
+node; internal invariant failures stop through one stable fatal error. Node.js `24.18.0` verification
+passed 22 focused tests and all 106 repository tests, with format, lint, typecheck, build, and global
+coverage gates passing.
+
 ### M03-T04 — Build the normalized model
 
 Aggregate deterministic project data and expose query helpers only when justified.
@@ -143,6 +156,19 @@ and coverage.
 - Babel's direct parser API does not load `.babelrc` or execute imports. The controlled
   no-execution fixture contains a top-level filesystem write and throw, yet parsing it as supplied
   text leaves the sentinel absent.
+- M03-T03 uses one linear AST traversal for discovery and relationship bookkeeping, followed by
+  explicit source-offset/ordinal ordering of extracted components and JSX records. Stable IDs derive
+  only from portable file paths and UTF-16 start offsets.
+- JSX in a named or spread attribute starts an independent relationship root, while nested
+  functions, class fields, and non-render class members cannot inherit the surrounding component's
+  ownership. A supported class owns only JSX reached through its instance `render` method.
+- Literal extraction is deliberately narrow: finite primitives and static templates are exact;
+  object properties remain ordered and prototype-safe; computed, spread, non-finite, or deeper than
+  the bounded object scope are partial or dynamic. Static descendant text is whitespace-normalized,
+  confidence-tagged, and truncated conservatively after 256 UTF-16 code units.
+- The T03 extraction gate passed 22 focused cases and all 106 repository tests on Node.js
+  `24.18.0`. Global V8 coverage measured 97.17% statements, 90.71% branches, 100% functions, and
+  97.13% lines; formatting, lint, typecheck, and build also passed.
 
 ## Decision log
 
@@ -151,6 +177,8 @@ and coverage.
   their tasks are implemented.
 - D-019 fixes the exact Babel 8 dependency/configuration boundary; D-020 fixes the AST-free model
   and confidence semantics.
+- D-021 fixes bounded AST extraction, component/relationship barriers, conservative retained text
+  and values, and the stable fatal invariant boundary.
 
 ## Risks and recovery
 
@@ -162,6 +190,10 @@ and coverage.
   the residual platform limit.
 - Source size and extracted-node limits prevent one candidate from monopolizing memory. Thresholds
   are product constants with boundary tests, not machine-dependent timing assertions.
+- The component recognizer is intentionally syntactic: it does not resolve aliases, higher-order
+  components, computed React superclasses, or runtime rendering. Nested-function and custom-child
+  text is therefore represented conservatively instead of inheriting unjustified ownership or exact
+  confidence.
 - The M02 squash ancestry will be reconciled before the first push. Recovery is a normal merge that
   preserves the M03 tree; rebase and force-push remain prohibited.
 

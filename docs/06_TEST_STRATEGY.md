@@ -137,3 +137,24 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   coverage, smoke and controlled scenario, harness validation, and dependency audit. The measured
   suite contains 66 passing tests across nine files with 99.64% statements/lines, 100% functions,
   and 94.15% branches; the JSON test record must also prove zero skipped or todo tests.
+
+## M03-T03 executed parser/extraction baseline
+
+- Babel extraction tests cover PascalCase function declarations, arrow/function expressions,
+  supported React class variants, anonymous default exports, inactive candidates, class-render and
+  nested-function ownership boundaries, and JSX embedded in attributes.
+- JSX cases cover intrinsic, custom, member/namespaced, shorthand-fragment, and `React.Fragment`
+  forms; exact bidirectional parent/child/component/root relationships; named, shorthand, and spread
+  attributes; finite primitive, static-template, bounded-object, dynamic, partial, non-finite, deep,
+  and prototype-sensitive values.
+- Text assertions distinguish exact, partial, and dynamic confidence, including primitive
+  expression children, nested JSX, custom-child uncertainty, whitespace normalization, and the
+  256-UTF-16-code-unit retention boundary.
+- Location assertions verify whole files, multiline JSX, attributes, object properties, spreads,
+  fragments, UTF-16 offsets, and end-exclusive ranges. Deterministic reruns and serialized-key scans
+  prove that Babel nodes, native metadata, source text, and absolute fixture paths do not escape.
+- Resource and robustness cases cover the 100,000-node maximum contract, invalid configured limits,
+  missing required locations, and stable fatal normalization of unexpected traversal failures.
+- The executed Node.js `24.18.0` gate passed 22 focused extraction tests and all 106 repository
+  tests. Format, lint, typecheck, and build passed; global V8 coverage measured 97.17% statements,
+  90.71% branches, 100% functions, and 97.13% lines.

@@ -147,3 +147,23 @@
 - Verified T02 on Node.js `24.18.0`: ten focused tests and all 84 tests across 14 files passed,
   together with formatting, strict lint, typecheck, build, an exact top-level Babel dependency
   tree, and an npm audit reporting zero vulnerabilities.
+- Completed M03-T03 with one bounded Babel traversal that projects AST data into UXAudit-owned
+  component and JSX records without evaluating target code. It recognizes named and anonymous
+  default function, arrow/function-expression, and supported React class component forms while
+  retaining unowned JSX conservatively.
+- Extracted JSX now distinguishes intrinsic, custom, member/namespaced, shorthand fragment, and
+  `React.Fragment` forms. Deterministic IDs and source-order arrays retain exact bidirectional
+  component/root/parent/child relationships; JSX attributes and nested functions form explicit
+  relationship or ownership barriers.
+- Added named/spread attribute extraction; exact finite primitive, static-template, and structured
+  object values; dynamic/partial confidence for unresolved data; and normalized descendant text
+  with exact/partial/dynamic confidence. Prototype-sensitive object keys remain data, object depth
+  is bounded, static text is capped at 256 UTF-16 code units, and the traversal stops recoverably
+  after 100,000 Babel nodes.
+- Preserved portable half-open locations for files, components, JSX, attributes, and object
+  properties. Expected extraction/limit failures remain stable and recoverable per file, while
+  unexpected traversal or bookkeeping invariant failures are hidden behind one stable fatal
+  `BabelAnalysisInvariantError`.
+- Verified T03 on Node.js `24.18.0`: 22 focused extraction tests and all 106 repository tests passed,
+  along with formatting, strict lint, typecheck, and build. Global V8 coverage passed at 97.17%
+  statements, 90.71% branches, 100% functions, and 97.13% lines.

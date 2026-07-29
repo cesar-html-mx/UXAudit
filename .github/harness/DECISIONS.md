@@ -279,9 +279,13 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   JSX elements/fragments, parent/child and ownership IDs, named/spread attributes, and static text.
   Preserve primitive literals and recursively bounded static object properties; represent
   expressions and unknown spread content as dynamic or partial instead of guessing. Intrinsic tags
-  remain distinct from custom/member components. Source locations carry portable relative file
-  paths, one-based lines, zero-based UTF-16 columns and offsets, and end-exclusive ranges. Stable
-  IDs derive from the relative file path, entity kind, and source offset.
+  remain distinct from custom/member components. Named PascalCase functions become components only
+  when they directly own JSX; direct default exports may be anonymous, and supported React classes
+  own JSX only through instance `render` methods. Attribute values and nested executable boundaries
+  start separate JSX roots instead of being presented as rendered children. Source locations carry
+  portable relative file paths, one-based lines, zero-based UTF-16 columns and offsets, and
+  end-exclusive ranges. Stable IDs derive from the relative file path, entity kind, and source
+  offset.
 - Alternatives considered: Retaining the Babel AST; nested cyclic objects; flattening dynamic
   values to strings; resolving imports and aliases; rendering components; or treating all
   PascalCase functions as React components.
@@ -293,3 +297,34 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Requirements/contracts affected: RF-08, RF-12, RNF-02 through RNF-05, R-001, R-002, and R-008.
 - Evidence: Contract tests, extraction fixtures, expected/actual model samples, location assertions,
   serialization checks, and `evidence/m03-parsing/`.
+
+## D-021 — Authorized bounded source processing
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M02 inventory entries remain untrusted candidates when M03 opens them. A path, target,
+  type, size, or byte sequence can change after discovery, and a syntactically valid but extremely
+  large/deep file can consume disproportionate parser resources.
+- Decision: Limit one source file to `1_048_576` bytes and one extraction traversal to at most
+  `100_000` Babel nodes. Maintain ownership and JSX-parent contexts during that traversal instead of
+  rescanning ancestor chains. Retain at most `256` UTF-16 code units of descendant text per JSX
+  node and mark truncation as partial. Reauthorize the canonical root and expected canonical file
+  immediately around a read-only file-handle open; use no-follow/non-blocking flags on platforms
+  that support them; compare path and handle type/device/inode metadata; read only through that
+  handle in bounded chunks; detect growth or mutation; and close in `finally`. Decode with
+  `TextDecoder('utf-8', { fatal: true, ignoreBOM: true })`, preserving an initial U+FEFF so UTF-16
+  offsets describe the exact JavaScript string supplied to Babel. Every expected file-local
+  failure is stable and recoverable; root loss or a model invariant remains fatal.
+- Alternatives considered: `readFile(path)` after a preflight; following final symlinks; replacing
+  malformed UTF-8; stripping BOM; unlimited parsing/traversal; arbitrary timing-based test limits;
+  or keeping a partial AST/model after a resource error.
+- Consequences: Normal authored sources remain single-pass and deterministic while oversized,
+  non-regular, retargeted, changed, invalid-encoding, or extraction-heavy candidates cannot discard
+  safe sibling results. Extremely long static labels remain useful for presence checks but are
+  explicitly partial rather than copied through every ancestor. Portable filesystem APIs still
+  cannot eliminate every race, and Windows lacks the full POSIX open-flag set; post-open
+  handle/path comparison and documented residual risk remain necessary.
+- Requirements/contracts affected: RF-07, RF-08, RNF-03, RNF-04, RNF-07, RNF-09, R-003, R-006,
+  and R-015.
+- Evidence: extraction-limit tests, source-open race/type/size/encoding tests, malformed sibling
+  isolation, parser baseline, no-execution scenario, and `evidence/m03-parsing/`.
