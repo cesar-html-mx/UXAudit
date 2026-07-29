@@ -390,3 +390,33 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   RNF-08, R-003, R-006, R-014, and R-015.
 - Evidence: batch isolation/invariant tests, real-filesystem application integration, compiled CLI
   scenario, no-execution sentinel, measurements, and `evidence/m03-parsing/`.
+
+## D-024 — Self-contained rule and finding contracts
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M04 rules need one typed, extensible input/output boundary while M05 reporters must later
+  consume normalized results without loading rules again. The planning finding schema flattened
+  source coordinates, but M03 already established a canonical half-open location with one-based
+  lines and zero-based UTF-16 columns/offsets.
+- Decision: A `Rule` owns complete immutable metadata and a synchronous model-only evaluation
+  function that returns rule-local message, confidence, and nullable source-location observations.
+  Normalize each observation into a self-contained `Finding` by copying the metadata, limitations,
+  structured reference, and complete M03 `SourceLocation`; do not convert coordinates at the domain
+  boundary.
+  Keep finding confidence independent from default severity and catalog status. Represent an
+  isolated rule failure as a stable recoverable `RuleExecutionError`, never as a finding, and keep
+  explicit available/enabled/executed/succeeded/failed/finding counters in the report-independent
+  result contract.
+- Alternatives considered: Returning partially populated findings directly from every rule;
+  flattening file/line/column and dropping the end range; using one value for severity and
+  confidence; exposing thrown errors or native causes; asynchronous rule I/O; or requiring a
+  reporter to reload rule metadata.
+- Consequences: Reporters can consume one normalized record without reevaluation, every finding is
+  traceable to a rule and canonical source range, and rule failures remain separately countable.
+  M05 owns any display-coordinate conversion. Runtime validation and deterministic execution remain
+  M04-T02 responsibilities.
+- Requirements/contracts affected: RF-10 through RF-14, RNF-02 through RNF-05, RNF-10, R-007, and
+  the rule/finding schemas.
+- Evidence: `tests/domain/rules/rule-contracts.test.ts`, focused typecheck/lint, and the eventual
+  `evidence/m04-rules/` package.

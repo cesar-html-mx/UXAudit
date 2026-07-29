@@ -147,7 +147,9 @@
         {
           "id": "M04-T01",
           "title": "Define Rule, Finding, severity, and category contracts",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0: 7 focused rule-contract tests pass; strict typecheck, lint, schema parse, format, and diff checks pass",
+          "completedAt": "2026-07-29T22:02:30.398Z"
         },
         {
           "id": "M04-T02",

@@ -224,8 +224,33 @@ native cause, absolute path, or source text.
 
 ### Rule
 
-Contains metadata and an evaluation operation over the analysis model. A rule is independent of
-report format and should not depend on another rule's execution.
+M04-T01 defines one immutable `Rule` as:
+
+- `RuleMetadata`: stable ID, title, category, default severity, catalog status, explanation,
+  actionable recommendation, nullable structured reference, and explicit limitations;
+- `RuleContext`: the normalized `AnalysisModel` and no parser or reporter state;
+- a synchronous `evaluate` operation that returns zero, one, or multiple rule-local observations
+  containing a message, confidence, and nullable `SourceLocation`.
+
+Categories are `accessibility`, `performance`, `seo`, and `ux`. Severities are `info`, `low`,
+`medium`, `high`, and `critical`; finding confidence is independently `low`, `medium`, or `high`.
+A rule is independent of report format, does not import Babel, and does not depend on another
+rule's execution.
+
+### Finding
+
+M04-T01 normalizes a rule observation and its metadata into one self-contained `Finding`. It
+retains rule ID/title, category, severity, message, explanation, recommendation, reference,
+limitations, confidence, and a nullable defensive copy of the complete M03 half-open source
+location.
+Coordinates remain one-based for lines and zero-based for columns/offsets. Presentation-specific
+line/column conversion belongs to reporters in M05.
+
+Rule failures are not findings. A recoverable `RuleExecutionError` contains only the rule ID,
+category, stable code/message, and recoverability flag; native causes and target-project content do
+not cross this boundary. `RuleEvaluationResult` keeps findings, execution errors, and explicit
+available/enabled/succeeded/failed/finding counters without any presentation state.
+The executed counter records every attempted enabled rule and equals succeeded plus failed.
 
 ### RuleEvaluator
 

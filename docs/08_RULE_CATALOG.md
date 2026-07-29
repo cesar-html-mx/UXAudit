@@ -112,10 +112,18 @@ Every implemented rule must provide:
 - title;
 - category;
 - default severity;
+- catalog status;
 - explanation;
 - recommendation;
-- optional standard/reference;
+- nullable standard/reference with a label and optional URL;
 - evaluation operation;
+- one or more explicit limitations;
 - positive and negative fixtures;
-- limitations;
+- boundary or unsupported fixture;
 - traceability to tests and evidence.
+
+The M04 domain contract distinguishes a rule's catalog status from finding confidence. Status
+describes catalog maturity or delivery (`required`, `stable`, `experimental`, or `deferred`);
+confidence (`high`, `medium`, or `low`) describes how strongly one finding is justified by the
+available static evidence. Findings retain the complete half-open `SourceLocation` when available;
+reporters may derive display coordinates later but rules do not flatten or convert them.

@@ -228,3 +228,14 @@
 - Closed M03 against verified task commit `6a33946a07bf2d8db5e81d201b59a038bf994e5e`
   and activated M04-T01. The M03 ExecPlan moved to `exec-plans/completed/`; no M04 implementation
   work was started.
+
+## M04 rule engine and initial catalog — 2026-07-29
+
+- Validated the harness, reconciled the clean `main` merge `2625bf6` with the stale M03 branch field
+  in state, created `milestone/m04-rule-engine-catalog`, and updated the active ExecPlan before
+  product work.
+- Defined M04-T01's model-only `Rule`, complete metadata/classification, rule-local observation,
+  self-contained normalized `Finding`, stable recoverable execution error, and evaluation-result
+  counter contracts. Finding normalization defensively copies limitations, the M03 half-open
+  location, and the structured reference without report-specific coordinate conversion.
+- Focused T01 verification passed seven contract tests, strict TypeScript, and ESLint.
