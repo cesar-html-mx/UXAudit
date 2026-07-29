@@ -40,7 +40,9 @@
         {
           "id": "M01-T05",
           "title": "Establish CI, documentation, and evidence baseline",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: isolated npm ci; npm run verify; 31 tests; 100% coverage; 6 CLI smokes; moderate npm audit 0; harness PASS; schema 3 evidence digest and manifest verified",
+          "completedAt": "2026-07-29T15:40:47.001Z"
         }
       ]
     },

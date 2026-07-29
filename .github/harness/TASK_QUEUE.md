@@ -6,7 +6,7 @@
 - [x] M01-T02 Configure ESLint, Prettier, Vitest, coverage, and Husky.
 - [x] M01-T03 Create the `ux-audit scan <project>` CLI contract and help output.
 - [x] M01-T04 Implement project-path validation and typed errors.
-- [ ] M01-T05 Establish CI, documentation, and first evidence.
+- [x] M01-T05 Establish CI, documentation, and first evidence.
 
 ## M02 — Project discovery, inventory, and classification
 

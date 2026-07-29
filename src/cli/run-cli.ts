@@ -1,8 +1,16 @@
 import { Command, CommanderError } from 'commander';
 
-import type { ScanProject } from '../application/scan-project.js';
+import {
+  SCAN_PROJECT_ERROR_CODES,
+  ScanProjectError,
+  type ScanProject,
+} from '../application/scan-project.js';
 import { PRODUCT_NAME, PRODUCT_VERSION } from '../index.js';
-import { PROJECT_PATH_ERROR_CODES, ProjectPathError } from '../project/validate-project-path.js';
+import {
+  sanitizeTerminalOutput,
+  sanitizeTerminalRecord,
+  sanitizeTerminalValue,
+} from './sanitize-terminal.js';
 
 export const EXIT_CODES = {
   success: 0,
@@ -25,14 +33,25 @@ const getErrorMessage = (error: unknown): string =>
 
 export const createProgram = ({ io, scanProject }: CliDependencies): Command => {
   const program = new Command();
+  const safeIo: CliIo = {
+    writeErr: (value) => {
+      io.writeErr(sanitizeTerminalOutput(value));
+    },
+    writeOut: (value) => {
+      io.writeOut(sanitizeTerminalOutput(value));
+    },
+  };
 
   program
     .name('ux-audit')
     .description(`${PRODUCT_NAME} static-analysis command line interface.`)
     .version(PRODUCT_VERSION)
     .configureOutput({
-      writeOut: io.writeOut,
-      writeErr: io.writeErr,
+      writeOut: safeIo.writeOut,
+      writeErr: safeIo.writeErr,
+      outputError: (value, write) => {
+        write(sanitizeTerminalRecord(value));
+      },
     })
     .exitOverride()
     .showHelpAfterError();
@@ -43,7 +62,7 @@ export const createProgram = ({ io, scanProject }: CliDependencies): Command => 
     .argument('<project-path>', 'React or TypeScript project directory')
     .action(async (projectPath: string) => {
       const result = await scanProject({ projectPath });
-      io.writeOut(`Project path validated: ${result.projectPath}\n`);
+      safeIo.writeOut(`Project path validated: ${sanitizeTerminalValue(result.projectPath)}\n`);
     });
 
   return program;
@@ -61,14 +80,14 @@ export const runCli = async (
       return error.exitCode === EXIT_CODES.success ? EXIT_CODES.success : EXIT_CODES.input;
     }
 
-    if (error instanceof ProjectPathError) {
-      dependencies.io.writeErr(`${error.message}\n`);
-      return error.code === PROJECT_PATH_ERROR_CODES.validationFailed
+    if (error instanceof ScanProjectError) {
+      dependencies.io.writeErr(`${sanitizeTerminalValue(error.message)}\n`);
+      return error.code === SCAN_PROJECT_ERROR_CODES.validationFailed
         ? EXIT_CODES.internal
         : EXIT_CODES.input;
     }
 
-    dependencies.io.writeErr(`Internal error: ${getErrorMessage(error)}\n`);
+    dependencies.io.writeErr(`Internal error: ${sanitizeTerminalValue(getErrorMessage(error))}\n`);
     return EXIT_CODES.internal;
   }
 };

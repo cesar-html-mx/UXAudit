@@ -3,13 +3,13 @@
 Evidence is organized by milestone and test concern. Never record a successful result that was not
 actually executed.
 
-| Milestone | Evidence path              | Status  |
-| --------- | -------------------------- | ------- |
-| M01       | `evidence/m01-bootstrap/`  | Pending |
-| M02       | `evidence/m02-discovery/`  | Pending |
-| M03       | `evidence/m03-parsing/`    | Pending |
-| M04       | `evidence/m04-rules/`      | Pending |
-| M05       | `evidence/m05-reporting/`  | Pending |
-| M06       | `evidence/m06-validation/` | Pending |
-| Usability | `evidence/usability/`      | Pending |
-| Security  | `evidence/security/`       | Pending |
+| Milestone | Evidence path              | Status                                                                                           |
+| --------- | -------------------------- | ------------------------------------------------------------------------------------------------ |
+| M01       | `evidence/m01-bootstrap/`  | Complete: source digest/manifest, clean install, gate, 100% coverage, six smokes, harness, audit |
+| M02       | `evidence/m02-discovery/`  | Pending                                                                                          |
+| M03       | `evidence/m03-parsing/`    | Pending                                                                                          |
+| M04       | `evidence/m04-rules/`      | Pending                                                                                          |
+| M05       | `evidence/m05-reporting/`  | Pending                                                                                          |
+| M06       | `evidence/m06-validation/` | Pending                                                                                          |
+| Usability | `evidence/usability/`      | Pending                                                                                          |
+| Security  | `evidence/security/`       | Pending                                                                                          |

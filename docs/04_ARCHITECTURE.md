@@ -50,6 +50,30 @@ src/
 The exact filenames may evolve, but the dependency direction and responsibility boundaries may not
 be collapsed without an architecture decision.
 
+## Implemented M01 slice
+
+```text
+src/cli/index.ts
+  -> src/cli/run-cli.ts
+       -> src/cli/sanitize-terminal.ts
+  -> src/application/scan-project.ts
+  -> src/project/validate-project-path.ts
+```
+
+- `cli/index.ts` is the only process boundary. It supplies arguments and streams and assigns
+  `process.exitCode`.
+- `run-cli.ts` owns Commander grammar and maps `ScanProjectError` application errors to terminal
+  output and exit codes. It receives I/O and the scan application function as dependencies and does
+  not import the project adapter. Its output boundary converts terminal control and bidirectional
+  characters in untrusted values to visible Unicode escapes.
+- `scan-project.ts` maps project-layer validation errors into its typed application boundary and
+  returns the canonical root.
+- `validate-project-path.ts` uses an injectable filesystem adapter to execute
+  `resolve → realpath → stat → access(R_OK | X_OK)`.
+
+This slice validates only the selected root. It neither traverses the root nor creates an
+`AuditResult`.
+
 ## Core contracts
 
 ### ProjectDiscovery
@@ -108,3 +132,8 @@ Transient inventory, AST adapter output, model, and findings remain in memory du
 
 Analyzed projects are untrusted input. Never execute their code, import their modules, interpolate
 their text into HTML without escaping, or traverse outside the approved root.
+
+The user may explicitly select any root, including one reached through `..` or a symlink. UXAudit
+uses that root's canonical `realpath` as the approved boundary. Starting in M02, every traversed
+descendant must be checked against this canonical root and real operation failures must be handled;
+M01's access check is only a TOCTOU-susceptible preflight.

@@ -8,20 +8,22 @@
     "ux-audit": "dist/cli/index.js"
   },
   "engines": {
-    "node": ">=24",
-    "npm": ">=11.16.0"
+    "node": ">=24.18.0 <25",
+    "npm": ">=11.16.0 <12"
   },
   "packageManager": "npm@11.16.0",
   "scripts": {
     "clean": "node scripts/clean.mjs",
     "build": "npm run clean && tsc -p tsconfig.build.json",
     "dev": "tsx src/cli/index.ts",
+    "evidence:m01": "node scripts/collect-m01-evidence.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --max-warnings 0",
     "prepare": "husky",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:smoke": "npm run build && node scripts/smoke-cli.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "verify": "node .github/harness/scripts/check-quality.mjs"
   },
@@ -42,6 +44,7 @@
     "vitest": "4.1.10"
   },
   "allowScripts": {
-    "esbuild@0.28.1": true
+    "esbuild@0.28.1": true,
+    "fsevents": false
   }
 }

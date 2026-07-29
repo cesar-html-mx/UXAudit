@@ -1,0 +1,10 @@
+Command: "node" "dist/cli/index.js" "scan" "package.json"
+Working directory: isolated temporary workspace
+Expected exit code: 2
+Observed exit code: 2
+
+--- stdout ---
+(empty)
+
+--- stderr ---
+Project path must reference a directory.

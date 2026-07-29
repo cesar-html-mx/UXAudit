@@ -8,7 +8,15 @@ The primary interface is:
 ux-audit scan <project-path> [options]
 ```
 
-Planned options:
+### Implemented in M01
+
+- `--help` and command help.
+- `--version`.
+- `scan <project-path>` with one required path argument.
+- Canonical project-root validation for existence, directory type, and read/search access.
+- Stable messages and exit codes without traversal or audit claims.
+
+### Planned options
 
 - `--config <path>`: configuration file; default search is `uxaudit.config.json` at project root.
 - `--format <terminal|json|html|all>`: selected reporters.
@@ -19,8 +27,8 @@ Planned options:
 - `--no-color`: terminal output without ANSI color.
 - `--verbose`: processing detail and recoverable errors.
 
-Final option names may be refined in M01/M05, but documented behavior and compatibility must be
-preserved after release.
+These options are not implemented in M01. Final option names may be refined in M05, but documented
+behavior and compatibility must be preserved after release.
 
 ## Successful execution
 
@@ -37,14 +45,15 @@ A successful audit returns an `AuditResult` containing:
 
 ## Exit codes
 
-Proposed initial policy:
+Implemented M01 policy:
 
-- `0`: audit completed and no finding meets failure policy.
-- `1`: audit completed and findings meet configured failure policy.
-- `2`: invalid input or configuration.
-- `3`: unrecoverable internal execution failure.
+- `0`: help/version completed or the selected project root was validated.
+- `1`: reserved for a future completed audit that meets the configured finding-failure policy.
+- `2`: command, argument, project-path, or access input error.
+- `3`: unexpected application failure or unclassified filesystem validation failure.
 
-The policy must be tested and documented before M06 closure.
+M05/M06 must refine finding-policy behavior without changing these established input/internal
+boundaries incompatibly.
 
 ## Determinism
 

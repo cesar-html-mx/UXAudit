@@ -2,9 +2,10 @@
 
 ## Runtime
 
-UXAudit runs locally on Node.js 24 LTS or later. It reads project files and writes optional local
-reports. No backend, container, database, cloud service, or network connection is required by the
-product.
+UXAudit runs on the Node.js 24 LTS line (`>=24.18.0 <25`) with npm 11 (`>=11.16.0 <12`); M01 pins
+Node.js `24.18.0` and npm `11.16.0` for development and CI. It reads project files and writes
+optional local reports in later milestones. No backend, container, database, cloud service, or
+network connection is required by the product.
 
 ## Development
 
@@ -20,18 +21,27 @@ product.
 
 ## Continuous integration
 
-GitHub Actions should verify:
+The M01 GitHub Actions configuration verifies:
 
-- harness integrity;
-- dependency installation from the lockfile;
+- harness integrity on Node.js 24;
+- dependency installation from the lockfile on Ubuntu 24.04, Windows 2025, and macOS 15;
 - format check;
 - lint;
 - typecheck;
-- unit and integration tests;
-- coverage generation;
+- focused tests;
+- coverage generation and thresholds on Linux;
 - build;
-- selected end-to-end smoke test;
-- CodeQL and dependency review where available.
+- six compiled-CLI smoke scenarios on every matrix platform;
+- npm audit with a moderate-severity failure threshold on Linux;
+- CodeQL on pushes/pull requests to `main`, weekly schedule, and manual dispatch where GitHub Code
+  Security is available;
+- Dependency Review for public repositories or private repositories explicitly marked as having
+  GitHub Code Security, failing on moderate-or-higher dependency changes.
+
+Workflows use minimum permissions, concurrency cancellation, bounded timeouts, no persisted checkout
+credentials, and immutable action SHAs. Dependabot monitors npm and GitHub Actions releases.
+Public repositories enable CodeQL and Dependency Review automatically; eligible private
+repositories opt in with `CODEQL_ENABLED=true` and `DEPENDENCY_REVIEW_ENABLED=true`.
 
 ## Artifacts
 
@@ -56,5 +66,6 @@ Engineering evidence:
 ## Portability
 
 Avoid operating-system-specific shell behavior in product code. CI should include more than one
-supported Node version after M01 stabilizes the toolchain. Platform-specific differences must be
-documented and tested when discovered.
+operating system for the supported Node.js 24 contract. Add another Node.js line only after it
+becomes a supported LTS contract; do not use an unsupported Current release as a quality signal.
+Platform-specific differences must be documented and tested when discovered.

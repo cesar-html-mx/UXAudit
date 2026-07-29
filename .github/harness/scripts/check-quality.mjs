@@ -15,17 +15,23 @@ try {
 
 const preferred = ['format:check', 'lint', 'typecheck', 'test', 'build'];
 const missing = preferred.filter((name) => !pkg.scripts?.[name]);
+const npmExecPath = process.env.npm_execpath;
 
 if (missing.length > 0) {
   console.error(`Missing required package scripts: ${missing.join(', ')}`);
   process.exit(1);
 }
 
+if (!npmExecPath) {
+  console.error('npm executable path is unavailable; run this gate through `npm run verify`.');
+  process.exit(1);
+}
+
 for (const name of preferred) {
   console.log(`\n> npm run ${name}`);
-  const result = spawnSync('npm', ['run', name], {
+  const result = spawnSync(process.execPath, [npmExecPath, 'run', name], {
     stdio: 'inherit',
-    shell: process.platform === 'win32',
+    shell: false,
   });
   if (result.status !== 0) process.exit(result.status ?? 1);
 }

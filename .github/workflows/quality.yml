@@ -3,36 +3,68 @@ name: Product Quality
 on:
   push:
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: 'true'
+  HUSKY: '0'
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    name: Node 24 / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-24.04
+          - windows-2025
+          - macos-15
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 20
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - name: Detect product scaffold
-        id: product
-        shell: bash
-        run: |
-          if [[ -f package.json && -f package-lock.json ]]; then
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Install dependencies
-        if: steps.product.outputs.ready == 'true'
+      - name: Install locked dependencies
         run: npm ci
 
-      - name: Run quality gate
-        if: steps.product.outputs.ready == 'true'
-        run: node .github/harness/scripts/check-quality.mjs
+      - name: Run product quality gate
+        run: npm run verify
 
-      - name: Harness-only repository
-        if: steps.product.outputs.ready != 'true'
-        run: echo "Product scaffold will be created during M01."
+      - name: Run CLI smoke tests
+        run: npm run test:smoke
+
+      - name: Enforce coverage thresholds
+        if: runner.os == 'Linux'
+        run: npm run test:coverage
+
+      - name: Audit dependencies
+        if: runner.os == 'Linux'
+        run: npm audit --audit-level=moderate
+
+      - name: Upload coverage report
+        if: runner.os == 'Linux' && success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage-node-24-ubuntu
+          path: coverage/
+          if-no-files-found: error
+          include-hidden-files: false
+          retention-days: 7

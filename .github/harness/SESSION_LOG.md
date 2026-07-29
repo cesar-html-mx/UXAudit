@@ -31,3 +31,20 @@
 - Verified valid, empty, missing, file, denied, race, and unknown-error paths; exit 2 versus 3
   mapping; hidden native causes; built CLI smokes; 23 tests; and 100% measured unit coverage under
   Node.js `24.18.0`.
+- Completed M01-T05 with immutable-SHA GitHub workflows, a Node.js 24 matrix across Ubuntu, Windows,
+  and macOS, a shell-free six-scenario CLI smoke runner, updated product/architecture/security/test
+  documentation, and a reproducible evidence collector.
+- An independent acceptance review detected a remaining CLI-to-project error dependency. T05
+  corrected it by translating project validation failures at the application boundary and added
+  focused application/CLI regression coverage. Final review also added an explicit side-effect-free
+  `scan --help` regression and corrected Windows npm execution to remain shell-free under Node 24.
+- Independent security review reproduced terminal-control injection and weak retained-evidence
+  validation. T05 added visible control/bidirectional escaping, hostile-output tests, a deterministic
+  source-tree digest, per-artifact SHA-256 manifest, retained-package
+  completeness/sanitization/integrity/result checks, and moderate dependency vulnerability
+  thresholds.
+- Generated `evidence/m01-bootstrap/` from an isolated clean `npm ci`. The retained run passed the
+  complete gate, 31 tests, 100% coverage, six smokes, path CLI checks, harness validation, and an npm
+  audit reporting zero known vulnerabilities; its sanitizer found no token or personal-home path.
+- Remote CI and publication were not claimed. A safe Git credential helper or GitHub CLI was not
+  configured in the local repository at evidence time.

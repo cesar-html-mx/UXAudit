@@ -35,8 +35,9 @@ Inspect before creating files.
 
 ## Requirements and traceability
 
-RF-01, RF-02, RNF-03, RNF-08, RNF-09. Update `docs/12_TRACEABILITY_MATRIX.md` with actual
-filenames and test identifiers.
+RF-01, RF-02, RNF-03, and RNF-09. RNF-08 remains assigned to M02/M03: M01 establishes the
+TypeScript/JavaScript toolchain but does not yet discover, classify, or parse `.ts`, `.tsx`, `.js`,
+or `.jsx`. Update `docs/12_TRACEABILITY_MATRIX.md` with actual filenames and test identifiers.
 
 ## Architecture and contracts
 
@@ -87,6 +88,9 @@ logic must be callable from tests without spawning a shell.
 - Update README usage and developer setup.
 - Store command outputs and environment summary in `evidence/m01-bootstrap/`.
 - Update state, traceability, session log, and this plan.
+- Status: completed on 2026-07-29. The Node.js 24 cross-platform workflows, portable smoke runner,
+  M01 documentation, sanitized clean-room evidence, and dependency/security baseline passed local
+  verification.
 
 ## Validation and acceptance
 
@@ -119,10 +123,10 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 
 - [x] Milestone started.
 - [x] Repository inspected and plan reconciled with reality.
-- [ ] Tasks completed.
-- [ ] Quality gate passed.
-- [ ] Evidence collected.
-- [ ] Documentation and traceability updated.
+- [x] Tasks completed.
+- [x] Quality gate passed.
+- [x] Evidence collected.
+- [x] Documentation and traceability updated.
 - [ ] Milestone closed and state advanced.
 
 ## Discoveries
@@ -130,8 +134,9 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - At the owner's explicit request, the first unpublished M01 attempt was discarded and the local
   milestone branch was restored to the clean harness commit `4959dba`. Generated `node_modules/`,
   `dist/`, and `coverage/` artifacts from that attempt were removed.
-- Node.js `24.18.0` (Krypton LTS) and npm `11.16.0` are installed locally. The interactive shell
-  default remains Node.js 22, so every M01 command will explicitly select the Node.js 24 toolchain.
+- Node.js `24.18.0` (Krypton LTS) and npm `11.16.0` are installed locally. The supported contract is
+  constrained to Node.js 24/npm 11 because later major lines are not in the CI matrix. The
+  interactive shell default remains Node.js 22, so every M01 command explicitly selects Node.js 24.
 - Registry metadata checked on 2026-07-29 identifies Commander `15.0.0`, ESLint `10.8.0`,
   TypeScript ESLint `8.65.0`, Vitest/coverage `4.1.10`, Prettier `3.9.6`, Husky `9.1.7`, and tsx
   `4.23.1` as current stable releases.
@@ -157,18 +162,53 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - A review found that M01-T03 had left two root `dependencies` keys in `package.json` after npm and
   the implementation patch both added Commander. npm resolved the same effective dependency, but
   duplicate JSON keys are ambiguous for other consumers; T04 removed the duplicate before closure.
+- An independent acceptance review found that the CLI still imported project-layer error types
+  directly. T05 applied the existing application-boundary decision by translating path failures
+  into `ScanProjectError`; the CLI now depends only on the application contract.
 - `fs.access` is a preflight check, not a durable authorization guarantee. `X_OK` also has different
   effective semantics on Windows. M02 must handle real operation failures and re-check canonical
   descendant containment while traversing.
 - A user may deliberately select a root through `..` or a symlink. M01 returns that root's exact
   canonical `realpath`; it does not confine the chosen root to the current working directory.
   Path-escape protection applies to descendants of this selected canonical root in M02.
+- Current official GitHub action releases were pinned to full immutable SHAs: checkout `7.0.1`,
+  setup-node `7.0.0`, upload-artifact `7.0.1`, CodeQL `4.37.3`, and Dependency Review `5.0.0`.
+  Dependabot remains responsible for reviewed action updates.
+- Dependency Review availability varies for private repositories. Its job runs automatically for
+  public repositories and can be enabled for a private repository with GitHub Code Security by
+  setting `DEPENDENCY_REVIEW_ENABLED=true`.
+- The evidence collector copied the complete working tree to an isolated temporary workspace,
+  executed a clean lockfile installation and every retained check, rejected personal paths/token
+  patterns, and copied only sanitized records into `evidence/m01-bootstrap/`. It identifies the
+  exact copied snapshot with a SHA-256 tree digest and hashes every core artifact in a manifest;
+  reproducibility checks reject incomplete, unsanitized, integrity-invalid, source-mismatched, or
+  result-mismatched retained evidence.
+- The original plan listed RNF-08 under M01 even though discovery/classification/parsing are
+  explicitly out of scope. The plan was reconciled to RF-01, RF-02, RNF-03, and RNF-09; RNF-08
+  remains truthfully planned and traced to M02/M03.
+- npm 11's `allowScripts` policy is advisory unless `strict-allow-scripts=true`. M01 enables strict
+  enforcement, approves only esbuild `0.28.1`, and explicitly denies optional fsevents scripts so
+  the macOS matrix cannot execute an unreviewed lifecycle script.
+- Node cannot execute Windows `.cmd` wrappers directly without a command shell, while passing
+  arguments with `shell:true` is deprecated for injection risk. The quality and evidence runners
+  therefore execute npm's JavaScript CLI through `process.execPath`, preserving shell-free
+  cross-platform behavior.
+- Final acceptance review confirmed the M01 contracts and identified only an unasserted public
+  `scan --help` path. A focused regression now verifies its successful, side-effect-free behavior.
+- Final security review reproduced ANSI/OSC/BEL injection through canonical paths, Commander
+  diagnostics, and unexpected error messages. The CLI boundary now renders C0/C1, bidirectional,
+  reflected line breaks, and line-separator controls as visible Unicode escapes, with focused
+  hostile-output regressions.
+- npm audit and Dependency Review now fail at moderate severity rather than accepting moderate
+  dependency vulnerabilities.
+- Remote workflows could not be executed or observed before publication. The local evidence states
+  this explicitly; the three-platform matrix becomes authoritative when the branch is pushed.
 
 ## Decision log
 
 - Raise the project baseline to Node.js 24 at the owner's explicit direction. Pin the development
-  runtime in `.nvmrc`, declare Node.js `>=24` in package metadata, and use Node.js 24 in CI and
-  evidence.
+  runtime in `.nvmrc`, declare Node.js `>=24.18.0 <25` and npm `>=11.16.0 <12`, and use those major
+  lines in CI and evidence.
 - Select current stable dependency releases from registry metadata, constrained by declared engine
   and peer compatibility. Use TypeScript `6.0.3` until stable TypeScript ESLint supports 7.
 - Keep Commander as the only M01 production dependency and defer Babel packages to M03.
@@ -184,6 +224,9 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
   missing/non-directory/inaccessible input to stable typed errors and exit 2; map unknown filesystem
   failures to a safe validation error and exit 3. Preserve native causes for programmatic diagnosis
   but never print them at the CLI boundary.
+- Use the exact `.nvmrc` Node.js 24 runtime on Ubuntu 24.04, Windows 2025, and macOS 15. Pin actions
+  by full SHA, disable persisted checkout credentials, use minimum permissions and bounded
+  timeouts, run the shared gate/smokes everywhere, and retain Linux-only coverage/audit evidence.
 
 ## Risks and recovery
 
@@ -194,8 +237,18 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
   peer-resolution, dependency audit, and recorded registry metadata are the recovery controls.
 - Never store or interpolate GitHub credentials in repository files, command arguments, logs, or
   evidence. Remote publication must use a safely configured credential helper or GitHub CLI.
+- GitHub Actions have been inspected and formatted locally, but only a remote run can verify hosted
+  runner/action availability. Workflow dispatch, pull-request checks, and retained coverage are the
+  recovery controls after publication.
 
 ## Outcomes and retrospective
 
-At closure, describe what now works, what was actually verified, remaining limitations, commits, and
-the next milestone.
+M01 now provides an ESM/strict-TypeScript CLI on Node.js 24 with current compatible tooling,
+Commander help/version/scan behavior, canonical root validation, typed safe errors, portable unit
+and smoke tests, hardened cross-platform CI configuration, complete developer documentation, and a
+sanitized evidence package.
+
+The clean evidence run passed 31 tests in 4 files, 100% statements/branches/functions/lines, six
+compiled CLI scenarios, harness validation, and an npm audit reporting zero known vulnerabilities.
+The product still does not traverse, parse, evaluate rules, or create reports; M02 owns safe
+discovery and canonical descendant containment.
