@@ -1,0 +1,60 @@
+Command: "npm" "run" "verify"
+Working directory: isolated temporary workspace
+Expected exit code: 0
+Observed exit code: 0
+
+--- stdout ---
+
+> ux-audit@0.1.0 verify
+> node .github/harness/scripts/check-quality.mjs
+
+
+> npm run format:check
+
+> ux-audit@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> npm run lint
+
+> ux-audit@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> npm run typecheck
+
+> ux-audit@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> npm run test
+
+> ux-audit@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.10 /tmp/uxaudit-m01-evidence-7VtAWQ/workspace
+
+
+ Test Files  4 passed (4)
+      Tests  31 passed (31)
+   Start at  09:40:01
+   Duration  166ms (transform 111ms, setup 0ms, import 177ms, tests 31ms, environment 0ms)
+
+
+> npm run build
+
+> ux-audit@0.1.0 build
+> npm run clean && tsc -p tsconfig.build.json
+
+
+> ux-audit@0.1.0 clean
+> node scripts/clean.mjs
+
+
+UXAudit product quality checks: PASS
+
+--- stderr ---
+(empty)

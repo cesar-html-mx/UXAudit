@@ -18,3 +18,10 @@ evidence/
 ```
 
 Do not commit secrets, private absolute paths, or modified raw output.
+
+## Available packages
+
+- `m01-bootstrap/`: completed Node.js 24 CLI-foundation evidence, including an isolated `npm ci`,
+  product gate, coverage, compiled CLI scenarios, harness validation, dependency audit, and the
+  SHA-256 digest of the exact source snapshot plus a per-artifact integrity manifest. Start with
+  `m01-bootstrap/SUMMARY.md`.

@@ -38,20 +38,25 @@ isolated when model integrity remains valid. A rule explains its limitations.
 ## Milestone tasks
 
 ### M04-T01 — Define contracts
+
 Implement metadata, context, result, finding, category, severity, reference, confidence/limitations,
 and execution errors.
 
 ### M04-T02 — Implement engine
+
 Create explicit registry, configuration filters, deterministic loader, isolated evaluator, counters, and
 error aggregation.
 
 ### M04-T03 — Accessibility rules
+
 Implement A11Y-001 through A11Y-003 with comprehensive fixtures.
 
 ### M04-T04 — SEO, performance, and UX rules
+
 Implement required stable rules from the catalog. Keep advisory wording conservative.
 
 ### M04-T05 — Validate catalog behavior
+
 Verify zero/one/multiple findings, rule failure isolation, deterministic order, filtering, metadata,
 traceability, and expected limitations.
 
@@ -64,7 +69,6 @@ catalog twice on the same model and compare stable results.
 
 Rule-by-rule test matrix, expected/actual finding samples, deterministic comparison, isolated failure
 scenario, limitations, tests, and coverage.
-
 
 ## Progress
 
@@ -92,4 +96,3 @@ Maintain task-specific risks, rollback steps, and any remaining debt.
 
 At closure, describe what now works, what was actually verified, remaining limitations, commits, and
 the next milestone.
-

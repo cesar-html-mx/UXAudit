@@ -107,3 +107,15 @@ limits.
 
 Store commands, environment, tool versions, machine-readable results, selected output samples, and
 human conclusions under `evidence/`. Never fabricate a result that was not executed.
+
+## M01 executed baseline
+
+- Focused Vitest tests cover product metadata, CLI help/version/delegation and exit mapping,
+  application orchestration, project-root validation, and hostile terminal-control rendering.
+- Filesystem integration uses controlled temporary directories; permission and race errors use an
+  injected adapter instead of platform-dependent `chmod`.
+- V8 coverage enforces 90% global thresholds for statements, branches, functions, and lines.
+- A portable Node.js smoke runner executes help, version, valid directory, missing path, regular
+  file, and missing-argument scenarios against the compiled CLI without a shell.
+- The Node.js 24 CI matrix covers Ubuntu, Windows, and macOS. Linux additionally enforces coverage
+  and rejects npm vulnerabilities of moderate severity or higher.

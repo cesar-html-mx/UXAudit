@@ -16,7 +16,8 @@ Read only the documents needed by the active ExecPlan, but use this index as the
 12. `12_TRACEABILITY_MATRIX.md` — requirements to modules, milestones, and tests.
 13. `13_GLOSSARY.md` — official project vocabulary.
 14. `14_ACADEMIC_ALIGNMENT.md` — evidence required for the TFM testing delivery.
-15. `architecture/diagrams/README.md` — architecture and UML visual references.
+15. `15_SOURCE_MAP.md` — provenance of the repository's operational specification.
+16. `architecture/diagrams/README.md` — architecture and UML visual references.
 
 The detailed TFM and its condensed methodology/architecture version are the origin of these
 specifications. Repository documents are the operational source during implementation.

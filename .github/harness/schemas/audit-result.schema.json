@@ -2,13 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "UXAudit AuditResult",
   "type": "object",
-  "required": [
-    "schemaVersion",
-    "projectRoot",
-    "summary",
-    "findings",
-    "errors"
-  ],
+  "required": ["schemaVersion", "projectRoot", "summary", "findings", "errors"],
   "properties": {
     "schemaVersion": {
       "type": "string"

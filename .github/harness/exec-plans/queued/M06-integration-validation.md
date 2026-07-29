@@ -39,21 +39,26 @@ truthfully documented limitation.
 ## Milestone tasks
 
 ### M06-T01 — Complete end-to-end pipeline
+
 Implement and verify the complete `ux-audit scan` flow, exit codes, progress/verbose behavior, report
 paths, and recoverable errors.
 
 ### M06-T02 — Build controlled projects
+
 Create valid, invalid, mixed, hostile, and large fixtures with versioned expected results.
 
 ### M06-T03 — Measure detection behavior
+
 Execute each stable rule, classify TP/FP/FN/TN where meaningful, calculate precision/recall, inspect
 failures, and correct justified defects without hiding limitations.
 
 ### M06-T04 — System, robustness, performance, and security
+
 Run invalid inputs, malformed files, permissions where portable, deterministic reruns, dependency
 audit, symlink/path/HTML injection scenarios, and a documented performance baseline.
 
 ### M06-T05 — Usability and TFM evidence
+
 Run defined developer tasks with real participants when available; otherwise perform and label an
 expert heuristic review. Use the SUS template only with actual responses. Assemble the evidence
 index and draft factual implementation/testing summaries.
@@ -68,7 +73,6 @@ and `docs/14_ACADEMIC_ALIGNMENT.md`.
 
 All items required by `docs/14_ACADEMIC_ALIGNMENT.md`, including raw machine outputs and concise
 human conclusions.
-
 
 ## Progress
 
@@ -96,4 +100,3 @@ Maintain task-specific risks, rollback steps, and any remaining debt.
 
 At closure, describe what now works, what was actually verified, remaining limitations, commits, and
 the next milestone.
-

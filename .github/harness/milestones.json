@@ -5,34 +5,44 @@
       "id": "M01",
       "slug": "bootstrap-cli",
       "title": "Repository bootstrap and CLI foundation",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M01-bootstrap-cli.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M01-bootstrap-cli.md",
       "branch": "milestone/m01-bootstrap-cli",
       "tasks": [
         {
           "id": "M01-T01",
           "title": "Initialize Node and TypeScript project",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run typecheck && npm run build",
+          "completedAt": "2026-07-29T14:27:17.101Z"
         },
         {
           "id": "M01-T02",
           "title": "Configure quality and test toolchain",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify && npm run test:coverage && npm ls --all --omit=optional",
+          "completedAt": "2026-07-29T14:35:31.713Z"
         },
         {
           "id": "M01-T03",
           "title": "Create CLI entry point and scan command",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify && npm run test:coverage && built CLI help/version/scan smoke",
+          "completedAt": "2026-07-29T14:41:25.508Z"
         },
         {
           "id": "M01-T04",
           "title": "Implement input and project-path validation",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify && npm run test:coverage; 23 tests; built valid/empty/missing/file CLI smokes",
+          "completedAt": "2026-07-29T14:48:39.701Z"
         },
         {
           "id": "M01-T05",
           "title": "Establish CI, documentation, and evidence baseline",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: isolated npm ci; npm run verify; 31 tests; 100% coverage; 6 CLI smokes; moderate npm audit 0; harness PASS; schema 3 evidence digest and manifest verified",
+          "completedAt": "2026-07-29T15:40:47.001Z"
         }
       ]
     },
@@ -40,8 +50,8 @@
       "id": "M02",
       "slug": "discovery-inventory",
       "title": "Project discovery, inventory, and classification",
-      "status": "queued",
-      "plan": ".github/harness/exec-plans/queued/M02-discovery-inventory.md",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M02-discovery-inventory.md",
       "branch": "milestone/m02-discovery-inventory",
       "tasks": [
         {

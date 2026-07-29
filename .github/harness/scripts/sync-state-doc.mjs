@@ -11,9 +11,7 @@ const data = JSON.parse(await readFile(milestonesPath, 'utf8'));
 const milestone = data.milestones.find((item) => item.id === state.activeMilestone);
 const task = milestone?.tasks.find((item) => item.id === state.activeTask);
 
-const completed = state.completedMilestones.length
-  ? state.completedMilestones.join(', ')
-  : 'None';
+const completed = state.completedMilestones.length ? state.completedMilestones.join(', ') : 'None';
 const blockers = state.blockers.length
   ? state.blockers.map((item) => `- ${item}`).join('\n')
   : 'None';

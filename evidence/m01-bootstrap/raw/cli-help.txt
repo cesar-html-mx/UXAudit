@@ -1,0 +1,20 @@
+Command: "node" "dist/cli/index.js" "--help"
+Working directory: isolated temporary workspace
+Expected exit code: 0
+Observed exit code: 0
+
+--- stdout ---
+Usage: ux-audit [options] [command]
+
+UXAudit static-analysis command line interface.
+
+Options:
+  -V, --version        output the version number
+  -h, --help           display help for command
+
+Commands:
+  scan <project-path>  Validate a project directory for static analysis.
+  help [command]       display help for command
+
+--- stderr ---
+(empty)

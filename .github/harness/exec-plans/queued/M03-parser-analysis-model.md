@@ -39,20 +39,25 @@ transform only information justified by stable rules.
 ## Milestone tasks
 
 ### M03-T01 — Define contracts
+
 Define parser result/error, source locations, analyzed files, components, JSX elements, attributes,
 literal/dynamic values, and model builder input/output.
 
 ### M03-T02 — Implement Babel parser adapter
+
 Support JS, JSX, TS, and TSX with source type behavior and plugins verified by fixtures.
 
 ### M03-T03 — Extract JSX and components
+
 Traverse without evaluating code. Preserve intrinsic versus custom element distinction and attribute
 value confidence.
 
 ### M03-T04 — Build the normalized model
+
 Aggregate deterministic project data and expose query helpers only when justified.
 
 ### M03-T05 — Integrate and isolate errors
+
 Continue after a malformed file when safe and report parse failures separately from findings.
 
 ## Validation and acceptance
@@ -64,7 +69,6 @@ accuracy, malformed files, and mixed projects. Verify that rule-facing types con
 
 Parser matrix, model samples, location assertions, malformed-file run, memory/time baseline, tests
 and coverage.
-
 
 ## Progress
 
@@ -92,4 +96,3 @@ Maintain task-specific risks, rollback steps, and any remaining debt.
 
 At closure, describe what now works, what was actually verified, remaining limitations, commits, and
 the next milestone.
-

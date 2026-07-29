@@ -8,7 +8,7 @@ execution:
   self_review_before_closure: true
 version_control:
   branch_policy: milestone
-  branch_pattern: "milestone/{milestone_id}-{slug}"
+  branch_pattern: 'milestone/{milestone_id}-{slug}'
   commit_policy: task
   push_policy: task
   create_pull_request_at_milestone: true

@@ -32,7 +32,9 @@ Threats relevant to a local static analyzer include:
 
 ## Security acceptance scenarios
 
-- `../../` and equivalent path inputs do not escape an authorized root.
+- During discovery, `../../` and equivalent descendant inputs do not escape the user-selected
+  canonical root. Selecting a root through `..` is itself allowed because the CLI user authorizes
+  that root explicitly.
 - Symlink cycles terminate safely.
 - A symlink pointing outside the root follows the documented policy.
 - `<script>alert(1)</script>` in a filename, JSX text, or attribute is displayed as text in HTML.
@@ -46,3 +48,23 @@ Threats relevant to a local static analyzer include:
 The MVP is local and does not expose an HTTP service, authentication layer, database, or WAF. Do not
 invent those controls. Security evaluation must focus on the actual architecture while explaining
 what would change if UXAudit later became a hosted service.
+
+## M01 implemented controls and limits
+
+- The project root is canonicalized, checked as a directory, and preflighted for read/search access.
+- Missing, non-directory, denied, and unknown filesystem failures become typed errors. The CLI does
+  not print their native causes.
+- The CLI renders C0/C1 controls, bidirectional controls, injected line breaks, and Unicode line
+  separators in untrusted paths and error values as visible escapes before writing to terminal
+  streams.
+- Product behavior uses Node filesystem APIs and does not execute a shell or target code.
+- Direct dependencies are exact and locked; npm rejects engine/peer conflicts and unreviewed install
+  scripts. esbuild `0.28.1` is the only approved dependency script, while optional fsevents scripts
+  are explicitly denied.
+- CI uses minimum permissions, immutable action SHAs, dependency audit, and conditional CodeQL and
+  Dependency Review based on repository visibility/GitHub Code Security availability. Audit and
+  dependency-review gates reject moderate-or-higher vulnerabilities.
+
+Root access may change after validation, and `X_OK`/ACL behavior differs by platform. M02 must treat
+preflight as advisory, handle actual traversal failures, detect symlink cycles, and enforce canonical
+descendant containment.

@@ -5,9 +5,7 @@ const root = process.cwd();
 const state = JSON.parse(
   await readFile(path.join(root, '.github/harness/state/state.json'), 'utf8'),
 );
-const data = JSON.parse(
-  await readFile(path.join(root, '.github/harness/milestones.json'), 'utf8'),
-);
+const data = JSON.parse(await readFile(path.join(root, '.github/harness/milestones.json'), 'utf8'));
 const milestone = data.milestones.find((item) => item.id === state.activeMilestone);
 
 console.log(`Project: ${state.project}`);

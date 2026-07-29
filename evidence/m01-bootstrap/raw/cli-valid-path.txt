@@ -1,0 +1,10 @@
+Command: "node" "dist/cli/index.js" "scan" "."
+Working directory: isolated temporary workspace
+Expected exit code: 0
+Observed exit code: 0
+
+--- stdout ---
+Project path validated: /tmp/uxaudit-m01-evidence-7VtAWQ/workspace
+
+--- stderr ---
+(empty)
