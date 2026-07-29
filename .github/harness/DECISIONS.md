@@ -242,3 +242,54 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   and the M01 exit-code boundary.
 - Evidence: `src/application/scan-project.ts`, `src/cli/run-cli.ts`, application/CLI integration
   tests, compiled smoke tests, and `evidence/m02-discovery/`.
+
+## D-019 — Babel 8 isolated parser boundary
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M03 needs current JS, JSX, TS, and TSX syntax support without exposing a parser-specific
+  tree to rules or relying on Babel packages that happen to exist under a development-only
+  transitive dependency.
+- Decision: Declare exact production dependencies on `@babel/parser`, `@babel/traverse`, and
+  `@babel/types` `8.0.4`, the current stable releases verified from registry metadata. Keep every
+  Babel type and value below `src/parsing/babel/`. Parse with locations, `sourceType:
+'unambiguous'`, no recovery or target configuration loading, and plugins selected only from the
+  M02 source kind: TypeScript for `.ts`, JSX for `.jsx`, and both for `.tsx`. Plain `.js` does not
+  silently enable JSX. Convert every success and failure to UXAudit-owned contracts before leaving
+  the parsing package.
+- Alternatives considered: Babel 7; TypeScript compiler AST; enabling every syntax plugin for every
+  extension; using `errorRecovery`; exposing Babel nodes behind `unknown`; or relying on Vitest's
+  incidental Babel tree.
+- Consequences: The parser uses the newest stable line compatible with Node.js `24.18.0`, has an
+  explicit locked runtime supply chain, and cannot couple M04 rules to Babel. Flow, decorators, JSX
+  in `.js`, and other opt-in proposal syntax remain unsupported unless a later requirement and
+  fixture justify them. A malformed file yields no partial model.
+- Requirements/contracts affected: RF-07, RF-08, RF-12, RNF-02, RNF-03, RNF-08, R-003, and R-010.
+- Evidence: M03 four-kind parser matrix, negative plugin cases, declaration-boundary checks,
+  dependency audit, and `evidence/m03-parsing/`.
+
+## D-020 — AST-free relational JSX model and confidence
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M04 rules need element names, selected values, descendant text, relationships, and exact
+  locations, but dynamic JSX and component abstractions cannot be evaluated reliably by a local
+  static parser.
+- Decision: Use a plain readonly relational model of files, syntactically justified components,
+  JSX elements/fragments, parent/child and ownership IDs, named/spread attributes, and static text.
+  Preserve primitive literals and recursively bounded static object properties; represent
+  expressions and unknown spread content as dynamic or partial instead of guessing. Intrinsic tags
+  remain distinct from custom/member components. Source locations carry portable relative file
+  paths, one-based lines, zero-based UTF-16 columns and offsets, and end-exclusive ranges. Stable
+  IDs derive from the relative file path, entity kind, and source offset.
+- Alternatives considered: Retaining the Babel AST; nested cyclic objects; flattening dynamic
+  values to strings; resolving imports and aliases; rendering components; or treating all
+  PascalCase functions as React components.
+- Consequences: The model is deterministic, serializable, parser-independent, and sufficient for
+  the initial catalog's `img`, input/label, button, heading, link, image-dimension/loading, and
+  literal `style.fontSize` checks. Rules must respect exact/partial/dynamic confidence. Runtime
+  component behavior, imported aliases, external CSS, and evaluated expressions remain explicit
+  limitations.
+- Requirements/contracts affected: RF-08, RF-12, RNF-02 through RNF-05, R-001, R-002, and R-008.
+- Evidence: Contract tests, extraction fixtures, expected/actual model samples, location assertions,
+  serialization checks, and `evidence/m03-parsing/`.

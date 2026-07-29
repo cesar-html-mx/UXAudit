@@ -120,10 +120,26 @@ field. Semantic detection remains exclusively in M03's parser and model stages.
 Parses one source file and returns either a parser result or a typed per-file error. Parser internals
 must not leak to rules.
 
+M03 defines this boundary as a discriminated `SourceParserResult`. A successful result contains one
+AST-free `AnalyzedSourceFile`; an expected read, syntax, or extraction problem contains a stable
+recoverable error with the portable file path, stage, code, and optional source position. Native
+filesystem/Babel causes, code frames, absolute paths, source text, and AST values are not part of
+the contract.
+
 ### AnalysisModelBuilder
 
 Converts parser output into UXAudit domain models containing only justified information needed by
 rules. It preserves source locations and can be extended deliberately.
+
+The M03 contracts use a flat serializable model of files, syntactically justified components, and
+JSX nodes connected by deterministic IDs. Elements distinguish intrinsic from custom names;
+fragments remain explicit; attributes distinguish named from spread values; and values/text carry
+exact, partial, or dynamic confidence. Literal objects retain bounded named properties so the
+initial catalog can inspect `style.fontSize` without retaining an expression tree.
+
+Every location contains a portable project-relative file path and a half-open range. Lines are
+one-based; columns and offsets are zero-based UTF-16 code-unit indexes. The model contains neither
+the absolute project root nor complete source content.
 
 ### Rule
 

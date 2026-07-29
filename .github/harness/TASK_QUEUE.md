@@ -18,7 +18,7 @@
 
 ## M03 — Source parser and analysis model
 
-- [ ] M03-T01 Define parser and normalized model contracts.
+- [x] M03-T01 Define parser and normalized model contracts.
 - [ ] M03-T02 Configure `@babel/parser` for TypeScript and JSX.
 - [ ] M03-T03 Traverse ASTs and extract components, JSX elements, attributes, and locations.
 - [ ] M03-T04 Build the UXAudit analysis model without exposing Babel nodes to rules.

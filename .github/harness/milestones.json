@@ -102,7 +102,9 @@
         {
           "id": "M03-T01",
           "title": "Define parser and model contracts",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, lint, typecheck, 8 focused contract tests, 74 total tests, harness and AST-free boundary PASS",
+          "completedAt": "2026-07-29T19:20:56.285Z"
         },
         {
           "id": "M03-T02",

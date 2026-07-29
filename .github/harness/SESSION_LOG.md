@@ -119,3 +119,20 @@
 - Created closure commit `868442a`. Automated HTTPS publication then failed because Git had no
   non-interactive GitHub username/credential, so no remote M02 branch, pull request, or hosted
   Windows/macOS result is claimed.
+
+## M03 parser and analysis model — 2026-07-29
+
+- Loaded and validated the active M03 harness, created
+  `milestone/m03-parser-analysis-model` from the verified M02 tree, and reconciled the stale
+  `state.currentBranch` value before product work.
+- Inspected the completed M02 pipeline and confirmed that no parser, analysis model, or M03 fixture
+  implementation already existed. Registry metadata identified aligned Babel `8.0.4` packages as
+  the current stable releases compatible with Node.js `24.18.0`; the exact AST-boundary decision
+  was recorded before installation.
+- Completed M03-T01 with parser-independent source locations, analyzed-file/component/JSX models,
+  named/spread attributes, literal/object/dynamic values, text confidence, and discriminated
+  recoverable read/parse/extract results. Rule-facing contracts contain no Babel imports, AST,
+  absolute project root, or source content.
+- Verified T01 under Node.js `24.18.0`: formatting, strict lint, typecheck, eight focused contract
+  tests, all 74 repository tests across 12 files, harness integrity, and the Babel-boundary scan
+  passed with no skipped tests.
