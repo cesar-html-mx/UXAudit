@@ -21,3 +21,7 @@
   that delegates to the shared verification gate.
 - Verified T02 under Node.js `24.18.0`: format, lint, typecheck, one focused unit test, build,
   coverage, dependency-tree resolution, and install-script review all passed.
+- Completed M01-T03 with Commander `15.0.0`, an injectable CLI adapter, application-level scan
+  request contract, npm executable mapping, and a process-only entry point.
+- Verified help/version output, application delegation, missing-argument exit 2, unexpected-error
+  exit 3, built `scan .`, eight tests, and 100% measured unit coverage under Node.js `24.18.0`.

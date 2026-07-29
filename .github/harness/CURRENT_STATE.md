@@ -5,11 +5,11 @@
 - Project: UXAudit
 - Harness status: ready
 - Active milestone: **M01 — Repository bootstrap and CLI foundation**
-- Active task: **M01-T03 — Create CLI entry point and scan command**
+- Active task: **M01-T04 — Implement input and project-path validation**
 - Completed milestones: None
 - Current branch: milestone/m01-bootstrap-cli
 - Last verification: PASS
-- Last verified at: 2026-07-29T14:35:31.713Z
+- Last verified at: 2026-07-29T14:41:25.508Z
 - Last commit: Not recorded
 
 ## Blockers

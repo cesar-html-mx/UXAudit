@@ -4,6 +4,9 @@
   "description": "Local static-analysis CLI for React and TypeScript projects.",
   "private": true,
   "type": "module",
+  "bin": {
+    "ux-audit": "dist/cli/index.js"
+  },
   "engines": {
     "node": ">=24",
     "npm": ">=11.16.0"
@@ -12,7 +15,7 @@
   "scripts": {
     "clean": "node scripts/clean.mjs",
     "build": "npm run clean && tsc -p tsconfig.build.json",
-    "dev": "tsx src/index.ts",
+    "dev": "tsx src/cli/index.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --max-warnings 0",
@@ -21,6 +24,9 @@
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "verify": "node .github/harness/scripts/check-quality.mjs"
+  },
+  "dependencies": {
+    "commander": "15.0.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -37,5 +43,8 @@
   },
   "allowScripts": {
     "esbuild@0.28.1": true
+  },
+  "dependencies": {
+    "commander": "15.0.0"
   }
 }

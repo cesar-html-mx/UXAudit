@@ -69,6 +69,8 @@ logic must be callable from tests without spawning a shell.
 - Provide help/version behavior and required project path.
 - Delegate to an application-level scan request.
 - Establish intended exit-code handling without claiming later pipeline behavior.
+- Status: completed on 2026-07-29. Help, version, scan delegation, required arguments, and
+  unexpected-failure handling passed unit tests and built-CLI smoke checks.
 
 ### M01-T04 — Implement input and project-path validation
 
@@ -144,6 +146,12 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - Prettier established the first repository-wide formatting baseline. The resulting existing-file
   changes are mechanical; generated outputs, raw evidence, the lockfile, and architecture diagrams
   are excluded.
+- Commander `15.0.0` supports the Node.js 24 contract and provides overridable output and exit
+  behavior. This lets unit tests exercise the actual command definition without spawning a child
+  process.
+- The M01-T03 application action only normalizes the requested path and reports that a scan request
+  was prepared. It deliberately does not claim the path is valid or that discovery occurred; path
+  validation remains M01-T04 and traversal remains M02.
 
 ## Decision log
 
@@ -158,6 +166,9 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - Use the ESLint 10 flat API with type-aware strict and stylistic TypeScript rules, reject warnings,
   and require 90% coverage for statements, branches, functions, and lines. Keep the process-only CLI
   entry outside unit coverage and cover it with smoke tests in M01-T05.
+- Keep process arguments, streams, and `exitCode` in `src/cli/index.ts`. Make `runCli` depend on
+  injected I/O and an application-level `ScanProject` function, with exit codes 0 for success/help,
+  2 for command/input errors, and 3 for unexpected application failures.
 
 ## Risks and recovery
 

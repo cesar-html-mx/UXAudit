@@ -26,7 +26,9 @@
         {
           "id": "M01-T03",
           "title": "Create CLI entry point and scan command",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify && npm run test:coverage && built CLI help/version/scan smoke",
+          "completedAt": "2026-07-29T14:41:25.508Z"
         },
         {
           "id": "M01-T04",

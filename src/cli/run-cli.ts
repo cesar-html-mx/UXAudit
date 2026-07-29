@@ -1,0 +1,66 @@
+import { Command, CommanderError } from 'commander';
+
+import type { ScanProject } from '../application/scan-project.js';
+import { PRODUCT_NAME, PRODUCT_VERSION } from '../index.js';
+
+export const EXIT_CODES = {
+  success: 0,
+  input: 2,
+  internal: 3,
+} as const;
+
+export interface CliIo {
+  readonly writeOut: (value: string) => void;
+  readonly writeErr: (value: string) => void;
+}
+
+export interface CliDependencies {
+  readonly io: CliIo;
+  readonly scanProject: ScanProject;
+}
+
+const getErrorMessage = (error: unknown): string =>
+  error instanceof Error ? error.message : 'Unknown internal failure';
+
+export const createProgram = ({ io, scanProject }: CliDependencies): Command => {
+  const program = new Command();
+
+  program
+    .name('ux-audit')
+    .description(`${PRODUCT_NAME} static-analysis command line interface.`)
+    .version(PRODUCT_VERSION)
+    .configureOutput({
+      writeOut: io.writeOut,
+      writeErr: io.writeErr,
+    })
+    .exitOverride()
+    .showHelpAfterError();
+
+  program
+    .command('scan')
+    .description('Prepare a static-analysis request for a project path.')
+    .argument('<project-path>', 'React or TypeScript project directory')
+    .action(async (projectPath: string) => {
+      const result = await scanProject({ projectPath });
+      io.writeOut(`Scan request prepared: ${result.projectPath}\n`);
+    });
+
+  return program;
+};
+
+export const runCli = async (
+  args: readonly string[],
+  dependencies: CliDependencies,
+): Promise<number> => {
+  try {
+    await createProgram(dependencies).parseAsync([...args], { from: 'user' });
+    return EXIT_CODES.success;
+  } catch (error) {
+    if (error instanceof CommanderError) {
+      return error.exitCode === EXIT_CODES.success ? EXIT_CODES.success : EXIT_CODES.input;
+    }
+
+    dependencies.io.writeErr(`Internal error: ${getErrorMessage(error)}\n`);
+    return EXIT_CODES.internal;
+  }
+};

@@ -75,3 +75,22 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Requirements/contracts affected: RNF-03, RNF-09, and M01 quality acceptance.
 - Evidence: `eslint.config.mjs`, `vitest.config.ts`, `.prettierrc.json`, `.husky/pre-commit`,
   `tests/product.test.ts`, and passing Node.js 24 `npm run verify`/coverage output.
+
+## D-011 — Testable CLI boundary and exit codes
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: Commander must not contain application validation and product behavior must be testable
+  without shell execution or mutation of global process state.
+- Decision: Keep the executable boundary in `src/cli/index.ts`; inject application behavior and
+  output streams into `runCli`; use exit code 0 for success/help/version, 2 for command or user-input
+  errors, and 3 for unexpected internal failures. M01-T03 reports only that a scan request was
+  prepared.
+- Alternatives considered: Calling `process.exit` from Commander actions; validating paths in
+  argument definitions; spawning the CLI for every unit assertion; or implying discovery before
+  M02.
+- Consequences: CLI behavior is deterministic and unit-testable. M01-T04 can add typed path
+  validation behind the existing application function without changing the command grammar.
+- Requirements/contracts affected: RF-01, RNF-01, RNF-03, and the M01 CLI contract.
+- Evidence: `src/cli/run-cli.ts`, `src/application/scan-project.ts`, CLI/application unit tests, and
+  built `--help`, `--version`, `scan .`, and missing-argument checks.
