@@ -62,3 +62,12 @@
   explicit in-root opt-in.
 - Verified T01 under Node.js `24.18.0`: formatting, strict lint, typecheck, two focused contract
   tests, and harness integrity passed.
+- Completed M02-T02 with iterative recursive discovery, deterministic entry/result sorting,
+  canonical descendant containment, pre/post-resolution exclusions, configurable internal-link
+  following, visited-directory cycle prevention, recoverable descendant issues, and typed fatal root
+  failures.
+- Verified nested/default/configured exclusions, deterministic reruns, actual directory-link skipping,
+  internal/external/broken/cyclic link handling, canonical-exclusion bypass prevention, sibling
+  continuation, filesystem races, special entries, POSIX sibling-prefix containment, and Windows
+  drive/separator semantics. All 45 repository tests passed with 100% statements/lines/functions and
+  94.07% branch coverage.

@@ -30,6 +30,23 @@ export const DISCOVERY_ISSUE_CODES = {
 
 export type DiscoveryIssueCode = (typeof DISCOVERY_ISSUE_CODES)[keyof typeof DISCOVERY_ISSUE_CODES];
 
+export const PROJECT_DISCOVERY_ERROR_CODES = {
+  rootUnavailable: 'PROJECT_DISCOVERY_ROOT_UNAVAILABLE',
+} as const;
+
+export type ProjectDiscoveryErrorCode =
+  (typeof PROJECT_DISCOVERY_ERROR_CODES)[keyof typeof PROJECT_DISCOVERY_ERROR_CODES];
+
+export class ProjectDiscoveryError extends Error {
+  public readonly code: ProjectDiscoveryErrorCode;
+
+  public constructor(cause?: unknown) {
+    super('Project root could not be traversed.', { cause });
+    this.name = 'ProjectDiscoveryError';
+    this.code = PROJECT_DISCOVERY_ERROR_CODES.rootUnavailable;
+  }
+}
+
 export const DISCOVERY_OPERATIONS = {
   inspect: 'inspect',
   readDirectory: 'read-directory',

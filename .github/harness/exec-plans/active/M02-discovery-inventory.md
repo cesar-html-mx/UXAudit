@@ -52,6 +52,12 @@ the secure-by-default `skip | follow-within-root` symlink policy.
 Traverse with Node APIs, preserve the authorized root, avoid cycles, return typed recoverable errors,
 and sort directory entries deterministically.
 
+Completed with an iterative Node filesystem traversal that revalidates the canonical root and each
+queued directory, uses path-relative containment rather than string prefixes, applies exclusions to
+both observed and canonical targets, tracks visited canonical directories, and deterministically
+sorts files, exclusions, and recoverable issues. A root operation failure is fatal and typed; a
+descendant failure is retained without discarding siblings.
+
 ### M02-T03 — Build the inventory
 
 Normalize, deduplicate, retain project-relative paths, file type, extension, and other justified
@@ -98,6 +104,11 @@ test and coverage summaries.
 - M01's `ScanProjectResult` exposes only the canonical project path. M02-T05 must extend that
   application result with a discovery summary while preserving the established CLI input and
   internal-error boundaries.
+- Node's directory enumeration order is not a product contract, so T02 performs explicit ordinal
+  sorting. The traversal queue is iterative and grows safely while `for...of` consumes it, avoiding
+  recursive call-stack growth.
+- Stable filesystem operation failures can be classified from native error codes without retaining
+  native messages or absolute host paths in the normalized issue contract.
 
 ## Decision log
 
@@ -111,8 +122,12 @@ test and coverage summaries.
 ## Risks and recovery
 
 - Symlink behavior and canonical containment differ subtly across operating systems. T02 will use
-  Node filesystem APIs only, test policy through controlled temporary trees, and retain portable
-  behavior where symlink creation is unavailable.
+  Node filesystem APIs only, tests the default policy through controlled temporary trees (using a
+  Windows junction where needed), and verifies the complete follow policy through an injected
+  portable filesystem adapter.
+- Portable path APIs and repeated revalidation narrow but cannot eliminate filesystem TOCTOU races.
+  The inventory is not a permanent authorization: M03 must revalidate containment when opening each
+  candidate for parsing.
 - Each task remains independently recoverable by reverting only its conventional task commit; no
   published history will be rewritten.
 

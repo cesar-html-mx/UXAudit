@@ -81,6 +81,13 @@ This slice validates only the selected root. It neither traverses the root nor c
 Input: validated project root and discovery configuration.  
 Output: discovered file records and recoverable discovery errors.
 
+M02 implements this contract with an iterative, ordinally sorted traversal. The selected canonical
+root remains the authorization boundary. Every candidate target is resolved canonically and checked
+with path-relative containment; configured names are checked on both the observed entry and the
+canonical target. Symbolic links are skipped by default, while the internal opt-in follows only
+targets within the root and tracks visited canonical directories. Descendant operation failures are
+normalized and isolated; losing the root is fatal.
+
 ### FileInventory
 
 Normalizes canonical and project-relative paths, deduplicates entries, and returns deterministic
