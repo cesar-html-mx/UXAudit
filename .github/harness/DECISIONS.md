@@ -314,7 +314,8 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   handle in bounded chunks; detect growth or mutation; and close in `finally`. Decode with
   `TextDecoder('utf-8', { fatal: true, ignoreBOM: true })`, preserving an initial U+FEFF so UTF-16
   offsets describe the exact JavaScript string supplied to Babel. Every expected file-local
-  failure is stable and recoverable; root loss or a model invariant remains fatal.
+  failure is stable and recoverable; a non-portable candidate declaration, root loss, or model
+  invariant remains fatal and detail-free.
 - Alternatives considered: `readFile(path)` after a preflight; following final symlinks; replacing
   malformed UTF-8; stripping BOM; unlimited parsing/traversal; arbitrary timing-based test limits;
   or keeping a partial AST/model after a resource error.
@@ -360,3 +361,32 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Evidence: model projection/immutability tests, reverse-input serialization, ID/location/value
   invariant matrices, cycle and cross-file cases, prototype-sensitive keys, generic-error
   redaction, and `evidence/m03-parsing/`.
+
+## D-023 — Additive sequential source-analysis integration
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M03 must connect the completed discovery pipeline to parsing and model construction
+  without changing M02's published `scanProject` contract. Expected read, syntax, and extraction
+  failures affect one candidate, while root authorization, parser bookkeeping, and model integrity
+  failures make the project result unsafe.
+- Decision: Add `analyzeProject` as a separate application facade over the unchanged `scanProject`.
+  Sort a copy of candidates ordinally, reject duplicate or non-portable paths, parse one candidate
+  at a time, retain successful analyzed files and recoverable parser errors in separate ordered
+  arrays, and build one model only after the batch finishes. A parser result whose path does not
+  match its candidate is a fatal invariant. Preserve existing two-line CLI scan output and let the
+  production injection append one fixed-order parsing summary; callers that inject only
+  `scanProject` retain the M02 behavior. Collapse fatal analysis/model details into stable
+  application errors without native causes or project data.
+- Alternatives considered: Mutating the existing scan result contract; parsing concurrently;
+  stopping on the first malformed file; returning a partial model after an invariant failure;
+  printing every parser error by default; or replacing the established discovery summary.
+- Consequences: M04 receives a deterministic AST-free model even when a safe sibling is malformed,
+  completed M02 callers remain compatible, and the CLI distinguishes discovery issues from parsing
+  failures without claiming that rules ran. Sequential parsing bounds simultaneous source/AST
+  memory but does not impose a whole-project candidate limit; project-scale performance remains an
+  M06 validation concern.
+- Requirements/contracts affected: RF-01, RF-07, RF-08, RF-12, RNF-01, RNF-03, RNF-04, RNF-07,
+  RNF-08, R-003, R-006, R-014, and R-015.
+- Evidence: batch isolation/invariant tests, real-filesystem application integration, compiled CLI
+  scenario, no-execution sentinel, measurements, and `evidence/m03-parsing/`.

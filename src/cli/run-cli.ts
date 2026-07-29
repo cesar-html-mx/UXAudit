@@ -1,9 +1,15 @@
 import { Command, CommanderError } from 'commander';
 
 import {
+  AnalyzeProjectError,
+  type AnalyzeProject,
+  type AnalyzeProjectResult,
+} from '../application/analyze-project.js';
+import {
   SCAN_PROJECT_ERROR_CODES,
   ScanProjectError,
   type ScanProject,
+  type ScanProjectResult,
 } from '../application/scan-project.js';
 import { PRODUCT_NAME, PRODUCT_VERSION } from '../index.js';
 import {
@@ -24,6 +30,7 @@ export interface CliIo {
 }
 
 export interface CliDependencies {
+  readonly analyzeProject?: AnalyzeProject;
   readonly io: CliIo;
   readonly scanProject: ScanProject;
 }
@@ -31,7 +38,33 @@ export interface CliDependencies {
 const getErrorMessage = (error: unknown): string =>
   error instanceof Error ? error.message : 'Unknown internal failure';
 
-export const createProgram = ({ io, scanProject }: CliDependencies): Command => {
+const writeScanResult = (io: CliIo, result: ScanProjectResult): void => {
+  io.writeOut(`Project path validated: ${sanitizeTerminalValue(result.projectPath)}\n`);
+  io.writeOut(
+    [
+      'Discovery summary:',
+      `discovered=${String(result.summary.discoveredFiles)}`,
+      `inventory=${String(result.summary.inventoryEntries)}`,
+      `candidates=${String(result.summary.sourceCandidates)}`,
+      `exclusions=${String(result.summary.excludedEntries)}`,
+      `issues=${String(result.summary.recoverableErrors)}`,
+    ].join(' ') + '\n',
+  );
+};
+
+const writeParsingSummary = (io: CliIo, result: AnalyzeProjectResult): void => {
+  io.writeOut(
+    [
+      'Parsing summary:',
+      `parsed=${String(result.parsingSummary.parsedFiles)}`,
+      `failed=${String(result.parsingSummary.failedFiles)}`,
+      `components=${String(result.parsingSummary.components)}`,
+      `jsx=${String(result.parsingSummary.jsxNodes)}`,
+    ].join(' ') + '\n',
+  );
+};
+
+export const createProgram = ({ analyzeProject, io, scanProject }: CliDependencies): Command => {
   const program = new Command();
   const safeIo: CliIo = {
     writeErr: (value) => {
@@ -58,21 +91,17 @@ export const createProgram = ({ io, scanProject }: CliDependencies): Command => 
 
   program
     .command('scan')
-    .description('Discover and classify project source files for static analysis.')
+    .description('Discover, analyze, and model project source files for static analysis.')
     .argument('<project-path>', 'React or TypeScript project directory')
     .action(async (projectPath: string) => {
-      const result = await scanProject({ projectPath });
-      safeIo.writeOut(`Project path validated: ${sanitizeTerminalValue(result.projectPath)}\n`);
-      safeIo.writeOut(
-        [
-          'Discovery summary:',
-          `discovered=${String(result.summary.discoveredFiles)}`,
-          `inventory=${String(result.summary.inventoryEntries)}`,
-          `candidates=${String(result.summary.sourceCandidates)}`,
-          `exclusions=${String(result.summary.excludedEntries)}`,
-          `issues=${String(result.summary.recoverableErrors)}`,
-        ].join(' ') + '\n',
-      );
+      if (analyzeProject === undefined) {
+        writeScanResult(safeIo, await scanProject({ projectPath }));
+        return;
+      }
+
+      const result = await analyzeProject({ projectPath });
+      writeScanResult(safeIo, result);
+      writeParsingSummary(safeIo, result);
     });
 
   return program;
@@ -95,6 +124,11 @@ export const runCli = async (
       return error.code === SCAN_PROJECT_ERROR_CODES.invalidPath
         ? EXIT_CODES.input
         : EXIT_CODES.internal;
+    }
+
+    if (error instanceof AnalyzeProjectError) {
+      dependencies.io.writeErr(`${sanitizeTerminalValue(error.message)}\n`);
+      return EXIT_CODES.internal;
     }
 
     dependencies.io.writeErr(`Internal error: ${sanitizeTerminalValue(getErrorMessage(error))}\n`);

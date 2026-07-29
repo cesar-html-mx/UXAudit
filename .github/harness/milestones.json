@@ -130,7 +130,9 @@
         {
           "id": "M03-T05",
           "title": "Integrate parsing and model with error isolation",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0: 208 tests across 21 files pass with zero skipped/todo; coverage 97.63% statements, 91.86% branches, 100% functions, 97.59% lines; format, lint, typecheck, build, six CLI smokes, four-kind deterministic M03 scenario, secure-reader review, harness validation, exact Babel 8.0.4 tree, zero-vulnerability audit, and twice-verified isolated evidence pass",
+          "completedAt": "2026-07-29T21:19:01.962Z"
         }
       ]
     },

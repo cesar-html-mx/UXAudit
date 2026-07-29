@@ -183,3 +183,37 @@
   files passed, together with formatting, strict lint, typecheck, and build. Global V8 coverage
   passed at 97.00% statements (973/1003), 90.31% branches (634/702), 100% functions, and 96.95%
   lines.
+- Implemented M03-T05 source opening with canonical-root reauthorization, declared/canonical
+  containment, path/descriptor identity and snapshot comparisons, POSIX no-follow/non-blocking
+  flags, exact handle closure, stable local/fatal error boundaries, a 1 MiB source limit, and 64 KiB
+  bounded reads.
+- Added strict UTF-8 decoding that rejects malformed bytes while retaining an initial BOM. The
+  composite parser now performs `verified read → Babel parse → AST-free extraction` without
+  exposing source text or Babel nodes.
+- Added deterministic sequential candidate analysis. Expected read, syntax, and extraction failures
+  remain ordered per-file records and safe siblings continue; duplicate/result-path, root,
+  extraction, and model invariants remain fatal.
+- Preserved the completed M02 `scanProject` public contract and introduced the separate
+  `analyzeProject` facade for parser errors, normalized model, and parsing counts. Existing injected
+  scan-only CLI callers retain their behavior, while the production entry point appends
+  `Parsing summary: parsed=<n> failed=<n> components=<n> jsx=<n>`.
+- Added secure-reader, composite, batch, application, real-filesystem integration, and CLI
+  regressions. The integration case isolates malformed TSX, retains valid sibling model locations,
+  and proves that target-code sentinels are not executed.
+- Independent review found two cross-platform hardening gaps before closure. Non-portable candidate
+  paths now fail through a detail-free fatal invariant, Windows drive prefixes are rejected on every
+  host, and reader tests construct native absolute paths instead of assuming POSIX syntax.
+- Verified T05 on Node.js `24.18.0`: all 208 repository tests across 21 files passed, together with
+  formatting, strict lint, typecheck, and build. Global V8 coverage passed at 97.63% statements,
+  91.86% branches, 100% functions, and 97.59% lines.
+- The compiled controlled M03 scenario modeled seven files, isolated one malformed file, retained
+  seven components and 15 JSX nodes across JavaScript/JSX/TypeScript/TSX, reproduced byte-identical
+  expected output, and did not execute target code.
+- Collected the isolated `M03-PARSING` evidence package twice. Locked install, product gate,
+  coverage, zero-skip/todo tests, CLI smoke, controlled scenario, harness, moderate-threshold audit,
+  and exact direct Babel tree all passed. The second run preserved the initial package after stable
+  comparison; its manifest verifies every retained artifact, and npm reported zero known
+  vulnerabilities.
+- Attempted to publish the task-complete T04 branch tip before the T05 commit. This process has no
+  HTTPS credential helper and no authorized SSH key, so the attempt failed without changing the
+  remote. No embedded token or remote publication is claimed.

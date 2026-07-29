@@ -8,7 +8,7 @@ The primary interface is:
 ux-audit scan <project-path> [options]
 ```
 
-### Implemented through M02
+### Implemented through M03
 
 - `--help` and command help.
 - `--version`.
@@ -16,7 +16,11 @@ ux-audit scan <project-path> [options]
 - Canonical project-root validation for existence, directory type, and read/search access.
 - Safe recursive discovery with exact default exclusions and secure symbolic-link skipping.
 - Deterministic canonical inventory and conservative `.js`/`.jsx`/`.ts`/`.tsx` classification.
-- Stable path and discovery-summary messages without parsing, rule, finding, or audit claims.
+- Bounded source reads, Babel parsing, AST-free JSX/component extraction, and deterministic normalized
+  model construction.
+- Recoverable read, parse, and extraction errors isolated by source file.
+- Stable path, discovery-summary, and parsing-summary messages without rule, finding, or audit
+  claims.
 
 ### Planned options
 
@@ -29,24 +33,45 @@ ux-audit scan <project-path> [options]
 - `--no-color`: terminal output without ANSI color.
 - `--verbose`: processing detail and recoverable errors.
 
-These options are not implemented through M02. Final option names may be refined in M05, but
+These options are not implemented through M03. Final option names may be refined in M05, but
 documented behavior and compatibility must be preserved after release.
 
-## Current discovery result
+## Current scan result
 
-M02's application flow returns the canonical project root, full discovery result, normalized
-inventory, classified source candidates, and counts for discovered files, inventory entries,
-candidates, exclusions, and recoverable issues. The CLI renders:
+The completed `scanProject` contract continues to return the canonical project root, full discovery
+result, normalized inventory, classified source candidates, and discovery counts. M03 preserves that
+public behavior and adds a separate `analyzeProject` facade with:
+
+- one normalized `AnalysisModel`;
+- one ordered list of recoverable per-file parser errors;
+- parsed-file, failed-file, component, and JSX-node counts.
+
+The production CLI uses the additive facade and renders:
 
 ```text
 Project path validated: <canonical-project-path>
 Discovery summary: discovered=<n> inventory=<n> candidates=<n> exclusions=<n> issues=<n>
+Parsing summary: parsed=<n> failed=<n> components=<n> jsx=<n>
 ```
 
 The default traversal skips symbolic links. An internal `follow-within-root` policy exists for
 controlled callers but is not yet exposed as a CLI option. Descendant operation failures can be
 retained as recoverable issues; a root or pipeline invariant failure stops processing with a stable
 message.
+
+Classified candidates are processed sequentially in ordinal project-relative path order. The reader
+reauthorizes the canonical project root and candidate before and after opening and reading a file
+handle. It accepts only regular in-root files up to 1 MiB, requests at most 64 KiB per read, rejects
+invalid UTF-8, and preserves an initial UTF-8 BOM. Read, syntax, and expected extraction failures are
+retained separately from the model so later siblings can continue. Non-portable internal candidate
+declarations, root authorization, candidate-batch invariants, unexpected extraction invariants, and
+model invariants remain fatal and detail-free.
+
+The Babel adapter owns the transient AST and composes strict text decoding, source-kind-specific
+parsing, and AST-free extraction. No target module, package script, or project configuration is
+imported or executed. The normalized model retains files, syntactically justified components, JSX
+elements/fragments, attributes, values, relationships, and half-open UTF-16 locations. It does not
+claim runtime React semantics.
 
 ## Successful execution
 
@@ -63,12 +88,14 @@ A future successful audit returns an `AuditResult` containing:
 
 ## Exit codes
 
-Implemented M02 policy:
+Implemented M03 policy:
 
-- `0`: help/version completed or discovery and source classification completed safely.
+- `0`: help/version completed or discovery, source parsing, and model construction completed safely,
+  including when recoverable per-file errors were retained.
 - `1`: reserved for a future completed audit that meets the configured finding-failure policy.
 - `2`: command, argument, project-path, or access input error.
-- `3`: fatal validation, discovery, inventory, classification, or unexpected application failure.
+- `3`: fatal validation, discovery, inventory, classification, root authorization, source-batch,
+  model, or unexpected application failure.
 
 M05/M06 must refine finding-policy behavior without changing these established input/internal
 boundaries incompatibly.

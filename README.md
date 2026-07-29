@@ -1,13 +1,14 @@
 # UXAudit
 
-UXAudit is a local, static-analysis CLI for React and TypeScript projects. Milestone M02 extends the
-Node.js 24 foundation with safe recursive project discovery, a normalized deterministic inventory,
-and conservative `.js`, `.jsx`, `.ts`, and `.tsx` source-candidate classification.
+UXAudit is a local, static-analysis CLI for React and TypeScript projects. The current Node.js 24
+implementation safely discovers and classifies `.js`, `.jsx`, `.ts`, and `.tsx` source candidates,
+parses them through an internal Babel boundary, and builds a deterministic parser-independent
+analysis model.
 
-The current `scan` command validates and canonicalizes the selected root, discovers files without
-executing target code, and prints discovery counts. Parsing, rules, and terminal/JSON/HTML audit
-reports are later milestones, so a successful M02 scan must not be interpreted as a completed
-audit.
+The `scan` command validates and canonicalizes the selected root, discovers files, analyzes safe
+source candidates without executing target code, and prints discovery and parsing counts. Rules and
+terminal/JSON/HTML finding reports are later milestones, so a successful M03 scan must not be
+interpreted as a completed audit.
 
 ## Requirements
 
@@ -37,11 +38,12 @@ node dist/cli/index.js --version
 node dist/cli/index.js scan .
 ```
 
-A valid directory produces its canonical path and one stable discovery summary:
+A valid directory produces its canonical path plus stable discovery and parsing summaries:
 
 ```text
 Project path validated: <canonical-project-path>
 Discovery summary: discovered=<n> inventory=<n> candidates=<n> exclusions=<n> issues=<n>
+Parsing summary: parsed=<n> failed=<n> components=<n> jsx=<n>
 ```
 
 The default traversal skips symbolic links and dependency, generated-output, cache, coverage, and
@@ -50,16 +52,24 @@ order; classification excludes declarations and conventionally named configurati
 reading file content or claiming React component semantics.
 
 Empty, missing, regular-file, and inaccessible roots are rejected before traversal. Fatal discovery,
-inventory, or classification failures use stable application messages; recoverable descendant
-filesystem failures are counted as `issues` while safe siblings continue. Native filesystem causes
-and stack traces are not printed. Control and bidirectional characters, including injected line
-breaks, are rendered as visible Unicode escapes before reaching the terminal.
+inventory, classification, root-authorization, batch-invariant, or model-invariant failures use
+stable application messages. Recoverable descendant discovery failures are counted as `issues`;
+recoverable read, syntax, and extraction failures are counted as `failed` while safe source siblings
+continue into the model.
 
-Current M02 exit codes:
+Source opening reauthorizes the canonical project root and candidate around a verified file-handle
+read. A source file may contain at most 1 MiB and is read in chunks of at most 64 KiB; non-regular,
+changed, outside-root, unreadable, oversized, and invalid-UTF-8 candidates fail closed. UTF-8 is
+decoded strictly and an initial BOM is preserved for Babel. Native filesystem/Babel causes, source
+text, absolute paths, and AST values do not leave their boundaries. Control and bidirectional
+characters, including injected line breaks, are rendered as visible Unicode escapes before reaching
+the terminal.
+
+Current M03 exit codes:
 
 | Code | Meaning                                                                               |
 | ---: | ------------------------------------------------------------------------------------- |
-|  `0` | Help/version completed or project discovery and classification completed safely.      |
+|  `0` | Help/version completed or project discovery, parsing, and modeling completed safely.  |
 |  `1` | Reserved for a future completed audit that meets a configured finding-failure policy. |
 |  `2` | Invalid command, missing argument, or invalid/inaccessible project root.              |
 |  `3` | Fatal processing failure or unexpected application failure.                           |
@@ -72,6 +82,7 @@ npm run verify
 npm run test:coverage
 npm run test:smoke
 npm run test:scenario:m02
+npm run test:scenario:m03
 ```
 
 Useful individual commands:
@@ -87,8 +98,11 @@ Useful individual commands:
 | `npm run build`                 | Emit ESM JavaScript, declarations, and source maps to `dist/`.           |
 | `npm run test:smoke`            | Build and execute six CLI scenarios without a shell.                     |
 | `npm run test:scenario:m02`     | Verify reviewed inventory, exclusions, links, determinism, and no exec.  |
+| `npm run test:scenario:m03`     | Exercise the controlled four-kind parser/model scenario without exec.    |
 | `npm run evidence:m02`          | Collect the isolated, sanitized, integrity-checked M02 evidence package. |
 | `npm run evidence:m02:finalize` | Add the milestone report to the retained SHA-256 manifest.               |
+| `npm run evidence:m03`          | Collect the isolated, sanitized, integrity-checked M03 evidence package. |
+| `npm run evidence:m03:finalize` | Add the milestone report to the retained M03 SHA-256 manifest.           |
 | `npm run verify`                | Run format, lint, typecheck, unit tests, and build in one gate.          |
 
 Husky invokes `npm run verify` before local commits. CI is configured for Node.js 24 on Ubuntu
@@ -97,22 +111,29 @@ pinned to immutable release SHAs and Dependabot tracks updates. Dependency Revie
 for public repositories; private repositories can enable them with `DEPENDENCY_REVIEW_ENABLED=true`
 and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
 
-## M02 boundaries
+## M03 boundaries
 
 - Local CLI only; no service, database, telemetry, or product network dependency.
 - Static analysis only; analyzed code is never executed or imported.
 - The canonical root is the traversal authorization boundary. Links are skipped by default; the
   internal opt-in follows only canonical in-root targets and prevents cycles.
-- Discovery and inventory are candidate-producing stages, not permanent file authorization. M03
-  must revalidate containment when opening each candidate.
-- No JSX/TSX parsing, semantic React detection, rule execution, or reports yet.
+- Discovery and inventory remain candidate-producing stages, not permanent file authorization.
+  Source opening revalidates root, path, regular-file identity, and bounded descriptor content.
+- Babel AST and source text remain internal to the parsing package. Rules will consume only the
+  normalized `AnalysisModel`.
+- Component recognition is intentionally syntactic and conservative; it does not resolve runtime
+  aliases, higher-order abstractions, imports, or rendered behavior.
+- No rule decisions, findings, finding-failure policy, or terminal/JSON/HTML audit reports yet.
 
 ## Repository map
 
 - `src/cli/`: executable boundary and Commander adapter.
-- `src/application/`: validation → discovery → inventory → classification orchestration.
+- `src/application/`: preserved scan pipeline plus the additive source-analysis/model facade.
 - `src/project/`: root validation plus focused discovery, inventory, and classification modules.
-- `tests/`: focused application, CLI, and project tests.
+- `src/parsing/`: bounded source reader, Babel-only AST adapter, extraction, and error-isolated
+  candidate batch.
+- `src/domain/models/`: parser-independent normalized analysis contracts and builder.
+- `tests/`: focused domain, parser, application, CLI, and project tests.
 - `.github/harness/`: milestone state, plans, decisions, risks, and lifecycle scripts.
 - `.github/workflows/`: quality, harness, CodeQL, and dependency-review automation.
 - `docs/`: product and engineering system of record.
@@ -125,4 +146,4 @@ node .github/harness/scripts/validate-harness.mjs
 node .github/harness/scripts/show-status.mjs
 ```
 
-After M02 closes, the harness activates M03 — source parsing and the normalized analysis model.
+This implementation slice prepares the parser-independent input consumed by M04 rules.

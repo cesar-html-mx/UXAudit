@@ -1,0 +1,549 @@
+{
+  "components": [
+    {
+      "id": "component:src/jsx-shapes.tsx:141",
+      "jsxNodeIds": [
+        "jsx:src/jsx-shapes.tsx:160",
+        "jsx:src/jsx-shapes.tsx:167",
+        "jsx:src/jsx-shapes.tsx:397",
+        "jsx:src/jsx-shapes.tsx:462",
+        "jsx:src/jsx-shapes.tsx:491",
+        "jsx:src/jsx-shapes.tsx:514"
+      ],
+      "kind": "arrow-function",
+      "location": {
+        "end": {
+          "column": 1,
+          "line": 31,
+          "offset": 607
+        },
+        "filePath": "src/jsx-shapes.tsx",
+        "start": {
+          "column": 13,
+          "line": 7,
+          "offset": 141
+        }
+      },
+      "name": "Shapes",
+      "rootJsxNodeIds": ["jsx:src/jsx-shapes.tsx:160"]
+    }
+  ],
+  "files": [
+    {
+      "componentIds": ["component:src/jsx-shapes.tsx:141"],
+      "filePath": "src/jsx-shapes.tsx",
+      "jsxNodeIds": [
+        "jsx:src/jsx-shapes.tsx:160",
+        "jsx:src/jsx-shapes.tsx:167",
+        "jsx:src/jsx-shapes.tsx:397",
+        "jsx:src/jsx-shapes.tsx:462",
+        "jsx:src/jsx-shapes.tsx:491",
+        "jsx:src/jsx-shapes.tsx:514"
+      ],
+      "language": "typescript",
+      "location": {
+        "end": {
+          "column": 0,
+          "line": 32,
+          "offset": 609
+        },
+        "filePath": "src/jsx-shapes.tsx",
+        "start": {
+          "column": 0,
+          "line": 1,
+          "offset": 0
+        }
+      },
+      "usesJsx": true
+    }
+  ],
+  "jsxNodes": [
+    {
+      "childNodeIds": [
+        "jsx:src/jsx-shapes.tsx:167",
+        "jsx:src/jsx-shapes.tsx:397",
+        "jsx:src/jsx-shapes.tsx:462",
+        "jsx:src/jsx-shapes.tsx:491"
+      ],
+      "componentId": "component:src/jsx-shapes.tsx:141",
+      "id": "jsx:src/jsx-shapes.tsx:160",
+      "location": {
+        "end": {
+          "column": 5,
+          "line": 30,
+          "offset": 605
+        },
+        "filePath": "src/jsx-shapes.tsx",
+        "start": {
+          "column": 2,
+          "line": 8,
+          "offset": 160
+        }
+      },
+      "parentNodeId": null,
+      "textContent": {
+        "confidence": "partial",
+        "value": "Save Read more"
+      },
+      "kind": "fragment"
+    },
+    {
+      "childNodeIds": [],
+      "componentId": "component:src/jsx-shapes.tsx:141",
+      "id": "jsx:src/jsx-shapes.tsx:167",
+      "location": {
+        "end": {
+          "column": 6,
+          "line": 19,
+          "offset": 392
+        },
+        "filePath": "src/jsx-shapes.tsx",
+        "start": {
+          "column": 4,
+          "line": 9,
+          "offset": 167
+        }
+      },
+      "parentNodeId": "jsx:src/jsx-shapes.tsx:160",
+      "textContent": {
+        "confidence": "exact",
+        "value": ""
+      },
+      "attributes": [
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 12,
+              "line": 10,
+              "offset": 184
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 6,
+              "line": 10,
+              "offset": 178
+            }
+          },
+          "name": "alt",
+          "value": {
+            "confidence": "exact",
+            "kind": "literal",
+            "value": ""
+          }
+        },
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 20,
+              "line": 11,
+              "offset": 205
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 6,
+              "line": 11,
+              "offset": 191
+            }
+          },
+          "name": "loading",
+          "value": {
+            "confidence": "exact",
+            "kind": "literal",
+            "value": "lazy"
+          }
+        },
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 17,
+              "line": 12,
+              "offset": 223
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 6,
+              "line": 12,
+              "offset": 212
+            }
+          },
+          "name": "width",
+          "value": {
+            "confidence": "exact",
+            "kind": "literal",
+            "value": 320
+          }
+        },
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 18,
+              "line": 13,
+              "offset": 242
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 6,
+              "line": 13,
+              "offset": 230
+            }
+          },
+          "name": "height",
+          "value": {
+            "confidence": "exact",
+            "kind": "literal",
+            "value": 180
+          }
+        },
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 20,
+              "line": 14,
+              "offset": 263
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 6,
+              "line": 14,
+              "offset": 249
+            }
+          },
+          "name": "hidden",
+          "value": {
+            "confidence": "exact",
+            "kind": "literal",
+            "value": false
+          }
+        },
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 47,
+              "line": 15,
+              "offset": 311
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 6,
+              "line": 15,
+              "offset": 270
+            }
+          },
+          "name": "style",
+          "value": {
+            "confidence": "exact",
+            "hasUnknownProperties": false,
+            "kind": "object",
+            "properties": [
+              {
+                "location": {
+                  "end": {
+                    "column": 27,
+                    "line": 15,
+                    "offset": 291
+                  },
+                  "filePath": "src/jsx-shapes.tsx",
+                  "start": {
+                    "column": 15,
+                    "line": 15,
+                    "offset": 279
+                  }
+                },
+                "name": "fontSize",
+                "value": {
+                  "confidence": "exact",
+                  "kind": "literal",
+                  "value": 11
+                }
+              },
+              {
+                "location": {
+                  "end": {
+                    "column": 44,
+                    "line": 15,
+                    "offset": 308
+                  },
+                  "filePath": "src/jsx-shapes.tsx",
+                  "start": {
+                    "column": 29,
+                    "line": 15,
+                    "offset": 293
+                  }
+                },
+                "name": "lineHeight",
+                "value": {
+                  "confidence": "exact",
+                  "kind": "literal",
+                  "value": 1.2
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 21,
+              "line": 16,
+              "offset": 333
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 6,
+              "line": 16,
+              "offset": 318
+            }
+          },
+          "name": "title",
+          "value": {
+            "confidence": "dynamic",
+            "kind": "dynamic"
+          }
+        },
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 29,
+              "line": 17,
+              "offset": 363
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 6,
+              "line": 17,
+              "offset": 340
+            }
+          },
+          "name": "data-risk",
+          "value": {
+            "confidence": "dynamic",
+            "kind": "dynamic"
+          }
+        },
+        {
+          "kind": "spread",
+          "location": {
+            "end": {
+              "column": 21,
+              "line": 18,
+              "offset": 385
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 6,
+              "line": 18,
+              "offset": 370
+            }
+          }
+        }
+      ],
+      "elementKind": "intrinsic",
+      "kind": "element",
+      "name": "img"
+    },
+    {
+      "childNodeIds": [],
+      "componentId": "component:src/jsx-shapes.tsx:141",
+      "id": "jsx:src/jsx-shapes.tsx:397",
+      "location": {
+        "end": {
+          "column": 13,
+          "line": 22,
+          "offset": 457
+        },
+        "filePath": "src/jsx-shapes.tsx",
+        "start": {
+          "column": 4,
+          "line": 20,
+          "offset": 397
+        }
+      },
+      "parentNodeId": "jsx:src/jsx-shapes.tsx:160",
+      "textContent": {
+        "confidence": "exact",
+        "value": "Save"
+      },
+      "attributes": [
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 20,
+              "line": 20,
+              "offset": 413
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 12,
+              "line": 20,
+              "offset": 405
+            }
+          },
+          "name": "disabled",
+          "value": {
+            "confidence": "exact",
+            "kind": "literal",
+            "value": true
+          }
+        },
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 38,
+              "line": 20,
+              "offset": 431
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 21,
+              "line": 20,
+              "offset": 414
+            }
+          },
+          "name": "aria-label",
+          "value": {
+            "confidence": "exact",
+            "kind": "literal",
+            "value": "Save"
+          }
+        }
+      ],
+      "elementKind": "custom",
+      "kind": "element",
+      "name": "Button"
+    },
+    {
+      "childNodeIds": [],
+      "componentId": "component:src/jsx-shapes.tsx:141",
+      "id": "jsx:src/jsx-shapes.tsx:462",
+      "location": {
+        "end": {
+          "column": 28,
+          "line": 23,
+          "offset": 486
+        },
+        "filePath": "src/jsx-shapes.tsx",
+        "start": {
+          "column": 4,
+          "line": 23,
+          "offset": 462
+        }
+      },
+      "parentNodeId": "jsx:src/jsx-shapes.tsx:160",
+      "textContent": {
+        "confidence": "exact",
+        "value": ""
+      },
+      "attributes": [
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 25,
+              "line": 23,
+              "offset": 483
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 13,
+              "line": 23,
+              "offset": 471
+            }
+          },
+          "name": "name",
+          "value": {
+            "confidence": "exact",
+            "kind": "literal",
+            "value": "check"
+          }
+        }
+      ],
+      "elementKind": "custom",
+      "kind": "element",
+      "name": "UI.Icon"
+    },
+    {
+      "childNodeIds": ["jsx:src/jsx-shapes.tsx:514"],
+      "componentId": "component:src/jsx-shapes.tsx:141",
+      "id": "jsx:src/jsx-shapes.tsx:491",
+      "location": {
+        "end": {
+          "column": 21,
+          "line": 29,
+          "offset": 599
+        },
+        "filePath": "src/jsx-shapes.tsx",
+        "start": {
+          "column": 4,
+          "line": 24,
+          "offset": 491
+        }
+      },
+      "parentNodeId": "jsx:src/jsx-shapes.tsx:160",
+      "textContent": {
+        "confidence": "partial",
+        "value": "Read more"
+      },
+      "kind": "fragment"
+    },
+    {
+      "childNodeIds": [],
+      "componentId": "component:src/jsx-shapes.tsx:141",
+      "id": "jsx:src/jsx-shapes.tsx:514",
+      "location": {
+        "end": {
+          "column": 10,
+          "line": 28,
+          "offset": 577
+        },
+        "filePath": "src/jsx-shapes.tsx",
+        "start": {
+          "column": 6,
+          "line": 25,
+          "offset": 514
+        }
+      },
+      "parentNodeId": "jsx:src/jsx-shapes.tsx:491",
+      "textContent": {
+        "confidence": "partial",
+        "value": "Read more"
+      },
+      "attributes": [
+        {
+          "kind": "named",
+          "location": {
+            "end": {
+              "column": 21,
+              "line": 25,
+              "offset": 529
+            },
+            "filePath": "src/jsx-shapes.tsx",
+            "start": {
+              "column": 9,
+              "line": 25,
+              "offset": 517
+            }
+          },
+          "name": "href",
+          "value": {
+            "confidence": "exact",
+            "kind": "literal",
+            "value": "/more"
+          }
+        }
+      ],
+      "elementKind": "intrinsic",
+      "kind": "element",
+      "name": "a"
+    }
+  ]
+}

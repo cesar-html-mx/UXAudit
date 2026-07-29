@@ -51,9 +51,9 @@ transform only information justified by stable rules.
   descriptor without following a final symlink where the platform supports it, verifies regular
   file identity before reading, enforces a byte limit, decodes UTF-8 strictly, and records stable
   recoverable errors without native messages or absolute-path disclosure.
-- `src/application/scan-project.ts` extends the existing M02 pipeline additively with parser/model
-  output and a separate parsing summary. The established canonical-root and discovery summary
-  output remain unchanged.
+- `src/application/analyze-project.ts` composes the existing M02 `scanProject` contract with
+  parser/model output and a separate parsing summary. The completed `scanProject` public contract,
+  canonical-root result, and discovery summary remain unchanged.
 
 ## Milestone tasks
 
@@ -118,6 +118,18 @@ with format, lint, typecheck, build, and global coverage gates passing.
 
 Continue after a malformed file when safe and report parse failures separately from findings.
 
+Status: completed. Retained evidence and harness closure follow the task commit.
+`analyzeProject` now composes the unchanged M02 scan with an authorized bounded reader, Babel
+composite, sequential candidate batch, and normalized model builder. Recoverable per-file errors
+remain separate and safe siblings continue; non-portable candidate declarations, root loss,
+parser/result bookkeeping, extraction invariants, and model invariants fail through stable generic
+boundaries. The production CLI appends one parsing-summary line while injected scan-only callers
+retain the established two-line behavior. Node.js `24.18.0` verification passes all 208 tests across
+21 files with 97.63% statements, 91.86% branches, 100% functions, and 97.59% lines covered. The
+controlled scenario parses seven siblings, isolates one malformed TSX file, retains seven
+components and 15 JSX nodes across all four source kinds, reproduces byte-identically, and does not
+execute its target-code sentinel.
+
 ## Validation and acceptance
 
 Test multiple component styles, fragments, spreads, string/expression/boolean attributes, location
@@ -132,10 +144,10 @@ and coverage.
 
 - [x] Milestone started.
 - [x] Repository inspected and plan reconciled with reality.
-- [ ] Tasks completed.
-- [ ] Quality gate passed.
-- [ ] Evidence collected.
-- [ ] Documentation and traceability updated.
+- [x] Tasks completed.
+- [x] Quality gate passed.
+- [x] Evidence collected.
+- [x] Documentation and traceability updated.
 - [ ] Milestone closed and state advanced.
 
 ## Discoveries
@@ -147,8 +159,8 @@ and coverage.
   `milestone/m03-parser-analysis-model` branch was created from the verified M02 tree and
   `state.currentBranch` was reconciled before product work.
 - The owner squash-merged M02 after this workspace last fetched `origin/main`. The local M03 branch
-  therefore preserves the correct M02 tree, and the new main squash must be fetched and recorded as
-  an ancestor before M03 publication; no history rewrite is required.
+  therefore preserved the correct M02 tree. Commit `0e32080` merged the fetched main squash as an
+  ancestor without rewriting M03 history.
 - Registry metadata on 2026-07-29 identifies Babel `8.0.4` as the current stable parser, traverse,
   and types release. Its Node engine (`^22.18.0 || >=24.11.0`) is compatible with the required
   Node.js `24.18.0`. Existing Babel packages are only incidental development transitive
@@ -195,6 +207,42 @@ and coverage.
 - The T04 builder gate passed 26 focused cases and all 132 repository tests across 16 files on
   Node.js `24.18.0`. Global V8 coverage measured 97.00% statements (973/1003), 90.31% branches
   (634/702), 100% functions, and 96.95% lines; formatting, lint, typecheck, and build also passed.
+- M03-T05 inspection found that `scanProject` is already an exported, tested M02 application
+  contract and the harness forbids changing completed public contracts. The integration will use a
+  new facade and an additive CLI dependency so existing injected callers retain their behavior.
+- The secure source boundary must consume the canonical root and exact classified candidate paths,
+  reauthorize both before and after bounded descriptor reads, and collapse native filesystem detail
+  into the stable recoverable parser error taxonomy. Syntax/extraction failures remain local to one
+  file; root authorization and model-invariant failures remain fatal.
+- The production reader now checks native absolute/canonical containment, regular-file identity and
+  size/time snapshots before and after an opened handle, reads at most 1 MiB plus one growth byte in
+  64 KiB requests, decodes UTF-8 fatally while retaining a BOM, and closes exactly once. POSIX uses
+  no-follow/non-blocking flags; Windows uses its portable read-only flag plus the same post-open
+  identity checks.
+- Independent review found and the implementation corrected two defense-in-depth portability gaps:
+  non-portable relative paths now fail through a detail-free reader invariant instead of entering a
+  recoverable record, and drive-prefixed paths are rejected consistently on every host. Reader
+  tests use native path construction so the hosted Windows/macOS matrix does not inherit a POSIX
+  assumption.
+- Candidate processing clones and sorts input ordinally, executes exactly one parser pipeline at a
+  time, continues after typed read/parse/extract failures, and rejects duplicates or result-path
+  mismatches fatally. The separate `analyzeProject` facade preserves the completed `scanProject`
+  contract and makes parsing counts/errors explicit without claiming rules or findings.
+- The M03 controlled scenario exercises JavaScript, JSX, TypeScript, and TSX fixtures, exact model
+  and location projections, a malformed sibling, CLI output, and a target-code sentinel. Two runs
+  are byte-identical; seven files are modeled, one fails locally, and no target code executes.
+- The final pre-evidence T05 gate passes 208 tests across 21 files on Node.js `24.18.0`. Global V8
+  coverage is 97.63% statements (1195/1224), 91.86% branches (768/836), 100% functions (220/220),
+  and 97.59% lines (1175/1204); format, lint, typecheck, build, compiled CLI smoke, scenario, and
+  harness validation pass.
+- The isolated evidence collector repeated locked installation, product gate, coverage, a
+  zero-skip/todo test run, compiled CLI smoke, the controlled scenario, harness validation,
+  dependency audit, and the direct Babel dependency check. All nine passed; the audit reported zero
+  known vulnerabilities and a second collection preserved the package after stable-result
+  comparison. The source snapshot digest is
+  `sha256:e6f315a35a130dc394009ada75cf9658bfd6bcaefa66c772e1b9183c62190b40`
+  and the normalized scenario digest is
+  `sha256:48501cab384bb28885899c3646ddc4521470c777339ff15c951cc2789d1b3225`.
 
 ## Decision log
 
@@ -205,6 +253,8 @@ and coverage.
   and confidence semantics.
 - D-021 fixes bounded AST extraction, component/relationship barriers, conservative retained text
   and values, and the stable fatal invariant boundary.
+- D-022 fixes defensive project-model projection and graph/value/location invariants; D-023 fixes
+  the additive facade, sequential error-isolated batch, compatibility, and parsing-summary boundary.
 
 ## Risks and recovery
 
@@ -216,12 +266,15 @@ and coverage.
   the residual platform limit.
 - Source size and extracted-node limits prevent one candidate from monopolizing memory. Thresholds
   are product constants with boundary tests, not machine-dependent timing assertions.
+- Sequential parsing bounds simultaneous source/AST retention but does not cap the number of project
+  candidates. The M03 measurement is a factual controlled baseline; project-scale thresholds remain
+  an M06 validation responsibility.
 - The component recognizer is intentionally syntactic: it does not resolve aliases, higher-order
   components, computed React superclasses, or runtime rendering. Nested-function and custom-child
   text is therefore represented conservatively instead of inheriting unjustified ownership or exact
   confidence.
-- The M02 squash ancestry will be reconciled before the first push. Recovery is a normal merge that
-  preserves the M03 tree; rebase and force-push remain prohibited.
+- The M02 squash ancestry is reconciled through merge commit `0e32080`, which preserves the M03 tree;
+  rebase and force-push remain prohibited.
 
 ## Outcomes and retrospective
 

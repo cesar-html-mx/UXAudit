@@ -22,7 +22,7 @@
 - [x] M03-T02 Configure `@babel/parser` for TypeScript and JSX.
 - [x] M03-T03 Traverse ASTs and extract components, JSX elements, attributes, and locations.
 - [x] M03-T04 Build the UXAudit analysis model without exposing Babel nodes to rules.
-- [ ] M03-T05 Isolate parser errors and integrate the complete processing path.
+- [x] M03-T05 Isolate parser errors and integrate the complete processing path.
 
 ## M04 — Rule engine and initial catalog
 

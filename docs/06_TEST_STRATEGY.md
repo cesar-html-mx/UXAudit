@@ -179,3 +179,27 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
 - The executed Node.js `24.18.0` gate passed 26 focused builder tests and all 132 repository tests
   across 16 files. Format, lint, typecheck, and build passed; global V8 coverage measured 97.00%
   statements (973/1003), 90.31% branches (634/702), 100% functions, and 96.95% lines.
+
+## M03-T05 executed integration/isolation baseline
+
+- Secure-reader tests cover declared/canonical containment, root retarget and identity loss,
+  path/handle snapshot changes, substituted non-regular files, POSIX no-follow/non-blocking flags,
+  the Windows read-only path, exact close behavior, and stable error normalization without native
+  path/message leakage.
+- Byte-boundary cases accept exactly 1 MiB, reject initial or observed growth above it, limit every
+  descriptor request to 64 KiB, detect short or invalid reads, reject malformed UTF-8, and prove that
+  an initial BOM survives both injected and production filesystem paths.
+- Composite tests prove strict `read → Babel parse → extraction` delegation, short-circuit each
+  recoverable stage, propagate fatal failures, and serialize no source string or AST through the
+  public parser result.
+- Batch tests prove cloned ordinal input, sequential execution, deterministic output, duplicate and
+  result-path invariants, fatal short-circuiting, and independent continuation after read, parse, and
+  extraction failures.
+- Application and real-filesystem integration tests preserve the complete `scanProject` result,
+  keep discovery and parsing summaries separate, isolate malformed syntax while modeling safe
+  siblings, retain locations, and prove that inert target-code sentinels are never executed. CLI
+  tests preserve scan-only dependency compatibility and verify the production third summary line
+  plus stable fatal-error exit mapping.
+- The executed Node.js `24.18.0` gate passed all 208 repository tests across 21 files. Format, lint,
+  typecheck, and build passed; global V8 coverage measured 97.63% statements, 91.86% branches, 100%
+  functions, and 97.59% lines.

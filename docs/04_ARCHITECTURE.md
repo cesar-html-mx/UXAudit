@@ -50,36 +50,47 @@ src/
 The exact filenames may evolve, but the dependency direction and responsibility boundaries may not
 be collapsed without an architecture decision.
 
-## Implemented through M02
+## Implemented through M03
 
 ```text
 src/cli/index.ts
   -> src/cli/run-cli.ts
        -> src/cli/sanitize-terminal.ts
+  -> src/application/analyze-project.ts
   -> src/application/scan-project.ts
        -> src/project/validate-project-path.ts
        -> src/project/discovery/
        -> src/project/inventory/
        -> src/project/classification/
+  -> src/parsing/analyze-source-candidates.ts
+       -> src/parsing/babel/parse-source-candidate.ts
+            -> src/parsing/read-source-candidate.ts
+            -> src/parsing/babel/parse-babel-source.ts
+            -> src/parsing/babel/extract-babel-analysis.ts
+  -> src/domain/models/build-analysis-model.ts
 ```
 
 - `cli/index.ts` is the only process boundary. It supplies arguments and streams and assigns
   `process.exitCode`.
 - `run-cli.ts` owns Commander grammar and maps `ScanProjectError` application errors to terminal
-  output and exit codes. It receives I/O and the scan application function as dependencies, prints
-  the preserved canonical-root line plus a stable discovery summary, and does not import project
-  adapters. Its output boundary converts terminal control and bidirectional characters in untrusted
-  values to visible Unicode escapes.
+  output and exit codes. It receives I/O, the preserved scan application function, and an optional
+  analysis facade as dependencies. Existing injected scan-only callers keep their two-line behavior;
+  the production entry point supplies `analyzeProject` and appends the stable parsing summary. It
+  does not import project or parsing adapters. Its output boundary converts terminal control and
+  bidirectional characters in untrusted values to visible Unicode escapes.
 - `scan-project.ts` composes `validation → discovery → inventory → classification`, retains each
-  normalized stage result for M03, computes the summary, and maps fatal stage failures into stable
-  application errors.
+  normalized stage result, computes the discovery summary, and maps fatal stage failures into stable
+  application errors. M03 does not change this completed M02 public contract.
+- `analyze-project.ts` composes `scanProject → source-candidate analysis → model construction`.
+  Recoverable parser errors remain separate from the model and discovery counters; fatal
+  source-analysis and model failures map to distinct stable application errors without causes.
 - `validate-project-path.ts` uses an injectable filesystem adapter to execute
   `resolve → realpath → stat → access(R_OK | X_OK)`.
 - The focused project modules traverse with Node APIs, build an invariant-checked inventory, and
   classify parser candidates without reading or executing source code.
 
-This slice ends after source-candidate classification. It does not parse files, infer components,
-run rules, or create an `AuditResult`.
+This slice ends after parser-independent model construction. It does not run rules, produce
+findings, or create an `AuditResult`.
 
 ## Core contracts
 
@@ -131,6 +142,26 @@ does not load project or host Babel configuration, and selects plugins from the 
 kind: JavaScript, JavaScript with JSX, TypeScript, or TypeScript with JSX. It uses unambiguous
 script/module detection, retains locations and the relative filename, disables partial error
 recovery, and normalizes thrown parser failures before they leave the adapter boundary.
+
+M03-T05 adds the source-opening and batch halves of the boundary:
+
+- `read-source-candidate.ts` treats the M02 inventory as candidates, not authorization. It validates
+  that the supplied root is its stable absolute canonical directory, checks declared and canonical
+  candidate containment, and compares device/inode plus size, modification time, and change time
+  across path and handle snapshots. A structurally non-portable candidate declaration is a generic
+  fatal invariant, so it cannot be reflected into a recoverable path field.
+- POSIX opens use read-only, no-follow, and non-blocking flags; Windows uses the portable read-only
+  flag and the same post-open identity checks. The verified descriptor is the only source-content
+  read path and is closed exactly once.
+- Source size is limited to 1,048,576 bytes. Reads request at most 65,536 bytes and one bounded
+  extra byte detects growth beyond the limit. Strict UTF-8 decoding rejects malformed bytes;
+  `ignoreBOM: true` preserves an initial U+FEFF in the string supplied to Babel.
+- `parse-source-candidate.ts` composes reader, Babel parser, and extractor in that order. A
+  recoverable result stops only the remaining stages for that candidate; the transient source string
+  and Babel AST never cross the composite boundary.
+- `analyze-source-candidates.ts` clones and ordinally sorts candidates, rejects duplicate/mismatched
+  paths as fatal invariants, and processes one candidate at a time. Expected read, parse, and
+  extraction failures are collected in deterministic order while safe siblings continue.
 
 M03-T03 adds the internal Babel-to-domain extraction adapter. It visits the AST once, up to 100,000
 nodes, and then orders extracted records by source offset with ordinal tie-breakers. The adapter
@@ -214,7 +245,10 @@ Transient inventory, AST adapter output, model, and findings remain in memory du
 
 - Invalid CLI/path/configuration: stop before analysis.
 - Fatal discovery, inventory, or classification failure: stop with a stable application error.
-- Descendant file access or parser error: record it and continue other files when safe.
+- Descendant discovery or expected read/parse/extraction error: record it and continue other files
+  when safe.
+- Non-portable candidate declaration, canonical-root authorization loss, candidate-batch invariant,
+  unexpected extraction invariant, or invalid normalized model: stop with a stable fatal error.
 - Individual rule error: record it and continue other rules when model integrity remains valid.
 - Report write failure: report the failure clearly; do not claim that output was generated.
 - Internal invariant failure: stop with an unrecoverable error.
@@ -227,5 +261,7 @@ their text into HTML without escaping, or traverse outside the approved root.
 The user may explicitly select any root, including one reached through `..` or a symlink. UXAudit
 uses that root's canonical `realpath` as the approved boundary. M02 checks each traversed canonical
 descendant against that root before reading metadata outside the boundary and handles actual
-operation failures; the access check remains a TOCTOU-susceptible preflight, and M03 must revalidate
-each file when it is opened.
+operation failures. M03 reauthorizes the root and each source around a bounded descriptor read and
+fails closed on observed changes. Portable filesystem APIs still cannot eliminate a replacement in
+the interval between the final path check and later use; downstream behavior therefore consumes
+only the already-read handle bytes and retains this residual TOCTOU limit explicitly.
