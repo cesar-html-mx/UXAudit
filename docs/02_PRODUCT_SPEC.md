@@ -29,8 +29,9 @@ ux-audit scan <project-path> [options]
 - Explicit validated registry plus fail-closed category/rule-ID filtering.
 - Exact-once deterministic evaluation with per-rule isolation, transactional output validation,
   canonical source-location provenance, and runtime model immutability.
-- Stable `accessibility/img-alt`, `accessibility/input-label`, and
-  `accessibility/button-name` rules within their documented static scopes.
+- Eight stable rules within documented static scopes: three accessibility checks, image
+  lazy-loading/dimension advisories, component-local multiple-H1 review, exact ambiguous-link text,
+  and literal inline small-text review.
 
 The CLI remains intentionally unchanged during M04: `scan` still stops after model construction and
 does not yet claim an audit result. Application integration, configuration, finding policy, and

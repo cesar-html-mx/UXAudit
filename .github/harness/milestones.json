@@ -168,7 +168,9 @@
         {
           "id": "M04-T04",
           "title": "Implement SEO, performance, and UX rules",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0: 54 focused T04 tests, 340-test full verify, and coverage 97.14% statements / 92.79% branches / 99.70% functions / 97.14% lines PASS; independent performance, SEO, and UX re-reviews found no blockers.",
+          "completedAt": "2026-07-29T23:01:00.449Z"
         },
         {
           "id": "M04-T05",

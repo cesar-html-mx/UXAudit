@@ -3,8 +3,8 @@
 UXAudit is a local, static-analysis CLI for React and TypeScript projects. The current Node.js 24
 implementation safely discovers and classifies `.js`, `.jsx`, `.ts`, and `.tsx` source candidates,
 parses them through an internal Babel boundary, and builds a deterministic parser-independent
-analysis model. The active M04 domain layer now adds a deterministic isolated rule engine and three
-stable accessibility rules.
+analysis model. The active M04 domain layer now adds a deterministic isolated rule engine and eight
+stable rules across accessibility, performance, SEO, and UX.
 
 The `scan` command validates and canonicalizes the selected root, discovers files, analyzes safe
 source candidates without executing target code, and prints discovery and parsing counts. The CLI

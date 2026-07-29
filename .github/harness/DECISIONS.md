@@ -487,3 +487,37 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Evidence: focused rule tests, `tests/fixtures/m04-rules/accessibility-cases.tsx.fixture`,
   `tests/rules/accessibility/accessibility-rules.integration.test.ts`, and the eventual
   `evidence/m04-rules/` package.
+
+## D-027 — Explicit advisory scopes for performance, SEO, and UX rules
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: PERF-001/PERF-002, SEO-001/SEO-002, and UX-001 need useful static findings without
+  claiming viewport priority, observed layout shift, rendered page composition, complete accessible
+  context, or computed CSS. The M03 model retains exact/partial/dynamic evidence, component
+  ownership, ordered JSX attributes/object properties, and canonical property locations.
+- Decision: Publish all five rules as stable within narrow intrinsic scopes. PERF-001 emits a
+  medium-confidence, low-severity review for absent/eager/invalid known `loading` values while
+  suppressing dynamic/spread uncertainty. PERF-002 normally requires two positive integer
+  dimensions, lets a proved missing/invalid sibling prevail over unrelated uncertainty, and treats
+  literal zero-by-zero as content not intended for the user. SEO-001 emits one medium-confidence
+  finding at the second intrinsic H1 of each recognized component and ignores unowned/project-wide
+  aggregation. SEO-002 matches only exact static anchor text after NFKC/whitespace/case normalization
+  against a descriptor-validated, dense replace-all phrase set. UX-001 reports the last exact
+  literal inline `fontSize` property on eligible intrinsic known text when a finite non-negative
+  numeric/px value is below an exclusively compared, validated `12px` default threshold; exact text
+  has high confidence and partial text has medium confidence. Assemble these with the accessibility
+  rules in one explicit eight-rule registry.
+- Alternatives considered: Project-wide or file-wide H1 counts; inferring pages/routes, custom
+  components, surrounding accessible names, above-fold position, CSS layout reservation, relative
+  units, or computed styles; reporting dynamic/spread values as violations; treating all eager
+  images as defects; or exposing mutable rule configuration through `RuleContext`.
+- Consequences: The initial catalog has deterministic coverage in all four product categories and
+  provides reviewable locations without runtime claims. It can miss wrapper, CSS, routed, and
+  dynamic cases; advisory wording, confidence, metadata limitations, and boundary fixtures make
+  those tradeoffs explicit. M05 can construct configured rule instances before registration without
+  changing the evaluator contract.
+- Requirements/contracts affected: RF-09 through RF-14, RNF-02 through RNF-07, RNF-10, R-001,
+  R-002, R-011, PERF-001/PERF-002, SEO-001/SEO-002, and UX-001.
+- Evidence: category-focused and registry integration tests, the eventual mixed-catalog scenario,
+  independent semantic review, and `evidence/m04-rules/`.

@@ -89,8 +89,10 @@ src/cli/index.ts
 - The focused project modules traverse with Node APIs, build an invariant-checked inventory, and
   classify parser candidates without reading or executing source code.
 
-This slice ends after parser-independent model construction. It does not run rules, produce
-findings, or create an `AuditResult`.
+The current CLI slice still ends after parser-independent model construction. M04 adds a
+report-independent domain rule engine that can evaluate an already constructed model and produce
+normalized findings/errors in isolation, but application/CLI integration and `AuditResult`
+construction remain M05 work.
 
 ## Core contracts
 
@@ -276,6 +278,12 @@ available, enabled, executed, succeeded, failed, and finding counts.
 Isolation assumes the M03 model remains valid and rules respect the readonly contract. The engine
 deep-freezes that model once before evaluation so an unsafe runtime cast cannot mutate it and
 contaminate a later rule. It does not clone or reparse the project per rule.
+
+`initialRuleRegistry` explicitly assembles the eight stable M04 rules: three accessibility, two
+performance, two SEO, and one UX rule. Category modules remain independently testable; the registry
+is the canonical default catalog and sorts their IDs before loading. Rule-specific factories
+capture validated ambiguous-link phrases and the inline-text pixel threshold without adding mutable
+configuration to `RuleContext`.
 
 ### Reporter
 

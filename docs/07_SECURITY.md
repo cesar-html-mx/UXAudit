@@ -125,3 +125,28 @@ occur between the last path observation and later external filesystem activity. 
 residual TOCTOU exposure by using only bytes read from the verified descriptor, comparing
 path/descriptor identity before and after the bounded read, reauthorizing the root throughout, and
 failing closed whenever an observable change occurs.
+
+## M04 implemented rule controls and limits
+
+- Rules receive only the normalized `AnalysisModel`; they do not read files, import parser nodes,
+  execute target code, invoke a shell, or perform product network access.
+- The registry validates and copies executable contracts, rejects duplicate IDs, deferred rules,
+  incomplete metadata, and credential-bearing or non-HTTP(S) references, then freezes the accepted
+  rules.
+- Category/ID filters require plain own data, reject unknown values and keys, and fail closed on
+  malformed containers or accessors. Experimental rules require exact ID opt-in.
+- Before evaluation the engine deep-freezes the trusted model once. Thrown rules and malformed
+  result batches become stable per-rule errors; safe sibling findings continue.
+- Every non-null finding range must exactly match a canonical model location. Rules cannot inject an
+  absolute/untraceable path, and native exceptions or project text do not enter normalized execution
+  errors.
+- Configurable rule factories inspect own descriptors without invoking getters, reject sparse or
+  exotic containers, normalize throwing proxies to stable non-reflective errors, and copy accepted
+  values into private deterministic sets/numbers.
+- Stable catalog rules suppress dynamic/spread uncertainty or use explicit advisory wording and
+  confidence. Custom components, rendered CSS, routing, viewport priority, and complete accessible
+  context remain documented limitations instead of security or runtime claims.
+
+The M04 engine is not yet connected to the CLI and does not write reports. M05 must preserve these
+validated boundaries when loading user configuration and must treat every normalized finding field
+as untrusted when rendering terminal, JSON, or HTML output.

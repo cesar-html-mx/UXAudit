@@ -91,6 +91,17 @@ Objective: implement the two required performance rules, two required SEO rules,
 rule with explicit initial scopes. Advisory findings must describe reviewable risk rather than
 runtime certainty, and every rule must include positive, negative, boundary, and unsupported cases.
 
+Status: completed and independently re-reviewed without remaining blockers. Two performance, two
+SEO, and one UX rule are stable category modules assembled with the accessibility rules in one
+explicit canonical eight-rule registry. PERF rules reason only about effective intrinsic-image
+attributes; SEO-001 groups recognized component ownership; SEO-002 matches exact normalized static
+anchor text through a hostile-input-safe phrase factory; and UX-001 inspects exact literal
+`style.fontSize` evidence with validated threshold/CSS-number syntax and exact-versus-partial text
+confidence. Review regressions cover proved-invalid/unknown dimensions, zero-by-zero, unsafe
+numbers, sparse/accessor/proxy configuration, inert text containers, invalid CSS whitespace, and
+advisory limits. Fifty-four focused T04 tests and all 340 repository tests pass; final coverage is
+97.14% statements, 92.79% branches, 99.70% functions, and 97.14% lines.
+
 ### M04-T05 — Validate catalog behavior
 
 Verify zero/one/multiple findings, rule failure isolation, deterministic order, filtering, metadata,
@@ -151,6 +162,13 @@ Record implementation facts, library behavior, and assumptions discovered during
 - JSX spreads cannot be treated as ordinary missing attributes: resolving from right to left
   distinguishes an explicit value that overrides an earlier spread from an earlier value that a
   later spread may replace.
+- The model can justify component-local H1 counts but not page-level counts: JSX without recognized
+  component ownership and separate components must not be combined into a project-wide SEO claim.
+- Exact text confidence plus deterministic NFKC/case/whitespace normalization supports a narrow
+  configurable ambiguous-link rule without inferring surrounding or dynamic accessible context.
+- Literal object properties retain their own canonical source locations, so UX-001 can point to the
+  effective `fontSize` declaration instead of inventing a range; unknown object properties and
+  non-pixel units remain outside its static scope.
 
 ## Decision log
 
@@ -164,6 +182,8 @@ Record decisions made within the authority allowed by `AGENTS.md`.
   evaluation, source-location provenance, stable isolation, canonical ordering, and counters.
 - D-026 fixes the stable intrinsic accessibility scopes, ordered-spread semantics, supported label
   associations/input types, conservative unknown suppression, and planning-status distinction.
+- D-027 fixes conservative performance/SEO/UX scopes, advisory confidence, component-local H1
+  ownership, validated rule factories, the 12px default, and the explicit eight-rule registry.
 
 ## Risks and recovery
 

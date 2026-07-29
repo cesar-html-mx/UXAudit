@@ -259,3 +259,14 @@
   limit.
 - The post-review full run passed all 286 tests with 96.85% statements, 92.01% branches, 99.65%
   functions, and 96.85% lines.
+- Implemented M04-T04's two performance, two SEO, and one UX stable rules plus the explicit initial
+  registry containing exactly eight rules across the reviewed three/two/two/one category
+  distribution. Factories validate/capture configurable ambiguous-link phrases and the default
+  12px inline-text threshold without expanding `RuleContext`.
+- Independent category reviews drove regressions for known-invalid dimensions beside uncertainty,
+  literal zero-by-zero, unsafe numeric dimensions, sparse/accessor/proxy configuration, invalid CSS
+  numeric syntax/Unicode whitespace, inert or void text containers, and medium confidence for
+  partial text. Final re-reviews exercised 19 dimension probes, hostile SEO configuration, and 14
+  CSS-whitespace probes without finding a remaining blocker.
+- Fifty-four focused T04 rule/registry tests passed. The full 340-test coverage run passed with
+  97.14% statements, 92.79% branches, 99.70% functions, and 97.14% lines.
