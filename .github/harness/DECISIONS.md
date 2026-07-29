@@ -155,3 +155,25 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   names or reflected errors, while ordinary path output and multiline help remain readable.
 - Requirements/contracts affected: RF-01, RF-02, RNF-01, and the M01 terminal-output contract.
 - Evidence: `src/cli/sanitize-terminal.ts`, hostile CLI unit tests, coverage, and compiled smokes.
+
+## D-015 — Explicit, secure-by-default symlink policy
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M02 must support portable project discovery without following an untrusted link outside
+  the canonical root or entering a cycle. Some React projects also use intentional in-root links,
+  so permanently rejecting every link would prevent a controlled future opt-in.
+- Decision: Discovery uses an explicit `skip | follow-within-root` policy and defaults to `skip`.
+  The opt-in mode resolves every target canonically, checks containment with path-relative
+  semantics, reapplies exclusions to the canonical target, and tracks visited canonical
+  directories. Discovery, inventory, and source classification expose separate immutable
+  contracts and never label a source candidate as a React component.
+- Alternatives considered: Following every link; using string-prefix containment; or having no
+  opt-in mode.
+- Consequences: Default scans have the smallest attack surface. Projects that deliberately use
+  internal links can opt in once configuration is surfaced, while external, broken, cyclic, and
+  duplicate link behavior remains observable and testable. Portable Node APIs cannot eliminate all
+  filesystem races, so M03 must revalidate a file when opening it for parsing.
+- Requirements/contracts affected: RF-03 through RF-06, RNF-04, RNF-07, RNF-09, R-004, and R-015.
+- Evidence: M02 discovery contracts, controlled traversal tests, and
+  `evidence/m02-discovery/`.

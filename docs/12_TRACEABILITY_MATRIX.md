@@ -6,10 +6,10 @@ This table is updated when implementation and exact test filenames exist.
 | ----------- | ------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------- |
 | RF-01       | `src/cli/run-cli.ts`, sanitizer, and `src/cli/index.ts` | M01         | CLI tests: help, version, delegation, safe terminal output, and exit codes                   |
 | RF-02       | `src/project/validate-project-path.ts`                  | M01         | `tests/project/validate-project-path.test.ts` and typed CLI error tests                      |
-| RF-03       | ProjectDiscovery                                        | M02         | controlled recursive tree                                                                    |
-| RF-04       | Discovery configuration                                 | M02         | excluded directory and file tests                                                            |
-| RF-05       | FileInventory                                           | M02         | normalization, deduplication, ordering                                                       |
-| RF-06       | FileClassifier                                          | M02         | supported and rejected candidate matrix                                                      |
+| RF-03       | `src/project/discovery/` contracts and traversal        | M02         | controlled recursive tree and recoverable-operation tests                                    |
+| RF-04       | `src/project/discovery/discovery-config.ts`             | M02         | exact defaults plus configured directory/file exclusion tests                                |
+| RF-05       | `src/project/inventory/`                                | M02         | normalization, canonical-path deduplication, and ordering                                    |
+| RF-06       | `src/project/classification/`                           | M02         | supported and rejected candidate matrix without React semantic claims                        |
 | RF-07       | SourceParser                                            | M03         | JS/JSX/TS/TSX parser fixtures                                                                |
 | RF-08       | AnalysisModelBuilder                                    | M03         | model transformation assertions                                                              |
 | RF-09       | RuleLoader                                              | M04         | category/rule filter tests                                                                   |

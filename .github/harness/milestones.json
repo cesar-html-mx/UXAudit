@@ -57,7 +57,9 @@
         {
           "id": "M02-T01",
           "title": "Define discovery contracts and defaults",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format check; strict lint; typecheck; 2 focused discovery-contract tests; harness PASS",
+          "completedAt": "2026-07-29T16:57:09.896Z"
         },
         {
           "id": "M02-T02",

@@ -43,6 +43,10 @@ classification responsibilities even if they collaborate closely.
 Define discovered file, inventory entry, source candidate, exclusions, supported extensions, and
 symlink behavior.
 
+Completed with separate immutable discovery, inventory, and classification contracts; exact
+directory/file-name defaults; four supported source extensions; stable issue/exclusion records; and
+the secure-by-default `skip | follow-within-root` symlink policy.
+
 ### M02-T02 — Implement safe discovery
 
 Traverse with Node APIs, preserve the authorized root, avoid cycles, return typed recoverable errors,
@@ -74,8 +78,8 @@ test and coverage summaries.
 
 ## Progress
 
-- [ ] Milestone started.
-- [ ] Repository inspected and plan reconciled with reality.
+- [x] Milestone started.
+- [x] Repository inspected and plan reconciled with reality.
 - [ ] Tasks completed.
 - [ ] Quality gate passed.
 - [ ] Evidence collected.
@@ -84,15 +88,33 @@ test and coverage summaries.
 
 ## Discoveries
 
-Record implementation facts, library behavior, and assumptions discovered during work.
+- M01 closed at `bd6e0fe` with the Node.js 24 baseline and all quality gates passing; that
+  verified commit is the starting point for M02.
+- The harness had activated M02 but `state.json` still named the M01 branch. The repository was
+  clean, so `milestone/m02-discovery-inventory` was created directly from the verified M01 closure
+  commit and the state branch is reconciled in M02-T01.
+- The implemented product currently stops after canonical root validation. No discovery,
+  inventory, or classification module exists, so all five M02 tasks remain substantive work.
+- M01's `ScanProjectResult` exposes only the canonical project path. M02-T05 must extend that
+  application result with a discovery summary while preserving the established CLI input and
+  internal-error boundaries.
 
 ## Decision log
 
-Record decisions made within the authority allowed by `AGENTS.md`.
+- Keep discovery, inventory, and classification as separate project-layer modules with explicit
+  immutable contracts; the application layer composes them and the CLI consumes only a normalized
+  summary.
+- D-015 selects `skip` as the default symlink policy and retains an explicit
+  `follow-within-root` opt-in whose containment, cycle, and duplicate behavior must be proven in
+  M02-T02/M02-T03.
 
 ## Risks and recovery
 
-Maintain task-specific risks, rollback steps, and any remaining debt.
+- Symlink behavior and canonical containment differ subtly across operating systems. T02 will use
+  Node filesystem APIs only, test policy through controlled temporary trees, and retain portable
+  behavior where symlink creation is unavailable.
+- Each task remains independently recoverable by reverting only its conventional task commit; no
+  published history will be rewritten.
 
 ## Outcomes and retrospective
 

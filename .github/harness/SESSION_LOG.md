@@ -50,3 +50,15 @@
   configured in the local repository at evidence time.
 - Closed M01 against verified task commit `4b5dac8` and activated M02-T01. The M01 milestone report,
   source digest, integrity manifest, and raw records remain under `evidence/m01-bootstrap/`.
+
+## M02 discovery and inventory — 2026-07-29
+
+- Reconciled the activated M02 state with the repository, created
+  `milestone/m02-discovery-inventory` from the verified M01 closure commit, and confirmed that no
+  discovery, inventory, or classification implementation already existed.
+- Completed M02-T01 with immutable contracts for discovered files, exclusions, recoverable issues,
+  inventory entries, and source candidates. Defined exact default dependency/generated/configuration
+  exclusions, the `.js`/`.jsx`/`.ts`/`.tsx` boundary, and a secure-by-default symlink policy with an
+  explicit in-root opt-in.
+- Verified T01 under Node.js `24.18.0`: formatting, strict lint, typecheck, two focused contract
+  tests, and harness integrity passed.
