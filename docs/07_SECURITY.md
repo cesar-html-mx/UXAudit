@@ -68,3 +68,31 @@ what would change if UXAudit later became a hosted service.
 Root access may change after validation, and `X_OK`/ACL behavior differs by platform. M02 must treat
 preflight as advisory, handle actual traversal failures, detect symlink cycles, and enforce canonical
 descendant containment.
+
+## M02 implemented traversal controls
+
+- Discovery revalidates the canonical root and every queued directory immediately before
+  enumeration. Canonical containment and directory identity are checked before querying metadata for
+  a retargeted path. Root loss is a typed fatal failure; descendant failures become stable
+  recoverable issues without native messages or absolute-path disclosure.
+- Directory names and normalized results use explicit ordinal ordering rather than
+  locale-dependent filesystem order.
+- The default policy does not follow symbolic links. The internal `follow-within-root` opt-in
+  resolves targets, checks containment with `path.relative`, reapplies exclusions to the canonical
+  target, and uses visited canonical directories to stop aliases and cycles.
+- Unknown runtime policy values fail closed to default link skipping rather than entering the opt-in
+  branch.
+- Excluded entries are rejected before a link is resolved, and canonical targets under excluded
+  directories are rejected again to prevent alias-based bypass.
+- POSIX sibling-prefix, Windows drive/separator, external-link, broken-link, cycle, race, access,
+  and unsupported-entry scenarios are covered with temporary trees and an injected filesystem
+  boundary.
+- The end-to-end controlled project contains a package-script sentinel and proves it is never
+  created. Retained evidence is built from an isolated source copy with an allowlisted child
+  environment, no inherited credential variables, rejected snapshot symlinks, pinned runtime and
+  active-harness assertions, personal-path/token rejection, atomic initial publication, and a
+  SHA-256 manifest that also covers the finalized milestone report.
+
+Portable filesystem APIs cannot eliminate every race between validation and a later file read. M03
+must treat the M02 inventory as a candidate list, canonicalize and verify containment again when
+opening a file, and isolate changes that occur after discovery.

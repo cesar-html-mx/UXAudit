@@ -50,29 +50,36 @@ src/
 The exact filenames may evolve, but the dependency direction and responsibility boundaries may not
 be collapsed without an architecture decision.
 
-## Implemented M01 slice
+## Implemented through M02
 
 ```text
 src/cli/index.ts
   -> src/cli/run-cli.ts
        -> src/cli/sanitize-terminal.ts
   -> src/application/scan-project.ts
-  -> src/project/validate-project-path.ts
+       -> src/project/validate-project-path.ts
+       -> src/project/discovery/
+       -> src/project/inventory/
+       -> src/project/classification/
 ```
 
 - `cli/index.ts` is the only process boundary. It supplies arguments and streams and assigns
   `process.exitCode`.
 - `run-cli.ts` owns Commander grammar and maps `ScanProjectError` application errors to terminal
-  output and exit codes. It receives I/O and the scan application function as dependencies and does
-  not import the project adapter. Its output boundary converts terminal control and bidirectional
-  characters in untrusted values to visible Unicode escapes.
-- `scan-project.ts` maps project-layer validation errors into its typed application boundary and
-  returns the canonical root.
+  output and exit codes. It receives I/O and the scan application function as dependencies, prints
+  the preserved canonical-root line plus a stable discovery summary, and does not import project
+  adapters. Its output boundary converts terminal control and bidirectional characters in untrusted
+  values to visible Unicode escapes.
+- `scan-project.ts` composes `validation → discovery → inventory → classification`, retains each
+  normalized stage result for M03, computes the summary, and maps fatal stage failures into stable
+  application errors.
 - `validate-project-path.ts` uses an injectable filesystem adapter to execute
   `resolve → realpath → stat → access(R_OK | X_OK)`.
+- The focused project modules traverse with Node APIs, build an invariant-checked inventory, and
+  classify parser candidates without reading or executing source code.
 
-This slice validates only the selected root. It neither traverses the root nor creates an
-`AuditResult`.
+This slice ends after source-candidate classification. It does not parse files, infer components,
+run rules, or create an `AuditResult`.
 
 ## Core contracts
 
@@ -81,15 +88,32 @@ This slice validates only the selected root. It neither traverses the root nor c
 Input: validated project root and discovery configuration.  
 Output: discovered file records and recoverable discovery errors.
 
+M02 implements this contract with an iterative, ordinally sorted traversal. The selected canonical
+root remains the authorization boundary. Every candidate target is resolved canonically and checked
+with path-relative containment; configured names are checked on both the observed entry and the
+canonical target. Symbolic links are skipped by default, while the internal opt-in follows only
+targets within the root and tracks visited canonical directories. Descendant operation failures are
+normalized and isolated; losing the root is fatal.
+
 ### FileInventory
 
 Normalizes canonical and project-relative paths, deduplicates entries, and returns deterministic
 ordering.
 
+M02 defines identity as the canonical absolute file path. Inventory entries retain that native
+absolute path, derive a portable `/`-separated project-relative path, normalize the final extension
+to lowercase, and carry only the justified `file` kind. Canonical aliases deduplicate and entries
+sort ordinally by relative path. A non-descendant record is an internal invariant failure.
+
 ### FileClassifier
 
 Selects supported source candidates. Classification may use extension and conservative source
 signals. It must not falsely claim that every supported extension is a React component.
+
+M02 derives the actual suffix from the inventory's portable relative path and maps supported files
+only to JavaScript/TypeScript plus JSX/non-JSX parser kinds. It excludes declaration and
+conventionally named configuration sources, reads no file content, and exposes no React component
+field. Semantic detection remains exclusively in M03's parser and model stages.
 
 ### SourceParser
 
@@ -123,7 +147,8 @@ Transient inventory, AST adapter output, model, and findings remain in memory du
 ## Error boundaries
 
 - Invalid CLI/path/configuration: stop before analysis.
-- File access or parser error: record it and continue other files when safe.
+- Fatal discovery, inventory, or classification failure: stop with a stable application error.
+- Descendant file access or parser error: record it and continue other files when safe.
 - Individual rule error: record it and continue other rules when model integrity remains valid.
 - Report write failure: report the failure clearly; do not claim that output was generated.
 - Internal invariant failure: stop with an unrecoverable error.
@@ -134,6 +159,7 @@ Analyzed projects are untrusted input. Never execute their code, import their mo
 their text into HTML without escaping, or traverse outside the approved root.
 
 The user may explicitly select any root, including one reached through `..` or a symlink. UXAudit
-uses that root's canonical `realpath` as the approved boundary. Starting in M02, every traversed
-descendant must be checked against this canonical root and real operation failures must be handled;
-M01's access check is only a TOCTOU-susceptible preflight.
+uses that root's canonical `realpath` as the approved boundary. M02 checks each traversed canonical
+descendant against that root before reading metadata outside the boundary and handles actual
+operation failures; the access check remains a TOCTOU-susceptible preflight, and M03 must revalidate
+each file when it is opened.

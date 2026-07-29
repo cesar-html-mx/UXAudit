@@ -1,0 +1,410 @@
+{
+  "fixture": {
+    "excludedFiles": [
+      ".cache/cache.js",
+      "dist/bundle.js",
+      "node_modules/dependency/index.js",
+      "vite.config.ts"
+    ],
+    "files": [
+      "README.md",
+      "package.json",
+      "src/App.TSX",
+      "src/button.config.ts",
+      "src/helper.ts",
+      "src/legacy.js",
+      "src/nested/View.JSX",
+      "src/shared/Duplicate.tsx",
+      "src/styles.css",
+      "src/types.d.ts"
+    ],
+    "links": [
+      {
+        "path": "alias",
+        "target": "src/shared"
+      },
+      {
+        "path": "cycle",
+        "target": "."
+      },
+      {
+        "path": "dependency-alias",
+        "target": "node_modules/dependency"
+      },
+      {
+        "path": "outside-link",
+        "target": "<OUTSIDE_ROOT>"
+      }
+    ],
+    "targetExecutionSentinel": "TARGET_CODE_EXECUTED"
+  },
+  "runs": {
+    "default": {
+      "candidates": [
+        {
+          "extension": ".tsx",
+          "relativePath": "src/App.TSX",
+          "sourceKind": "typescript-jsx"
+        },
+        {
+          "extension": ".ts",
+          "relativePath": "src/helper.ts",
+          "sourceKind": "typescript"
+        },
+        {
+          "extension": ".js",
+          "relativePath": "src/legacy.js",
+          "sourceKind": "javascript"
+        },
+        {
+          "extension": ".jsx",
+          "relativePath": "src/nested/View.JSX",
+          "sourceKind": "javascript-jsx"
+        },
+        {
+          "extension": ".tsx",
+          "relativePath": "src/shared/Duplicate.tsx",
+          "sourceKind": "typescript-jsx"
+        }
+      ],
+      "discovered": [
+        {
+          "canonicalPath": "README.md",
+          "observedPath": "README.md",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "package.json",
+          "observedPath": "package.json",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/App.TSX",
+          "observedPath": "src/App.TSX",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/button.config.ts",
+          "observedPath": "src/button.config.ts",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/helper.ts",
+          "observedPath": "src/helper.ts",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/legacy.js",
+          "observedPath": "src/legacy.js",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/nested/View.JSX",
+          "observedPath": "src/nested/View.JSX",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/shared/Duplicate.tsx",
+          "observedPath": "src/shared/Duplicate.tsx",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/styles.css",
+          "observedPath": "src/styles.css",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/types.d.ts",
+          "observedPath": "src/types.d.ts",
+          "viaSymlink": false
+        }
+      ],
+      "exclusions": [
+        {
+          "entryType": "directory",
+          "reason": "directory-name",
+          "relativePath": ".cache"
+        },
+        {
+          "entryType": "symbolic-link",
+          "reason": "symlink-policy",
+          "relativePath": "alias"
+        },
+        {
+          "entryType": "symbolic-link",
+          "reason": "symlink-policy",
+          "relativePath": "cycle"
+        },
+        {
+          "entryType": "symbolic-link",
+          "reason": "symlink-policy",
+          "relativePath": "dependency-alias"
+        },
+        {
+          "entryType": "directory",
+          "reason": "directory-name",
+          "relativePath": "dist"
+        },
+        {
+          "entryType": "directory",
+          "reason": "directory-name",
+          "relativePath": "node_modules"
+        },
+        {
+          "entryType": "symbolic-link",
+          "reason": "symlink-policy",
+          "relativePath": "outside-link"
+        },
+        {
+          "entryType": "file",
+          "reason": "file-name",
+          "relativePath": "vite.config.ts"
+        }
+      ],
+      "inventory": [
+        {
+          "extension": ".md",
+          "kind": "file",
+          "relativePath": "README.md"
+        },
+        {
+          "extension": ".json",
+          "kind": "file",
+          "relativePath": "package.json"
+        },
+        {
+          "extension": ".tsx",
+          "kind": "file",
+          "relativePath": "src/App.TSX"
+        },
+        {
+          "extension": ".ts",
+          "kind": "file",
+          "relativePath": "src/button.config.ts"
+        },
+        {
+          "extension": ".ts",
+          "kind": "file",
+          "relativePath": "src/helper.ts"
+        },
+        {
+          "extension": ".js",
+          "kind": "file",
+          "relativePath": "src/legacy.js"
+        },
+        {
+          "extension": ".jsx",
+          "kind": "file",
+          "relativePath": "src/nested/View.JSX"
+        },
+        {
+          "extension": ".tsx",
+          "kind": "file",
+          "relativePath": "src/shared/Duplicate.tsx"
+        },
+        {
+          "extension": ".css",
+          "kind": "file",
+          "relativePath": "src/styles.css"
+        },
+        {
+          "extension": ".ts",
+          "kind": "file",
+          "relativePath": "src/types.d.ts"
+        }
+      ],
+      "issues": [],
+      "summary": {
+        "discoveredFiles": 10,
+        "excludedEntries": 8,
+        "inventoryEntries": 10,
+        "recoverableErrors": 0,
+        "sourceCandidates": 5
+      }
+    },
+    "followWithinRoot": {
+      "candidates": [
+        {
+          "extension": ".tsx",
+          "relativePath": "src/App.TSX",
+          "sourceKind": "typescript-jsx"
+        },
+        {
+          "extension": ".ts",
+          "relativePath": "src/helper.ts",
+          "sourceKind": "typescript"
+        },
+        {
+          "extension": ".js",
+          "relativePath": "src/legacy.js",
+          "sourceKind": "javascript"
+        },
+        {
+          "extension": ".jsx",
+          "relativePath": "src/nested/View.JSX",
+          "sourceKind": "javascript-jsx"
+        },
+        {
+          "extension": ".tsx",
+          "relativePath": "src/shared/Duplicate.tsx",
+          "sourceKind": "typescript-jsx"
+        }
+      ],
+      "discovered": [
+        {
+          "canonicalPath": "README.md",
+          "observedPath": "README.md",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/shared/Duplicate.tsx",
+          "observedPath": "alias/Duplicate.tsx",
+          "viaSymlink": true
+        },
+        {
+          "canonicalPath": "package.json",
+          "observedPath": "package.json",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/App.TSX",
+          "observedPath": "src/App.TSX",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/button.config.ts",
+          "observedPath": "src/button.config.ts",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/helper.ts",
+          "observedPath": "src/helper.ts",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/legacy.js",
+          "observedPath": "src/legacy.js",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/nested/View.JSX",
+          "observedPath": "src/nested/View.JSX",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/styles.css",
+          "observedPath": "src/styles.css",
+          "viaSymlink": false
+        },
+        {
+          "canonicalPath": "src/types.d.ts",
+          "observedPath": "src/types.d.ts",
+          "viaSymlink": false
+        }
+      ],
+      "exclusions": [
+        {
+          "entryType": "directory",
+          "reason": "directory-name",
+          "relativePath": ".cache"
+        },
+        {
+          "entryType": "symbolic-link",
+          "reason": "already-visited",
+          "relativePath": "cycle"
+        },
+        {
+          "entryType": "symbolic-link",
+          "reason": "directory-name",
+          "relativePath": "dependency-alias"
+        },
+        {
+          "entryType": "directory",
+          "reason": "directory-name",
+          "relativePath": "dist"
+        },
+        {
+          "entryType": "directory",
+          "reason": "directory-name",
+          "relativePath": "node_modules"
+        },
+        {
+          "entryType": "symbolic-link",
+          "reason": "outside-root",
+          "relativePath": "outside-link"
+        },
+        {
+          "entryType": "directory",
+          "reason": "already-visited",
+          "relativePath": "src/shared"
+        },
+        {
+          "entryType": "file",
+          "reason": "file-name",
+          "relativePath": "vite.config.ts"
+        }
+      ],
+      "inventory": [
+        {
+          "extension": ".md",
+          "kind": "file",
+          "relativePath": "README.md"
+        },
+        {
+          "extension": ".json",
+          "kind": "file",
+          "relativePath": "package.json"
+        },
+        {
+          "extension": ".tsx",
+          "kind": "file",
+          "relativePath": "src/App.TSX"
+        },
+        {
+          "extension": ".ts",
+          "kind": "file",
+          "relativePath": "src/button.config.ts"
+        },
+        {
+          "extension": ".ts",
+          "kind": "file",
+          "relativePath": "src/helper.ts"
+        },
+        {
+          "extension": ".js",
+          "kind": "file",
+          "relativePath": "src/legacy.js"
+        },
+        {
+          "extension": ".jsx",
+          "kind": "file",
+          "relativePath": "src/nested/View.JSX"
+        },
+        {
+          "extension": ".tsx",
+          "kind": "file",
+          "relativePath": "src/shared/Duplicate.tsx"
+        },
+        {
+          "extension": ".css",
+          "kind": "file",
+          "relativePath": "src/styles.css"
+        },
+        {
+          "extension": ".ts",
+          "kind": "file",
+          "relativePath": "src/types.d.ts"
+        }
+      ],
+      "issues": [],
+      "summary": {
+        "discoveredFiles": 10,
+        "excludedEntries": 8,
+        "inventoryEntries": 10,
+        "recoverableErrors": 0,
+        "sourceCandidates": 5
+      }
+    }
+  },
+  "targetCodeExecuted": false
+}

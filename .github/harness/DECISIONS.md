@@ -155,3 +155,90 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   names or reflected errors, while ordinary path output and multiline help remain readable.
 - Requirements/contracts affected: RF-01, RF-02, RNF-01, and the M01 terminal-output contract.
 - Evidence: `src/cli/sanitize-terminal.ts`, hostile CLI unit tests, coverage, and compiled smokes.
+
+## D-015 — Explicit, secure-by-default symlink policy
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M02 must support portable project discovery without following an untrusted link outside
+  the canonical root or entering a cycle. Some React projects also use intentional in-root links,
+  so permanently rejecting every link would prevent a controlled future opt-in.
+- Decision: Discovery uses an explicit `skip | follow-within-root` policy and defaults to `skip`.
+  The opt-in mode resolves every target canonically, checks containment with path-relative
+  semantics, reapplies exclusions to the canonical target, and tracks visited canonical
+  directories. Discovery, inventory, and source classification expose separate immutable
+  contracts and never label a source candidate as a React component.
+- Alternatives considered: Following every link; using string-prefix containment; or having no
+  opt-in mode.
+- Consequences: Default scans have the smallest attack surface. Projects that deliberately use
+  internal links can opt in once configuration is surfaced, while external, broken, cyclic, and
+  duplicate link behavior remains observable and testable. Unknown runtime values fail closed to
+  link skipping rather than entering the opt-in branch. Portable Node APIs cannot eliminate all
+  filesystem races, so M03 must revalidate a file when opening it for parsing.
+- Requirements/contracts affected: RF-03 through RF-06, RNF-04, RNF-07, RNF-09, R-004, and R-015.
+- Evidence: M02 discovery contracts, controlled traversal tests, and
+  `evidence/m02-discovery/`.
+
+## D-016 — Canonical inventory identity and portable ordering
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: RF-05 requires normalized absolute and relative locations with no duplicates and RNF-04
+  requires stable results across repeated execution.
+- Decision: Use the discovered canonical absolute path as inventory identity, derive a `/`-separated
+  relative path from the canonical root, normalize the final extension to lowercase, and sort
+  ordinally by relative path. Reject root, relative, sibling-prefix, ancestor, or other outside-root
+  records as invariant failures.
+- Alternatives considered: Deduplicating observed aliases; locale-aware sorting; comparing content;
+  or performing additional device/inode calls to merge hard links.
+- Consequences: Symlink aliases collapse deterministically and unsupported files remain available to
+  the separate classifier. Hard links at distinct canonical paths remain separate entries because
+  they are independently addressable locations; this is an explicit limitation rather than an
+  unsupported physical-identity claim.
+- Requirements/contracts affected: RF-05, RNF-04, RNF-07, and RNF-09.
+- Evidence: `src/project/inventory/`, focused normalization/deduplication tests, and
+  `evidence/m02-discovery/`.
+
+## D-017 — Syntactic source-candidate classification
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: RF-06 needs source candidates for M03 without parsing in M02 or falsely describing every
+  TypeScript file as a React component.
+- Decision: Derive the actual suffix from the normalized relative path, accept
+  `.js`/`.jsx`/`.ts`/`.tsx` case-insensitively, and map only to JavaScript/TypeScript plus
+  JSX/non-JSX source kinds. Exclude `.d.ts`, `config.*`, and `*.config.*` paths before parsing. Do
+  not read content or add React/component fields.
+- Alternatives considered: Trusting inventory extension metadata; selecting every supported suffix;
+  scanning file text for imports or JSX; or identifying components before the parser/model
+  milestone.
+- Consequences: Classification is deterministic, cheap, and does not duplicate M03 parsing.
+  Conventionally named configuration files are excluded, with the explicit limitation that an
+  unusually named runtime source such as `config.ts` is also omitted.
+- Requirements/contracts affected: RF-04, RF-06, RNF-04, RNF-07, and RNF-08.
+- Evidence: `src/project/classification/`, the supported/rejected candidate matrix, and
+  `evidence/m02-discovery/`.
+
+## D-018 — Retained discovery pipeline and stable CLI summary
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M02 must connect discovery to the CLI without collapsing project-layer boundaries,
+  discarding data required by M03, changing M01's established first output line, or claiming a
+  completed audit.
+- Decision: Compose `validation → discovery → inventory → classification` in the application layer
+  and return each normalized stage result plus five counts. Preserve
+  `Project path validated: <canonical-root>` and append one fixed-order `Discovery summary` line.
+  Treat only invalid path input as exit 2; fatal validation or pipeline-stage failures become stable
+  exit-3 application errors, while recoverable descendant issues remain in the result and count.
+- Alternatives considered: Returning only counts; placing traversal in Commander; flattening all
+  errors into input failures; treating every descendant issue as fatal; or constructing an
+  incomplete `AuditResult`.
+- Consequences: M03 can consume the exact candidates and discovery issues without rediscovery, CLI
+  compatibility remains explicit, and users can distinguish inventory progress from a future audit.
+  The complete transient inventory remains in memory, and parsing-time file authorization is still
+  required.
+- Requirements/contracts affected: RF-01, RF-03 through RF-06, RNF-01, RNF-04, RNF-07, RNF-08,
+  and the M01 exit-code boundary.
+- Evidence: `src/application/scan-project.ts`, `src/cli/run-cli.ts`, application/CLI integration
+  tests, compiled smoke tests, and `evidence/m02-discovery/`.

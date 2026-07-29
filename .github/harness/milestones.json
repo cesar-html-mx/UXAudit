@@ -50,34 +50,44 @@
       "id": "M02",
       "slug": "discovery-inventory",
       "title": "Project discovery, inventory, and classification",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M02-discovery-inventory.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M02-discovery-inventory.md",
       "branch": "milestone/m02-discovery-inventory",
       "tasks": [
         {
           "id": "M02-T01",
           "title": "Define discovery contracts and defaults",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format check; strict lint; typecheck; 2 focused discovery-contract tests; harness PASS",
+          "completedAt": "2026-07-29T16:57:09.896Z"
         },
         {
           "id": "M02-T02",
           "title": "Implement safe recursive discovery",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck; 12 focused traversal/security tests; 45 total tests; coverage 100% statements/lines/functions and 94.07% branches",
+          "completedAt": "2026-07-29T17:08:17.759Z"
         },
         {
           "id": "M02-T03",
           "title": "Build deterministic file inventory",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck; 7 focused inventory tests; 52 total tests; coverage 100% statements/lines/functions and 94.36% branches",
+          "completedAt": "2026-07-29T17:12:04.378Z"
         },
         {
           "id": "M02-T04",
           "title": "Classify supported source candidates",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck; 4 focused classification tests; 56 total tests; coverage 100% statements/lines/functions and 94.59% branches",
+          "completedAt": "2026-07-29T17:15:38.921Z"
         },
         {
           "id": "M02-T05",
           "title": "Integrate discovery into CLI and collect evidence",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify; 66 tests in 9 files with zero skipped/todo; coverage 99.64% statements/lines, 100% functions, 94.15% branches; 6 CLI smokes; M02 scenario; harness; npm audit 0 vulnerabilities; evidence reproducibility PASS",
+          "completedAt": "2026-07-29T17:57:16.611Z"
         }
       ]
     },
@@ -85,8 +95,8 @@
       "id": "M03",
       "slug": "parser-analysis-model",
       "title": "Source parser and analysis model",
-      "status": "queued",
-      "plan": ".github/harness/exec-plans/queued/M03-parser-analysis-model.md",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M03-parser-analysis-model.md",
       "branch": "milestone/m03-parser-analysis-model",
       "tasks": [
         {

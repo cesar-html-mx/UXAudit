@@ -50,3 +50,72 @@
   configured in the local repository at evidence time.
 - Closed M01 against verified task commit `4b5dac8` and activated M02-T01. The M01 milestone report,
   source digest, integrity manifest, and raw records remain under `evidence/m01-bootstrap/`.
+
+## M02 discovery and inventory — 2026-07-29
+
+- Reconciled the activated M02 state with the repository, created
+  `milestone/m02-discovery-inventory` from the verified M01 closure commit, and confirmed that no
+  discovery, inventory, or classification implementation already existed.
+- Completed M02-T01 with immutable contracts for discovered files, exclusions, recoverable issues,
+  inventory entries, and source candidates. Defined exact default dependency/generated/configuration
+  exclusions, the `.js`/`.jsx`/`.ts`/`.tsx` boundary, and a secure-by-default symlink policy with an
+  explicit in-root opt-in.
+- Verified T01 under Node.js `24.18.0`: formatting, strict lint, typecheck, two focused contract
+  tests, and harness integrity passed.
+- Completed M02-T02 with iterative recursive discovery, deterministic entry/result sorting,
+  canonical descendant containment, pre/post-resolution exclusions, configurable internal-link
+  following, visited-directory cycle prevention, recoverable descendant issues, and typed fatal root
+  failures.
+- Verified nested/default/configured exclusions, deterministic reruns, actual directory-link skipping,
+  internal/external/broken/cyclic link handling, canonical-exclusion bypass prevention, sibling
+  continuation, filesystem races, special entries, POSIX sibling-prefix containment, and Windows
+  drive/separator semantics. All 45 repository tests passed with 100% statements/lines/functions and
+  94.07% branch coverage.
+- Completed M02-T03 with a pure canonical-path inventory builder, portable relative paths, normalized
+  extensions, canonical alias deduplication, explicit file type, ordinal ordering, input immutability,
+  and a typed invariant failure for non-descendant records.
+- Verified T03 with seven focused inventory tests and 52 repository tests. Coverage remained 100%
+  for statements, lines, and functions and reached 94.36% for branches.
+- Completed M02-T04 with case-insensitive `.js`/`.jsx`/`.ts`/`.tsx` classification, parser-oriented
+  JavaScript/TypeScript and JSX source kinds, deterministic ordering, and conservative exclusion of
+  declaration and configuration files. The classifier derives paths only and makes no React
+  component claim.
+- Verified T04 with four focused positive/negative/determinism tests and 56 repository tests.
+  Coverage reached 100% statements, lines, and functions and 94.59% branches.
+- Integrated M02-T05 as the complete
+  `validation → discovery → inventory → classification` application flow. The normalized result
+  retains discovery, inventory, candidates, and five summary counts; the CLI preserves M01's first
+  line and appends the exact discovery summary without claiming parsing or audit completion.
+- Added typed fatal boundaries for discovery, inventory, and classification while keeping
+  descendant traversal issues recoverable. Independent review further enforced that discovery and
+  inventory adapters cannot redefine the validated canonical root.
+- Added a real-filesystem application integration test, extended all six compiled CLI smokes, and
+  created a reviewed controlled scenario with default/opt-in symbolic-link behavior, exact
+  exclusions, expected/actual inventory, byte-identical reruns, and executable source/package
+  sentinels that remain untouched.
+- Independent pre-closure security review found and corrected fail-open behavior for an unknown
+  runtime symlink policy and containment-after-metadata ordering for a retargeted queued directory.
+  Focused regressions now prove fail-closed link skipping and that no outside-root metadata is
+  inspected.
+- Independent evidence review hardened the collector to reject source-snapshot symlinks, bind child
+  processes to the pinned Node.js 24 runtime, validate Git/harness metadata, enforce zero
+  skipped/todo tests from a machine-readable Vitest report, publish through same-filesystem staging,
+  and include the finalized milestone report in the SHA-256 manifest.
+- Generated `evidence/m02-discovery/` three times from isolated clean installations. The first run
+  atomically published the package and two later runs preserved it after exact source/result
+  reproducibility comparisons. The retained run passed 66 tests across nine files with zero
+  skipped/todo, 99.64% statements/lines, 100% functions, 94.15% branches, six compiled smokes, the
+  reviewed 10-entry/five-candidate scenario, harness validation, and an npm audit reporting zero
+  known vulnerabilities. The sanitizer and SHA-256 contract passed independently.
+- Three independent final reviews found no blocking or medium-severity defects. They confirmed
+  requirements, M01 compatibility, dependency direction, path/link controls, evidence integrity,
+  and the documented residual TOCTOU boundary. Remote Windows/macOS CI remains unclaimed until the
+  milestone branch is published.
+- Completed M02-T05 in commit `5ffbd14` after its pre-commit Node.js 24 gate passed all 66 tests and
+  the build.
+- Closed M02 against verified task commit `5ffbd14` and activated M03-T01. The finalized milestone
+  report, source digest, expected/actual scenario, measurements, raw records, and SHA-256 manifest
+  remain under `evidence/m02-discovery/`.
+- Created closure commit `868442a`. Automated HTTPS publication then failed because Git had no
+  non-interactive GitHub username/credential, so no remote M02 branch, pull request, or hosted
+  Windows/macOS result is claimed.

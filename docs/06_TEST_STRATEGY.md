@@ -119,3 +119,21 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   file, and missing-argument scenarios against the compiled CLI without a shell.
 - The Node.js 24 CI matrix covers Ubuntu, Windows, and macOS. Linux additionally enforces coverage
   and rejects npm vulnerabilities of moderate severity or higher.
+
+## M02 executed baseline
+
+- Unit tests cover exact default/custom exclusions, ordinal traversal, fatal versus recoverable
+  filesystem failures, default and opt-in symbolic-link behavior, external/cyclic/broken links,
+  canonical-containment races, inventory invariants/deduplication, and the source-candidate matrix.
+- The real-filesystem application integration test executes
+  `validation → discovery → inventory → classification` twice over a mixed temporary project,
+  asserts identical normalized results, and proves that its package script sentinel is not created.
+- The compiled CLI smoke suite retains all six M01 scenarios and now asserts the stable empty-project
+  discovery summary.
+- The controlled M02 scenario versions expected and actual JSON for 10 canonical inventory entries,
+  five candidates, exclusions, default and opt-in link policy, two byte-identical reruns, and no
+  target-code execution.
+- The isolated Node.js `24.18.0` evidence run executes a clean locked install, the full gate,
+  coverage, smoke and controlled scenario, harness validation, and dependency audit. The measured
+  suite contains 66 passing tests across nine files with 99.64% statements/lines, 100% functions,
+  and 94.15% branches; the JSON test record must also prove zero skipped or todo tests.

@@ -1,0 +1,53 @@
+{
+  "default": [
+    {
+      "entryType": "symbolic-link",
+      "reason": "symlink-policy",
+      "relativePath": "alias"
+    },
+    {
+      "entryType": "symbolic-link",
+      "reason": "symlink-policy",
+      "relativePath": "cycle"
+    },
+    {
+      "entryType": "symbolic-link",
+      "reason": "symlink-policy",
+      "relativePath": "dependency-alias"
+    },
+    {
+      "entryType": "symbolic-link",
+      "reason": "symlink-policy",
+      "relativePath": "outside-link"
+    }
+  ],
+  "followedFiles": [
+    {
+      "canonicalPath": "src/shared/Duplicate.tsx",
+      "observedPath": "alias/Duplicate.tsx",
+      "viaSymlink": true
+    }
+  ],
+  "followWithinRoot": [
+    {
+      "entryType": "symbolic-link",
+      "reason": "already-visited",
+      "relativePath": "cycle"
+    },
+    {
+      "entryType": "symbolic-link",
+      "reason": "directory-name",
+      "relativePath": "dependency-alias"
+    },
+    {
+      "entryType": "symbolic-link",
+      "reason": "outside-root",
+      "relativePath": "outside-link"
+    },
+    {
+      "entryType": "directory",
+      "reason": "already-visited",
+      "relativePath": "src/shared"
+    }
+  ]
+}

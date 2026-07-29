@@ -86,7 +86,10 @@ try {
   assertScenario(
     validDirectory.exitCode === 0 &&
       validDirectory.stderr === '' &&
-      validDirectory.stdout.startsWith('Project path validated: '),
+      validDirectory.stdout.startsWith('Project path validated: ') &&
+      validDirectory.stdout.includes(
+        'Discovery summary: discovered=0 inventory=0 candidates=0 exclusions=0 issues=0',
+      ),
     'valid directory',
     validDirectory,
   );

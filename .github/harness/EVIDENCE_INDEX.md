@@ -6,7 +6,7 @@ actually executed.
 | Milestone | Evidence path              | Status                                                                                           |
 | --------- | -------------------------- | ------------------------------------------------------------------------------------------------ |
 | M01       | `evidence/m01-bootstrap/`  | Complete: source digest/manifest, clean install, gate, 100% coverage, six smokes, harness, audit |
-| M02       | `evidence/m02-discovery/`  | Pending                                                                                          |
+| M02       | `evidence/m02-discovery/`  | Complete: 66 tests/no skips, coverage, six smokes, deterministic scenario, audit, SHA-256 report |
 | M03       | `evidence/m03-parsing/`    | Pending                                                                                          |
 | M04       | `evidence/m04-rules/`      | Pending                                                                                          |
 | M05       | `evidence/m05-reporting/`  | Pending                                                                                          |
