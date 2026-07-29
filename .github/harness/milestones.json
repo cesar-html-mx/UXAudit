@@ -50,8 +50,8 @@
       "id": "M02",
       "slug": "discovery-inventory",
       "title": "Project discovery, inventory, and classification",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M02-discovery-inventory.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M02-discovery-inventory.md",
       "branch": "milestone/m02-discovery-inventory",
       "tasks": [
         {
@@ -85,7 +85,9 @@
         {
           "id": "M02-T05",
           "title": "Integrate discovery into CLI and collect evidence",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify; 66 tests in 9 files with zero skipped/todo; coverage 99.64% statements/lines, 100% functions, 94.15% branches; 6 CLI smokes; M02 scenario; harness; npm audit 0 vulnerabilities; evidence reproducibility PASS",
+          "completedAt": "2026-07-29T17:57:16.611Z"
         }
       ]
     },
@@ -93,8 +95,8 @@
       "id": "M03",
       "slug": "parser-analysis-model",
       "title": "Source parser and analysis model",
-      "status": "queued",
-      "plan": ".github/harness/exec-plans/queued/M03-parser-analysis-model.md",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M03-parser-analysis-model.md",
       "branch": "milestone/m03-parser-analysis-model",
       "tasks": [
         {

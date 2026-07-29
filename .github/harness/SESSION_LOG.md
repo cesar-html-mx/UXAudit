@@ -101,3 +101,18 @@
   processes to the pinned Node.js 24 runtime, validate Git/harness metadata, enforce zero
   skipped/todo tests from a machine-readable Vitest report, publish through same-filesystem staging,
   and include the finalized milestone report in the SHA-256 manifest.
+- Generated `evidence/m02-discovery/` three times from isolated clean installations. The first run
+  atomically published the package and two later runs preserved it after exact source/result
+  reproducibility comparisons. The retained run passed 66 tests across nine files with zero
+  skipped/todo, 99.64% statements/lines, 100% functions, 94.15% branches, six compiled smokes, the
+  reviewed 10-entry/five-candidate scenario, harness validation, and an npm audit reporting zero
+  known vulnerabilities. The sanitizer and SHA-256 contract passed independently.
+- Three independent final reviews found no blocking or medium-severity defects. They confirmed
+  requirements, M01 compatibility, dependency direction, path/link controls, evidence integrity,
+  and the documented residual TOCTOU boundary. Remote Windows/macOS CI remains unclaimed until the
+  milestone branch is published.
+- Completed M02-T05 in commit `5ffbd14` after its pre-commit Node.js 24 gate passed all 66 tests and
+  the build.
+- Closed M02 against verified task commit `5ffbd14` and activated M03-T01. The finalized milestone
+  report, source digest, expected/actual scenario, measurements, raw records, and SHA-256 manifest
+  remain under `evidence/m02-discovery/`.

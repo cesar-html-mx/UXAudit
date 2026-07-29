@@ -94,6 +94,14 @@ Use temporary directory unit tests plus a controlled fixture containing nested s
 `dist`, duplicate/symlink scenarios, unsupported files, and mixed extensions. Run the full repository
 verify command and M02 scenario.
 
+The retained Node.js `24.18.0`/npm `11.16.0` run passed a clean locked installation,
+`npm run verify`, coverage, six compiled CLI smokes, the controlled M02 scenario, harness integrity,
+and the moderate-threshold dependency audit. It recorded 66 passing tests across nine files, zero
+skipped/todo tests, 99.64% statements/lines, 100% functions, 94.15% branches, and zero known
+dependency vulnerabilities. The scenario produced 10 canonical inventory entries, five candidates,
+eight exclusions, zero issues, reviewed expected/actual equality, and byte-identical reruns without
+executing target code.
+
 ## Evidence to retain
 
 Inventory expected/actual JSON, exclusion proof, symlink behavior, deterministic rerun comparison,
@@ -103,11 +111,11 @@ test and coverage summaries.
 
 - [x] Milestone started.
 - [x] Repository inspected and plan reconciled with reality.
-- [ ] Tasks completed.
-- [ ] Quality gate passed.
-- [ ] Evidence collected.
-- [ ] Documentation and traceability updated.
-- [ ] Milestone closed and state advanced.
+- [x] Tasks completed.
+- [x] Quality gate passed.
+- [x] Evidence collected.
+- [x] Documentation and traceability updated.
+- [x] Milestone closed and state advanced.
 
 ## Discoveries
 
@@ -187,5 +195,17 @@ test and coverage summaries.
 
 ## Outcomes and retrospective
 
-At closure, describe what now works, what was actually verified, remaining limitations, commits, and
-the next milestone.
+M02 now turns a validated root into a safe deterministic discovery result, invariant-checked
+inventory, conservative source-candidate list, and stable CLI summary. Review-driven fixes tightened
+the validated-root boundary, fail-closed link behavior, containment-before-metadata ordering,
+no-execution proof, evidence isolation, no-skip enforcement, atomic publication, and report
+integrity.
+
+The remaining limitations are deliberate: file contents are not yet opened or parsed; React
+component semantics are not inferred; distinct hard-link paths remain distinct inventory locations;
+configuration naming is conservative; and M03 must canonicalize and reauthorize each candidate at
+open time to narrow the remaining filesystem TOCTOU window.
+
+Task commits are `0ccc730`, `67f4761`, `3d666ee`, `0ac527d`, and `5ffbd14`. Publication status is
+recorded in `evidence/m02-discovery/MILESTONE_REPORT.md`. M03 owns source parsing, per-file error
+isolation, and the normalized analysis model.

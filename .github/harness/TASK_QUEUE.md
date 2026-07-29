@@ -14,7 +14,7 @@
 - [x] M02-T02 Implement safe recursive traversal with symlink-loop protection.
 - [x] M02-T03 Build a normalized, deduplicated, deterministic inventory.
 - [x] M02-T04 Classify `.ts`, `.tsx`, `.js`, and `.jsx` source candidates.
-- [ ] M02-T05 Integrate discovery with the CLI and record evidence.
+- [x] M02-T05 Integrate discovery with the CLI and record evidence.
 
 ## M03 — Source parser and analysis model
 
