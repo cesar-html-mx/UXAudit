@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 5,
+  "evidenceId": "M02-DISCOVERY",
+  "observedAt": "2026-07-29T17:50:33.207Z",
+  "source": {
+    "baseCommit": "0ac527d2cc33d61d5b1ad03cba634ade7d990e9e",
+    "branch": "milestone/m02-discovery-inventory",
+    "state": "M02-T05 working tree copied without generated or retained evidence",
+    "treeDigest": "sha256:1ba06a093bc930e68894f198666723916362cd041e7b520d169d0dce7290bda4"
+  },
+  "productVersion": "0.1.0",
+  "runtime": {
+    "node": "v24.18.0",
+    "npm": "11.16.0"
+  },
+  "system": {
+    "architecture": "x64",
+    "platform": "linux"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "manifest": "MANIFEST.sha256"
+  },
+  "scenario": {
+    "byteIdenticalReruns": true,
+    "expectedMatched": true,
+    "resultDigest": "sha256:4fc55e4c5f79c04e8a1c4ce623dbc2d84f743d42548b887002759422df89ad44",
+    "targetCodeExecuted": false
+  },
+  "verification": {
+    "commands": [
+      {
+        "fileName": "npm-ci.txt",
+        "label": "Locked clean installation",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "verify.txt",
+        "label": "Product quality gate",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "coverage.txt",
+        "label": "Coverage thresholds",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "test-results.txt",
+        "label": "No skipped or todo tests",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "cli-smoke.txt",
+        "label": "Compiled CLI smoke tests",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "m02-scenario.txt",
+        "label": "Controlled M02 discovery scenario",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "harness-validation.txt",
+        "label": "Harness integrity",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "npm-audit.json.txt",
+        "label": "Dependency audit",
+        "observedExitCode": 0,
+        "passed": true
+      }
+    ],
+    "coverage": {
+      "branches": 94.15,
+      "functions": 100,
+      "lines": 99.64,
+      "statements": 99.64
+    },
+    "dependencyAuditVulnerabilities": 0,
+    "skippedTests": 0,
+    "testFiles": 9,
+    "tests": 66,
+    "todoTests": 0
+  }
+}

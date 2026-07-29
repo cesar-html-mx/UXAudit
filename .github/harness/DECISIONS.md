@@ -172,7 +172,8 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   opt-in mode.
 - Consequences: Default scans have the smallest attack surface. Projects that deliberately use
   internal links can opt in once configuration is surfaced, while external, broken, cyclic, and
-  duplicate link behavior remains observable and testable. Portable Node APIs cannot eliminate all
+  duplicate link behavior remains observable and testable. Unknown runtime values fail closed to
+  link skipping rather than entering the opt-in branch. Portable Node APIs cannot eliminate all
   filesystem races, so M03 must revalidate a file when opening it for parsing.
 - Requirements/contracts affected: RF-03 through RF-06, RNF-04, RNF-07, RNF-09, R-004, and R-015.
 - Evidence: M02 discovery contracts, controlled traversal tests, and
@@ -217,3 +218,27 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Requirements/contracts affected: RF-04, RF-06, RNF-04, RNF-07, and RNF-08.
 - Evidence: `src/project/classification/`, the supported/rejected candidate matrix, and
   `evidence/m02-discovery/`.
+
+## D-018 — Retained discovery pipeline and stable CLI summary
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M02 must connect discovery to the CLI without collapsing project-layer boundaries,
+  discarding data required by M03, changing M01's established first output line, or claiming a
+  completed audit.
+- Decision: Compose `validation → discovery → inventory → classification` in the application layer
+  and return each normalized stage result plus five counts. Preserve
+  `Project path validated: <canonical-root>` and append one fixed-order `Discovery summary` line.
+  Treat only invalid path input as exit 2; fatal validation or pipeline-stage failures become stable
+  exit-3 application errors, while recoverable descendant issues remain in the result and count.
+- Alternatives considered: Returning only counts; placing traversal in Commander; flattening all
+  errors into input failures; treating every descendant issue as fatal; or constructing an
+  incomplete `AuditResult`.
+- Consequences: M03 can consume the exact candidates and discovery issues without rediscovery, CLI
+  compatibility remains explicit, and users can distinguish inventory progress from a future audit.
+  The complete transient inventory remains in memory, and parsing-time file authorization is still
+  required.
+- Requirements/contracts affected: RF-01, RF-03 through RF-06, RNF-01, RNF-04, RNF-07, RNF-08,
+  and the M01 exit-code boundary.
+- Evidence: `src/application/scan-project.ts`, `src/cli/run-cli.ts`, application/CLI integration
+  tests, compiled smoke tests, and `evidence/m02-discovery/`.

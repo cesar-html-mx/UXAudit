@@ -5,6 +5,8 @@ import {
   ScanProjectError,
   type ScanProject,
   type ScanProjectRequest,
+  type ScanProjectResult,
+  type ScanProjectSummary,
 } from '../../src/application/scan-project.js';
 import { EXIT_CODES, runCli } from '../../src/cli/run-cli.js';
 import { PRODUCT_VERSION } from '../../src/index.js';
@@ -27,13 +29,39 @@ const createIo = () => {
   };
 };
 
+const createScanResult = (
+  projectPath: string,
+  summaryOverrides: Partial<ScanProjectSummary> = {},
+): ScanProjectResult => ({
+  discovery: {
+    exclusions: [],
+    files: [],
+    issues: [],
+    projectRoot: projectPath,
+  },
+  inventory: {
+    entries: [],
+    projectRoot: projectPath,
+  },
+  projectPath,
+  sourceCandidates: [],
+  summary: {
+    discoveredFiles: 0,
+    excludedEntries: 0,
+    inventoryEntries: 0,
+    recoverableErrors: 0,
+    sourceCandidates: 0,
+    ...summaryOverrides,
+  },
+});
+
 describe('runCli', () => {
   it('prints help without invoking the application request', async () => {
     const output = createIo();
     let invoked = false;
     const scanProject: ScanProject = (request) => {
       invoked = true;
-      return Promise.resolve({ projectPath: request.projectPath });
+      return Promise.resolve(createScanResult(request.projectPath));
     };
 
     const exitCode = await runCli(['--help'], { io: output.io, scanProject });
@@ -50,7 +78,7 @@ describe('runCli', () => {
     let invoked = false;
     const scanProject: ScanProject = (request) => {
       invoked = true;
-      return Promise.resolve({ projectPath: request.projectPath });
+      return Promise.resolve(createScanResult(request.projectPath));
     };
 
     const exitCode = await runCli(['scan', '--help'], { io: output.io, scanProject });
@@ -65,7 +93,7 @@ describe('runCli', () => {
   it('prints the product version', async () => {
     const output = createIo();
     const scanProject: ScanProject = (request) =>
-      Promise.resolve({ projectPath: request.projectPath });
+      Promise.resolve(createScanResult(request.projectPath));
 
     const exitCode = await runCli(['--version'], { io: output.io, scanProject });
 
@@ -79,29 +107,41 @@ describe('runCli', () => {
     const requests: ScanProjectRequest[] = [];
     const scanProject: ScanProject = (request) => {
       requests.push(request);
-      return Promise.resolve({ projectPath: '/canonical/project' });
+      return Promise.resolve(
+        createScanResult('/canonical/project', {
+          discoveredFiles: 7,
+          excludedEntries: 4,
+          inventoryEntries: 7,
+          recoverableErrors: 1,
+          sourceCandidates: 4,
+        }),
+      );
     };
 
     const exitCode = await runCli(['scan', './project'], { io: output.io, scanProject });
 
     expect(exitCode).toBe(EXIT_CODES.success);
     expect(requests).toEqual([{ projectPath: './project' }]);
-    expect(output.stdout.join('')).toBe('Project path validated: /canonical/project\n');
+    expect(output.stdout.join('')).toBe(
+      'Project path validated: /canonical/project\n' +
+        'Discovery summary: discovered=7 inventory=7 candidates=4 exclusions=4 issues=1\n',
+    );
     expect(output.stderr).toEqual([]);
   });
 
   it('renders control and bidirectional characters in a canonical path as visible escapes', async () => {
     const output = createIo();
     const scanProject: ScanProject = () =>
-      Promise.resolve({
-        projectPath: '/project/\u001b[31mred\u001b]0;title\u0007\u009b\n\u2028\u202eroot',
-      });
+      Promise.resolve(
+        createScanResult('/project/\u001b[31mred\u001b]0;title\u0007\u009b\n\u2028\u202eroot'),
+      );
 
     const exitCode = await runCli(['scan', '.'], { io: output.io, scanProject });
 
     expect(exitCode).toBe(EXIT_CODES.success);
     expect(output.stdout.join('')).toBe(
-      'Project path validated: /project/\\u001b[31mred\\u001b]0;title\\u0007\\u009b\\u000a\\u2028\\u202eroot\n',
+      'Project path validated: /project/\\u001b[31mred\\u001b]0;title\\u0007\\u009b\\u000a\\u2028\\u202eroot\n' +
+        'Discovery summary: discovered=0 inventory=0 candidates=0 exclusions=0 issues=0\n',
     );
     expect(output.stdout.join('')).not.toContain('\u001b');
     expect(output.stdout.join('')).not.toContain('\u0007');
@@ -116,7 +156,7 @@ describe('runCli', () => {
     let invoked = false;
     const scanProject: ScanProject = (request) => {
       invoked = true;
-      return Promise.resolve({ projectPath: request.projectPath });
+      return Promise.resolve(createScanResult(request.projectPath));
     };
 
     const exitCode = await runCli(['scan'], { io: output.io, scanProject });
@@ -131,7 +171,7 @@ describe('runCli', () => {
     let invoked = false;
     const scanProject: ScanProject = (request) => {
       invoked = true;
-      return Promise.resolve({ projectPath: request.projectPath });
+      return Promise.resolve(createScanResult(request.projectPath));
     };
 
     const exitCode = await runCli(['unknown'], { io: output.io, scanProject });
@@ -144,7 +184,7 @@ describe('runCli', () => {
   it('neutralizes terminal controls and injected lines reflected by an unknown command', async () => {
     const output = createIo();
     const scanProject: ScanProject = (request) =>
-      Promise.resolve({ projectPath: request.projectPath });
+      Promise.resolve(createScanResult(request.projectPath));
 
     const exitCode = await runCli(['unknown\u001b[31m\u0007\nforged-line'], {
       io: output.io,
@@ -222,6 +262,30 @@ describe('runCli', () => {
     expect(exitCode).toBe(EXIT_CODES.internal);
     expect(output.stdout).toEqual([]);
     expect(output.stderr.join('')).toBe('Project path could not be validated.\n');
+  });
+
+  it.each([
+    [SCAN_PROJECT_ERROR_CODES.discoveryFailed, 'Project root could not be traversed.'],
+    [SCAN_PROJECT_ERROR_CODES.inventoryFailed, 'Project file inventory could not be built.'],
+    [
+      SCAN_PROJECT_ERROR_CODES.classificationFailed,
+      'Project source candidates could not be classified.',
+    ],
+  ])('maps typed %s failures to stable internal output', async (code, message) => {
+    const output = createIo();
+    const scanProject: ScanProject = () =>
+      Promise.reject(
+        new ScanProjectError(code, message, new Error('native details must stay hidden')),
+      );
+
+    const exitCode = await runCli(['scan', 'project'], {
+      io: output.io,
+      scanProject,
+    });
+
+    expect(exitCode).toBe(EXIT_CODES.internal);
+    expect(output.stdout).toEqual([]);
+    expect(output.stderr.join('')).toBe(`${message}\n`);
   });
 
   it('does not expose unstructured rejection values', async () => {

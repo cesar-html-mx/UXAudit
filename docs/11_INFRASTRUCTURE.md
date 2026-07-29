@@ -63,6 +63,19 @@ Engineering evidence:
 - controlled-project expected/actual comparison;
 - security and usability records.
 
+M02 adds a shell-free controlled discovery scenario and an isolated evidence collector:
+
+- `npm run test:scenario:m02` builds UXAudit, creates a temporary mixed project, compares normalized
+  expected/actual discovery results, verifies two byte-identical runs, and proves target scripts are
+  not executed.
+- `npm run evidence:m02` copies the source snapshot without dependencies, retained evidence, Git
+  metadata, credential files, or private keys; performs a clean locked install under Node.js 24;
+  rejects included symbolic links; asserts the pinned runtime and active M02 state; executes the
+  complete M02 gate with an explicit zero-skip/todo record; and atomically retains only sanitized,
+  checksummed records under `evidence/m02-discovery/`.
+- `npm run evidence:m02:finalize` runs after the milestone report is written and regenerates the
+  manifest atomically so the report is covered by the same integrity contract.
+
 ## Portability
 
 Avoid operating-system-specific shell behavior in product code. CI should include more than one

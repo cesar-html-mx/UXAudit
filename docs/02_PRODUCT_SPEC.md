@@ -8,13 +8,15 @@ The primary interface is:
 ux-audit scan <project-path> [options]
 ```
 
-### Implemented in M01
+### Implemented through M02
 
 - `--help` and command help.
 - `--version`.
 - `scan <project-path>` with one required path argument.
 - Canonical project-root validation for existence, directory type, and read/search access.
-- Stable messages and exit codes without traversal or audit claims.
+- Safe recursive discovery with exact default exclusions and secure symbolic-link skipping.
+- Deterministic canonical inventory and conservative `.js`/`.jsx`/`.ts`/`.tsx` classification.
+- Stable path and discovery-summary messages without parsing, rule, finding, or audit claims.
 
 ### Planned options
 
@@ -27,12 +29,28 @@ ux-audit scan <project-path> [options]
 - `--no-color`: terminal output without ANSI color.
 - `--verbose`: processing detail and recoverable errors.
 
-These options are not implemented in M01. Final option names may be refined in M05, but documented
-behavior and compatibility must be preserved after release.
+These options are not implemented through M02. Final option names may be refined in M05, but
+documented behavior and compatibility must be preserved after release.
+
+## Current discovery result
+
+M02's application flow returns the canonical project root, full discovery result, normalized
+inventory, classified source candidates, and counts for discovered files, inventory entries,
+candidates, exclusions, and recoverable issues. The CLI renders:
+
+```text
+Project path validated: <canonical-project-path>
+Discovery summary: discovered=<n> inventory=<n> candidates=<n> exclusions=<n> issues=<n>
+```
+
+The default traversal skips symbolic links. An internal `follow-within-root` policy exists for
+controlled callers but is not yet exposed as a CLI option. Descendant operation failures can be
+retained as recoverable issues; a root or pipeline invariant failure stops processing with a stable
+message.
 
 ## Successful execution
 
-A successful audit returns an `AuditResult` containing:
+A future successful audit returns an `AuditResult` containing:
 
 - project root;
 - start/end or duration metadata;
@@ -45,12 +63,12 @@ A successful audit returns an `AuditResult` containing:
 
 ## Exit codes
 
-Implemented M01 policy:
+Implemented M02 policy:
 
-- `0`: help/version completed or the selected project root was validated.
+- `0`: help/version completed or discovery and source classification completed safely.
 - `1`: reserved for a future completed audit that meets the configured finding-failure policy.
 - `2`: command, argument, project-path, or access input error.
-- `3`: unexpected application failure or unclassified filesystem validation failure.
+- `3`: fatal validation, discovery, inventory, classification, or unexpected application failure.
 
 M05/M06 must refine finding-policy behavior without changing these established input/internal
 boundaries incompatibly.

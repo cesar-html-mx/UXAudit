@@ -1,0 +1,106 @@
+{
+  "default": [
+    {
+      "extension": ".md",
+      "kind": "file",
+      "relativePath": "README.md"
+    },
+    {
+      "extension": ".json",
+      "kind": "file",
+      "relativePath": "package.json"
+    },
+    {
+      "extension": ".tsx",
+      "kind": "file",
+      "relativePath": "src/App.TSX"
+    },
+    {
+      "extension": ".ts",
+      "kind": "file",
+      "relativePath": "src/button.config.ts"
+    },
+    {
+      "extension": ".ts",
+      "kind": "file",
+      "relativePath": "src/helper.ts"
+    },
+    {
+      "extension": ".js",
+      "kind": "file",
+      "relativePath": "src/legacy.js"
+    },
+    {
+      "extension": ".jsx",
+      "kind": "file",
+      "relativePath": "src/nested/View.JSX"
+    },
+    {
+      "extension": ".tsx",
+      "kind": "file",
+      "relativePath": "src/shared/Duplicate.tsx"
+    },
+    {
+      "extension": ".css",
+      "kind": "file",
+      "relativePath": "src/styles.css"
+    },
+    {
+      "extension": ".ts",
+      "kind": "file",
+      "relativePath": "src/types.d.ts"
+    }
+  ],
+  "followWithinRoot": [
+    {
+      "extension": ".md",
+      "kind": "file",
+      "relativePath": "README.md"
+    },
+    {
+      "extension": ".json",
+      "kind": "file",
+      "relativePath": "package.json"
+    },
+    {
+      "extension": ".tsx",
+      "kind": "file",
+      "relativePath": "src/App.TSX"
+    },
+    {
+      "extension": ".ts",
+      "kind": "file",
+      "relativePath": "src/button.config.ts"
+    },
+    {
+      "extension": ".ts",
+      "kind": "file",
+      "relativePath": "src/helper.ts"
+    },
+    {
+      "extension": ".js",
+      "kind": "file",
+      "relativePath": "src/legacy.js"
+    },
+    {
+      "extension": ".jsx",
+      "kind": "file",
+      "relativePath": "src/nested/View.JSX"
+    },
+    {
+      "extension": ".tsx",
+      "kind": "file",
+      "relativePath": "src/shared/Duplicate.tsx"
+    },
+    {
+      "extension": ".css",
+      "kind": "file",
+      "relativePath": "src/styles.css"
+    },
+    {
+      "extension": ".ts",
+      "kind": "file",
+      "relativePath": "src/types.d.ts"
+    }
+  ]
+}

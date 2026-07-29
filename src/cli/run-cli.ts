@@ -58,11 +58,21 @@ export const createProgram = ({ io, scanProject }: CliDependencies): Command => 
 
   program
     .command('scan')
-    .description('Validate a project directory for static analysis.')
+    .description('Discover and classify project source files for static analysis.')
     .argument('<project-path>', 'React or TypeScript project directory')
     .action(async (projectPath: string) => {
       const result = await scanProject({ projectPath });
       safeIo.writeOut(`Project path validated: ${sanitizeTerminalValue(result.projectPath)}\n`);
+      safeIo.writeOut(
+        [
+          'Discovery summary:',
+          `discovered=${String(result.summary.discoveredFiles)}`,
+          `inventory=${String(result.summary.inventoryEntries)}`,
+          `candidates=${String(result.summary.sourceCandidates)}`,
+          `exclusions=${String(result.summary.excludedEntries)}`,
+          `issues=${String(result.summary.recoverableErrors)}`,
+        ].join(' ') + '\n',
+      );
     });
 
   return program;
@@ -82,9 +92,9 @@ export const runCli = async (
 
     if (error instanceof ScanProjectError) {
       dependencies.io.writeErr(`${sanitizeTerminalValue(error.message)}\n`);
-      return error.code === SCAN_PROJECT_ERROR_CODES.validationFailed
-        ? EXIT_CODES.internal
-        : EXIT_CODES.input;
+      return error.code === SCAN_PROJECT_ERROR_CODES.invalidPath
+        ? EXIT_CODES.input
+        : EXIT_CODES.internal;
     }
 
     dependencies.io.writeErr(`Internal error: ${sanitizeTerminalValue(getErrorMessage(error))}\n`);

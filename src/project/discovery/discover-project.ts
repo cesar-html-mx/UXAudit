@@ -159,13 +159,17 @@ export const createProjectDiscoverer =
 
     try {
       canonicalRoot = await fileSystem.realpath(authorizedRoot);
-      const rootStats = await fileSystem.stat(canonicalRoot);
 
       if (
-        !rootStats.isDirectory() ||
         !isPathWithinRoot(authorizedRoot, canonicalRoot) ||
         !isPathWithinRoot(canonicalRoot, authorizedRoot)
       ) {
+        throw new ProjectDiscoveryError();
+      }
+
+      const rootStats = await fileSystem.stat(canonicalRoot);
+
+      if (!rootStats.isDirectory()) {
         throw new ProjectDiscoveryError();
       }
     } catch (error) {
@@ -186,14 +190,18 @@ export const createProjectDiscoverer =
 
       try {
         currentDirectoryPath = await fileSystem.realpath(directory.absolutePath);
-        const currentStats = await fileSystem.stat(currentDirectoryPath);
 
         if (
-          !currentStats.isDirectory() ||
           !isPathWithinRoot(canonicalRoot, currentDirectoryPath) ||
           !isPathWithinRoot(directory.absolutePath, currentDirectoryPath) ||
           !isPathWithinRoot(currentDirectoryPath, directory.absolutePath)
         ) {
+          throw new Error('Directory identity changed');
+        }
+
+        const currentStats = await fileSystem.stat(currentDirectoryPath);
+
+        if (!currentStats.isDirectory()) {
           throw new Error('Directory identity changed');
         }
       } catch (error) {
@@ -264,7 +272,10 @@ export const createProjectDiscoverer =
           continue;
         }
 
-        if (linkStats.isSymbolicLink() && configuration.symlinkPolicy === SYMLINK_POLICIES.skip) {
+        if (
+          linkStats.isSymbolicLink() &&
+          configuration.symlinkPolicy !== SYMLINK_POLICIES.followWithinRoot
+        ) {
           exclusions.push({
             entryType,
             reason: DISCOVERY_EXCLUSION_REASONS.symlinkPolicy,

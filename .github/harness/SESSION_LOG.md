@@ -82,3 +82,22 @@
   component claim.
 - Verified T04 with four focused positive/negative/determinism tests and 56 repository tests.
   Coverage reached 100% statements, lines, and functions and 94.59% branches.
+- Integrated M02-T05 as the complete
+  `validation → discovery → inventory → classification` application flow. The normalized result
+  retains discovery, inventory, candidates, and five summary counts; the CLI preserves M01's first
+  line and appends the exact discovery summary without claiming parsing or audit completion.
+- Added typed fatal boundaries for discovery, inventory, and classification while keeping
+  descendant traversal issues recoverable. Independent review further enforced that discovery and
+  inventory adapters cannot redefine the validated canonical root.
+- Added a real-filesystem application integration test, extended all six compiled CLI smokes, and
+  created a reviewed controlled scenario with default/opt-in symbolic-link behavior, exact
+  exclusions, expected/actual inventory, byte-identical reruns, and executable source/package
+  sentinels that remain untouched.
+- Independent pre-closure security review found and corrected fail-open behavior for an unknown
+  runtime symlink policy and containment-after-metadata ordering for a retargeted queued directory.
+  Focused regressions now prove fail-closed link skipping and that no outside-root metadata is
+  inspected.
+- Independent evidence review hardened the collector to reject source-snapshot symlinks, bind child
+  processes to the pinned Node.js 24 runtime, validate Git/harness metadata, enforce zero
+  skipped/todo tests from a machine-readable Vitest report, publish through same-filesystem staging,
+  and include the finalized milestone report in the SHA-256 manifest.

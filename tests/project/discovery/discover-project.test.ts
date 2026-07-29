@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import {
   DEFAULT_DISCOVERY_CONFIGURATION,
   SYMLINK_POLICIES,
+  type DiscoveryConfiguration,
 } from '../../../src/project/discovery/discovery-config.js';
 import {
   createProjectDiscoverer,
@@ -77,6 +78,7 @@ describe('discoverProjectFiles', () => {
     ]);
     await Promise.all([
       writeFile(join(root, 'README.md'), '# Fixture\n', 'utf8'),
+      writeFile(join(root, 'custom.ignore.ts'), 'ignored file\n', 'utf8'),
       writeFile(join(root, 'dist', 'bundle.js'), 'generated\n', 'utf8'),
       writeFile(join(root, 'ignored', 'hidden.ts'), 'hidden\n', 'utf8'),
       writeFile(join(root, 'node_modules', 'dependency', 'index.js'), 'dependency\n', 'utf8'),
@@ -91,6 +93,7 @@ describe('discoverProjectFiles', () => {
         ...DEFAULT_DISCOVERY_CONFIGURATION.excludedDirectoryNames,
         'ignored',
       ],
+      excludedFileNames: [...DEFAULT_DISCOVERY_CONFIGURATION.excludedFileNames, 'custom.ignore.ts'],
     };
     const first = await discoverProjectFiles(root, configuration);
     const second = await discoverProjectFiles(root, configuration);
@@ -98,6 +101,11 @@ describe('discoverProjectFiles', () => {
 
     expect(relativeFiles).toEqual(['README.md', 'src/b.ts', 'src/nested/a.tsx']);
     expect(first.exclusions).toEqual([
+      {
+        entryType: DISCOVERY_ENTRY_TYPES.file,
+        reason: DISCOVERY_EXCLUSION_REASONS.fileName,
+        relativePath: 'custom.ignore.ts',
+      },
       {
         entryType: DISCOVERY_ENTRY_TYPES.directory,
         reason: DISCOVERY_EXCLUSION_REASONS.directoryName,
@@ -131,6 +139,10 @@ describe('discoverProjectFiles', () => {
     await createDirectoryLink(realDirectory, join(root, 'alias'));
 
     const result = await discoverProjectFiles(root);
+    const invalidPolicyResult = await discoverProjectFiles(root, {
+      ...DEFAULT_DISCOVERY_CONFIGURATION,
+      symlinkPolicy: 'invalid-runtime-value',
+    } as unknown as DiscoveryConfiguration);
 
     expect(result.files.map((file) => toProjectRelativePath(root, file.absolutePath))).toEqual([
       'real/component.tsx',
@@ -140,6 +152,7 @@ describe('discoverProjectFiles', () => {
       reason: DISCOVERY_EXCLUSION_REASONS.symlinkPolicy,
       relativePath: 'alias',
     });
+    expect(invalidPolicyResult).toEqual(result);
   });
 
   it('follows only internal links, prevents cycles, and records broken or external links', async () => {
@@ -379,6 +392,43 @@ describe('discoverProjectFiles', () => {
         relativePath: 'stale',
       },
     ]);
+  });
+
+  it('checks a retargeted directory before inspecting metadata outside the root', async () => {
+    const root = resolve('virtual-project');
+    const child = join(root, 'child');
+    const outside = resolve('outside-project');
+    const inspectedPaths: string[] = [];
+    let childResolutionCount = 0;
+    const fileSystem = createFakeFileSystem({
+      lstat: () => Promise.resolve(createStats('directory')),
+      readDirectory: (path) => Promise.resolve(path === root ? ['child'] : []),
+      realpath: (path) => {
+        if (path === child) {
+          childResolutionCount += 1;
+          return Promise.resolve(childResolutionCount === 1 ? child : outside);
+        }
+
+        return Promise.resolve(path);
+      },
+      stat: (path) => {
+        inspectedPaths.push(path);
+        return Promise.resolve(createStats('directory'));
+      },
+    });
+    const discover = createProjectDiscoverer(fileSystem);
+
+    const result = await discover(root);
+
+    expect(result.issues).toEqual([
+      {
+        code: DISCOVERY_ISSUE_CODES.ioFailed,
+        operation: DISCOVERY_OPERATIONS.inspect,
+        recoverable: true,
+        relativePath: 'child',
+      },
+    ]);
+    expect(inspectedPaths).not.toContain(outside);
   });
 
   it('treats an unreadable authorized root as a typed fatal error', async () => {

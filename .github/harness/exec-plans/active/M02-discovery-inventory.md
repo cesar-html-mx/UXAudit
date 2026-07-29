@@ -80,6 +80,14 @@ without reading source content or claiming React component semantics.
 
 Connect the application flow to discovery and expose a tested summary suitable for later reporters.
 
+Implemented as an injected application composition of
+`validation → discovery → inventory → classification`. The result retains all four stage outputs
+plus five stable counts for M03. The CLI preserves M01's canonical-root line, appends a fixed-order
+discovery summary, maps invalid roots to exit 2 and fatal stage failures to stable exit 3 messages,
+and leaves recoverable descendant issues in the successful result. The controlled scenario compares
+reviewed expected/actual JSON, exercises both symbolic-link policies and exclusions, proves
+byte-identical reruns, and includes executable source/package sentinels that remain untouched.
+
 ## Validation and acceptance
 
 Use temporary directory unit tests plus a controlled fixture containing nested source, `node_modules`,
@@ -108,8 +116,9 @@ test and coverage summaries.
 - The harness had activated M02 but `state.json` still named the M01 branch. The repository was
   clean, so `milestone/m02-discovery-inventory` was created directly from the verified M01 closure
   commit and the state branch is reconciled in M02-T01.
-- The implemented product currently stops after canonical root validation. No discovery,
-  inventory, or classification module exists, so all five M02 tasks remain substantive work.
+- At M02 start, the implemented product stopped after canonical root validation. The milestone now
+  adds separate discovery, inventory, and classification modules and composes them only in the
+  application layer.
 - M01's `ScanProjectResult` exposes only the canonical project path. M02-T05 must extend that
   application result with a discovery summary while preserving the established CLI input and
   internal-error boundaries.
@@ -123,6 +132,22 @@ test and coverage summaries.
 - Classification recomputes the suffix from `relativePath` rather than trusting incidental
   inventory metadata. This preserves the normalized boundary if a test adapter or future producer
   supplies inconsistent extension data.
+- Independent T05 review found that an injected discovery adapter could redefine the validated root.
+  The application now treats any discovery or inventory root mismatch as a typed fatal stage error,
+  always builds against and returns the canonical root established by validation, and covers both
+  invariant failures.
+- Independent security review found two fail-open ordering edges: an unknown runtime link policy
+  entered the follow branch, and a retargeted queued directory could be inspected before its
+  containment check. Both now fail closed and have regressions proving default-equivalent link
+  skipping and no metadata query outside the root.
+- The controlled source fixture contains executable side effects as well as a package-script
+  sentinel, and the scenario checks the sentinel after direct application reruns and compiled CLI
+  execution. Discovery never imports or executes either path.
+- Evidence review required stronger isolation and closure integrity. The collector now rejects
+  included source symlinks, forces the pinned Node executable onto child `PATH`, validates npm/Git
+  metadata and active M02-T05 state, proves zero skipped/todo tests from Vitest JSON, publishes the
+  initial package through a same-filesystem staging directory, and finalizes the SHA-256 manifest
+  after adding the milestone report.
 
 ## Decision log
 
@@ -138,11 +163,14 @@ test and coverage summaries.
 - D-017 keeps classification syntactic and parser-oriented: supported extensions become language
   and JSX source kinds, while `.d.ts`, `config.*`, and `*.config.*` remain non-candidates without
   reading or interpreting code.
+- D-018 retains normalized stage outputs behind one application boundary, preserves M01's first CLI
+  line and exit meanings, and adds only a discovery summary rather than constructing a premature
+  `AuditResult`.
 
 ## Risks and recovery
 
-- Symlink behavior and canonical containment differ subtly across operating systems. T02 will use
-  Node filesystem APIs only, tests the default policy through controlled temporary trees (using a
+- Symlink behavior and canonical containment differ subtly across operating systems. T02 uses Node
+  filesystem APIs only, tests the default policy through controlled temporary trees (using a
   Windows junction where needed), and verifies the complete follow policy through an injected
   portable filesystem adapter.
 - Portable path APIs and repeated revalidation narrow but cannot eliminate filesystem TOCTOU races.
