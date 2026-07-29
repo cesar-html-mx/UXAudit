@@ -177,3 +177,23 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Requirements/contracts affected: RF-03 through RF-06, RNF-04, RNF-07, RNF-09, R-004, and R-015.
 - Evidence: M02 discovery contracts, controlled traversal tests, and
   `evidence/m02-discovery/`.
+
+## D-016 — Canonical inventory identity and portable ordering
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: RF-05 requires normalized absolute and relative locations with no duplicates and RNF-04
+  requires stable results across repeated execution.
+- Decision: Use the discovered canonical absolute path as inventory identity, derive a `/`-separated
+  relative path from the canonical root, normalize the final extension to lowercase, and sort
+  ordinally by relative path. Reject root, relative, sibling-prefix, ancestor, or other outside-root
+  records as invariant failures.
+- Alternatives considered: Deduplicating observed aliases; locale-aware sorting; comparing content;
+  or performing additional device/inode calls to merge hard links.
+- Consequences: Symlink aliases collapse deterministically and unsupported files remain available to
+  the separate classifier. Hard links at distinct canonical paths remain separate entries because
+  they are independently addressable locations; this is an explicit limitation rather than an
+  unsupported physical-identity claim.
+- Requirements/contracts affected: RF-05, RNF-04, RNF-07, and RNF-09.
+- Evidence: `src/project/inventory/`, focused normalization/deduplication tests, and
+  `evidence/m02-discovery/`.

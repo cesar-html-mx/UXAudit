@@ -93,6 +93,11 @@ normalized and isolated; losing the root is fatal.
 Normalizes canonical and project-relative paths, deduplicates entries, and returns deterministic
 ordering.
 
+M02 defines identity as the canonical absolute file path. Inventory entries retain that native
+absolute path, derive a portable `/`-separated project-relative path, normalize the final extension
+to lowercase, and carry only the justified `file` kind. Canonical aliases deduplicate and entries
+sort ordinally by relative path. A non-descendant record is an internal invariant failure.
+
 ### FileClassifier
 
 Selects supported source candidates. Classification may use extension and conservative source

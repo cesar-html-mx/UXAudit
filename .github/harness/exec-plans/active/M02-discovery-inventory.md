@@ -63,6 +63,10 @@ descendant failure is retained without discarding siblings.
 Normalize, deduplicate, retain project-relative paths, file type, extension, and other justified
 metadata.
 
+Completed with a pure inventory builder that accepts only absolute descendants, normalizes
+project-relative paths to `/`, lowercases extensions, assigns the explicit `file` type, deduplicates
+canonical paths, and returns ordinal relative-path order without mutating discovery input.
+
 ### M02-T04 — Classify candidates
 
 Select supported source files conservatively. Do not label every `.ts` file a React component.
@@ -109,6 +113,8 @@ test and coverage summaries.
   recursive call-stack growth.
 - Stable filesystem operation failures can be classified from native error codes without retaining
   native messages or absolute host paths in the normalized issue contract.
+- `path.extname` returns the final suffix only; lowercasing that value creates a stable classifier
+  boundary while preserving the original case and spelling in `relativePath`.
 
 ## Decision log
 
@@ -118,6 +124,9 @@ test and coverage summaries.
 - D-015 selects `skip` as the default symlink policy and retains an explicit
   `follow-within-root` opt-in whose containment, cycle, and duplicate behavior must be proven in
   M02-T02/M02-T03.
+- D-016 defines inventory identity as canonical absolute path and ordering as normalized relative
+  path. Observed aliases collapse; distinct hard-link paths remain distinct because they are
+  separately addressable project locations.
 
 ## Risks and recovery
 
@@ -128,6 +137,9 @@ test and coverage summaries.
 - Portable path APIs and repeated revalidation narrow but cannot eliminate filesystem TOCTOU races.
   The inventory is not a permanent authorization: M03 must revalidate containment when opening each
   candidate for parsing.
+- Canonical-path deduplication does not infer physical identity for hard links. Adding device/inode
+  metadata would require extra platform-sensitive filesystem state and is not justified for the M02
+  contract; this limitation remains explicit.
 - Each task remains independently recoverable by reverting only its conventional task commit; no
   published history will be rewritten.
 

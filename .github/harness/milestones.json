@@ -71,7 +71,9 @@
         {
           "id": "M02-T03",
           "title": "Build deterministic file inventory",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck; 7 focused inventory tests; 52 total tests; coverage 100% statements/lines/functions and 94.36% branches",
+          "completedAt": "2026-07-29T17:12:04.378Z"
         },
         {
           "id": "M02-T04",

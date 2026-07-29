@@ -12,7 +12,7 @@
 
 - [x] M02-T01 Define discovery contracts, exclusions, and supported extensions.
 - [x] M02-T02 Implement safe recursive traversal with symlink-loop protection.
-- [ ] M02-T03 Build a normalized, deduplicated, deterministic inventory.
+- [x] M02-T03 Build a normalized, deduplicated, deterministic inventory.
 - [ ] M02-T04 Classify `.ts`, `.tsx`, `.js`, and `.jsx` source candidates.
 - [ ] M02-T05 Integrate discovery with the CLI and record evidence.
 

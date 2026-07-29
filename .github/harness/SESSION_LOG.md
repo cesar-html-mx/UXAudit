@@ -71,3 +71,8 @@
   continuation, filesystem races, special entries, POSIX sibling-prefix containment, and Windows
   drive/separator semantics. All 45 repository tests passed with 100% statements/lines/functions and
   94.07% branch coverage.
+- Completed M02-T03 with a pure canonical-path inventory builder, portable relative paths, normalized
+  extensions, canonical alias deduplication, explicit file type, ordinal ordering, input immutability,
+  and a typed invariant failure for non-descendant records.
+- Verified T03 with seven focused inventory tests and 52 repository tests. Coverage remained 100%
+  for statements, lines, and functions and reached 94.36% for branches.
