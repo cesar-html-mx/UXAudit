@@ -148,7 +148,7 @@ and coverage.
 - [x] Quality gate passed.
 - [x] Evidence collected.
 - [x] Documentation and traceability updated.
-- [ ] Milestone closed and state advanced.
+- [x] Milestone closed and state advanced.
 
 ## Discoveries
 
@@ -278,5 +278,23 @@ and coverage.
 
 ## Outcomes and retrospective
 
-At closure, describe what now works, what was actually verified, remaining limitations, commits, and
-the next milestone.
+M03 delivered the complete local
+`authorized source read → Babel parse → AST-free extraction → normalized project model` pipeline.
+The additive `analyzeProject` facade and production CLI expose parsing results and isolated
+per-file failures without changing the completed M02 `scanProject` contract or evaluating target
+code. Task commits `3e2f5ce`, `6b8a608`, `5d12ee3`, `3a1c5fb`, and `6a33946` implement M03;
+`0e32080` only reconciles the owner's squashed M02 ancestry.
+
+Node.js `24.18.0` verification passed formatting, strict lint, typecheck, build, 208 tests across 21
+files with zero skipped/todo, global coverage thresholds, six compiled CLI smokes, the deterministic
+four-kind controlled scenario, exact Babel `8.0.4` dependency checks, and a dependency audit with
+zero known vulnerabilities. The isolated evidence package reproduced twice, its SHA-256 contract
+passed, and two independent final reviews found no blocking, high, or medium defects.
+
+Remaining limitations are explicit: portable filesystem APIs cannot eliminate the final
+path-replacement race; component recognition and dynamic-value confidence are deliberately
+syntactic; total project candidate count is not yet bounded; and hosted Windows/macOS execution is
+not claimed until the branch is published. Automatic publication was unavailable because this
+process has neither a non-interactive HTTPS credential nor an authorized SSH key. The harness closed
+M03 against verified task commit `6a33946` and activated M04-T01; no M04 product work was started in
+this session.

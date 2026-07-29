@@ -217,3 +217,14 @@
 - Attempted to publish the task-complete T04 branch tip before the T05 commit. This process has no
   HTTPS credential helper and no authorized SSH key, so the attempt failed without changing the
   remote. No embedded token or remote publication is claimed.
+- Two independent final reviews collectively covered the Node.js `24.18.0` product gate, coverage,
+  CLI smokes, controlled scenario, exact Babel tree, evidence contract, and security/architecture
+  boundaries. One reproduced the executable gate and scenarios; the other audited the retained
+  evidence and finalizer independently. Neither found a blocking, high, or medium defect; the only
+  observed harness failure was the expected pre-advance state with M03 active and no remaining task.
+- Finalized the M03 milestone report and SHA-256 evidence manifest, marked the retained package
+  complete, and recorded the residual portable TOCTOU, syntactic-analysis, unbounded project-count,
+  and unexecuted hosted-platform limitations without weakening a gate.
+- Closed M03 against verified task commit `6a33946a07bf2d8db5e81d201b59a038bf994e5e`
+  and activated M04-T01. The M03 ExecPlan moved to `exec-plans/completed/`; no M04 implementation
+  work was started.

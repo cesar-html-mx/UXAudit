@@ -4,13 +4,13 @@
 
 - Project: UXAudit
 - Harness status: ready
-- Active milestone: **M03 — Source parser and analysis model**
-- Active task: **None**
-- Completed milestones: M01, M02
+- Active milestone: **M04 — Rule engine and initial validation catalog**
+- Active task: **M04-T01 — Define Rule, Finding, severity, and category contracts**
+- Completed milestones: M01, M02, M03
 - Current branch: milestone/m03-parser-analysis-model
 - Last verification: PASS
-- Last verified at: 2026-07-29T21:19:01.962Z
-- Last commit: 5ffbd144369d4b4dae9649cfd7f1c75d11b2a918
+- Last verified at: 2026-07-29T21:24:45.176Z
+- Last commit: 6a33946a07bf2d8db5e81d201b59a038bf994e5e
 
 ## Blockers
 
