@@ -137,3 +137,69 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   coverage, smoke and controlled scenario, harness validation, and dependency audit. The measured
   suite contains 66 passing tests across nine files with 99.64% statements/lines, 100% functions,
   and 94.15% branches; the JSON test record must also prove zero skipped or todo tests.
+
+## M03-T03 executed parser/extraction baseline
+
+- Babel extraction tests cover PascalCase function declarations, arrow/function expressions,
+  supported React class variants, anonymous default exports, inactive candidates, class-render and
+  nested-function ownership boundaries, and JSX embedded in attributes.
+- JSX cases cover intrinsic, custom, member/namespaced, shorthand-fragment, and `React.Fragment`
+  forms; exact bidirectional parent/child/component/root relationships; named, shorthand, and spread
+  attributes; finite primitive, static-template, bounded-object, dynamic, partial, non-finite, deep,
+  and prototype-sensitive values.
+- Text assertions distinguish exact, partial, and dynamic confidence, including primitive
+  expression children, nested JSX, custom-child uncertainty, whitespace normalization, and the
+  256-UTF-16-code-unit retention boundary.
+- Location assertions verify whole files, multiline JSX, attributes, object properties, spreads,
+  fragments, UTF-16 offsets, and end-exclusive ranges. Deterministic reruns and serialized-key scans
+  prove that Babel nodes, native metadata, source text, and absolute fixture paths do not escape.
+- Resource and robustness cases cover the 100,000-node maximum contract, invalid configured limits,
+  missing required locations, and stable fatal normalization of unexpected traversal failures.
+- The executed Node.js `24.18.0` gate passed 22 focused extraction tests and all 106 repository
+  tests. Format, lint, typecheck, and build passed; global V8 coverage measured 97.17% statements,
+  90.71% branches, 100% functions, and 97.13% lines.
+
+## M03-T04 executed model-builder baseline
+
+- Builder tests cover the canonical empty model, reverse multi-file input, ordinal portable-path
+  ordering, deterministic global entity order, source-order retention for attributes and object
+  properties, deep defensive projection, input immutability, and removal of AST/source extras.
+- Path, ID, and coordinate cases reject duplicates, absolute/Windows/backslash/dot-segment paths,
+  noncanonical IDs, invalid ranges, inconsistent offset/line/column mappings, mismatched file paths,
+  and locations outside file/component/parent/attribute/property containers.
+- Relationship cases exercise exact file and component membership, ownership, root sets,
+  parent/child reciprocity and order, missing and cross-file references, self/cyclic graphs, and
+  `usesJsx` consistency.
+- Value cases cover supported discriminants, names and languages; exact/dynamic/partial text states;
+  finite primitive literals; object confidence, property order and containment; prototype-sensitive
+  keys; object cycles; and the depth/text bounds established by T03.
+- Hostile control characters are preserved as inert model data, while every malformed-input case
+  yields the same fatal `AnalysisModelInvariantError` without a cause, rejected value, sensitive
+  path, or source detail.
+- The executed Node.js `24.18.0` gate passed 26 focused builder tests and all 132 repository tests
+  across 16 files. Format, lint, typecheck, and build passed; global V8 coverage measured 97.00%
+  statements (973/1003), 90.31% branches (634/702), 100% functions, and 96.95% lines.
+
+## M03-T05 executed integration/isolation baseline
+
+- Secure-reader tests cover declared/canonical containment, root retarget and identity loss,
+  path/handle snapshot changes, substituted non-regular files, POSIX no-follow/non-blocking flags,
+  the Windows read-only path, exact close behavior, and stable error normalization without native
+  path/message leakage.
+- Byte-boundary cases accept exactly 1 MiB, reject initial or observed growth above it, limit every
+  descriptor request to 64 KiB, detect short or invalid reads, reject malformed UTF-8, and prove that
+  an initial BOM survives both injected and production filesystem paths.
+- Composite tests prove strict `read → Babel parse → extraction` delegation, short-circuit each
+  recoverable stage, propagate fatal failures, and serialize no source string or AST through the
+  public parser result.
+- Batch tests prove cloned ordinal input, sequential execution, deterministic output, duplicate and
+  result-path invariants, fatal short-circuiting, and independent continuation after read, parse, and
+  extraction failures.
+- Application and real-filesystem integration tests preserve the complete `scanProject` result,
+  keep discovery and parsing summaries separate, isolate malformed syntax while modeling safe
+  siblings, retain locations, and prove that inert target-code sentinels are never executed. CLI
+  tests preserve scan-only dependency compatibility and verify the production third summary line
+  plus stable fatal-error exit mapping.
+- The executed Node.js `24.18.0` gate passed all 208 repository tests across 21 files. Format, lint,
+  typecheck, and build passed; global V8 coverage measured 97.63% statements, 91.86% branches, 100%
+  functions, and 97.59% lines.

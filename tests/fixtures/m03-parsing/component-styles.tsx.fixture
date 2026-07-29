@@ -1,0 +1,25 @@
+import React from 'react';
+
+export function FunctionPanel() {
+  return <section data-component="function">Function</section>;
+}
+
+export const ArrowPanel = () => <section data-component="arrow">Arrow</section>;
+
+export const FunctionExpressionPanel = function FunctionExpressionPanel() {
+  return <section data-component="function-expression">Function expression</section>;
+};
+
+export class ClassPanel extends React.Component<{ readonly label: string }> {
+  public render() {
+    return <section data-component="class">{this.props.label}</section>;
+  }
+}
+
+export const helperView = () => <small>Lowercase helper</small>;
+
+export function calculateTotal(left: number, right: number) {
+  return left + right;
+}
+
+export const NotAComponent = () => 42;

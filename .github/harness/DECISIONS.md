@@ -242,3 +242,151 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   and the M01 exit-code boundary.
 - Evidence: `src/application/scan-project.ts`, `src/cli/run-cli.ts`, application/CLI integration
   tests, compiled smoke tests, and `evidence/m02-discovery/`.
+
+## D-019 — Babel 8 isolated parser boundary
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M03 needs current JS, JSX, TS, and TSX syntax support without exposing a parser-specific
+  tree to rules or relying on Babel packages that happen to exist under a development-only
+  transitive dependency.
+- Decision: Declare exact production dependencies on `@babel/parser`, `@babel/traverse`, and
+  `@babel/types` `8.0.4`, the current stable releases verified from registry metadata. Keep every
+  Babel type and value below `src/parsing/babel/`. Parse with locations, `sourceType:
+'unambiguous'`, no recovery or target configuration loading, and plugins selected only from the
+  M02 source kind: TypeScript for `.ts`, JSX for `.jsx`, and both for `.tsx`. Plain `.js` does not
+  silently enable JSX. Convert every success and failure to UXAudit-owned contracts before leaving
+  the parsing package.
+- Alternatives considered: Babel 7; TypeScript compiler AST; enabling every syntax plugin for every
+  extension; using `errorRecovery`; exposing Babel nodes behind `unknown`; or relying on Vitest's
+  incidental Babel tree.
+- Consequences: The parser uses the newest stable line compatible with Node.js `24.18.0`, has an
+  explicit locked runtime supply chain, and cannot couple M04 rules to Babel. Flow, decorators, JSX
+  in `.js`, and other opt-in proposal syntax remain unsupported unless a later requirement and
+  fixture justify them. A malformed file yields no partial model.
+- Requirements/contracts affected: RF-07, RF-08, RF-12, RNF-02, RNF-03, RNF-08, R-003, and R-010.
+- Evidence: M03 four-kind parser matrix, negative plugin cases, declaration-boundary checks,
+  dependency audit, and `evidence/m03-parsing/`.
+
+## D-020 — AST-free relational JSX model and confidence
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M04 rules need element names, selected values, descendant text, relationships, and exact
+  locations, but dynamic JSX and component abstractions cannot be evaluated reliably by a local
+  static parser.
+- Decision: Use a plain readonly relational model of files, syntactically justified components,
+  JSX elements/fragments, parent/child and ownership IDs, named/spread attributes, and static text.
+  Preserve primitive literals and recursively bounded static object properties; represent
+  expressions and unknown spread content as dynamic or partial instead of guessing. Intrinsic tags
+  remain distinct from custom/member components. Named PascalCase functions become components only
+  when they directly own JSX; direct default exports may be anonymous, and supported React classes
+  own JSX only through instance `render` methods. Attribute values and nested executable boundaries
+  start separate JSX roots instead of being presented as rendered children. Source locations carry
+  portable relative file paths, one-based lines, zero-based UTF-16 columns and offsets, and
+  end-exclusive ranges. Stable IDs derive from the relative file path, entity kind, and source
+  offset.
+- Alternatives considered: Retaining the Babel AST; nested cyclic objects; flattening dynamic
+  values to strings; resolving imports and aliases; rendering components; or treating all
+  PascalCase functions as React components.
+- Consequences: The model is deterministic, serializable, parser-independent, and sufficient for
+  the initial catalog's `img`, input/label, button, heading, link, image-dimension/loading, and
+  literal `style.fontSize` checks. Rules must respect exact/partial/dynamic confidence. Runtime
+  component behavior, imported aliases, external CSS, and evaluated expressions remain explicit
+  limitations.
+- Requirements/contracts affected: RF-08, RF-12, RNF-02 through RNF-05, R-001, R-002, and R-008.
+- Evidence: Contract tests, extraction fixtures, expected/actual model samples, location assertions,
+  serialization checks, and `evidence/m03-parsing/`.
+
+## D-021 — Authorized bounded source processing
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M02 inventory entries remain untrusted candidates when M03 opens them. A path, target,
+  type, size, or byte sequence can change after discovery, and a syntactically valid but extremely
+  large/deep file can consume disproportionate parser resources.
+- Decision: Limit one source file to `1_048_576` bytes and one extraction traversal to at most
+  `100_000` Babel nodes. Maintain ownership and JSX-parent contexts during that traversal instead of
+  rescanning ancestor chains. Retain at most `256` UTF-16 code units of descendant text per JSX
+  node and mark truncation as partial. Reauthorize the canonical root and expected canonical file
+  immediately around a read-only file-handle open; use no-follow/non-blocking flags on platforms
+  that support them; compare path and handle type/device/inode metadata; read only through that
+  handle in bounded chunks; detect growth or mutation; and close in `finally`. Decode with
+  `TextDecoder('utf-8', { fatal: true, ignoreBOM: true })`, preserving an initial U+FEFF so UTF-16
+  offsets describe the exact JavaScript string supplied to Babel. Every expected file-local
+  failure is stable and recoverable; a non-portable candidate declaration, root loss, or model
+  invariant remains fatal and detail-free.
+- Alternatives considered: `readFile(path)` after a preflight; following final symlinks; replacing
+  malformed UTF-8; stripping BOM; unlimited parsing/traversal; arbitrary timing-based test limits;
+  or keeping a partial AST/model after a resource error.
+- Consequences: Normal authored sources remain single-pass and deterministic while oversized,
+  non-regular, retargeted, changed, invalid-encoding, or extraction-heavy candidates cannot discard
+  safe sibling results. Extremely long static labels remain useful for presence checks but are
+  explicitly partial rather than copied through every ancestor. Portable filesystem APIs still
+  cannot eliminate every race, and Windows lacks the full POSIX open-flag set; post-open
+  handle/path comparison and documented residual risk remain necessary.
+- Requirements/contracts affected: RF-07, RF-08, RNF-03, RNF-04, RNF-07, RNF-09, R-003, R-006,
+  and R-015.
+- Evidence: extraction-limit tests, source-open race/type/size/encoding tests, malformed sibling
+  isolation, parser baseline, no-execution scenario, and `evidence/m03-parsing/`.
+
+## D-022 — Defensive canonical analysis-model construction
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: Per-file parser output is an internal boundary, but rules need one deterministic project
+  model whose identities, coordinates, ownership, and values cannot be corrupted by an adapter bug
+  or retained parser reference.
+- Decision: Reproject every per-file value into fresh UXAudit-owned objects and validate the entire
+  graph before returning it. File paths must be non-empty slash-separated relative paths without
+  absolute, drive, traversal, empty-segment, or backslash syntax; control and bidirectional
+  characters remain untrusted filename data for later reporters to escape. Locations must use safe
+  half-open UTF-16 coordinates, agree at shared offsets, remain within their file and owning
+  containers, and advance consistently. IDs derive exactly from file path and start offset. File,
+  component, root, ownership, parent, and child arrays must equal the canonical source-order graph;
+  every component owns JSX and at least one root. Literal/object/text confidence must be internally
+  consistent, numbers finite, structured values bounded and cycle-safe, and all invalid input must
+  stop with one detail-free `AnalysisModelInvariantError`. Do not add query helpers before a rule
+  demonstrates a concrete need.
+- Alternatives considered: Trusting parser output; shallow copying; retaining nested input
+  references; silently repairing broken relationships; accepting absolute or platform-separator
+  paths; returning the first detailed invariant failure; or adding speculative indexes/helpers.
+- Consequences: Equivalent per-file input order produces byte-identical project models, attributes
+  and object properties retain source order, parser/source extras cannot cross the domain boundary,
+  and later rules can rely on reciprocal relationships. A model invariant is fatal rather than
+  isolated because continuing could produce unsound findings. Hostile path characters remain data,
+  so every reporter must still apply its output-context escaping policy.
+- Requirements/contracts affected: RF-08, RF-12, RNF-02, RNF-03, RNF-04, RNF-05, R-001, R-002,
+  R-008, and R-014.
+- Evidence: model projection/immutability tests, reverse-input serialization, ID/location/value
+  invariant matrices, cycle and cross-file cases, prototype-sensitive keys, generic-error
+  redaction, and `evidence/m03-parsing/`.
+
+## D-023 — Additive sequential source-analysis integration
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M03 must connect the completed discovery pipeline to parsing and model construction
+  without changing M02's published `scanProject` contract. Expected read, syntax, and extraction
+  failures affect one candidate, while root authorization, parser bookkeeping, and model integrity
+  failures make the project result unsafe.
+- Decision: Add `analyzeProject` as a separate application facade over the unchanged `scanProject`.
+  Sort a copy of candidates ordinally, reject duplicate or non-portable paths, parse one candidate
+  at a time, retain successful analyzed files and recoverable parser errors in separate ordered
+  arrays, and build one model only after the batch finishes. A parser result whose path does not
+  match its candidate is a fatal invariant. Preserve existing two-line CLI scan output and let the
+  production injection append one fixed-order parsing summary; callers that inject only
+  `scanProject` retain the M02 behavior. Collapse fatal analysis/model details into stable
+  application errors without native causes or project data.
+- Alternatives considered: Mutating the existing scan result contract; parsing concurrently;
+  stopping on the first malformed file; returning a partial model after an invariant failure;
+  printing every parser error by default; or replacing the established discovery summary.
+- Consequences: M04 receives a deterministic AST-free model even when a safe sibling is malformed,
+  completed M02 callers remain compatible, and the CLI distinguishes discovery issues from parsing
+  failures without claiming that rules ran. Sequential parsing bounds simultaneous source/AST
+  memory but does not impose a whole-project candidate limit; project-scale performance remains an
+  M06 validation concern.
+- Requirements/contracts affected: RF-01, RF-07, RF-08, RF-12, RNF-01, RNF-03, RNF-04, RNF-07,
+  RNF-08, R-003, R-006, R-014, and R-015.
+- Evidence: batch isolation/invariant tests, real-filesystem application integration, compiled CLI
+  scenario, no-execution sentinel, measurements, and `evidence/m03-parsing/`.

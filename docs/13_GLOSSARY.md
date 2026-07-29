@@ -6,7 +6,13 @@
 - **Inventory**: normalized deterministic records for discovered files.
 - **Source candidate**: supported file selected for parsing.
 - **AST adapter output**: parser-boundary representation that may use Babel types internally.
+- **Analyzed source file**: AST-free normalized result for one successfully processed source
+  candidate; it is the input to the project analysis-model builder.
 - **Analysis model**: parser-independent UXAudit domain representation used by rules.
+- **Source location**: portable relative file path plus a half-open source range using one-based
+  lines and zero-based UTF-16 columns/offsets.
+- **Value confidence**: `exact`, `partial`, or `dynamic` statement of how much JSX value/text
+  information can be justified without evaluating target code.
 - **Rule**: one independently executable validation criterion.
 - **Finding**: normalized evidence that a rule identified a reviewable situation.
 - **Execution error**: recoverable or unrecoverable processing problem, distinct from a finding.

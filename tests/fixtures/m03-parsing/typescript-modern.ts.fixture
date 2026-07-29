@@ -1,0 +1,13 @@
+interface AuditOptions {
+  readonly enabled?: boolean;
+}
+
+type AuditValue<T> = {
+  readonly value: T;
+};
+
+export const defaultOptions = {
+  enabled: true,
+} satisfies AuditOptions;
+
+export const wrapValue = <T>(value: T): AuditValue<T> => ({ value });

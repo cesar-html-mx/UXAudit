@@ -30,3 +30,9 @@ Do not commit secrets, private absolute paths, or modified raw output.
   controlled project, deterministic reruns, symlink/exclusion proof, dependency audit, source
   snapshot digest, a zero-skip/todo test record, and a per-artifact SHA-256 manifest covering the
   finalized milestone report. Start with `m02-discovery/SUMMARY.md`.
+- `m03-parsing/`: completed Node.js 24 source-reader, Babel pipeline, normalized-model, and
+  error-isolation evidence, including an isolated `npm ci`, the product gate, coverage, compiled CLI
+  smokes, a reviewed four-kind expected/actual scenario, byte-identical reruns, location and
+  target-code non-execution proof, dependency audit, exact Babel dependency tree, source snapshot
+  digest, zero-skip/todo record, bounded performance observations, and a per-artifact SHA-256
+  manifest covering the finalized milestone report. Start with `m03-parsing/SUMMARY.md`.

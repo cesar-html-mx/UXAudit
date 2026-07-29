@@ -119,3 +119,112 @@
 - Created closure commit `868442a`. Automated HTTPS publication then failed because Git had no
   non-interactive GitHub username/credential, so no remote M02 branch, pull request, or hosted
   Windows/macOS result is claimed.
+
+## M03 parser and analysis model — 2026-07-29
+
+- Loaded and validated the active M03 harness, created
+  `milestone/m03-parser-analysis-model` from the verified M02 tree, and reconciled the stale
+  `state.currentBranch` value before product work.
+- Inspected the completed M02 pipeline and confirmed that no parser, analysis model, or M03 fixture
+  implementation already existed. Registry metadata identified aligned Babel `8.0.4` packages as
+  the current stable releases compatible with Node.js `24.18.0`; the exact AST-boundary decision
+  was recorded before installation.
+- Completed M03-T01 with parser-independent source locations, analyzed-file/component/JSX models,
+  named/spread attributes, literal/object/dynamic values, text confidence, and discriminated
+  recoverable read/parse/extract results. Rule-facing contracts contain no Babel imports, AST,
+  absolute project root, or source content.
+- Verified T01 under Node.js `24.18.0`: formatting, strict lint, typecheck, eight focused contract
+  tests, all 74 repository tests across 12 files, harness integrity, and the Babel-boundary scan
+  passed with no skipped tests.
+- Completed M03-T02 with exact `@babel/parser`, `@babel/traverse`, and `@babel/types` `8.0.4`
+  production dependencies and an internal Babel adapter. Source kinds select only JavaScript, JSX,
+  TypeScript, or TSX syntax; source type is unambiguous; locations and relative filenames are
+  retained; partial recovery, comments, and tokens are disabled.
+- Added an inert fixture corpus plus tests for the four language kinds, script/module behavior,
+  negative plugin boundaries, stable malformed-file coordinates, CRLF/astral UTF-16 offsets,
+  deterministic reruns, direct dependency declarations, and target-code non-execution. ESLint now
+  prevents Babel imports from entering domain or rule modules.
+- Verified T02 on Node.js `24.18.0`: ten focused tests and all 84 tests across 14 files passed,
+  together with formatting, strict lint, typecheck, build, an exact top-level Babel dependency
+  tree, and an npm audit reporting zero vulnerabilities.
+- Completed M03-T03 with one bounded Babel traversal that projects AST data into UXAudit-owned
+  component and JSX records without evaluating target code. It recognizes named and anonymous
+  default function, arrow/function-expression, and supported React class component forms while
+  retaining unowned JSX conservatively.
+- Extracted JSX now distinguishes intrinsic, custom, member/namespaced, shorthand fragment, and
+  `React.Fragment` forms. Deterministic IDs and source-order arrays retain exact bidirectional
+  component/root/parent/child relationships; JSX attributes and nested functions form explicit
+  relationship or ownership barriers.
+- Added named/spread attribute extraction; exact finite primitive, static-template, and structured
+  object values; dynamic/partial confidence for unresolved data; and normalized descendant text
+  with exact/partial/dynamic confidence. Prototype-sensitive object keys remain data, object depth
+  is bounded, static text is capped at 256 UTF-16 code units, and the traversal stops recoverably
+  after 100,000 Babel nodes.
+- Preserved portable half-open locations for files, components, JSX, attributes, and object
+  properties. Expected extraction/limit failures remain stable and recoverable per file, while
+  unexpected traversal or bookkeeping invariant failures are hidden behind one stable fatal
+  `BabelAnalysisInvariantError`.
+- Verified T03 on Node.js `24.18.0`: 22 focused extraction tests and all 106 repository tests passed,
+  along with formatting, strict lint, typecheck, and build. Global V8 coverage passed at 97.17%
+  statements, 90.71% branches, 100% functions, and 97.13% lines.
+- Completed M03-T04 with a defensive `buildAnalysisModel` boundary that recursively projects fresh
+  UXAudit-owned files, components, JSX nodes, attributes, text, and values. Parser/source extras and
+  all mutable input references are discarded instead of being concatenated into the project model.
+- Normalization orders portable project-relative paths ordinally and rebuilds per-file and global
+  arrays from canonical component/JSX IDs. It preserves source-significant attribute/object-property
+  order and retains hostile control characters as inert data for later escaping at output
+  boundaries.
+- Added fatal validation for duplicate or nonportable paths; unsafe/inconsistent coordinates;
+  location containment; membership, ownership, root, and reciprocal parent/child relationships;
+  missing/cross-file references and cycles; value/confidence combinations; finite literals; bounded
+  text/object depth; object cycles; and `usesJsx` consistency. All failures expose the same generic
+  `AnalysisModelInvariantError` without invalid input details.
+- Verified T04 on Node.js `24.18.0`: 26 focused builder tests and all 132 repository tests across 16
+  files passed, together with formatting, strict lint, typecheck, and build. Global V8 coverage
+  passed at 97.00% statements (973/1003), 90.31% branches (634/702), 100% functions, and 96.95%
+  lines.
+- Implemented M03-T05 source opening with canonical-root reauthorization, declared/canonical
+  containment, path/descriptor identity and snapshot comparisons, POSIX no-follow/non-blocking
+  flags, exact handle closure, stable local/fatal error boundaries, a 1 MiB source limit, and 64 KiB
+  bounded reads.
+- Added strict UTF-8 decoding that rejects malformed bytes while retaining an initial BOM. The
+  composite parser now performs `verified read → Babel parse → AST-free extraction` without
+  exposing source text or Babel nodes.
+- Added deterministic sequential candidate analysis. Expected read, syntax, and extraction failures
+  remain ordered per-file records and safe siblings continue; duplicate/result-path, root,
+  extraction, and model invariants remain fatal.
+- Preserved the completed M02 `scanProject` public contract and introduced the separate
+  `analyzeProject` facade for parser errors, normalized model, and parsing counts. Existing injected
+  scan-only CLI callers retain their behavior, while the production entry point appends
+  `Parsing summary: parsed=<n> failed=<n> components=<n> jsx=<n>`.
+- Added secure-reader, composite, batch, application, real-filesystem integration, and CLI
+  regressions. The integration case isolates malformed TSX, retains valid sibling model locations,
+  and proves that target-code sentinels are not executed.
+- Independent review found two cross-platform hardening gaps before closure. Non-portable candidate
+  paths now fail through a detail-free fatal invariant, Windows drive prefixes are rejected on every
+  host, and reader tests construct native absolute paths instead of assuming POSIX syntax.
+- Verified T05 on Node.js `24.18.0`: all 208 repository tests across 21 files passed, together with
+  formatting, strict lint, typecheck, and build. Global V8 coverage passed at 97.63% statements,
+  91.86% branches, 100% functions, and 97.59% lines.
+- The compiled controlled M03 scenario modeled seven files, isolated one malformed file, retained
+  seven components and 15 JSX nodes across JavaScript/JSX/TypeScript/TSX, reproduced byte-identical
+  expected output, and did not execute target code.
+- Collected the isolated `M03-PARSING` evidence package twice. Locked install, product gate,
+  coverage, zero-skip/todo tests, CLI smoke, controlled scenario, harness, moderate-threshold audit,
+  and exact direct Babel tree all passed. The second run preserved the initial package after stable
+  comparison; its manifest verifies every retained artifact, and npm reported zero known
+  vulnerabilities.
+- Attempted to publish the task-complete T04 branch tip before the T05 commit. This process has no
+  HTTPS credential helper and no authorized SSH key, so the attempt failed without changing the
+  remote. No embedded token or remote publication is claimed.
+- Two independent final reviews collectively covered the Node.js `24.18.0` product gate, coverage,
+  CLI smokes, controlled scenario, exact Babel tree, evidence contract, and security/architecture
+  boundaries. One reproduced the executable gate and scenarios; the other audited the retained
+  evidence and finalizer independently. Neither found a blocking, high, or medium defect; the only
+  observed harness failure was the expected pre-advance state with M03 active and no remaining task.
+- Finalized the M03 milestone report and SHA-256 evidence manifest, marked the retained package
+  complete, and recorded the residual portable TOCTOU, syntactic-analysis, unbounded project-count,
+  and unexecuted hosted-platform limitations without weakening a gate.
+- Closed M03 against verified task commit `6a33946a07bf2d8db5e81d201b59a038bf994e5e`
+  and activated M04-T01. The M03 ExecPlan moved to `exec-plans/completed/`; no M04 implementation
+  work was started.

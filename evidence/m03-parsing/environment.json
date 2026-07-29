@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 6,
+  "evidenceId": "M03-PARSING",
+  "observedAt": "2026-07-29T21:17:43.463Z",
+  "source": {
+    "baseCommit": "3a1c5fb58b997a561c418c3a053fc9e4f80c0854",
+    "branch": "milestone/m03-parser-analysis-model",
+    "state": "M03-T05 working tree copied without generated or retained evidence",
+    "treeDigest": "sha256:e6f315a35a130dc394009ada75cf9658bfd6bcaefa66c772e1b9183c62190b40"
+  },
+  "productVersion": "0.1.0",
+  "runtime": { "node": "v24.18.0", "npm": "11.16.0" },
+  "system": { "architecture": "x64", "platform": "linux" },
+  "integrity": { "algorithm": "sha256", "manifest": "MANIFEST.sha256" },
+  "scenario": {
+    "byteIdenticalReruns": true,
+    "components": 7,
+    "expectedMatched": true,
+    "failedFiles": 1,
+    "jsxNodes": 15,
+    "parsedFiles": 7,
+    "resultDigest": "sha256:48501cab384bb28885899c3646ddc4521470c777339ff15c951cc2789d1b3225",
+    "sourceKinds": ["javascript", "javascript-jsx", "typescript", "typescript-jsx"],
+    "sourceLocationsRetained": true,
+    "targetCodeExecuted": false
+  },
+  "verification": {
+    "babelDependencies": {
+      "@babel/parser": "8.0.4",
+      "@babel/traverse": "8.0.4",
+      "@babel/types": "8.0.4"
+    },
+    "commands": [
+      {
+        "fileName": "npm-ci.txt",
+        "label": "Locked clean installation",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "verify.txt",
+        "label": "Product quality gate",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "coverage.txt",
+        "label": "Coverage thresholds",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "test-results.txt",
+        "label": "No skipped or todo tests",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "cli-smoke.txt",
+        "label": "Compiled CLI smoke tests",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "m03-scenario.txt",
+        "label": "Controlled M03 parser/model scenario",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "harness-validation.txt",
+        "label": "Harness integrity",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "npm-audit.json.txt",
+        "label": "Dependency audit",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "babel-dependencies.json.txt",
+        "label": "Direct locked Babel dependencies",
+        "observedExitCode": 0,
+        "passed": true
+      }
+    ],
+    "coverage": { "branches": 91.86, "functions": 100, "lines": 97.59, "statements": 97.63 },
+    "dependencyAuditVulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "skippedTests": 0,
+    "testFiles": 21,
+    "tests": 208,
+    "todoTests": 0
+  }
+}

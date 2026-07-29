@@ -1,0 +1,768 @@
+{
+  "fixture": {
+    "files": [
+      {
+        "logicalName": "src/javascript-commonjs.js",
+        "sourceKind": "javascript"
+      },
+      {
+        "logicalName": "src/javascript-jsx.jsx",
+        "sourceKind": "javascript-jsx"
+      },
+      {
+        "logicalName": "src/typescript-modern.ts",
+        "sourceKind": "typescript"
+      },
+      {
+        "logicalName": "src/typescript-modern.tsx",
+        "sourceKind": "typescript-jsx"
+      },
+      {
+        "logicalName": "src/malformed.tsx",
+        "sourceKind": "typescript-jsx"
+      },
+      {
+        "logicalName": "src/component-styles.tsx",
+        "sourceKind": "typescript-jsx"
+      },
+      {
+        "logicalName": "src/jsx-shapes.tsx",
+        "sourceKind": "typescript-jsx"
+      },
+      {
+        "logicalName": "src/no-execution.js",
+        "sourceKind": "javascript"
+      }
+    ],
+    "malformedFile": "src/malformed.tsx",
+    "targetExecutionSentinel": "src/TARGET_CODE_EXECUTED"
+  },
+  "sourceCandidates": [
+    {
+      "extension": ".tsx",
+      "relativePath": "src/component-styles.tsx",
+      "sourceKind": "typescript-jsx"
+    },
+    {
+      "extension": ".js",
+      "relativePath": "src/javascript-commonjs.js",
+      "sourceKind": "javascript"
+    },
+    {
+      "extension": ".jsx",
+      "relativePath": "src/javascript-jsx.jsx",
+      "sourceKind": "javascript-jsx"
+    },
+    {
+      "extension": ".tsx",
+      "relativePath": "src/jsx-shapes.tsx",
+      "sourceKind": "typescript-jsx"
+    },
+    {
+      "extension": ".tsx",
+      "relativePath": "src/malformed.tsx",
+      "sourceKind": "typescript-jsx"
+    },
+    {
+      "extension": ".js",
+      "relativePath": "src/no-execution.js",
+      "sourceKind": "javascript"
+    },
+    {
+      "extension": ".ts",
+      "relativePath": "src/typescript-modern.ts",
+      "sourceKind": "typescript"
+    },
+    {
+      "extension": ".tsx",
+      "relativePath": "src/typescript-modern.tsx",
+      "sourceKind": "typescript-jsx"
+    }
+  ],
+  "parsingSummary": {
+    "components": 7,
+    "failedFiles": 1,
+    "jsxNodes": 15,
+    "parsedFiles": 7
+  },
+  "parserErrors": [
+    {
+      "code": "SOURCE_PARSE_FAILED",
+      "filePath": "src/malformed.tsx",
+      "message": "Source file contains invalid or unsupported syntax.",
+      "recoverable": true,
+      "stage": "parse",
+      "position": {
+        "column": 12,
+        "line": 4,
+        "offset": 84
+      }
+    }
+  ],
+  "model": {
+    "components": [
+      {
+        "filePath": "src/component-styles.tsx",
+        "jsxNodeCount": 1,
+        "kind": "function",
+        "location": {
+          "end": "5:1@127",
+          "start": "3:7@35"
+        },
+        "name": "FunctionPanel",
+        "rootJsxNodeCount": 1
+      },
+      {
+        "filePath": "src/component-styles.tsx",
+        "jsxNodeCount": 1,
+        "kind": "arrow-function",
+        "location": {
+          "end": "7:79@208",
+          "start": "7:13@142"
+        },
+        "name": "ArrowPanel",
+        "rootJsxNodeCount": 1
+      },
+      {
+        "filePath": "src/component-styles.tsx",
+        "jsxNodeCount": 1,
+        "kind": "function",
+        "location": {
+          "end": "11:1@374",
+          "start": "9:13@224"
+        },
+        "name": "FunctionExpressionPanel",
+        "rootJsxNodeCount": 1
+      },
+      {
+        "filePath": "src/component-styles.tsx",
+        "jsxNodeCount": 1,
+        "kind": "class",
+        "location": {
+          "end": "17:1@553",
+          "start": "13:7@384"
+        },
+        "name": "ClassPanel",
+        "rootJsxNodeCount": 1
+      },
+      {
+        "filePath": "src/javascript-jsx.jsx",
+        "jsxNodeCount": 2,
+        "kind": "arrow-function",
+        "location": {
+          "end": "7:1@136",
+          "start": "3:13@41"
+        },
+        "name": "Greeting",
+        "rootJsxNodeCount": 1
+      },
+      {
+        "filePath": "src/jsx-shapes.tsx",
+        "jsxNodeCount": 6,
+        "kind": "arrow-function",
+        "location": {
+          "end": "31:1@607",
+          "start": "7:13@141"
+        },
+        "name": "Shapes",
+        "rootJsxNodeCount": 1
+      },
+      {
+        "filePath": "src/typescript-modern.tsx",
+        "jsxNodeCount": 2,
+        "kind": "arrow-function",
+        "location": {
+          "end": "13:1@294",
+          "start": "8:13@138"
+        },
+        "name": "Panel",
+        "rootJsxNodeCount": 1
+      }
+    ],
+    "files": [
+      {
+        "componentCount": 4,
+        "filePath": "src/component-styles.tsx",
+        "jsxNodeCount": 5,
+        "language": "typescript",
+        "location": {
+          "end": "26:0@748",
+          "start": "1:0@0"
+        },
+        "usesJsx": true
+      },
+      {
+        "componentCount": 0,
+        "filePath": "src/javascript-commonjs.js",
+        "jsxNodeCount": 0,
+        "language": "javascript",
+        "location": {
+          "end": "8:0@143",
+          "start": "1:0@0"
+        },
+        "usesJsx": false
+      },
+      {
+        "componentCount": 1,
+        "filePath": "src/javascript-jsx.jsx",
+        "jsxNodeCount": 2,
+        "language": "javascript",
+        "location": {
+          "end": "8:0@138",
+          "start": "1:0@0"
+        },
+        "usesJsx": true
+      },
+      {
+        "componentCount": 1,
+        "filePath": "src/jsx-shapes.tsx",
+        "jsxNodeCount": 6,
+        "language": "typescript",
+        "location": {
+          "end": "32:0@609",
+          "start": "1:0@0"
+        },
+        "usesJsx": true
+      },
+      {
+        "componentCount": 0,
+        "filePath": "src/no-execution.js",
+        "jsxNodeCount": 0,
+        "language": "javascript",
+        "location": {
+          "end": "7:0@239",
+          "start": "1:0@0"
+        },
+        "usesJsx": false
+      },
+      {
+        "componentCount": 0,
+        "filePath": "src/typescript-modern.ts",
+        "jsxNodeCount": 0,
+        "language": "typescript",
+        "location": {
+          "end": "14:0@252",
+          "start": "1:0@0"
+        },
+        "usesJsx": false
+      },
+      {
+        "componentCount": 1,
+        "filePath": "src/typescript-modern.tsx",
+        "jsxNodeCount": 2,
+        "language": "typescript",
+        "location": {
+          "end": "14:0@296",
+          "start": "1:0@0"
+        },
+        "usesJsx": true
+      }
+    ],
+    "jsxNodes": [
+      {
+        "childNodeCount": 0,
+        "elementKind": "intrinsic",
+        "filePath": "src/component-styles.tsx",
+        "kind": "element",
+        "location": {
+          "end": "4:62@124",
+          "start": "4:9@71"
+        },
+        "name": "section",
+        "nested": false,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "exact",
+          "value": "Function"
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "intrinsic",
+        "filePath": "src/component-styles.tsx",
+        "kind": "element",
+        "location": {
+          "end": "7:79@208",
+          "start": "7:32@161"
+        },
+        "name": "section",
+        "nested": false,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "exact",
+          "value": "Arrow"
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "intrinsic",
+        "filePath": "src/component-styles.tsx",
+        "kind": "element",
+        "location": {
+          "end": "10:84@371",
+          "start": "10:9@296"
+        },
+        "name": "section",
+        "nested": false,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "exact",
+          "value": "Function expression"
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "intrinsic",
+        "filePath": "src/component-styles.tsx",
+        "kind": "element",
+        "location": {
+          "end": "15:71@546",
+          "start": "15:11@486"
+        },
+        "name": "section",
+        "nested": false,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "dynamic",
+          "value": ""
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "intrinsic",
+        "filePath": "src/component-styles.tsx",
+        "kind": "element",
+        "location": {
+          "end": "19:63@618",
+          "start": "19:32@587"
+        },
+        "name": "small",
+        "nested": false,
+        "ownedByComponent": false,
+        "textContent": {
+          "confidence": "exact",
+          "value": "Lowercase helper"
+        }
+      },
+      {
+        "childNodeCount": 1,
+        "elementKind": "intrinsic",
+        "filePath": "src/javascript-jsx.jsx",
+        "kind": "element",
+        "location": {
+          "end": "6:9@134",
+          "start": "4:2@70"
+        },
+        "name": "main",
+        "nested": false,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "partial",
+          "value": "Hello,"
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "intrinsic",
+        "filePath": "src/javascript-jsx.jsx",
+        "kind": "element",
+        "location": {
+          "end": "5:26@124",
+          "start": "5:4@102"
+        },
+        "name": "h1",
+        "nested": true,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "partial",
+          "value": "Hello,"
+        }
+      },
+      {
+        "childNodeCount": 4,
+        "filePath": "src/jsx-shapes.tsx",
+        "kind": "fragment",
+        "location": {
+          "end": "30:5@605",
+          "start": "8:2@160"
+        },
+        "nested": false,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "partial",
+          "value": "Save Read more"
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "intrinsic",
+        "filePath": "src/jsx-shapes.tsx",
+        "kind": "element",
+        "location": {
+          "end": "19:6@392",
+          "start": "9:4@167"
+        },
+        "name": "img",
+        "nested": true,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "exact",
+          "value": ""
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "custom",
+        "filePath": "src/jsx-shapes.tsx",
+        "kind": "element",
+        "location": {
+          "end": "22:13@457",
+          "start": "20:4@397"
+        },
+        "name": "Button",
+        "nested": true,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "exact",
+          "value": "Save"
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "custom",
+        "filePath": "src/jsx-shapes.tsx",
+        "kind": "element",
+        "location": {
+          "end": "23:28@486",
+          "start": "23:4@462"
+        },
+        "name": "UI.Icon",
+        "nested": true,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "exact",
+          "value": ""
+        }
+      },
+      {
+        "childNodeCount": 1,
+        "filePath": "src/jsx-shapes.tsx",
+        "kind": "fragment",
+        "location": {
+          "end": "29:21@599",
+          "start": "24:4@491"
+        },
+        "nested": true,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "partial",
+          "value": "Read more"
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "intrinsic",
+        "filePath": "src/jsx-shapes.tsx",
+        "kind": "element",
+        "location": {
+          "end": "28:10@577",
+          "start": "25:6@514"
+        },
+        "name": "a",
+        "nested": true,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "partial",
+          "value": "Read more"
+        }
+      },
+      {
+        "childNodeCount": 1,
+        "elementKind": "intrinsic",
+        "filePath": "src/typescript-modern.tsx",
+        "kind": "element",
+        "location": {
+          "end": "12:12@292",
+          "start": "9:2@187"
+        },
+        "name": "section",
+        "nested": false,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "dynamic",
+          "value": ""
+        }
+      },
+      {
+        "childNodeCount": 0,
+        "elementKind": "intrinsic",
+        "filePath": "src/typescript-modern.tsx",
+        "kind": "element",
+        "location": {
+          "end": "10:37@264",
+          "start": "10:4@231"
+        },
+        "name": "h2",
+        "nested": true,
+        "ownedByComponent": true,
+        "textContent": {
+          "confidence": "dynamic",
+          "value": ""
+        }
+      }
+    ]
+  },
+  "reviewedModelSample": {
+    "component": [
+      {
+        "kind": "arrow-function",
+        "name": "Shapes",
+        "rootJsxNodeCount": 1
+      }
+    ],
+    "jsxNodes": [
+      {
+        "kind": "fragment",
+        "location": {
+          "end": "30:5@605",
+          "start": "8:2@160"
+        },
+        "textContent": {
+          "confidence": "partial",
+          "value": "Save Read more"
+        }
+      },
+      {
+        "attributes": [
+          {
+            "kind": "named",
+            "name": "alt",
+            "value": {
+              "confidence": "exact",
+              "kind": "literal",
+              "value": ""
+            }
+          },
+          {
+            "kind": "named",
+            "name": "loading",
+            "value": {
+              "confidence": "exact",
+              "kind": "literal",
+              "value": "lazy"
+            }
+          },
+          {
+            "kind": "named",
+            "name": "width",
+            "value": {
+              "confidence": "exact",
+              "kind": "literal",
+              "value": 320
+            }
+          },
+          {
+            "kind": "named",
+            "name": "height",
+            "value": {
+              "confidence": "exact",
+              "kind": "literal",
+              "value": 180
+            }
+          },
+          {
+            "kind": "named",
+            "name": "hidden",
+            "value": {
+              "confidence": "exact",
+              "kind": "literal",
+              "value": false
+            }
+          },
+          {
+            "kind": "named",
+            "name": "style",
+            "value": {
+              "confidence": "exact",
+              "hasUnknownProperties": false,
+              "kind": "object",
+              "properties": [
+                {
+                  "name": "fontSize",
+                  "value": {
+                    "confidence": "exact",
+                    "kind": "literal",
+                    "value": 11
+                  }
+                },
+                {
+                  "name": "lineHeight",
+                  "value": {
+                    "confidence": "exact",
+                    "kind": "literal",
+                    "value": 1.2
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "named",
+            "name": "title",
+            "value": {
+              "confidence": "dynamic",
+              "kind": "dynamic"
+            }
+          },
+          {
+            "kind": "named",
+            "name": "data-risk",
+            "value": {
+              "confidence": "dynamic",
+              "kind": "dynamic"
+            }
+          },
+          {
+            "kind": "spread"
+          }
+        ],
+        "elementKind": "intrinsic",
+        "kind": "element",
+        "location": {
+          "end": "19:6@392",
+          "start": "9:4@167"
+        },
+        "name": "img",
+        "textContent": {
+          "confidence": "exact",
+          "value": ""
+        }
+      },
+      {
+        "attributes": [
+          {
+            "kind": "named",
+            "name": "disabled",
+            "value": {
+              "confidence": "exact",
+              "kind": "literal",
+              "value": true
+            }
+          },
+          {
+            "kind": "named",
+            "name": "aria-label",
+            "value": {
+              "confidence": "exact",
+              "kind": "literal",
+              "value": "Save"
+            }
+          }
+        ],
+        "elementKind": "custom",
+        "kind": "element",
+        "location": {
+          "end": "22:13@457",
+          "start": "20:4@397"
+        },
+        "name": "Button",
+        "textContent": {
+          "confidence": "exact",
+          "value": "Save"
+        }
+      },
+      {
+        "attributes": [
+          {
+            "kind": "named",
+            "name": "name",
+            "value": {
+              "confidence": "exact",
+              "kind": "literal",
+              "value": "check"
+            }
+          }
+        ],
+        "elementKind": "custom",
+        "kind": "element",
+        "location": {
+          "end": "23:28@486",
+          "start": "23:4@462"
+        },
+        "name": "UI.Icon",
+        "textContent": {
+          "confidence": "exact",
+          "value": ""
+        }
+      },
+      {
+        "kind": "fragment",
+        "location": {
+          "end": "29:21@599",
+          "start": "24:4@491"
+        },
+        "textContent": {
+          "confidence": "partial",
+          "value": "Read more"
+        }
+      },
+      {
+        "attributes": [
+          {
+            "kind": "named",
+            "name": "href",
+            "value": {
+              "confidence": "exact",
+              "kind": "literal",
+              "value": "/more"
+            }
+          }
+        ],
+        "elementKind": "intrinsic",
+        "kind": "element",
+        "location": {
+          "end": "28:10@577",
+          "start": "25:6@514"
+        },
+        "name": "a",
+        "textContent": {
+          "confidence": "partial",
+          "value": "Read more"
+        }
+      }
+    ]
+  },
+  "checks": {
+    "fourSourceKinds": [
+      {
+        "sourceKind": "javascript"
+      },
+      {
+        "sourceKind": "javascript-jsx"
+      },
+      {
+        "sourceKind": "typescript"
+      },
+      {
+        "sourceKind": "typescript-jsx"
+      }
+    ],
+    "malformedFileIsolated": true,
+    "modeledSiblingFiles": [
+      "src/component-styles.tsx",
+      "src/javascript-commonjs.js",
+      "src/javascript-jsx.jsx",
+      "src/jsx-shapes.tsx",
+      "src/no-execution.js",
+      "src/typescript-modern.ts",
+      "src/typescript-modern.tsx"
+    ],
+    "sourceLocationsRetained": true,
+    "targetCodeExecuted": false
+  },
+  "cli": {
+    "exitCode": 0,
+    "stderr": "(empty)",
+    "stdout": "Project path validated: <PROJECT_ROOT>\nDiscovery summary: discovered=8 inventory=8 candidates=8 exclusions=0 issues=0\nParsing summary: parsed=7 failed=1 components=7 jsx=15\n"
+  }
+}

@@ -1,0 +1,13 @@
+import type { ReactNode } from 'react';
+
+interface PanelProps {
+  readonly children: ReactNode;
+  readonly title: string;
+}
+
+export const Panel = ({ children, title }: PanelProps) => (
+  <section aria-labelledby="panel-title">
+    <h2 id="panel-title">{title}</h2>
+    {children}
+  </section>
+);

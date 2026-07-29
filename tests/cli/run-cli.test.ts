@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  ANALYZE_PROJECT_ERROR_CODES,
+  AnalyzeProjectError,
+  type AnalyzeProject,
+  type AnalyzeProjectResult,
+} from '../../src/application/analyze-project.js';
+import {
   SCAN_PROJECT_ERROR_CODES,
   ScanProjectError,
   type ScanProject,
@@ -52,6 +58,25 @@ const createScanResult = (
     recoverableErrors: 0,
     sourceCandidates: 0,
     ...summaryOverrides,
+  },
+});
+
+const createAnalyzeResult = (
+  projectPath: string,
+  summaryOverrides: Partial<ScanProjectSummary> = {},
+): AnalyzeProjectResult => ({
+  ...createScanResult(projectPath, summaryOverrides),
+  model: {
+    components: [],
+    files: [],
+    jsxNodes: [],
+  },
+  parserErrors: [],
+  parsingSummary: {
+    components: 0,
+    failedFiles: 0,
+    jsxNodes: 0,
+    parsedFiles: 0,
   },
 });
 
@@ -125,6 +150,50 @@ describe('runCli', () => {
     expect(output.stdout.join('')).toBe(
       'Project path validated: /canonical/project\n' +
         'Discovery summary: discovered=7 inventory=7 candidates=4 exclusions=4 issues=1\n',
+    );
+    expect(output.stderr).toEqual([]);
+  });
+
+  it('uses the additive analysis facade and appends its parsing summary when provided', async () => {
+    const output = createIo();
+    const requests: ScanProjectRequest[] = [];
+    let directScanInvoked = false;
+    const analyzeProject: AnalyzeProject = (request) => {
+      requests.push(request);
+      return Promise.resolve({
+        ...createAnalyzeResult('/canonical/project', {
+          discoveredFiles: 8,
+          excludedEntries: 3,
+          inventoryEntries: 8,
+          recoverableErrors: 1,
+          sourceCandidates: 5,
+        }),
+        parsingSummary: {
+          components: 4,
+          failedFiles: 2,
+          jsxNodes: 11,
+          parsedFiles: 3,
+        },
+      });
+    };
+    const scanProject: ScanProject = (request) => {
+      directScanInvoked = true;
+      return Promise.resolve(createScanResult(request.projectPath));
+    };
+
+    const exitCode = await runCli(['scan', './project'], {
+      analyzeProject,
+      io: output.io,
+      scanProject,
+    });
+
+    expect(exitCode).toBe(EXIT_CODES.success);
+    expect(requests).toEqual([{ projectPath: './project' }]);
+    expect(directScanInvoked).toBe(false);
+    expect(output.stdout.join('')).toBe(
+      'Project path validated: /canonical/project\n' +
+        'Discovery summary: discovered=8 inventory=8 candidates=5 exclusions=3 issues=1\n' +
+        'Parsing summary: parsed=3 failed=2 components=4 jsx=11\n',
     );
     expect(output.stderr).toEqual([]);
   });
@@ -279,6 +348,29 @@ describe('runCli', () => {
       );
 
     const exitCode = await runCli(['scan', 'project'], {
+      io: output.io,
+      scanProject,
+    });
+
+    expect(exitCode).toBe(EXIT_CODES.internal);
+    expect(output.stdout).toEqual([]);
+    expect(output.stderr.join('')).toBe(`${message}\n`);
+  });
+
+  it.each([
+    [
+      ANALYZE_PROJECT_ERROR_CODES.analysisFailed,
+      'Project source candidates could not be analyzed.',
+    ],
+    [ANALYZE_PROJECT_ERROR_CODES.modelFailed, 'Project analysis model could not be built.'],
+  ])('maps typed analysis failure %s to stable internal output', async (code, message) => {
+    const output = createIo();
+    const analyzeProject: AnalyzeProject = () => Promise.reject(new AnalyzeProjectError(code));
+    const scanProject: ScanProject = (request) =>
+      Promise.resolve(createScanResult(request.projectPath));
+
+    const exitCode = await runCli(['scan', 'project'], {
+      analyzeProject,
       io: output.io,
       scanProject,
     });

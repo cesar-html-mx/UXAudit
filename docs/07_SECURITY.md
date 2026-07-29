@@ -96,3 +96,32 @@ descendant containment.
 Portable filesystem APIs cannot eliminate every race between validation and a later file read. M03
 must treat the M02 inventory as a candidate list, canonicalize and verify containment again when
 opening a file, and isolate changes that occur after discovery.
+
+## M03 implemented source controls and limits
+
+- Source reading accepts only a canonical absolute root whose directory identity remains stable.
+  Each declared candidate must be an exact portable descendant, resolve to the expected canonical
+  in-root file, and remain a regular file with the same device/inode, size, modification time, and
+  change time across path and handle observations.
+- POSIX opens request read-only, no-follow, and non-blocking behavior. Windows uses read-only plus
+  the same descriptor/path identity checks. Content is read only through the verified handle, which
+  is closed exactly once on success, recoverable failure, or fatal root loss.
+- Each source is limited to 1 MiB; descriptor reads request no more than 64 KiB and can observe one
+  extra byte to reject growth. Strict UTF-8 decoding fails closed on malformed bytes and deliberately
+  preserves an initial BOM for the parser.
+- Native filesystem/Babel errors, absolute paths, source bytes/text, AST values, and causes are not
+  exposed by recoverable parser records or fatal application errors. Control and bidirectional
+  characters remain untrusted model data and are escaped at the terminal boundary.
+- A non-portable internal candidate path fails through a generic fatal invariant instead of being
+  copied into a recoverable error record.
+- The Babel composite parses supplied text only. It does not import a candidate, execute project
+  configuration or package scripts, invoke a shell, or evaluate JSX expressions.
+- Candidates run sequentially in deterministic order. Expected file-local read, syntax, and
+  extraction problems do not corrupt or suppress safe sibling models; loss of root authorization,
+  batch/model invariants, and unexpected extraction invariants stop processing.
+
+Portable user-space checks cannot make pathnames permanently immutable. A replacement could still
+occur between the last path observation and later external filesystem activity. UXAudit limits this
+residual TOCTOU exposure by using only bytes read from the verified descriptor, comparing
+path/descriptor identity before and after the bounded read, reauthorizing the root throughout, and
+failing closed whenever an observable change occurs.

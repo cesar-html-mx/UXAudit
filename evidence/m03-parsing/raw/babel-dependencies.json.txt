@@ -1,0 +1,30 @@
+Command: "npm" "ls" "--depth=0" "--json" "@babel/parser" "@babel/traverse" "@babel/types"
+Working directory: isolated temporary workspace
+Expected exit code: 0
+Observed exit code: 0
+
+--- stdout ---
+{
+  "version": "0.1.0",
+  "name": "ux-audit",
+  "dependencies": {
+    "@babel/parser": {
+      "version": "8.0.4",
+      "resolved": "https://registry.npmjs.org/@babel/parser/-/parser-8.0.4.tgz",
+      "overridden": false
+    },
+    "@babel/traverse": {
+      "version": "8.0.4",
+      "resolved": "https://registry.npmjs.org/@babel/traverse/-/traverse-8.0.4.tgz",
+      "overridden": false
+    },
+    "@babel/types": {
+      "version": "8.0.4",
+      "resolved": "https://registry.npmjs.org/@babel/types/-/types-8.0.4.tgz",
+      "overridden": false
+    }
+  }
+}
+
+--- stderr ---
+(empty)
