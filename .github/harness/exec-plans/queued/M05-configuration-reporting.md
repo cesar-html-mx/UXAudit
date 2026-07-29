@@ -39,19 +39,24 @@ data. Project-controlled strings are escaped in HTML.
 ## Milestone tasks
 
 ### M05-T01 — Define configuration and result
+
 Define defaults, overrides, validation errors, audit counters, findings, processing errors, summary,
 and version metadata.
 
 ### M05-T02 — Implement configuration
+
 Load local JSON, validate unknown/invalid fields, merge CLI precedence, and document defaults.
 
 ### M05-T03 — Implement terminal reporter
+
 Provide concise summary and readable findings with no-color support and stable order.
 
 ### M05-T04 — Implement JSON reporter
+
 Serialize complete stable data, document schema/version, and test repeated output.
 
 ### M05-T05 — Implement HTML reporter
+
 Create one standalone readable file, escape hostile strings, show summary and grouped findings, and
 test write failures.
 
@@ -64,7 +69,6 @@ hostile-string tests and deterministic JSON/HTML tests.
 
 Configuration matrix, terminal capture, JSON and HTML samples, consistency comparison, XSS test,
 write-failure test, tests and coverage.
-
 
 ## Progress
 
@@ -92,4 +96,3 @@ Maintain task-specific risks, rollback steps, and any remaining debt.
 
 At closure, describe what now works, what was actually verified, remaining limitations, commits, and
 the next milestone.
-

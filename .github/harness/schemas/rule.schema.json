@@ -2,15 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "UXAudit Rule Metadata",
   "type": "object",
-  "required": [
-    "id",
-    "title",
-    "category",
-    "severity",
-    "status",
-    "explanation",
-    "recommendation"
-  ],
+  "required": ["id", "title", "category", "severity", "status", "explanation", "recommendation"],
   "properties": {
     "id": {
       "type": "string",
@@ -21,29 +13,13 @@
       "minLength": 1
     },
     "category": {
-      "enum": [
-        "ux",
-        "accessibility",
-        "seo",
-        "performance"
-      ]
+      "enum": ["ux", "accessibility", "seo", "performance"]
     },
     "severity": {
-      "enum": [
-        "info",
-        "low",
-        "medium",
-        "high",
-        "critical"
-      ]
+      "enum": ["info", "low", "medium", "high", "critical"]
     },
     "status": {
-      "enum": [
-        "required",
-        "stable",
-        "experimental",
-        "deferred"
-      ]
+      "enum": ["required", "stable", "experimental", "deferred"]
     },
     "explanation": {
       "type": "string",
@@ -54,10 +30,7 @@
       "minLength": 1
     },
     "reference": {
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": ["string", "null"]
     },
     "limitations": {
       "type": "array",

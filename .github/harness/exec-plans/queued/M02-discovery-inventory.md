@@ -39,21 +39,26 @@ classification responsibilities even if they collaborate closely.
 ## Milestone tasks
 
 ### M02-T01 — Define contracts and defaults
+
 Define discovered file, inventory entry, source candidate, exclusions, supported extensions, and
 symlink behavior.
 
 ### M02-T02 — Implement safe discovery
+
 Traverse with Node APIs, preserve the authorized root, avoid cycles, return typed recoverable errors,
 and sort directory entries deterministically.
 
 ### M02-T03 — Build the inventory
+
 Normalize, deduplicate, retain project-relative paths, file type, extension, and other justified
 metadata.
 
 ### M02-T04 — Classify candidates
+
 Select supported source files conservatively. Do not label every `.ts` file a React component.
 
 ### M02-T05 — Integrate and collect evidence
+
 Connect the application flow to discovery and expose a tested summary suitable for later reporters.
 
 ## Validation and acceptance
@@ -66,7 +71,6 @@ verify command and M02 scenario.
 
 Inventory expected/actual JSON, exclusion proof, symlink behavior, deterministic rerun comparison,
 test and coverage summaries.
-
 
 ## Progress
 
@@ -94,4 +98,3 @@ Maintain task-specific risks, rollback steps, and any remaining debt.
 
 At closure, describe what now works, what was actually verified, remaining limitations, commits, and
 the next milestone.
-

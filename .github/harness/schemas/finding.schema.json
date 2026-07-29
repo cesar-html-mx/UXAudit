@@ -16,21 +16,10 @@
       "type": "string"
     },
     "category": {
-      "enum": [
-        "ux",
-        "accessibility",
-        "seo",
-        "performance"
-      ]
+      "enum": ["ux", "accessibility", "seo", "performance"]
     },
     "severity": {
-      "enum": [
-        "info",
-        "low",
-        "medium",
-        "high",
-        "critical"
-      ]
+      "enum": ["info", "low", "medium", "high", "critical"]
     },
     "message": {
       "type": "string"
@@ -45,32 +34,18 @@
       "type": "string"
     },
     "line": {
-      "type": [
-        "integer",
-        "null"
-      ],
+      "type": ["integer", "null"],
       "minimum": 1
     },
     "column": {
-      "type": [
-        "integer",
-        "null"
-      ],
+      "type": ["integer", "null"],
       "minimum": 1
     },
     "reference": {
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": ["string", "null"]
     },
     "confidence": {
-      "enum": [
-        "high",
-        "medium",
-        "low",
-        null
-      ]
+      "enum": ["high", "medium", "low", null]
     }
   },
   "additionalProperties": true

@@ -41,7 +41,9 @@ if (!current) {
 
 const incomplete = current.tasks.filter((task) => task.status !== 'completed');
 if (incomplete.length > 0) {
-  console.error(`Refusing to close milestone with incomplete tasks: ${incomplete.map((t) => t.id).join(', ')}`);
+  console.error(
+    `Refusing to close milestone with incomplete tasks: ${incomplete.map((t) => t.id).join(', ')}`,
+  );
   process.exit(1);
 }
 

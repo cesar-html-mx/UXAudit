@@ -41,9 +41,7 @@ try {
 }
 
 try {
-  state = JSON.parse(
-    await readFile(path.join(root, '.github/harness/state/state.json'), 'utf8'),
-  );
+  state = JSON.parse(await readFile(path.join(root, '.github/harness/state/state.json'), 'utf8'));
 } catch (error) {
   errors.push(`Invalid state.json: ${error.message}`);
 }

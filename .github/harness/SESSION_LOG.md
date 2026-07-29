@@ -15,3 +15,9 @@
   7/TypeScript ESLint incompatibility before implementation.
 - Completed M01-T01 with an exact-version npm/ESM/ES2024/strict-TypeScript scaffold, reviewed
   esbuild install-script approval, a committed lockfile, and passing Node.js 24 typecheck/build.
+- Completed M01-T02 with the current compatible ESLint, TypeScript ESLint, Prettier, Vitest,
+  coverage-v8, and Husky releases. Added a flat type-aware lint configuration, 90% coverage
+  thresholds, strict peer enforcement, repository-wide formatting baseline, and a pre-commit hook
+  that delegates to the shared verification gate.
+- Verified T02 under Node.js `24.18.0`: format, lint, typecheck, one focused unit test, build,
+  coverage, dependency-tree resolution, and install-script review all passed.

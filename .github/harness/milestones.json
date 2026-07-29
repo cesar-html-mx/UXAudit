@@ -19,7 +19,9 @@
         {
           "id": "M01-T02",
           "title": "Configure quality and test toolchain",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify && npm run test:coverage && npm ls --all --omit=optional",
+          "completedAt": "2026-07-29T14:35:31.713Z"
         },
         {
           "id": "M01-T03",

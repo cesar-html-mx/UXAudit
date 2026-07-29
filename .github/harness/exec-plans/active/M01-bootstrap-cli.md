@@ -60,6 +60,8 @@ logic must be callable from tests without spawning a shell.
 - Add `format`, `format:check`, `lint`, `typecheck`, `test`, `test:coverage`, `build`, and `verify`.
 - Commit the lockfile.
 - Do not introduce unapproved production dependencies.
+- Status: completed on 2026-07-29. The Node.js 24 quality gate, typed linting, deterministic
+  formatting, V8 coverage thresholds, and pre-commit verification all passed.
 
 ### M01-T03 — Create CLI entry point and scan command
 
@@ -109,7 +111,6 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - coverage summary;
 - commit and branch identifiers.
 
-
 ## Progress
 
 - [x] Milestone started.
@@ -137,6 +138,12 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - npm `11.16.0` reports dependency install scripts that have not been reviewed. The only T01 script
   belongs to esbuild `0.28.1`, pulled by tsx, and is explicitly approved at that exact version in
   `package.json`; no unreviewed install scripts remain.
+- ESLint 10 flat configuration requires the project to declare `@eslint/js` and `globals`
+  explicitly. This avoids relying on transitive packages and allows Node ESM globals without
+  enabling CommonJS-only globals such as `require` or `__dirname`.
+- Prettier established the first repository-wide formatting baseline. The resulting existing-file
+  changes are mechanical; generated outputs, raw evidence, the lockfile, and architecture diagrams
+  are excluded.
 
 ## Decision log
 
@@ -148,6 +155,9 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - Keep Commander as the only M01 production dependency and defer Babel packages to M03.
 - Pin direct dependencies exactly and commit the npm lockfile. Dependabot remains responsible for
   proposing reviewed updates instead of allowing installation-time range drift.
+- Use the ESLint 10 flat API with type-aware strict and stylistic TypeScript rules, reject warnings,
+  and require 90% coverage for statements, branches, functions, and lines. Keep the process-only CLI
+  entry outside unit coverage and cover it with smoke tests in M01-T05.
 
 ## Risks and recovery
 
