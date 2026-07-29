@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "milestones": [
+    {
+      "id": "M01",
+      "slug": "bootstrap-cli",
+      "title": "Repository bootstrap and CLI foundation",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M01-bootstrap-cli.md",
+      "branch": "milestone/m01-bootstrap-cli",
+      "tasks": [
+        {
+          "id": "M01-T01",
+          "title": "Initialize Node and TypeScript project",
+          "status": "pending"
+        },
+        {
+          "id": "M01-T02",
+          "title": "Configure quality and test toolchain",
+          "status": "pending"
+        },
+        {
+          "id": "M01-T03",
+          "title": "Create CLI entry point and scan command",
+          "status": "pending"
+        },
+        {
+          "id": "M01-T04",
+          "title": "Implement input and project-path validation",
+          "status": "pending"
+        },
+        {
+          "id": "M01-T05",
+          "title": "Establish CI, documentation, and evidence baseline",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "slug": "discovery-inventory",
+      "title": "Project discovery, inventory, and classification",
+      "status": "queued",
+      "plan": ".github/harness/exec-plans/queued/M02-discovery-inventory.md",
+      "branch": "milestone/m02-discovery-inventory",
+      "tasks": [
+        {
+          "id": "M02-T01",
+          "title": "Define discovery contracts and defaults",
+          "status": "pending"
+        },
+        {
+          "id": "M02-T02",
+          "title": "Implement safe recursive discovery",
+          "status": "pending"
+        },
+        {
+          "id": "M02-T03",
+          "title": "Build deterministic file inventory",
+          "status": "pending"
+        },
+        {
+          "id": "M02-T04",
+          "title": "Classify supported source candidates",
+          "status": "pending"
+        },
+        {
+          "id": "M02-T05",
+          "title": "Integrate discovery into CLI and collect evidence",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "slug": "parser-analysis-model",
+      "title": "Source parser and analysis model",
+      "status": "queued",
+      "plan": ".github/harness/exec-plans/queued/M03-parser-analysis-model.md",
+      "branch": "milestone/m03-parser-analysis-model",
+      "tasks": [
+        {
+          "id": "M03-T01",
+          "title": "Define parser and model contracts",
+          "status": "pending"
+        },
+        {
+          "id": "M03-T02",
+          "title": "Implement Babel parser adapter",
+          "status": "pending"
+        },
+        {
+          "id": "M03-T03",
+          "title": "Extract JSX and component information",
+          "status": "pending"
+        },
+        {
+          "id": "M03-T04",
+          "title": "Build normalized analysis model",
+          "status": "pending"
+        },
+        {
+          "id": "M03-T05",
+          "title": "Integrate parsing and model with error isolation",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "slug": "rule-engine-catalog",
+      "title": "Rule engine and initial validation catalog",
+      "status": "queued",
+      "plan": ".github/harness/exec-plans/queued/M04-rule-engine-catalog.md",
+      "branch": "milestone/m04-rule-engine-catalog",
+      "tasks": [
+        {
+          "id": "M04-T01",
+          "title": "Define Rule, Finding, severity, and category contracts",
+          "status": "pending"
+        },
+        {
+          "id": "M04-T02",
+          "title": "Implement rule registry, loader, and evaluator",
+          "status": "pending"
+        },
+        {
+          "id": "M04-T03",
+          "title": "Implement accessibility rules",
+          "status": "pending"
+        },
+        {
+          "id": "M04-T04",
+          "title": "Implement SEO, performance, and UX rules",
+          "status": "pending"
+        },
+        {
+          "id": "M04-T05",
+          "title": "Validate rule isolation and deterministic findings",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "M05",
+      "slug": "configuration-reporting",
+      "title": "Configuration and terminal, JSON, and HTML reporting",
+      "status": "queued",
+      "plan": ".github/harness/exec-plans/queued/M05-configuration-reporting.md",
+      "branch": "milestone/m05-configuration-reporting",
+      "tasks": [
+        {
+          "id": "M05-T01",
+          "title": "Define configuration and AuditResult contracts",
+          "status": "pending"
+        },
+        {
+          "id": "M05-T02",
+          "title": "Implement configuration loading and defaults",
+          "status": "pending"
+        },
+        {
+          "id": "M05-T03",
+          "title": "Implement terminal reporter",
+          "status": "pending"
+        },
+        {
+          "id": "M05-T04",
+          "title": "Implement deterministic JSON reporter",
+          "status": "pending"
+        },
+        {
+          "id": "M05-T05",
+          "title": "Implement escaped standalone HTML reporter",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "M06",
+      "slug": "integration-validation",
+      "title": "End-to-end integration, validation, usability, and security evidence",
+      "status": "queued",
+      "plan": ".github/harness/exec-plans/queued/M06-integration-validation.md",
+      "branch": "milestone/m06-integration-validation",
+      "tasks": [
+        {
+          "id": "M06-T01",
+          "title": "Complete end-to-end CLI pipeline",
+          "status": "pending"
+        },
+        {
+          "id": "M06-T02",
+          "title": "Build controlled React and TypeScript fixture projects",
+          "status": "pending"
+        },
+        {
+          "id": "M06-T03",
+          "title": "Measure expected versus obtained findings",
+          "status": "pending"
+        },
+        {
+          "id": "M06-T04",
+          "title": "Execute system, robustness, performance, and security checks",
+          "status": "pending"
+        },
+        {
+          "id": "M06-T05",
+          "title": "Execute usability protocol and assemble TFM evidence",
+          "status": "pending"
+        }
+      ]
+    }
+  ]
+}

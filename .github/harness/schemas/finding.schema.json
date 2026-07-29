@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UXAudit Finding",
+  "type": "object",
+  "required": [
+    "ruleId",
+    "category",
+    "severity",
+    "message",
+    "explanation",
+    "recommendation",
+    "file"
+  ],
+  "properties": {
+    "ruleId": {
+      "type": "string"
+    },
+    "category": {
+      "enum": [
+        "ux",
+        "accessibility",
+        "seo",
+        "performance"
+      ]
+    },
+    "severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "explanation": {
+      "type": "string"
+    },
+    "recommendation": {
+      "type": "string"
+    },
+    "file": {
+      "type": "string"
+    },
+    "line": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "column": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low",
+        null
+      ]
+    }
+  },
+  "additionalProperties": true
+}

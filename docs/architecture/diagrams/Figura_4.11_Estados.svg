@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1250" viewBox="0 0 2200 1250">
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L10,5 L0,10 z" fill="#2f2f2f"/>
+  </marker>
+  <style>
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 28px; font-weight: 600; fill: #333333; }
+    .label { font-family: Arial, Helvetica, sans-serif; font-size: 18px; fill: #333333; }
+    .small { font-family: Arial, Helvetica, sans-serif; font-size: 15px; fill: #333333; }
+    .state { fill: #ece9ff; stroke: #9b8af7; stroke-width: 2.2; rx: 22; ry: 22; }
+    .terminal { fill: #333333; stroke: #333333; stroke-width: 2; }
+    .system { fill: #f7f6dc; fill-opacity: 0.58; stroke: #b7b062; stroke-width: 2.2; rx: 24; ry: 24; }
+    .transition { fill: none; stroke: #2f2f2f; stroke-width: 2.2; marker-end: url(#arrow); }
+    .guard { font-family: Arial, Helvetica, sans-serif; font-size: 15px; fill: #333333; }
+    .note { fill: #ffffff; fill-opacity: 0.45; stroke: #9b8af7; stroke-width: 1.8; rx: 14; ry: 14; }
+    .dashed { fill: none; stroke: #6f6f6f; stroke-width: 1.5; stroke-dasharray: 8 7; }
+  </style>
+</defs>
+
+<rect width="100%" height="100%" fill="#eeeeee"/>
+<text x="1100.0" y="42" text-anchor="middle" class="title">Figura 4.11. Diagrama de estados de una sesión de análisis de UXAudit</text>
+
+<rect x="70" y="75" width="2060" height="1090" class="system"/>
+<text x="2070" y="108" text-anchor="end" class="label">Sesión de análisis de UXAudit</text>
+
+<circle cx="160" cy="180" r="18" class="terminal"/>
+<rect x="270" y="130" width="250" height="100" class="state"/>
+<text x="395.0" y="176.0" text-anchor="middle" class="label" font-weight="600">En espera</text>
+<text x="395.0" y="204.0" text-anchor="middle" class="small">Sin análisis activo</text>
+<rect x="650" y="130" width="280" height="100" class="state"/>
+<text x="790.0" y="176.0" text-anchor="middle" class="label" font-weight="600">Validando entrada</text>
+<text x="790.0" y="204.0" text-anchor="middle" class="small">Ruta y configuración</text>
+<rect x="1050" y="130" width="280" height="100" class="state"/>
+<text x="1190.0" y="176.0" text-anchor="middle" class="label" font-weight="600">Descubriendo archivos</text>
+<text x="1190.0" y="204.0" text-anchor="middle" class="small">Recorrido y exclusiones</text>
+<rect x="1450" y="130" width="280" height="100" class="state"/>
+<text x="1590.0" y="176.0" text-anchor="middle" class="label" font-weight="600">Interpretando código</text>
+<text x="1590.0" y="204.0" text-anchor="middle" class="small">Parser y AST</text>
+<rect x="1450" y="420" width="280" height="100" class="state"/>
+<text x="1590.0" y="466.0" text-anchor="middle" class="label" font-weight="600">Construyendo modelo</text>
+<text x="1590.0" y="494.0" text-anchor="middle" class="small">Normalización de datos</text>
+<rect x="1050" y="420" width="280" height="100" class="state"/>
+<text x="1190.0" y="466.0" text-anchor="middle" class="label" font-weight="600">Cargando reglas</text>
+<text x="1190.0" y="494.0" text-anchor="middle" class="small">Selección de validaciones</text>
+<rect x="650" y="420" width="280" height="100" class="state"/>
+<text x="790.0" y="466.0" text-anchor="middle" class="label" font-weight="600">Evaluando reglas</text>
+<text x="790.0" y="494.0" text-anchor="middle" class="small">Generación de hallazgos</text>
+<rect x="270" y="420" width="280" height="100" class="state"/>
+<text x="410.0" y="466.0" text-anchor="middle" class="label" font-weight="600">Generando resultados</text>
+<text x="410.0" y="494.0" text-anchor="middle" class="small">Terminal, JSON y HTML</text>
+<rect x="270" y="750" width="280" height="100" class="state"/>
+<text x="410.0" y="796.0" text-anchor="middle" class="label" font-weight="600">Completada</text>
+<text x="410.0" y="824.0" text-anchor="middle" class="small">Resultados disponibles</text>
+<rect x="650" y="750" width="280" height="100" class="state"/>
+<text x="790.0" y="796.0" text-anchor="middle" class="label" font-weight="600">Cancelada</text>
+<text x="790.0" y="824.0" text-anchor="middle" class="small">Interrupción solicitada</text>
+<rect x="1050" y="750" width="280" height="100" class="state"/>
+<text x="1190.0" y="796.0" text-anchor="middle" class="label" font-weight="600">Fallida</text>
+<text x="1190.0" y="824.0" text-anchor="middle" class="small">Error no recuperable</text>
+<circle cx="1600" cy="800" r="24" fill="none" stroke="#333333" stroke-width="3"/>
+<circle cx="1600" cy="800" r="13" class="terminal"/>
+<path d="M178,180 L 270,180" class="transition"/>
+<text x="225" y="160" text-anchor="middle" class="guard">iniciar análisis</text>
+<path d="M520,180 L 650,180" class="transition"/>
+<text x="585" y="160" text-anchor="middle" class="guard">run(path, config)</text>
+<path d="M930,180 L 1050,180" class="transition"/>
+<text x="990" y="160" text-anchor="middle" class="guard">[entrada válida]</text>
+<path d="M1330,180 L 1450,180" class="transition"/>
+<text x="1390" y="160" text-anchor="middle" class="guard">[archivos encontrados]</text>
+<path d="M1590,230 L 1590,420" class="transition"/>
+<text x="1680" y="330" text-anchor="middle" class="guard">archivos procesados</text>
+<path d="M1450,470 L 1330,470" class="transition"/>
+<text x="1390" y="450" text-anchor="middle" class="guard">modelo construido</text>
+<path d="M1050,470 L 930,470" class="transition"/>
+<text x="990" y="450" text-anchor="middle" class="guard">reglas disponibles</text>
+<path d="M650,470 L 550,470" class="transition"/>
+<text x="600" y="450" text-anchor="middle" class="guard">evaluación finalizada</text>
+<path d="M410,520 L 410,750" class="transition"/>
+<text x="505" y="640" text-anchor="middle" class="guard">reportes generados</text>
+<path d="M550,800 L 1576,800" class="transition"/>
+<text x="1060" y="780" text-anchor="middle" class="guard">cerrar sesión</text>
+<path d="M790,230 L 790,700 L 1190,700 L 1190,750" class="transition"/>
+<text x="980" y="680" text-anchor="middle" class="guard">[ruta o configuración inválida]</text>
+<path d="M1190,230 L 1190,650 L 1190,750" class="transition"/>
+<text x="1290" y="625" text-anchor="middle" class="guard">[sin archivos analizables]</text>
+<path d="M1590,520 L 1590,680 L 1190,680 L 1190,750" class="transition"/>
+<text x="1480" y="660" text-anchor="middle" class="guard">[error no recuperable]</text>
+<path d="M790,520 L 790,690 L 1190,690 L 1190,750" class="transition"/>
+<text x="970" y="715" text-anchor="middle" class="guard">[fallo del motor]</text>
+<path d="M410,520 L 410,690 L 1190,690" class="transition"/>
+<text x="705" y="670" text-anchor="middle" class="guard">[fallo al generar reporte]</text>
+<path d="M790,230 L 790,750" class="transition"/>
+<text x="830" y="510" text-anchor="middle" class="guard">cancelar</text>
+<path d="M1190,230 L 1190,735 L 930,735 L 930,800" class="transition"/>
+<text x="1080" y="715" text-anchor="middle" class="guard">cancelar</text>
+<path d="M1590,230 L 1590,720 L 930,720 L 930,800" class="transition"/>
+<text x="1260" y="700" text-anchor="middle" class="guard">cancelar</text>
+<path d="M1450,470 L 1420,470 L 1420,710 L 930,710 L 930,800" class="transition"/>
+<text x="1180" y="690" text-anchor="middle" class="guard">cancelar</text>
+<path d="M1050,470 L 1010,470 L 1010,800 L 930,800" class="transition"/>
+<text x="975" y="635" text-anchor="middle" class="guard">cancelar</text>
+<path d="M650,470 L 610,470 L 610,800 L 650,800" class="transition"/>
+<text x="585" y="635" text-anchor="middle" class="guard">cancelar</text>
+<path d="M270,470 L 230,470 L 230,800 L 650,800" class="transition"/>
+<text x="375" y="710" text-anchor="middle" class="guard">cancelar</text>
+<path d="M930,800 L 1576,800" class="transition"/>
+<text x="1240" y="835" text-anchor="middle" class="guard">finalizar sesión</text>
+<path d="M1330,800 L 1576,800" class="transition"/>
+<text x="1450" y="780" text-anchor="middle" class="guard">registrar error</text>
+<path d="M1190,750 L 1190,620 L 790,620 L 790,520" class="transition"/>
+<text x="995" y="605" text-anchor="middle" class="guard">reintentar evaluación</text>
+<path d="M1190,750 L 1190,560 L 410,560 L 410,520" class="transition"/>
+<text x="800" y="545" text-anchor="middle" class="guard">reintentar reporte</text>
+<rect x="1460" y="930" width="520" height="130" class="note"/>
+<text x="1720" y="968" text-anchor="middle" class="label" font-weight="600">Estados terminales</text>
+<text x="1490" y="1004" class="small">• Completada: el análisis produjo resultados.</text>
+<text x="1490" y="1032" class="small">• Cancelada: el usuario interrumpió la ejecución.</text>
+<text x="1490" y="1060" class="small">• Fallida: ocurrió un error que impidió continuar.</text>
+</svg>

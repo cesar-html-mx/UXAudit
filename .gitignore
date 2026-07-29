@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+.tmp/
+.cache/
+*.log
+.env
+.env.*
+!.env.example
+uxaudit-report.json
+uxaudit-report.html
+.DS_Store
+.vscode/settings.local.json
+.codex-log/

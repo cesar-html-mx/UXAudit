@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "project": "UXAudit",
+  "status": "ready",
+  "activeMilestone": "M01",
+  "activeTask": "M01-T01",
+  "completedMilestones": [],
+  "currentBranch": null,
+  "lastVerifiedAt": null,
+  "lastVerificationCommand": "node .github/harness/scripts/validate-harness.mjs",
+  "lastVerificationResult": "PASS",
+  "lastCommit": null,
+  "blockers": [],
+  "notes": [
+    "Harness initialized from the approved TFM methodology and architecture.",
+    "Start Codex from the repository root and execute the active milestone."
+  ]
+}

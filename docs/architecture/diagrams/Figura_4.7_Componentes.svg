@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2800" height="820" viewBox="0 0 2800 820">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#222222"/>
+    </marker>
+    <style>
+      .title { font-family: Arial, Helvetica, sans-serif; font-size: 26px; font-weight: 600; fill: #333333; }
+      .label { font-family: Arial, Helvetica, sans-serif; font-size: 16px; fill: #333333; }
+      .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #333333; }
+      .box { fill: #ece9ff; stroke: #9b8af7; stroke-width: 2; rx: 18; ry: 18; }
+      .cluster { fill: #f2f0c9; fill-opacity: 0.45; stroke: #9a9a9a; stroke-width: 1.8; stroke-dasharray: 9 8; rx: 22; ry: 22; }
+      .sys { fill: #f7f6dc; fill-opacity: 0.32; stroke: #b7b062; stroke-width: 2; rx: 24; ry: 24; }
+      .line { fill: none; stroke: #222222; stroke-width: 2.2; marker-end: url(#arrow); }
+      .plain { fill: none; stroke: #222222; stroke-width: 2.2; }
+      .note { fill: #ffffff; fill-opacity: 0.45; stroke: #9b8af7; stroke-width: 2; }
+      .cyl { fill: #ffffff; fill-opacity: 0.32; stroke: #9b8af7; stroke-width: 2; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#eeeeee"/>
+  <text x="1400" y="42" text-anchor="middle" class="title">Figura 4.7. Diagrama de componentes de UXAudit</text>
+
+<rect x="210" y="68" width="2535" height="690" class="sys"/>
+<text x="2685" y="98" text-anchor="end" class="label">Sistema UXAudit</text>
+<rect x="40" y="105" width="150" height="58" class="box"/>
+<text x="115.0" y="129.2" text-anchor="middle" class="label" font-size="16">Desarrollador</text>
+<text x="115.0" y="149.2" text-anchor="middle" class="label" font-size="16">front-end</text>
+<rect x="245" y="105" width="88" height="58" class="box"/>
+<text x="289.0" y="139.33333333333334" text-anchor="middle" class="label" font-size="16">CLI</text>
+<rect x="395" y="105" width="160" height="58" class="box"/>
+<text x="475.0" y="139.33333333333334" text-anchor="middle" class="label" font-size="16">Orquestador</text>
+<path d="M190,134 L 245,134" class="line"/>
+<path d="M333,134 L 395,134" class="line"/>
+<rect x="610" y="145" width="500" height="160" class="cluster"/>
+<text x="860.0" y="169" text-anchor="middle" class="label">Procesamiento del proyecto</text>
+<rect x="645" y="210" width="150" height="58" class="box"/>
+<text x="720.0" y="244.33333333333334" text-anchor="middle" class="label" font-size="16">Descubrimiento</text>
+<rect x="825" y="210" width="125" height="58" class="box"/>
+<text x="887.5" y="244.33333333333334" text-anchor="middle" class="label" font-size="16">Inventario</text>
+<rect x="980" y="210" width="120" height="58" class="box"/>
+<text x="1040.0" y="244.33333333333334" text-anchor="middle" class="label" font-size="16">Clasificación</text>
+<path d="M795,239 L 825,239" class="line"/>
+<path d="M950,239 L 980,239" class="line"/>
+<path d="M555,134 L 720,134 L 720,210" class="line"/>
+<rect x="370" y="240" width="190" height="50" class="cyl"/>
+<ellipse cx="465.0" cy="240" rx="95.0" ry="10" class="cyl"/>
+<path d="M370,290 a95.0,10 0 0 0 190,0" class="plain" stroke="#9b8af7" fill="none"/>
+<text x="465.0" y="271.0" text-anchor="middle" class="label">Sistema de archivos</text>
+<path d="M560,265 L 645,239" class="line"/>
+<polygon points="395,365 531,365 545,379 545,427 395,427" class="note"/>
+<polyline points="531,365 531,379 545,379" class="plain" stroke="#9b8af7" stroke-width="1.6" fill="none"/>
+<text x="466.0" y="402.0" text-anchor="middle" class="label">Configuración</text>
+<path d="M545,396 L 645,396 L 645,268" class="line"/>
+<rect x="1180" y="405" width="440" height="145" class="cluster"/>
+<text x="1400.0" y="429" text-anchor="middle" class="label">Interpretación y análisis</text>
+<rect x="1220" y="462" width="100" height="58" class="box"/>
+<text x="1270.0" y="496.3333333333333" text-anchor="middle" class="label" font-size="16">Parser</text>
+<rect x="1430" y="462" width="150" height="58" class="box"/>
+<text x="1505.0" y="496.3333333333333" text-anchor="middle" class="label" font-size="16">Modelo de análisis</text>
+<path d="M1100,239 L 1270,239 L 1270,462" class="line"/>
+<path d="M1320,491 L 1430,491" class="line"/>
+<rect x="1495" y="300" width="700" height="175" class="cluster"/>
+<text x="1845.0" y="324" text-anchor="middle" class="label">Motor de reglas</text>
+<polygon points="1270,325 1426,325 1440,339 1440,387 1270,387" class="note"/>
+<polyline points="1426,325 1426,339 1440,339" class="plain" stroke="#9b8af7" stroke-width="1.6" fill="none"/>
+<text x="1351.0" y="362.0" text-anchor="middle" class="label">Catálogo de reglas</text>
+<rect x="1525" y="358" width="190" height="58" class="box"/>
+<text x="1620.0" y="392.3333333333333" text-anchor="middle" class="label" font-size="16">Cargador de reglas</text>
+<rect x="1795" y="358" width="190" height="58" class="box"/>
+<text x="1890.0" y="392.3333333333333" text-anchor="middle" class="label" font-size="16">Evaluador de reglas</text>
+<rect x="2065" y="358" width="170" height="58" class="box"/>
+<text x="2150.0" y="392.3333333333333" text-anchor="middle" class="label" font-size="16">Colector de hallazgos</text>
+<path d="M1440,356 L 1525,387" class="line"/>
+<path d="M1715,387 L 1795,387" class="line"/>
+<path d="M1985,387 L 2065,387" class="line"/>
+<path d="M1580,491 L 1890,491 L 1890,416" class="line"/>
+<path d="M555,134 L 1580,134 L 1580,358" class="line"/>
+<path d="M545,427 L 545,367 L 1525,367" class="line"/>
+<rect x="2255" y="300" width="455" height="315" class="cluster"/>
+<text x="2482.5" y="324" text-anchor="middle" class="label">Generación de resultados</text>
+<rect x="2290" y="455" width="205" height="58" class="box"/>
+<text x="2392.5" y="489.3333333333333" text-anchor="middle" class="label" font-size="16">Generador de reportes</text>
+<polygon points="2530,340 2656,340 2670,354 2670,402 2530,402" class="note"/>
+<polyline points="2656,340 2656,354 2670,354" class="plain" stroke="#9b8af7" stroke-width="1.6" fill="none"/>
+<text x="2596.0" y="377.0" text-anchor="middle" class="label">Reporte HTML</text>
+<polygon points="2530,445 2656,445 2670,459 2670,507 2530,507" class="note"/>
+<polyline points="2656,445 2656,459 2670,459" class="plain" stroke="#9b8af7" stroke-width="1.6" fill="none"/>
+<text x="2596.0" y="482.0" text-anchor="middle" class="label">Reporte JSON</text>
+<polygon points="2495,550 2656,550 2670,564 2670,612 2495,612" class="note"/>
+<polyline points="2656,550 2656,564 2670,564" class="plain" stroke="#9b8af7" stroke-width="1.6" fill="none"/>
+<text x="2578.5" y="587.0" text-anchor="middle" class="label">Salida en terminal</text>
+<path d="M2235,387 L 2350,387 L 2350,455" class="line"/>
+<path d="M545,427 L 545,330 L 2390,330 L 2390,455" class="line"/>
+<path d="M2495,484 L 2530,476" class="line"/>
+<path d="M2495,484 L 2495,371 L 2530,371" class="line"/>
+<path d="M2495,484 L 2495,581" class="line"/>
+</svg>
