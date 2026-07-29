@@ -5,11 +5,11 @@
 - Project: UXAudit
 - Harness status: ready
 - Active milestone: **M02 — Project discovery, inventory, and classification**
-- Active task: **M02-T04 — Classify supported source candidates**
+- Active task: **M02-T05 — Integrate discovery into CLI and collect evidence**
 - Completed milestones: M01
 - Current branch: milestone/m02-discovery-inventory
 - Last verification: PASS
-- Last verified at: 2026-07-29T17:12:04.378Z
+- Last verified at: 2026-07-29T17:15:38.921Z
 - Last commit: 4b5dac8b263fcb09ce6c08dfcf21fcd67f7278d0
 
 ## Blockers

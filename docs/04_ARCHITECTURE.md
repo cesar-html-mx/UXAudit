@@ -103,6 +103,11 @@ sort ordinally by relative path. A non-descendant record is an internal invarian
 Selects supported source candidates. Classification may use extension and conservative source
 signals. It must not falsely claim that every supported extension is a React component.
 
+M02 derives the actual suffix from the inventory's portable relative path and maps supported files
+only to JavaScript/TypeScript plus JSX/non-JSX parser kinds. It excludes declaration and
+conventionally named configuration sources, reads no file content, and exposes no React component
+field. Semantic detection remains exclusively in M03's parser and model stages.
+
 ### SourceParser
 
 Parses one source file and returns either a parser result or a typed per-file error. Parser internals

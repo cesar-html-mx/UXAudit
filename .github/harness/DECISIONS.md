@@ -197,3 +197,23 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Requirements/contracts affected: RF-05, RNF-04, RNF-07, and RNF-09.
 - Evidence: `src/project/inventory/`, focused normalization/deduplication tests, and
   `evidence/m02-discovery/`.
+
+## D-017 — Syntactic source-candidate classification
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: RF-06 needs source candidates for M03 without parsing in M02 or falsely describing every
+  TypeScript file as a React component.
+- Decision: Derive the actual suffix from the normalized relative path, accept
+  `.js`/`.jsx`/`.ts`/`.tsx` case-insensitively, and map only to JavaScript/TypeScript plus
+  JSX/non-JSX source kinds. Exclude `.d.ts`, `config.*`, and `*.config.*` paths before parsing. Do
+  not read content or add React/component fields.
+- Alternatives considered: Trusting inventory extension metadata; selecting every supported suffix;
+  scanning file text for imports or JSX; or identifying components before the parser/model
+  milestone.
+- Consequences: Classification is deterministic, cheap, and does not duplicate M03 parsing.
+  Conventionally named configuration files are excluded, with the explicit limitation that an
+  unusually named runtime source such as `config.ts` is also omitted.
+- Requirements/contracts affected: RF-04, RF-06, RNF-04, RNF-07, and RNF-08.
+- Evidence: `src/project/classification/`, the supported/rejected candidate matrix, and
+  `evidence/m02-discovery/`.

@@ -78,7 +78,9 @@
         {
           "id": "M02-T04",
           "title": "Classify supported source candidates",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck; 4 focused classification tests; 56 total tests; coverage 100% statements/lines/functions and 94.59% branches",
+          "completedAt": "2026-07-29T17:15:38.921Z"
         },
         {
           "id": "M02-T05",

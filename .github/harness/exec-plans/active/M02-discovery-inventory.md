@@ -71,6 +71,11 @@ canonical paths, and returns ordinal relative-path order without mutating discov
 
 Select supported source files conservatively. Do not label every `.ts` file a React component.
 
+Completed with a pure classifier that derives the normalized extension from each portable relative
+path, accepts `.js`, `.jsx`, `.ts`, and `.tsx` case-insensitively, rejects declaration and
+configuration paths, assigns only a parser-oriented source kind, and returns deterministic order
+without reading source content or claiming React component semantics.
+
 ### M02-T05 — Integrate and collect evidence
 
 Connect the application flow to discovery and expose a tested summary suitable for later reporters.
@@ -115,6 +120,9 @@ test and coverage summaries.
   native messages or absolute host paths in the normalized issue contract.
 - `path.extname` returns the final suffix only; lowercasing that value creates a stable classifier
   boundary while preserving the original case and spelling in `relativePath`.
+- Classification recomputes the suffix from `relativePath` rather than trusting incidental
+  inventory metadata. This preserves the normalized boundary if a test adapter or future producer
+  supplies inconsistent extension data.
 
 ## Decision log
 
@@ -127,6 +135,9 @@ test and coverage summaries.
 - D-016 defines inventory identity as canonical absolute path and ordering as normalized relative
   path. Observed aliases collapse; distinct hard-link paths remain distinct because they are
   separately addressable project locations.
+- D-017 keeps classification syntactic and parser-oriented: supported extensions become language
+  and JSX source kinds, while `.d.ts`, `config.*`, and `*.config.*` remain non-candidates without
+  reading or interpreting code.
 
 ## Risks and recovery
 
@@ -140,6 +151,9 @@ test and coverage summaries.
 - Canonical-path deduplication does not infer physical identity for hard links. Adding device/inode
   metadata would require extra platform-sensitive filesystem state and is not justified for the M02
   contract; this limitation remains explicit.
+- Name-based configuration rejection can conservatively omit an unusually named runtime source
+  such as `config.ts`; this trade-off is deliberate for RF-04 and can be revisited only with a
+  documented configuration contract in M05.
 - Each task remains independently recoverable by reverting only its conventional task commit; no
   published history will be rewritten.
 

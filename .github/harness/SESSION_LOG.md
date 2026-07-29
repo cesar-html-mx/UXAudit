@@ -76,3 +76,9 @@
   and a typed invariant failure for non-descendant records.
 - Verified T03 with seven focused inventory tests and 52 repository tests. Coverage remained 100%
   for statements, lines, and functions and reached 94.36% for branches.
+- Completed M02-T04 with case-insensitive `.js`/`.jsx`/`.ts`/`.tsx` classification, parser-oriented
+  JavaScript/TypeScript and JSX source kinds, deterministic ordering, and conservative exclusion of
+  declaration and configuration files. The classifier derives paths only and makes no React
+  component claim.
+- Verified T04 with four focused positive/negative/determinism tests and 56 repository tests.
+  Coverage reached 100% statements, lines, and functions and 94.59% branches.

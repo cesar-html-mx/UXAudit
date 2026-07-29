@@ -9,7 +9,7 @@ This table is updated when implementation and exact test filenames exist.
 | RF-03       | `src/project/discovery/` contracts and traversal        | M02         | controlled recursive tree and recoverable-operation tests                                      |
 | RF-04       | `src/project/discovery/discovery-config.ts`             | M02         | exact defaults plus configured directory/file exclusion tests                                  |
 | RF-05       | `src/project/inventory/`                                | M02         | `tests/project/inventory/build-file-inventory.test.ts`: normalization, deduplication, ordering |
-| RF-06       | `src/project/classification/`                           | M02         | supported and rejected candidate matrix without React semantic claims                          |
+| RF-06       | `src/project/classification/`                           | M02         | `tests/project/classification/classify-source-candidates.test.ts`: matrix/order                |
 | RF-07       | SourceParser                                            | M03         | JS/JSX/TS/TSX parser fixtures                                                                  |
 | RF-08       | AnalysisModelBuilder                                    | M03         | model transformation assertions                                                                |
 | RF-09       | RuleLoader                                              | M04         | category/rule filter tests                                                                     |
