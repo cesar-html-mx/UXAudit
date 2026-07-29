@@ -101,6 +101,19 @@ coverage gates passing.
 
 Aggregate deterministic project data and expose query helpers only when justified.
 
+Status: completed. `buildAnalysisModel` now defensively projects per-file parser output into a fresh,
+flat, AST-free project model. It validates portable paths, canonical IDs, safe and mutually
+consistent UTF-16 coordinates, containment, exact file/component membership, component ownership,
+root sets, reciprocal parent/child relationships, source order, and acyclic JSX graphs. Literal,
+dynamic, object, text-confidence, finite-number, depth, and object-cycle invariants are checked
+before data enters the model. Files sort ordinally by portable path; components and JSX sort by
+source offset and canonical ID, while source-meaningful attribute/property order is preserved.
+Hostile control characters remain untrusted data rather than being interpreted or silently changed.
+Any malformed builder input stops with one generic fatal `AnalysisModelInvariantError`; no query
+helper was added because the normalized arrays already satisfy the documented M04 consumers.
+Node.js `24.18.0` verification passed 26 focused tests and all 132 repository tests across 16 files,
+with format, lint, typecheck, build, and global coverage gates passing.
+
 ### M03-T05 — Integrate and isolate errors
 
 Continue after a malformed file when safe and report parse failures separately from findings.
@@ -169,6 +182,19 @@ and coverage.
 - The T03 extraction gate passed 22 focused cases and all 106 repository tests on Node.js
   `24.18.0`. Global V8 coverage measured 97.17% statements, 90.71% branches, 100% functions, and
   97.13% lines; formatting, lint, typecheck, and build also passed.
+- M03-T04 treats per-file parser output as an internal trust boundary rather than concatenating its
+  arrays. It recursively copies only documented fields, strips parser/source extras, and retains no
+  mutable input array or object reference.
+- Project normalization sorts portable file paths ordinally and rebuilds canonical per-file/global
+  arrays. Stable component and JSX IDs must match their file path and UTF-16 start offset; duplicate,
+  missing, extra, cross-file, or out-of-order membership fails closed.
+- Coordinate, containment, ownership, root, parent/child reciprocity, cycle, value-discriminant,
+  confidence, finite-number, object-depth, and `usesJsx` inconsistencies all converge on the same
+  fatal invariant error without leaking the invalid value. Control and bidirectional characters in
+  an otherwise portable relative path remain data for later output-boundary escaping.
+- The T04 builder gate passed 26 focused cases and all 132 repository tests across 16 files on
+  Node.js `24.18.0`. Global V8 coverage measured 97.00% statements (973/1003), 90.31% branches
+  (634/702), 100% functions, and 96.95% lines; formatting, lint, typecheck, and build also passed.
 
 ## Decision log
 

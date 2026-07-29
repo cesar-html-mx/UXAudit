@@ -170,8 +170,26 @@ the absolute project root nor complete source content.
 
 M03-T03 implements the per-file extraction half of this boundary: file, component, JSX, attribute,
 object-property, relationship, confidence, and location records are AST-free and deterministic.
-Cross-file validation and aggregation into the normalized project `AnalysisModel` remain the
-responsibility of M03-T04.
+
+M03-T04 implements the project half through `buildAnalysisModel`. The builder treats every
+`AnalyzedSourceFile` as boundary input and recursively projects only documented fields into fresh
+objects and arrays. It never retains input references or parser/source extras. Files are ordered
+ordinally by canonical portable relative path; components and JSX nodes are rebuilt in file/source
+order, and each supplied ID must equal the canonical value derived from that path and UTF-16 start
+offset. Attribute and object-property order remains source-significant. The flat normalized arrays
+already meet the documented rule needs, so no speculative query API is exposed.
+
+Construction validates safe integer coordinates, cross-location consistency and containment;
+canonical and unique IDs; exact file/component membership and ownership; non-empty component root
+sets; reciprocal, same-owner parent/child links; and acyclic JSX graphs. It also validates supported
+discriminants, finite literal values, exact/dynamic/partial confidence combinations, static-text
+length, bounded object depth, and cyclic object input. `usesJsx` must match the JSX inventory.
+Control and bidirectional characters in an otherwise portable file path remain untrusted data rather
+than being normalized away; later presentation boundaries own escaping.
+
+Any malformed builder input is an internal integrity failure. The boundary catches its details and
+throws only the fatal `AnalysisModelInvariantError`, whose stable code and message contain no input,
+native cause, absolute path, or source text.
 
 ### Rule
 

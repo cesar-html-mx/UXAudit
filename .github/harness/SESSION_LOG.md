@@ -167,3 +167,19 @@
 - Verified T03 on Node.js `24.18.0`: 22 focused extraction tests and all 106 repository tests passed,
   along with formatting, strict lint, typecheck, and build. Global V8 coverage passed at 97.17%
   statements, 90.71% branches, 100% functions, and 97.13% lines.
+- Completed M03-T04 with a defensive `buildAnalysisModel` boundary that recursively projects fresh
+  UXAudit-owned files, components, JSX nodes, attributes, text, and values. Parser/source extras and
+  all mutable input references are discarded instead of being concatenated into the project model.
+- Normalization orders portable project-relative paths ordinally and rebuilds per-file and global
+  arrays from canonical component/JSX IDs. It preserves source-significant attribute/object-property
+  order and retains hostile control characters as inert data for later escaping at output
+  boundaries.
+- Added fatal validation for duplicate or nonportable paths; unsafe/inconsistent coordinates;
+  location containment; membership, ownership, root, and reciprocal parent/child relationships;
+  missing/cross-file references and cycles; value/confidence combinations; finite literals; bounded
+  text/object depth; object cycles; and `usesJsx` consistency. All failures expose the same generic
+  `AnalysisModelInvariantError` without invalid input details.
+- Verified T04 on Node.js `24.18.0`: 26 focused builder tests and all 132 repository tests across 16
+  files passed, together with formatting, strict lint, typecheck, and build. Global V8 coverage
+  passed at 97.00% statements (973/1003), 90.31% branches (634/702), 100% functions, and 96.95%
+  lines.

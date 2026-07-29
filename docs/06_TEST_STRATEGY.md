@@ -158,3 +158,24 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
 - The executed Node.js `24.18.0` gate passed 22 focused extraction tests and all 106 repository
   tests. Format, lint, typecheck, and build passed; global V8 coverage measured 97.17% statements,
   90.71% branches, 100% functions, and 97.13% lines.
+
+## M03-T04 executed model-builder baseline
+
+- Builder tests cover the canonical empty model, reverse multi-file input, ordinal portable-path
+  ordering, deterministic global entity order, source-order retention for attributes and object
+  properties, deep defensive projection, input immutability, and removal of AST/source extras.
+- Path, ID, and coordinate cases reject duplicates, absolute/Windows/backslash/dot-segment paths,
+  noncanonical IDs, invalid ranges, inconsistent offset/line/column mappings, mismatched file paths,
+  and locations outside file/component/parent/attribute/property containers.
+- Relationship cases exercise exact file and component membership, ownership, root sets,
+  parent/child reciprocity and order, missing and cross-file references, self/cyclic graphs, and
+  `usesJsx` consistency.
+- Value cases cover supported discriminants, names and languages; exact/dynamic/partial text states;
+  finite primitive literals; object confidence, property order and containment; prototype-sensitive
+  keys; object cycles; and the depth/text bounds established by T03.
+- Hostile control characters are preserved as inert model data, while every malformed-input case
+  yields the same fatal `AnalysisModelInvariantError` without a cause, rejected value, sensitive
+  path, or source detail.
+- The executed Node.js `24.18.0` gate passed 26 focused builder tests and all 132 repository tests
+  across 16 files. Format, lint, typecheck, and build passed; global V8 coverage measured 97.00%
+  statements (973/1003), 90.31% branches (634/702), 100% functions, and 96.95% lines.

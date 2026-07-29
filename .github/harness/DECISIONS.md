@@ -328,3 +328,35 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   and R-015.
 - Evidence: extraction-limit tests, source-open race/type/size/encoding tests, malformed sibling
   isolation, parser baseline, no-execution scenario, and `evidence/m03-parsing/`.
+
+## D-022 — Defensive canonical analysis-model construction
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: Per-file parser output is an internal boundary, but rules need one deterministic project
+  model whose identities, coordinates, ownership, and values cannot be corrupted by an adapter bug
+  or retained parser reference.
+- Decision: Reproject every per-file value into fresh UXAudit-owned objects and validate the entire
+  graph before returning it. File paths must be non-empty slash-separated relative paths without
+  absolute, drive, traversal, empty-segment, or backslash syntax; control and bidirectional
+  characters remain untrusted filename data for later reporters to escape. Locations must use safe
+  half-open UTF-16 coordinates, agree at shared offsets, remain within their file and owning
+  containers, and advance consistently. IDs derive exactly from file path and start offset. File,
+  component, root, ownership, parent, and child arrays must equal the canonical source-order graph;
+  every component owns JSX and at least one root. Literal/object/text confidence must be internally
+  consistent, numbers finite, structured values bounded and cycle-safe, and all invalid input must
+  stop with one detail-free `AnalysisModelInvariantError`. Do not add query helpers before a rule
+  demonstrates a concrete need.
+- Alternatives considered: Trusting parser output; shallow copying; retaining nested input
+  references; silently repairing broken relationships; accepting absolute or platform-separator
+  paths; returning the first detailed invariant failure; or adding speculative indexes/helpers.
+- Consequences: Equivalent per-file input order produces byte-identical project models, attributes
+  and object properties retain source order, parser/source extras cannot cross the domain boundary,
+  and later rules can rely on reciprocal relationships. A model invariant is fatal rather than
+  isolated because continuing could produce unsound findings. Hostile path characters remain data,
+  so every reporter must still apply its output-context escaping policy.
+- Requirements/contracts affected: RF-08, RF-12, RNF-02, RNF-03, RNF-04, RNF-05, R-001, R-002,
+  R-008, and R-014.
+- Evidence: model projection/immutability tests, reverse-input serialization, ID/location/value
+  invariant matrices, cycle and cross-file cases, prototype-sensitive keys, generic-error
+  redaction, and `evidence/m03-parsing/`.
