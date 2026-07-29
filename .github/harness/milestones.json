@@ -5,8 +5,8 @@
       "id": "M01",
       "slug": "bootstrap-cli",
       "title": "Repository bootstrap and CLI foundation",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M01-bootstrap-cli.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M01-bootstrap-cli.md",
       "branch": "milestone/m01-bootstrap-cli",
       "tasks": [
         {
@@ -50,8 +50,8 @@
       "id": "M02",
       "slug": "discovery-inventory",
       "title": "Project discovery, inventory, and classification",
-      "status": "queued",
-      "plan": ".github/harness/exec-plans/queued/M02-discovery-inventory.md",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M02-discovery-inventory.md",
       "branch": "milestone/m02-discovery-inventory",
       "tasks": [
         {

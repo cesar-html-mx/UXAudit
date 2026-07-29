@@ -48,3 +48,5 @@
   audit reporting zero known vulnerabilities; its sanitizer found no token or personal-home path.
 - Remote CI and publication were not claimed. A safe Git credential helper or GitHub CLI was not
   configured in the local repository at evidence time.
+- Closed M01 against verified task commit `4b5dac8` and activated M02-T01. The M01 milestone report,
+  source digest, integrity manifest, and raw records remain under `evidence/m01-bootstrap/`.

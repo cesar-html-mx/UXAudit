@@ -127,7 +127,7 @@ Acceptance is defined by M01 in `docs/09_ACCEPTANCE_CRITERIA.md`.
 - [x] Quality gate passed.
 - [x] Evidence collected.
 - [x] Documentation and traceability updated.
-- [ ] Milestone closed and state advanced.
+- [x] Milestone closed and state advanced.
 
 ## Discoveries
 
