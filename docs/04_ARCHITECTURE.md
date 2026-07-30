@@ -1,3 +1,5 @@
+[Español](es/04_ARCHITECTURE.md) | **English**
+
 # Architecture
 
 ## Style
@@ -124,7 +126,7 @@ followed by an HTML failure is propagated without an unsafe deletion or a comple
 
 ### ProjectDiscovery
 
-Input: validated project root and discovery configuration.  
+Input: validated project root and discovery configuration.
 Output: discovered file records and recoverable discovery errors.
 
 M02 implements this contract with an iterative, ordinally sorted traversal. The selected canonical

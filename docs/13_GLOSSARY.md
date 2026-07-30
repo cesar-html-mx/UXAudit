@@ -1,3 +1,5 @@
+[Español](es/13_GLOSSARY.md) | **English**
+
 # Glossary
 
 - **Audit session**: one complete execution over one project and configuration.

@@ -13,7 +13,7 @@ try {
   process.exit(0);
 }
 
-const preferred = ['format:check', 'lint', 'typecheck', 'test', 'build'];
+const preferred = ['format:check', 'docs:check', 'lint', 'typecheck', 'test', 'build'];
 const missing = preferred.filter((name) => !pkg.scripts?.[name]);
 const npmExecPath = process.env.npm_execpath;
 

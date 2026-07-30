@@ -1,3 +1,5 @@
+[Español](es/08_RULE_CATALOG.md) | **English**
+
 # Initial Rule Catalog
 
 Rule status:

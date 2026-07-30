@@ -30,6 +30,7 @@ import {
   renderEvidenceManifest,
   sanitizeEvidenceText,
 } from './m05-evidence-contract.mjs';
+import { getPublicDocumentationCopyDecision } from './public-documentation-source-filter.mjs';
 
 const rootDirectory = process.cwd();
 const finalEvidenceDirectory = path.join(rootDirectory, 'evidence', 'm05-reporting');
@@ -275,6 +276,11 @@ const shouldCopySource = (source) => {
   const segments = relativePath.split(path.sep);
   const topLevel = segments[0];
   const fileName = (segments.at(-1) ?? '').toLowerCase();
+  const publicDocumentationDecision = getPublicDocumentationCopyDecision(segments);
+
+  if (publicDocumentationDecision !== undefined) {
+    return publicDocumentationDecision;
+  }
 
   if (!topLevel || !allowedTopLevelEntries.has(topLevel)) {
     return false;

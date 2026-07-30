@@ -1,5 +1,7 @@
 # UXAudit Evidence
 
+[Español](README.es.md) | **English**
+
 Each milestone stores reproducible evidence here. Use the template in
 `.github/harness/templates/TEST_EVIDENCE_TEMPLATE.md`.
 
@@ -53,3 +55,15 @@ Do not commit secrets, private absolute paths, or modified raw output.
   execution matched stable results and preserved the first package.
   `npm run evidence:m06:finalize` added only the factual milestone report; the final manifest covers
   all 42 base artifacts plus that report.
+
+## Public guides
+
+The following non-finalized public guides and templates are maintained in English and Spanish. The
+finalized M01-M06 packages above remain in English so their integrity manifests stay unchanged.
+
+- Security execution checklist: [English](security/SECURITY_CHECKLIST.md) |
+  [Español](security/SECURITY_CHECKLIST.es.md)
+- Usability protocol: [English](usability/USABILITY_PROTOCOL.md) |
+  [Español](usability/USABILITY_PROTOCOL.es.md)
+- System Usability Scale template: [English](usability/SUS_EN.md) |
+  [Español](usability/SUS_ES.md)

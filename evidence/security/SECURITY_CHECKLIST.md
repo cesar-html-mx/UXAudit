@@ -1,5 +1,7 @@
 # Security Execution Checklist
 
+[Español](SECURITY_CHECKLIST.es.md) | **English**
+
 - [x] Project root canonicalization tested.
 - [x] Missing and real inaccessible-path behavior tested on Linux.
 - [x] Symlink loop created and excluded under the default policy.

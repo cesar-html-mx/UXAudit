@@ -1,3 +1,5 @@
+[Español](es/02_PRODUCT_SPEC.md) | **English**
+
 # Product Specification
 
 ## Command

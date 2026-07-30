@@ -1,21 +1,22 @@
-## Milestone/task
+## Hito o tarea / Milestone or task
 
-## Observable outcome
+## Resultado observable / Observable outcome
 
-## Requirements
+## Requisitos / Requirements
 
-## Verification
+## Verificación / Verification
 
-- [ ] Format
+- [ ] Formato / Format
+- [ ] Documentación bilingüe / Bilingual documentation
 - [ ] Lint
-- [ ] Typecheck
-- [ ] Tests
-- [ ] Build
-- [ ] Harness integrity
-- [ ] Security impact reviewed
-- [ ] Documentation and traceability updated
-- [ ] Evidence stored
+- [ ] Verificación de tipos / Typecheck
+- [ ] Pruebas / Tests
+- [ ] Compilación / Build
+- [ ] Integridad del harness / Harness integrity
+- [ ] Impacto de seguridad revisado / Security impact reviewed
+- [ ] Documentación y trazabilidad actualizadas / Documentation and traceability updated
+- [ ] Evidencia almacenada / Evidence stored
 
-## Risks and limitations
+## Riesgos y limitaciones / Risks and limitations
 
-## Evidence paths
+## Rutas de evidencia / Evidence paths

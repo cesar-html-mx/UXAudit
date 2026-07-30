@@ -1,3 +1,5 @@
+[Español](es/09_ACCEPTANCE_CRITERIA.md) | **English**
+
 # Acceptance Criteria
 
 ## Product-level

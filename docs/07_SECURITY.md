@@ -1,3 +1,5 @@
+[Español](es/07_SECURITY.md) | **English**
+
 # Security
 
 ## Threat model

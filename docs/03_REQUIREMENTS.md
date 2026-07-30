@@ -1,3 +1,5 @@
+[Español](es/03_REQUIREMENTS.md) | **English**
+
 # Requirements
 
 ## Functional requirements
