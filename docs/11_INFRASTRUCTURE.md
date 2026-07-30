@@ -100,6 +100,20 @@ an exact lifetime peak; other platforms must record memory measurement as unavai
 substitute a different process. The runner imposes no machine-dependent timing threshold and
 records hosted CodeQL as unexecuted unless an actual hosted result is retrieved.
 
+M06-T05 adds `npm run test:usability:m06`, an expert-review runner over six controlled developer
+tasks. Its per-task wall-clock values measure the scripted review procedure, not participant task
+time. Participant testing remains unexecuted and SUS remains not applicable because no real
+responses exist.
+
+`npm run evidence:m06` copies an allowlisted source tree into a credential-free temporary workspace,
+performs a locked install, executes the complete product/coverage/no-skip/smoke/system/accuracy/
+robustness/usability/harness/audit gate without a shell, and publishes exactly 42 sanitized base
+artifacts with SHA-256 integrity. A second execution must match the source and stable projections
+while treating only recorded performance and expert-procedure timing as volatile; it preserves the
+first package. `npm run evidence:m06:finalize` validates that base manifest and adds only the
+milestone report. The collector never treats hosted CodeQL, participant testing, SUS, browser
+execution, or unavailable publication as executed work.
+
 ## Portability
 
 Avoid operating-system-specific shell behavior in product code. CI should include more than one

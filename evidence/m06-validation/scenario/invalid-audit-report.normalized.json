@@ -1,0 +1,324 @@
+{
+  "configuration": {
+    "categories": null,
+    "color": false,
+    "formats": ["terminal", "json", "html"],
+    "minimumSeverity": "info",
+    "outputDirectory": "uxaudit-reports",
+    "ruleIds": null,
+    "schemaVersion": 1,
+    "verbose": true
+  },
+  "errors": [],
+  "findings": [
+    {
+      "category": "accessibility",
+      "confidence": "high",
+      "explanation": "A button needs an accessible name so assistive-technology users can understand the action it performs.",
+      "limitations": [
+        "The static text model does not implement the complete accessible-name computation.",
+        "Dynamic-only content, JSX spreads, and custom icon components are treated as unknown.",
+        "Referenced aria-labelledby targets and CSS-hidden content are not resolved."
+      ],
+      "location": {
+        "end": {
+          "column": 68,
+          "line": 15,
+          "offset": 452
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 15,
+          "offset": 388
+        }
+      },
+      "message": "Button has no statically determinable accessible name.",
+      "recommendation": "Provide visible descriptive text, aria-label, or aria-labelledby with a non-empty accessible name.",
+      "reference": {
+        "label": "WCAG 2.2 — 4.1.2 Name, Role, Value",
+        "url": null
+      },
+      "ruleId": "accessibility/button-name",
+      "ruleTitle": "Button accessible name",
+      "severity": "high"
+    },
+    {
+      "category": "accessibility",
+      "confidence": "high",
+      "explanation": "An intrinsic image without an explicit text alternative may be unavailable to people who cannot perceive the image.",
+      "limitations": [
+        "Custom image components and aliases are not inferred.",
+        "A later JSX spread can provide alt at runtime and is therefore treated as unknown.",
+        "The rule checks explicit attribute presence, not the descriptive quality of alt text."
+      ],
+      "location": {
+        "end": {
+          "column": 6,
+          "line": 13,
+          "offset": 316
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 7,
+          "offset": 176
+        }
+      },
+      "message": "Intrinsic image has no explicit alt attribute.",
+      "recommendation": "Add a descriptive alt value, or use alt=\"\" when the image is intentionally decorative.",
+      "reference": {
+        "label": "WCAG 2.2 — 1.1.1 Non-text Content",
+        "url": null
+      },
+      "ruleId": "accessibility/img-alt",
+      "ruleTitle": "Image alternative text",
+      "severity": "high"
+    },
+    {
+      "category": "accessibility",
+      "confidence": "high",
+      "explanation": "A form control needs a programmatic label or accessible name so users can understand its purpose.",
+      "limitations": [
+        "Dynamic IDs, labels, and JSX spreads are treated as unknown rather than violations.",
+        "Custom label or form-control abstractions are not resolved across component boundaries.",
+        "aria-labelledby target existence and the complete accessible-name computation are not validated.",
+        "Input types hidden, button, submit, reset, and image are outside this label rule.",
+        "A nested label is not checked for the one-labelable-descendant content constraint."
+      ],
+      "location": {
+        "end": {
+          "column": 66,
+          "line": 14,
+          "offset": 383
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 14,
+          "offset": 321
+        }
+      },
+      "message": "Form control has no statically associated label or accessible name.",
+      "recommendation": "Associate an intrinsic label with nesting or htmlFor/id, or provide a non-empty aria-label or aria-labelledby value.",
+      "reference": {
+        "label": "WCAG 2.2 — 1.3.1 Info and Relationships",
+        "url": null
+      },
+      "ruleId": "accessibility/input-label",
+      "ruleTitle": "Form input label",
+      "severity": "high"
+    },
+    {
+      "category": "performance",
+      "confidence": "medium",
+      "explanation": "An intrinsic image without positive integer width and height attributes may lack intrinsic space reservation and contribute to layout shift.",
+      "limitations": [
+        "External CSS, aspect-ratio, and component-level layout can reserve equivalent space, so the finding describes reviewable risk rather than observed layout shift.",
+        "Dynamic dimension values and unresolved JSX spreads are unknown and do not independently produce a finding; a proved sibling violation remains reviewable.",
+        "A literal zero-by-zero image is treated as content not intended for the user; zero paired with a positive dimension remains reviewable.",
+        "Only intrinsic img attributes are checked; custom image components and runtime image metadata are not inferred."
+      ],
+      "location": {
+        "end": {
+          "column": 6,
+          "line": 23,
+          "offset": 644
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 16,
+          "offset": 457
+        }
+      },
+      "message": "Image does not provide statically verified positive integer width and height attributes; review its reserved layout space.",
+      "recommendation": "Provide positive integer width and height attributes that preserve the image aspect ratio, or verify that CSS reserves equivalent space.",
+      "reference": {
+        "label": "HTML Standard — Dimension attributes",
+        "url": "https://html.spec.whatwg.org/multipage/embedded-content-other.html#dimension-attributes"
+      },
+      "ruleId": "performance/img-dimensions",
+      "ruleTitle": "Image dimensions",
+      "severity": "medium"
+    },
+    {
+      "category": "performance",
+      "confidence": "medium",
+      "explanation": "An intrinsic image that is not configured for lazy loading may be fetched before it is needed and consume avoidable resources.",
+      "limitations": [
+        "Static analysis cannot determine whether an image is above the fold or otherwise visually critical, so every finding is advisory.",
+        "Missing, eager, and invalid literal loading values are reviewable; dynamic values and unresolved JSX spreads are treated as unknown.",
+        "Custom image components, aliases, preload behavior, and runtime loading priorities are not inferred."
+      ],
+      "location": {
+        "end": {
+          "column": 6,
+          "line": 31,
+          "offset": 826
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 24,
+          "offset": 649
+        }
+      },
+      "message": "Image is not statically configured with loading=\"lazy\"; review whether lazy loading is appropriate.",
+      "recommendation": "For images that are not intentionally above the fold, set loading=\"lazy\"; retain eager loading when visual priority requires it.",
+      "reference": {
+        "label": "HTML Standard — Lazy loading attributes",
+        "url": "https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes"
+      },
+      "ruleId": "performance/img-lazy-loading",
+      "ruleTitle": "Image lazy loading",
+      "severity": "low"
+    },
+    {
+      "category": "seo",
+      "confidence": "medium",
+      "explanation": "Generic link text can obscure the destination when the link is considered without its surrounding context.",
+      "limitations": [
+        "Only exact retained text on intrinsic links is compared; partial and dynamic text are not reported.",
+        "Custom link components and their rendered output are not inferred.",
+        "Surrounding content, ARIA naming, destination URLs, and visual context are not evaluated."
+      ],
+      "location": {
+        "end": {
+          "column": 8,
+          "line": 34,
+          "offset": 923
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 32,
+          "offset": 831
+        }
+      },
+      "message": "Link uses configured ambiguous static text and needs contextual review.",
+      "recommendation": "Use visible link text that identifies the destination or purpose, and review its surrounding accessible context.",
+      "reference": null,
+      "ruleId": "seo/ambiguous-link-text",
+      "ruleTitle": "Ambiguous link text",
+      "severity": "medium"
+    },
+    {
+      "category": "seo",
+      "confidence": "medium",
+      "explanation": "Multiple intrinsic h1 elements owned by one component can make the rendered page hierarchy unclear.",
+      "limitations": [
+        "The initial scope counts intrinsic h1 elements only within each syntactically recognized component.",
+        "Conditional rendering, routes, and whether owned headings appear together at runtime are not evaluated.",
+        "Custom heading components, component composition, and heading roles are not inferred."
+      ],
+      "location": {
+        "end": {
+          "column": 72,
+          "line": 37,
+          "offset": 1041
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 6,
+          "line": 37,
+          "offset": 975
+        }
+      },
+      "message": "Component contains more than one intrinsic h1 element and needs review.",
+      "recommendation": "Review the component and keep one primary h1 for each rendered page context, using lower heading levels for subordinate sections.",
+      "reference": null,
+      "ruleId": "seo/multiple-h1",
+      "ruleTitle": "Multiple H1 elements",
+      "severity": "medium"
+    },
+    {
+      "category": "ux",
+      "confidence": "high",
+      "explanation": "Text rendered with a very small literal inline pixel font size may be difficult to read.",
+      "limitations": [
+        "External stylesheets, class names, inherited styles, and the rendered cascade are not evaluated.",
+        "Dynamic styles, unresolved JSX spreads, and object styles with unknown properties are treated as unknown.",
+        "Relative units, percentages, calculations, browser zoom, and user display settings are not resolved.",
+        "Only intrinsic elements with retained non-empty static text are evaluated.",
+        "Metadata, inert, void, and other intrinsically non-rendered text containers are excluded."
+      ],
+      "location": {
+        "end": {
+          "column": 77,
+          "line": 39,
+          "offset": 1134
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 65,
+          "line": 39,
+          "offset": 1122
+        }
+      },
+      "message": "Literal inline text may be too small.",
+      "recommendation": "Use an inline fontSize of at least 12px, or define an equivalent readable size in the project style system.",
+      "reference": null,
+      "ruleId": "ux/small-inline-text",
+      "ruleTitle": "Very small literal inline text",
+      "severity": "medium"
+    }
+  ],
+  "projectRoot": "<PROJECT_ROOT>",
+  "reportPaths": {
+    "html": "uxaudit-reports/audit-report.html",
+    "json": "uxaudit-reports/audit-report.json"
+  },
+  "schemaVersion": "1.0.0",
+  "summary": {
+    "errors": {
+      "byStage": {
+        "discovery": 0,
+        "extract": 0,
+        "parse": 0,
+        "read": 0,
+        "rule": 0
+      },
+      "total": 0
+    },
+    "files": {
+      "discovered": 2,
+      "failed": 0,
+      "parsed": 1,
+      "selected": 1
+    },
+    "findings": {
+      "byCategory": {
+        "accessibility": 3,
+        "performance": 2,
+        "seo": 2,
+        "ux": 1
+      },
+      "bySeverity": {
+        "critical": 0,
+        "high": 3,
+        "info": 0,
+        "low": 1,
+        "medium": 4
+      },
+      "total": 8
+    },
+    "rules": {
+      "availableRuleCount": 8,
+      "enabledRuleCount": 8,
+      "executedRuleCount": 8,
+      "failedRuleCount": 0,
+      "findingCount": 8,
+      "succeededRuleCount": 8
+    }
+  },
+  "timing": {
+    "completedAt": "<COMPLETED_AT>",
+    "durationMs": "<DURATION_MS>",
+    "startedAt": "<STARTED_AT>"
+  },
+  "tool": {
+    "name": "UXAudit",
+    "version": "0.1.0"
+  }
+}

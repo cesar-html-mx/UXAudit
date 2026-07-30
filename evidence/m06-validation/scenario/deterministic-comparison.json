@@ -1,0 +1,10 @@
+{
+  "byteIdentical": true,
+  "manifestExpectationsAsserted": true,
+  "projectOrderMatched": true,
+  "firstDigest": "sha256:08eca3218fcdc4ae9ac3de1b32ac8758d35aad33c499c8230747b1271d822e42",
+  "manifestDigest": "sha256:37742cd9c4309d48bc8b7658e962593038a24369018eacc8dd768f2bda71e136",
+  "scenarioId": "M06-CONTROLLED-PROJECTS",
+  "schemaVersion": 1,
+  "secondDigest": "sha256:08eca3218fcdc4ae9ac3de1b32ac8758d35aad33c499c8230747b1271d822e42"
+}

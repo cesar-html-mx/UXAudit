@@ -1,0 +1,42 @@
+Command: "npm" "run" "test:scenario:m06" "--" "--output" "<SCENARIO_DIR>"
+Working directory: isolated temporary workspace
+Expected exit code: 0
+Observed exit code: 0
+Observed signal: none
+
+--- stdout ---
+
+> ux-audit@0.1.0 test:scenario:m06
+> npm run build && node scripts/run-m06-scenario.mjs --output <REDACTED_PATH>/evidence/scenario
+
+
+> ux-audit@0.1.0 build
+> npm run clean && tsc -p tsconfig.build.json
+
+
+> ux-audit@0.1.0 clean
+> node scripts/clean.mjs
+
+{
+  "deterministic": true,
+  "findings": {
+    "valid-project": 0,
+    "invalid-project": 8,
+    "mixed-project": 3,
+    "hostile-project": 1,
+    "large-project": 0
+  },
+  "parserErrors": {
+    "valid-project": 0,
+    "invalid-project": 0,
+    "mixed-project": 1,
+    "hostile-project": 0,
+    "large-project": 0
+  },
+  "projects": 5,
+  "scenarioId": "M06-CONTROLLED-PROJECTS",
+  "targetCodeExecuted": false
+}
+
+--- stderr ---
+(empty)

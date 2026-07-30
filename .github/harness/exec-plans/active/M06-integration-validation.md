@@ -206,10 +206,10 @@ The final package under `evidence/m06-validation/` must include:
 - [x] M06-T03 per-rule ground truth, matching, and accuracy evidence implemented and verified.
 - [x] M06-T04 system, robustness, performance, dependency, and security checks implemented and
       verified.
-- [ ] Tasks completed.
-- [ ] Quality gate passed.
-- [ ] Evidence collected.
-- [ ] Documentation and traceability updated.
+- [x] Tasks completed.
+- [x] Quality gate passed.
+- [x] Evidence collected.
+- [x] Documentation and traceability updated.
 - [ ] Milestone closed and state advanced.
 
 ## Discoveries
@@ -223,10 +223,11 @@ The final package under `evidence/m06-validation/` must include:
   unsafe rollback after a partial/post-create failure.
 - M02-M05 contain reusable discovery, parser, rule, hostile-report, writer, and evidence patterns,
   but none is complete M06 end-to-end or rule-accuracy evidence.
-- Only M06 CSV/security/usability templates exist; fixture projects, scenario, evidence lifecycle,
-  performance baseline, and heuristic observations remain to be implemented.
-- The final milestone transition currently produces a semantically correct `status=complete` state
-  that `validate-harness.mjs`, `show-status.mjs`, and `sync-state-doc.mjs` do not yet support.
+- Initial inspection found only M06 CSV/security/usability templates; T02-T05 subsequently added the
+  fixture projects, scenarios, evidence lifecycle, performance baseline, and heuristic observations.
+- Initial inspection also found that the final milestone transition produced a semantically correct
+  `status=complete` state unsupported by the harness renderers; T05 now validates and renders that
+  terminal state without weakening the ready-state gate.
 - `gh` is unavailable and prior non-interactive HTTPS pushes lacked credentials. Publication remains
   best-effort and is not a product blocker.
 - M06-T01's final Node.js 24 gate passed 548 tests across 50 files, all 11 compiled CLI scenarios,
@@ -256,6 +257,15 @@ The final package under `evidence/m06-validation/` must include:
 - The generated performance baseline ran five times over 240 files. Durations are descriptive and
   the maximum observed child `VmRSS` comes from 5 ms `/proc` sampling rather than an exact lifetime
   peak. The moderate npm audit returned zero vulnerabilities; hosted CodeQL remained unexecuted.
+- The six-task expert heuristic procedure is executable from the built CLI and produces
+  machine-readable/CSV records. It contains one low prioritization observation, five no-issue
+  observations, participant count zero, participant testing unexecuted, and SUS N/A/null.
+- Terminal lifecycle tests execute the actual final advance/sync/validate/show sequence in a
+  temporary repository and reject incoherent ready, transitional, and complete combinations.
+- The M06 evidence lifecycle has an exact 42-artifact base contract. It executes in an allowlisted
+  credential-free snapshot, normalizes only machine-dependent performance timing/RSS and
+  expert-procedure timing for the second-run comparison, preserves the first package, and adds the
+  milestone report only through finalization.
 
 ## Decision log
 
@@ -272,6 +282,10 @@ The final package under `evidence/m06-validation/` must include:
 - Treat performance as an environment-labelled observation with no pass threshold, and distinguish
   sampled child memory, structural HTML validation, reviewed architecture, and hosted analysis from
   stronger claims that were not executed.
+- Treat the scripted expert review as a substitute inspection, never as participant research or
+  SUS; retain its low-severity prioritization observation without turning it into a product failure.
+- Require terminal harness coherence and an exact, sanitized, two-pass evidence contract before
+  final milestone closure.
 
 ## Risks and recovery
 
@@ -290,5 +304,20 @@ The final package under `evidence/m06-validation/` must include:
 
 ## Outcomes and retrospective
 
-At closure, describe what now works, what was actually verified, remaining limitations, commits, and
-the next milestone.
+M06 composes the complete local CLI, validates five controlled projects, measures every stable rule,
+and retains factual system, security, performance, usability, and Activity 3 evidence. T01-T04 are
+committed as `c5eb8bc`, `79454e4`, `e7ea7b5`, and `709ddc5`; T05 adds the terminal harness lifecycle,
+expert review, exact evidence lifecycle, and final documentation.
+
+The definitive Node.js 24 gate passed 619 tests across 56 files with no skipped/todo tests and
+95.84% statement / 91.50% branch / 99.82% function / 95.79% line coverage. Controlled results were
+0/8/3/1/0 findings, 11 TP/0 FP/8 TN/0 FN on the reviewed corpus, 15 robustness cases, five
+descriptive 240-file runs, and six expert-review tasks. Two isolated evidence collections matched
+stable results and preserved a 42-artifact base package with source digest
+`sha256:92bd1c57cf85126082270c9111b03cd00fe28491d77a8c9cba7aa0b4d8ad404b`.
+
+Participant testing and SUS remain unexecuted/N/A, browser/runtime behavior and hosted CodeQL/CI
+remain outside the executed evidence, and the performance values are one-machine observations
+without a portable threshold. Publication remains best-effort because the prior non-interactive
+HTTPS push lacked credentials and `gh` was unavailable. M06 is the final configured milestone, so
+successful closure transitions the harness to terminal `complete` with no next milestone.

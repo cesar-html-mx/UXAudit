@@ -1,0 +1,172 @@
+{
+  "generatedAt": "<COLLECTED_AT>",
+  "manifestDigest": "sha256:37742cd9c4309d48bc8b7658e962593038a24369018eacc8dd768f2bda71e136",
+  "scenarioId": "M06-SYSTEM-ROBUSTNESS-SECURITY-PERFORMANCE",
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "canonical-project-root",
+      "objective": "Resolve an explicitly selected equivalent root.",
+      "observation": {
+        "exitCode": 0,
+        "canonicalRootMatched": true
+      },
+      "status": "passed"
+    },
+    {
+      "id": "missing-project-root",
+      "objective": "Reject a missing project path.",
+      "observation": {
+        "exitCode": 2,
+        "stderr": "Project path does not exist."
+      },
+      "status": "passed"
+    },
+    {
+      "id": "missing-project-argument",
+      "objective": "Reject scan without a project argument.",
+      "observation": {
+        "exitCode": 2,
+        "stableCommanderDiagnostic": true
+      },
+      "status": "passed"
+    },
+    {
+      "id": "invalid-configuration",
+      "objective": "Reject malformed JSON configuration.",
+      "observation": {
+        "exitCode": 2,
+        "reportsCreated": false
+      },
+      "status": "passed"
+    },
+    {
+      "id": "output-path-escape",
+      "objective": "Reject a project-relative output escape.",
+      "observation": {
+        "exitCode": 2,
+        "outsideReportCreated": false
+      },
+      "status": "passed"
+    },
+    {
+      "id": "symlink-output-escape",
+      "objective": "Reject an output ancestor linked outside the project.",
+      "observation": {
+        "exitCode": 3,
+        "outsideReportCreated": false,
+        "outsideSentinelUnchanged": true
+      },
+      "status": "passed"
+    },
+    {
+      "id": "exclusive-report-write",
+      "objective": "Refuse overwrite and preserve report bytes.",
+      "observation": {
+        "digestUnchanged": true,
+        "exitCode": 3
+      },
+      "status": "passed"
+    },
+    {
+      "id": "malformed-source-isolation",
+      "objective": "Retain one recoverable parse failure while auditing siblings.",
+      "observation": {
+        "failedFiles": 1,
+        "findings": 3,
+        "parsedFiles": 4
+      },
+      "status": "passed"
+    },
+    {
+      "id": "deep-project-traversal",
+      "objective": "Audit a safe source below 32 nested project directories.",
+      "observation": {
+        "findingCount": 0,
+        "nestedDirectoryCount": 32,
+        "parsedFiles": 1
+      },
+      "status": "passed"
+    },
+    {
+      "id": "symlink-policy",
+      "objective": "Exclude internal, external, and cyclic runtime links when supported.",
+      "observation": {
+        "createdLinks": 3,
+        "linkObservations": [
+          {
+            "created": true,
+            "expectedDefaultDisposition": "skipped",
+            "path": "src/internal-alias.tsx",
+            "targetAuthority": "project",
+            "type": "file"
+          },
+          {
+            "created": true,
+            "expectedDefaultDisposition": "skipped",
+            "path": "src/external-alias.tsx",
+            "targetAuthority": "outside-project",
+            "type": "file"
+          },
+          {
+            "created": true,
+            "expectedDefaultDisposition": "skipped",
+            "path": "src/cycle",
+            "targetAuthority": "project",
+            "type": "directory"
+          }
+        ],
+        "findings": 1
+      },
+      "status": "passed"
+    },
+    {
+      "id": "hostile-html-structure",
+      "objective": "Keep hostile project content inert in the standalone HTML report.",
+      "observation": {
+        "cspMatched": true,
+        "escapedHostilePath": true,
+        "structuralValidationOnly": true
+      },
+      "status": "passed"
+    },
+    {
+      "id": "deterministic-hostile-rerun",
+      "objective": "Match stable JSON and normalized HTML across fresh hostile roots.",
+      "observation": {
+        "htmlMatched": true,
+        "stableJsonMatched": true
+      },
+      "status": "passed"
+    },
+    {
+      "id": "inaccessible-project-root",
+      "objective": "Reject a project root denied by the real filesystem.",
+      "observation": {
+        "exitCode": 2
+      },
+      "status": "passed"
+    },
+    {
+      "id": "unwritable-report-output",
+      "objective": "Surface a real filesystem report-write denial.",
+      "observation": {
+        "exitCode": 3
+      },
+      "status": "passed"
+    },
+    {
+      "id": "performance-large-project",
+      "objective": "Measure five complete built-CLI runs without a machine-dependent pass threshold.",
+      "observation": {
+        "durationMaxMs": 413.343,
+        "durationMedianMs": 403.432,
+        "durationMinMs": 389.581,
+        "runCount": 5,
+        "sourceFileCount": 240
+      },
+      "status": "passed"
+    }
+  ],
+  "conclusion": "All executable assertions passed; portable exceptions are labelled."
+}

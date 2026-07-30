@@ -1,0 +1,38 @@
+Command: "npm" "run" "test:robustness:m06" "--" "--output" "<ROBUSTNESS_DIR>"
+Working directory: isolated temporary workspace
+Expected exit code: 0
+Observed exit code: 0
+Observed signal: none
+
+--- stdout ---
+
+> ux-audit@0.1.0 test:robustness:m06
+> npm run build && node scripts/run-m06-robustness.mjs --output <REDACTED_PATH>/evidence/robustness
+
+
+> ux-audit@0.1.0 build
+> npm run clean && tsc -p tsconfig.build.json
+
+
+> ux-audit@0.1.0 clean
+> node scripts/clean.mjs
+
+{
+  "cases": 15,
+  "codeql": "unexecuted",
+  "performance": {
+    "maxMs": 413.343,
+    "medianMs": 403.432,
+    "minMs": 389.581,
+    "peakRssMeasurement": "observed-linux-proc",
+    "runs": 5,
+    "sourceFiles": 240
+  },
+  "scenarioId": "M06-SYSTEM-ROBUSTNESS-SECURITY-PERFORMANCE",
+  "statuses": {
+    "passed": 15
+  }
+}
+
+--- stderr ---
+(empty)

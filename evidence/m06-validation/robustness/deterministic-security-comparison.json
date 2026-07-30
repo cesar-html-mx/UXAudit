@@ -1,0 +1,9 @@
+{
+  "generatedAt": "<COLLECTED_AT>",
+  "manifestDigest": "sha256:37742cd9c4309d48bc8b7658e962593038a24369018eacc8dd768f2bda71e136",
+  "scenarioId": "M06-SYSTEM-ROBUSTNESS-SECURITY-PERFORMANCE",
+  "schemaVersion": 1,
+  "hostileHtmlMatched": true,
+  "hostileStableJsonMatched": true,
+  "volatilityRemoved": ["/projectRoot", "/timing"]
+}

@@ -265,7 +265,9 @@
         {
           "id": "M06-T05",
           "title": "Execute usability protocol and assemble TFM evidence",
-          "status": "pending"
+          "status": "completed",
+          "verification": "npm run verify; coverage 95.84/91.50/99.82/95.79; 619/619 zero skip/todo; smoke, scenario, accuracy, robustness, usability, audit, harness PASS; evidence:m06 twice PASS; self-review PASS",
+          "completedAt": "2026-07-30T08:12:28.739Z"
         }
       ]
     }

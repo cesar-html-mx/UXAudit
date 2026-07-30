@@ -1,0 +1,1328 @@
+{
+  "caseCounts": {
+    "negative": 8,
+    "positive": 11,
+    "unsupported": 8
+  },
+  "expectedMatched": true,
+  "findingIdentities": [
+    {
+      "category": "accessibility",
+      "confidence": "high",
+      "filePath": "src/violations.tsx",
+      "findingIndex": 0,
+      "location": {
+        "end": {
+          "column": 68,
+          "line": 15,
+          "offset": 452
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 15,
+          "offset": 388
+        }
+      },
+      "message": "Button has no statically determinable accessible name.",
+      "projectId": "invalid-project",
+      "ruleId": "accessibility/button-name",
+      "severity": "high"
+    },
+    {
+      "category": "accessibility",
+      "confidence": "high",
+      "filePath": "src/violations.tsx",
+      "findingIndex": 1,
+      "location": {
+        "end": {
+          "column": 6,
+          "line": 13,
+          "offset": 316
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 7,
+          "offset": 176
+        }
+      },
+      "message": "Intrinsic image has no explicit alt attribute.",
+      "projectId": "invalid-project",
+      "ruleId": "accessibility/img-alt",
+      "severity": "high"
+    },
+    {
+      "category": "accessibility",
+      "confidence": "high",
+      "filePath": "src/violations.tsx",
+      "findingIndex": 2,
+      "location": {
+        "end": {
+          "column": 66,
+          "line": 14,
+          "offset": 383
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 14,
+          "offset": 321
+        }
+      },
+      "message": "Form control has no statically associated label or accessible name.",
+      "projectId": "invalid-project",
+      "ruleId": "accessibility/input-label",
+      "severity": "high"
+    },
+    {
+      "category": "performance",
+      "confidence": "medium",
+      "filePath": "src/violations.tsx",
+      "findingIndex": 3,
+      "location": {
+        "end": {
+          "column": 6,
+          "line": 23,
+          "offset": 644
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 16,
+          "offset": 457
+        }
+      },
+      "message": "Image does not provide statically verified positive integer width and height attributes; review its reserved layout space.",
+      "projectId": "invalid-project",
+      "ruleId": "performance/img-dimensions",
+      "severity": "medium"
+    },
+    {
+      "category": "performance",
+      "confidence": "medium",
+      "filePath": "src/violations.tsx",
+      "findingIndex": 4,
+      "location": {
+        "end": {
+          "column": 6,
+          "line": 31,
+          "offset": 826
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 24,
+          "offset": 649
+        }
+      },
+      "message": "Image is not statically configured with loading=\"lazy\"; review whether lazy loading is appropriate.",
+      "projectId": "invalid-project",
+      "ruleId": "performance/img-lazy-loading",
+      "severity": "low"
+    },
+    {
+      "category": "seo",
+      "confidence": "medium",
+      "filePath": "src/violations.tsx",
+      "findingIndex": 5,
+      "location": {
+        "end": {
+          "column": 8,
+          "line": 34,
+          "offset": 923
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 32,
+          "offset": 831
+        }
+      },
+      "message": "Link uses configured ambiguous static text and needs contextual review.",
+      "projectId": "invalid-project",
+      "ruleId": "seo/ambiguous-link-text",
+      "severity": "medium"
+    },
+    {
+      "category": "seo",
+      "confidence": "medium",
+      "filePath": "src/violations.tsx",
+      "findingIndex": 6,
+      "location": {
+        "end": {
+          "column": 72,
+          "line": 37,
+          "offset": 1041
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 6,
+          "line": 37,
+          "offset": 975
+        }
+      },
+      "message": "Component contains more than one intrinsic h1 element and needs review.",
+      "projectId": "invalid-project",
+      "ruleId": "seo/multiple-h1",
+      "severity": "medium"
+    },
+    {
+      "category": "ux",
+      "confidence": "high",
+      "filePath": "src/violations.tsx",
+      "findingIndex": 7,
+      "location": {
+        "end": {
+          "column": 77,
+          "line": 39,
+          "offset": 1134
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 65,
+          "line": 39,
+          "offset": 1122
+        }
+      },
+      "message": "Literal inline text may be too small.",
+      "projectId": "invalid-project",
+      "ruleId": "ux/small-inline-text",
+      "severity": "medium"
+    },
+    {
+      "category": "accessibility",
+      "confidence": "high",
+      "filePath": "src/components/Settings.tsx",
+      "findingIndex": 0,
+      "location": {
+        "end": {
+          "column": 63,
+          "line": 4,
+          "offset": 129
+        },
+        "filePath": "src/components/Settings.tsx",
+        "start": {
+          "column": 4,
+          "line": 4,
+          "offset": 70
+        }
+      },
+      "message": "Form control has no statically associated label or accessible name.",
+      "projectId": "mixed-project",
+      "ruleId": "accessibility/input-label",
+      "severity": "high"
+    },
+    {
+      "category": "performance",
+      "confidence": "medium",
+      "filePath": "src/App.jsx",
+      "findingIndex": 1,
+      "location": {
+        "end": {
+          "column": 6,
+          "line": 15,
+          "offset": 366
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 4,
+          "line": 8,
+          "offset": 192
+        }
+      },
+      "message": "Image is not statically configured with loading=\"lazy\"; review whether lazy loading is appropriate.",
+      "projectId": "mixed-project",
+      "ruleId": "performance/img-lazy-loading",
+      "severity": "low"
+    },
+    {
+      "category": "seo",
+      "confidence": "medium",
+      "filePath": "src/App.jsx",
+      "findingIndex": 2,
+      "location": {
+        "end": {
+          "column": 8,
+          "line": 18,
+          "offset": 457
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 4,
+          "line": 16,
+          "offset": 371
+        }
+      },
+      "message": "Link uses configured ambiguous static text and needs contextual review.",
+      "projectId": "mixed-project",
+      "ruleId": "seo/ambiguous-link-text",
+      "severity": "medium"
+    }
+  ],
+  "instanceObservations": [
+    {
+      "caseId": "invalid-button-name",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "accessibility",
+          "confidence": "high",
+          "filePath": "src/violations.tsx",
+          "findingIndex": 0,
+          "location": {
+            "end": {
+              "column": 68,
+              "line": 15,
+              "offset": 452
+            },
+            "filePath": "src/violations.tsx",
+            "start": {
+              "column": 4,
+              "line": 15,
+              "offset": 388
+            }
+          },
+          "message": "Button has no statically determinable accessible name.",
+          "projectId": "invalid-project",
+          "ruleId": "accessibility/button-name",
+          "severity": "high"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 68,
+          "line": 15,
+          "offset": 452
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 15,
+          "offset": 388
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "invalid-project",
+      "rationale": "The intrinsic button has no statically determinable visible or ARIA accessible name.",
+      "ruleId": "accessibility/button-name",
+      "sourcePath": "src/violations.tsx"
+    },
+    {
+      "caseId": "valid-button-name",
+      "classification": "negative",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 13,
+          "line": 20,
+          "offset": 634
+        },
+        "filePath": "src/App.tsx",
+        "start": {
+          "column": 4,
+          "line": 18,
+          "offset": 541
+        }
+      },
+      "outcome": "true-negative",
+      "projectId": "valid-project",
+      "rationale": "The intrinsic button has retained descriptive visible text.",
+      "ruleId": "accessibility/button-name",
+      "sourcePath": "src/App.tsx"
+    },
+    {
+      "caseId": "unsupported-button-name",
+      "classification": "unsupported",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 66,
+          "line": 21,
+          "offset": 652
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 6,
+          "line": 21,
+          "offset": 592
+        }
+      },
+      "outcome": "unsupported-clear",
+      "projectId": "mixed-project",
+      "rationale": "Accessible-name computation for a custom button abstraction is outside the rule scope.",
+      "ruleId": "accessibility/button-name",
+      "sourcePath": "src/App.jsx"
+    },
+    {
+      "caseId": "invalid-img-alt",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "accessibility",
+          "confidence": "high",
+          "filePath": "src/violations.tsx",
+          "findingIndex": 1,
+          "location": {
+            "end": {
+              "column": 6,
+              "line": 13,
+              "offset": 316
+            },
+            "filePath": "src/violations.tsx",
+            "start": {
+              "column": 4,
+              "line": 7,
+              "offset": 176
+            }
+          },
+          "message": "Intrinsic image has no explicit alt attribute.",
+          "projectId": "invalid-project",
+          "ruleId": "accessibility/img-alt",
+          "severity": "high"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 6,
+          "line": 13,
+          "offset": 316
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 7,
+          "offset": 176
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "invalid-project",
+      "rationale": "The intrinsic image has no explicit alt attribute.",
+      "ruleId": "accessibility/img-alt",
+      "sourcePath": "src/violations.tsx"
+    },
+    {
+      "caseId": "valid-image",
+      "classification": "negative",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 6,
+          "line": 15,
+          "offset": 399
+        },
+        "filePath": "src/App.tsx",
+        "start": {
+          "column": 4,
+          "line": 8,
+          "offset": 231
+        }
+      },
+      "outcome": "true-negative",
+      "projectId": "valid-project",
+      "rationale": "The intrinsic image provides an explicit descriptive alt attribute.",
+      "ruleId": "accessibility/img-alt",
+      "sourcePath": "src/App.tsx"
+    },
+    {
+      "caseId": "unsupported-img-alt",
+      "classification": "unsupported",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 88,
+          "line": 22,
+          "offset": 741
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 6,
+          "line": 22,
+          "offset": 659
+        }
+      },
+      "outcome": "unsupported-clear",
+      "projectId": "mixed-project",
+      "rationale": "Alternative-text behavior for a custom image abstraction is not inferred.",
+      "ruleId": "accessibility/img-alt",
+      "sourcePath": "src/App.jsx"
+    },
+    {
+      "caseId": "invalid-input-label",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "accessibility",
+          "confidence": "high",
+          "filePath": "src/violations.tsx",
+          "findingIndex": 2,
+          "location": {
+            "end": {
+              "column": 66,
+              "line": 14,
+              "offset": 383
+            },
+            "filePath": "src/violations.tsx",
+            "start": {
+              "column": 4,
+              "line": 14,
+              "offset": 321
+            }
+          },
+          "message": "Form control has no statically associated label or accessible name.",
+          "projectId": "invalid-project",
+          "ruleId": "accessibility/input-label",
+          "severity": "high"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 66,
+          "line": 14,
+          "offset": 383
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 14,
+          "offset": 321
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "invalid-project",
+      "rationale": "The intrinsic input has no static label association or accessible name.",
+      "ruleId": "accessibility/input-label",
+      "sourcePath": "src/violations.tsx"
+    },
+    {
+      "caseId": "mixed-input-label",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "accessibility",
+          "confidence": "high",
+          "filePath": "src/components/Settings.tsx",
+          "findingIndex": 0,
+          "location": {
+            "end": {
+              "column": 63,
+              "line": 4,
+              "offset": 129
+            },
+            "filePath": "src/components/Settings.tsx",
+            "start": {
+              "column": 4,
+              "line": 4,
+              "offset": 70
+            }
+          },
+          "message": "Form control has no statically associated label or accessible name.",
+          "projectId": "mixed-project",
+          "ruleId": "accessibility/input-label",
+          "severity": "high"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 63,
+          "line": 4,
+          "offset": 129
+        },
+        "filePath": "src/components/Settings.tsx",
+        "start": {
+          "column": 4,
+          "line": 4,
+          "offset": 70
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "mixed-project",
+      "rationale": "The mixed-project intrinsic input has no static label association or accessible name.",
+      "ruleId": "accessibility/input-label",
+      "sourcePath": "src/components/Settings.tsx"
+    },
+    {
+      "caseId": "valid-input-label",
+      "classification": "negative",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 81,
+          "line": 17,
+          "offset": 536
+        },
+        "filePath": "src/App.tsx",
+        "start": {
+          "column": 4,
+          "line": 17,
+          "offset": 459
+        }
+      },
+      "outcome": "true-negative",
+      "projectId": "valid-project",
+      "rationale": "The input id is statically associated with a matching intrinsic label.",
+      "ruleId": "accessibility/input-label",
+      "sourcePath": "src/App.tsx"
+    },
+    {
+      "caseId": "unsupported-input-label",
+      "classification": "unsupported",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 85,
+          "line": 23,
+          "offset": 827
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 6,
+          "line": 23,
+          "offset": 748
+        }
+      },
+      "outcome": "unsupported-clear",
+      "projectId": "mixed-project",
+      "rationale": "Label association across a custom form-control abstraction is not resolved.",
+      "ruleId": "accessibility/input-label",
+      "sourcePath": "src/App.jsx"
+    },
+    {
+      "caseId": "invalid-img-dimensions",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "performance",
+          "confidence": "medium",
+          "filePath": "src/violations.tsx",
+          "findingIndex": 3,
+          "location": {
+            "end": {
+              "column": 6,
+              "line": 23,
+              "offset": 644
+            },
+            "filePath": "src/violations.tsx",
+            "start": {
+              "column": 4,
+              "line": 16,
+              "offset": 457
+            }
+          },
+          "message": "Image does not provide statically verified positive integer width and height attributes; review its reserved layout space.",
+          "projectId": "invalid-project",
+          "ruleId": "performance/img-dimensions",
+          "severity": "medium"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 6,
+          "line": 23,
+          "offset": 644
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 16,
+          "offset": 457
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "invalid-project",
+      "rationale": "The intrinsic image pairs a literal zero width with a positive height.",
+      "ruleId": "performance/img-dimensions",
+      "sourcePath": "src/violations.tsx"
+    },
+    {
+      "caseId": "valid-image",
+      "classification": "negative",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 6,
+          "line": 15,
+          "offset": 399
+        },
+        "filePath": "src/App.tsx",
+        "start": {
+          "column": 4,
+          "line": 8,
+          "offset": 231
+        }
+      },
+      "outcome": "true-negative",
+      "projectId": "valid-project",
+      "rationale": "The intrinsic image provides positive integer width and height attributes.",
+      "ruleId": "performance/img-dimensions",
+      "sourcePath": "src/App.tsx"
+    },
+    {
+      "caseId": "unsupported-img-dimensions",
+      "classification": "unsupported",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 100,
+          "line": 24,
+          "offset": 928
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 6,
+          "line": 24,
+          "offset": 834
+        }
+      },
+      "outcome": "unsupported-clear",
+      "projectId": "mixed-project",
+      "rationale": "Layout reservation for a custom responsive-image abstraction is not inferred.",
+      "ruleId": "performance/img-dimensions",
+      "sourcePath": "src/App.jsx"
+    },
+    {
+      "caseId": "invalid-img-lazy-loading",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "performance",
+          "confidence": "medium",
+          "filePath": "src/violations.tsx",
+          "findingIndex": 4,
+          "location": {
+            "end": {
+              "column": 6,
+              "line": 31,
+              "offset": 826
+            },
+            "filePath": "src/violations.tsx",
+            "start": {
+              "column": 4,
+              "line": 24,
+              "offset": 649
+            }
+          },
+          "message": "Image is not statically configured with loading=\"lazy\"; review whether lazy loading is appropriate.",
+          "projectId": "invalid-project",
+          "ruleId": "performance/img-lazy-loading",
+          "severity": "low"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 6,
+          "line": 31,
+          "offset": 826
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 24,
+          "offset": 649
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "invalid-project",
+      "rationale": "The intrinsic image explicitly uses the reviewable eager loading value.",
+      "ruleId": "performance/img-lazy-loading",
+      "sourcePath": "src/violations.tsx"
+    },
+    {
+      "caseId": "mixed-img-lazy-loading",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "performance",
+          "confidence": "medium",
+          "filePath": "src/App.jsx",
+          "findingIndex": 1,
+          "location": {
+            "end": {
+              "column": 6,
+              "line": 15,
+              "offset": 366
+            },
+            "filePath": "src/App.jsx",
+            "start": {
+              "column": 4,
+              "line": 8,
+              "offset": 192
+            }
+          },
+          "message": "Image is not statically configured with loading=\"lazy\"; review whether lazy loading is appropriate.",
+          "projectId": "mixed-project",
+          "ruleId": "performance/img-lazy-loading",
+          "severity": "low"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 6,
+          "line": 15,
+          "offset": 366
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 4,
+          "line": 8,
+          "offset": 192
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "mixed-project",
+      "rationale": "The mixed-project intrinsic image explicitly uses eager loading.",
+      "ruleId": "performance/img-lazy-loading",
+      "sourcePath": "src/App.jsx"
+    },
+    {
+      "caseId": "valid-image",
+      "classification": "negative",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 6,
+          "line": 15,
+          "offset": 399
+        },
+        "filePath": "src/App.tsx",
+        "start": {
+          "column": 4,
+          "line": 8,
+          "offset": 231
+        }
+      },
+      "outcome": "true-negative",
+      "projectId": "valid-project",
+      "rationale": "The intrinsic image is statically configured with loading=\"lazy\".",
+      "ruleId": "performance/img-lazy-loading",
+      "sourcePath": "src/App.tsx"
+    },
+    {
+      "caseId": "unsupported-img-lazy-loading",
+      "classification": "unsupported",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 98,
+          "line": 25,
+          "offset": 1027
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 6,
+          "line": 25,
+          "offset": 935
+        }
+      },
+      "outcome": "unsupported-clear",
+      "projectId": "mixed-project",
+      "rationale": "Runtime priority behavior for a custom image abstraction is not inferred.",
+      "ruleId": "performance/img-lazy-loading",
+      "sourcePath": "src/App.jsx"
+    },
+    {
+      "caseId": "invalid-ambiguous-link-text",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "seo",
+          "confidence": "medium",
+          "filePath": "src/violations.tsx",
+          "findingIndex": 5,
+          "location": {
+            "end": {
+              "column": 8,
+              "line": 34,
+              "offset": 923
+            },
+            "filePath": "src/violations.tsx",
+            "start": {
+              "column": 4,
+              "line": 32,
+              "offset": 831
+            }
+          },
+          "message": "Link uses configured ambiguous static text and needs contextual review.",
+          "projectId": "invalid-project",
+          "ruleId": "seo/ambiguous-link-text",
+          "severity": "medium"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 8,
+          "line": 34,
+          "offset": 923
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 32,
+          "offset": 831
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "invalid-project",
+      "rationale": "The intrinsic link retains the configured ambiguous text \"Read more\".",
+      "ruleId": "seo/ambiguous-link-text",
+      "sourcePath": "src/violations.tsx"
+    },
+    {
+      "caseId": "mixed-ambiguous-link-text",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "seo",
+          "confidence": "medium",
+          "filePath": "src/App.jsx",
+          "findingIndex": 2,
+          "location": {
+            "end": {
+              "column": 8,
+              "line": 18,
+              "offset": 457
+            },
+            "filePath": "src/App.jsx",
+            "start": {
+              "column": 4,
+              "line": 16,
+              "offset": 371
+            }
+          },
+          "message": "Link uses configured ambiguous static text and needs contextual review.",
+          "projectId": "mixed-project",
+          "ruleId": "seo/ambiguous-link-text",
+          "severity": "medium"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 8,
+          "line": 18,
+          "offset": 457
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 4,
+          "line": 16,
+          "offset": 371
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "mixed-project",
+      "rationale": "The mixed-project intrinsic link retains the configured ambiguous text \"Here\".",
+      "ruleId": "seo/ambiguous-link-text",
+      "sourcePath": "src/App.jsx"
+    },
+    {
+      "caseId": "valid-link-text",
+      "classification": "negative",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 8,
+          "line": 23,
+          "offset": 742
+        },
+        "filePath": "src/App.tsx",
+        "start": {
+          "column": 4,
+          "line": 21,
+          "offset": 639
+        }
+      },
+      "outcome": "true-negative",
+      "projectId": "valid-project",
+      "rationale": "The intrinsic link text identifies its account-security destination.",
+      "ruleId": "seo/ambiguous-link-text",
+      "sourcePath": "src/App.tsx"
+    },
+    {
+      "caseId": "unsupported-ambiguous-link-text",
+      "classification": "unsupported",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 23,
+          "line": 28,
+          "offset": 1156
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 6,
+          "line": 26,
+          "offset": 1034
+        }
+      },
+      "outcome": "unsupported-clear",
+      "projectId": "mixed-project",
+      "rationale": "Rendered text from a custom navigation-link abstraction is not inferred.",
+      "ruleId": "seo/ambiguous-link-text",
+      "sourcePath": "src/App.jsx"
+    },
+    {
+      "caseId": "invalid-multiple-h1",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "seo",
+          "confidence": "medium",
+          "filePath": "src/violations.tsx",
+          "findingIndex": 6,
+          "location": {
+            "end": {
+              "column": 72,
+              "line": 37,
+              "offset": 1041
+            },
+            "filePath": "src/violations.tsx",
+            "start": {
+              "column": 6,
+              "line": 37,
+              "offset": 975
+            }
+          },
+          "message": "Component contains more than one intrinsic h1 element and needs review.",
+          "projectId": "invalid-project",
+          "ruleId": "seo/multiple-h1",
+          "severity": "medium"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 72,
+          "line": 37,
+          "offset": 1041
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 6,
+          "line": 37,
+          "offset": 975
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "invalid-project",
+      "rationale": "This is the second intrinsic h1 owned by the same recognized component.",
+      "ruleId": "seo/multiple-h1",
+      "sourcePath": "src/violations.tsx"
+    },
+    {
+      "caseId": "valid-single-h1",
+      "classification": "negative",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 65,
+          "line": 7,
+          "offset": 226
+        },
+        "filePath": "src/App.tsx",
+        "start": {
+          "column": 4,
+          "line": 7,
+          "offset": 165
+        }
+      },
+      "outcome": "true-negative",
+      "projectId": "valid-project",
+      "rationale": "The recognized component owns exactly one intrinsic h1.",
+      "ruleId": "seo/multiple-h1",
+      "sourcePath": "src/App.tsx"
+    },
+    {
+      "caseId": "unsupported-multiple-h1",
+      "classification": "unsupported",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 20,
+          "line": 31,
+          "offset": 1276
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 6,
+          "line": 29,
+          "offset": 1163
+        }
+      },
+      "outcome": "unsupported-clear",
+      "projectId": "mixed-project",
+      "rationale": "Heading semantics exposed by a custom heading abstraction are not inferred.",
+      "ruleId": "seo/multiple-h1",
+      "sourcePath": "src/App.jsx"
+    },
+    {
+      "caseId": "invalid-small-inline-text",
+      "classification": "positive",
+      "detected": true,
+      "expectedDetected": true,
+      "matchedFindings": [
+        {
+          "category": "ux",
+          "confidence": "high",
+          "filePath": "src/violations.tsx",
+          "findingIndex": 7,
+          "location": {
+            "end": {
+              "column": 77,
+              "line": 39,
+              "offset": 1134
+            },
+            "filePath": "src/violations.tsx",
+            "start": {
+              "column": 65,
+              "line": 39,
+              "offset": 1122
+            }
+          },
+          "message": "Literal inline text may be too small.",
+          "projectId": "invalid-project",
+          "ruleId": "ux/small-inline-text",
+          "severity": "medium"
+        }
+      ],
+      "nodeLocation": {
+        "end": {
+          "column": 11,
+          "line": 41,
+          "offset": 1175
+        },
+        "filePath": "src/violations.tsx",
+        "start": {
+          "column": 4,
+          "line": 39,
+          "offset": 1061
+        }
+      },
+      "outcome": "true-positive",
+      "projectId": "invalid-project",
+      "rationale": "The intrinsic text element has an exact inline fontSize below the 12 px threshold.",
+      "ruleId": "ux/small-inline-text",
+      "sourcePath": "src/violations.tsx"
+    },
+    {
+      "caseId": "valid-inline-text",
+      "classification": "negative",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 11,
+          "line": 26,
+          "offset": 848
+        },
+        "filePath": "src/App.tsx",
+        "start": {
+          "column": 4,
+          "line": 24,
+          "offset": 747
+        }
+      },
+      "outcome": "true-negative",
+      "projectId": "valid-project",
+      "rationale": "The exact inline fontSize equals the 12 px threshold and is not below it.",
+      "ruleId": "ux/small-inline-text",
+      "sourcePath": "src/App.tsx"
+    },
+    {
+      "caseId": "unsupported-small-inline-text",
+      "classification": "unsupported",
+      "detected": false,
+      "expectedDetected": false,
+      "matchedFindings": [],
+      "nodeLocation": {
+        "end": {
+          "column": 17,
+          "line": 34,
+          "offset": 1413
+        },
+        "filePath": "src/App.jsx",
+        "start": {
+          "column": 6,
+          "line": 32,
+          "offset": 1283
+        }
+      },
+      "outcome": "unsupported-clear",
+      "projectId": "mixed-project",
+      "rationale": "Rendered styles for a custom text abstraction are outside the intrinsic-element scope.",
+      "ruleId": "ux/small-inline-text",
+      "sourcePath": "src/App.jsx"
+    }
+  ],
+  "metrics": [
+    {
+      "falseNegativeCount": 0,
+      "falsePositiveCount": 0,
+      "precision": 1,
+      "recall": 1,
+      "ruleId": "accessibility/button-name",
+      "trueNegativeCount": 1,
+      "truePositiveCount": 1,
+      "unmatchedFindingCount": 0,
+      "unsupportedCount": 1,
+      "unsupportedDetectedCount": 0
+    },
+    {
+      "falseNegativeCount": 0,
+      "falsePositiveCount": 0,
+      "precision": 1,
+      "recall": 1,
+      "ruleId": "accessibility/img-alt",
+      "trueNegativeCount": 1,
+      "truePositiveCount": 1,
+      "unmatchedFindingCount": 0,
+      "unsupportedCount": 1,
+      "unsupportedDetectedCount": 0
+    },
+    {
+      "falseNegativeCount": 0,
+      "falsePositiveCount": 0,
+      "precision": 1,
+      "recall": 1,
+      "ruleId": "accessibility/input-label",
+      "trueNegativeCount": 1,
+      "truePositiveCount": 2,
+      "unmatchedFindingCount": 0,
+      "unsupportedCount": 1,
+      "unsupportedDetectedCount": 0
+    },
+    {
+      "falseNegativeCount": 0,
+      "falsePositiveCount": 0,
+      "precision": 1,
+      "recall": 1,
+      "ruleId": "performance/img-dimensions",
+      "trueNegativeCount": 1,
+      "truePositiveCount": 1,
+      "unmatchedFindingCount": 0,
+      "unsupportedCount": 1,
+      "unsupportedDetectedCount": 0
+    },
+    {
+      "falseNegativeCount": 0,
+      "falsePositiveCount": 0,
+      "precision": 1,
+      "recall": 1,
+      "ruleId": "performance/img-lazy-loading",
+      "trueNegativeCount": 1,
+      "truePositiveCount": 2,
+      "unmatchedFindingCount": 0,
+      "unsupportedCount": 1,
+      "unsupportedDetectedCount": 0
+    },
+    {
+      "falseNegativeCount": 0,
+      "falsePositiveCount": 0,
+      "precision": 1,
+      "recall": 1,
+      "ruleId": "seo/ambiguous-link-text",
+      "trueNegativeCount": 1,
+      "truePositiveCount": 2,
+      "unmatchedFindingCount": 0,
+      "unsupportedCount": 1,
+      "unsupportedDetectedCount": 0
+    },
+    {
+      "falseNegativeCount": 0,
+      "falsePositiveCount": 0,
+      "precision": 1,
+      "recall": 1,
+      "ruleId": "seo/multiple-h1",
+      "trueNegativeCount": 1,
+      "truePositiveCount": 1,
+      "unmatchedFindingCount": 0,
+      "unsupportedCount": 1,
+      "unsupportedDetectedCount": 0
+    },
+    {
+      "falseNegativeCount": 0,
+      "falsePositiveCount": 0,
+      "precision": 1,
+      "recall": 1,
+      "ruleId": "ux/small-inline-text",
+      "trueNegativeCount": 1,
+      "truePositiveCount": 1,
+      "unmatchedFindingCount": 0,
+      "unsupportedCount": 1,
+      "unsupportedDetectedCount": 0
+    }
+  ],
+  "projects": [
+    {
+      "cliExitCode": 0,
+      "findingCount": 0,
+      "id": "valid-project",
+      "parserErrorCount": 0,
+      "stableReportDigest": "sha256:f55357cc30244b87463b16a755d889acbe0e55221f458ab0224fd2f69aaf0187"
+    },
+    {
+      "cliExitCode": 0,
+      "findingCount": 8,
+      "id": "invalid-project",
+      "parserErrorCount": 0,
+      "stableReportDigest": "sha256:63d641655954570dacc1866c05a926f76159004955de66638d40c6cd4357e282"
+    },
+    {
+      "cliExitCode": 0,
+      "findingCount": 3,
+      "id": "mixed-project",
+      "parserErrorCount": 1,
+      "stableReportDigest": "sha256:24fb3b01c0c765f9ddd64e24cb59130e9806955864b181c13d4e9dd1d7bb9ec7"
+    }
+  ],
+  "scenarioId": "M06-RULE-ACCURACY",
+  "schemaVersion": 1,
+  "unmatchedFindings": []
+}

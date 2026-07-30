@@ -41,5 +41,14 @@ Do not commit secrets, private absolute paths, or modified raw output.
   eight-rule findings, byte-identical reruns, category/ID filters, metadata and limitations,
   thrown-rule sibling isolation, target-code non-execution, dependency audit, source snapshot
   digest, zero-skip/todo record, and a per-artifact SHA-256 manifest covering the milestone report.
-  Start with
-  `m04-rules/SUMMARY.md`.
+  Start with `m04-rules/SUMMARY.md`.
+- `m05-reporting/`: completed normalized-result and terminal/JSON/HTML reporting evidence, including
+  an isolated install, product gate, coverage, compiled smokes, exact cross-reporter projections,
+  terminal color behavior, structural XSS/CSP checks, exclusive in-root report writes, dependency
+  audit, zero-skip/todo record, source digest, and a finalized SHA-256 manifest. Start with
+  `m05-reporting/SUMMARY.md`.
+- `m06-validation/`: the completed M06-T05 base collection contains exactly 42 manifested Activity
+  3 artifacts after an isolated locked install, complete gate, controlled projects, per-rule
+  accuracy, robustness/security/performance execution, and expert heuristic review. A second
+  execution matched stable results and preserved the first package.
+  `npm run evidence:m06:finalize` adds only the factual milestone report to the final manifest.

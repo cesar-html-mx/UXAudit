@@ -409,3 +409,36 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
 - The Node.js 24 gate passed all 602 tests across 54 files, all 11 compiled CLI smokes, the
   controlled-project, accuracy, and 15-case robustness scenarios, and harness validation. Global V8
   coverage measured 95.84% statements, 91.50% branches, 99.82% functions, and 95.79% lines.
+
+## M06-T05 executed expert heuristic review
+
+- No real participant data or SUS responses were available. Participant testing is recorded as
+  unexecuted and SUS as not applicable with a null score; neither is represented as completed user
+  research.
+- A closed versioned contract defines six developer tasks: discover the scan command, analyze the
+  controlled invalid project, identify maximum severity, locate source, understand the
+  recommendation, and find the JSON/HTML reports.
+- The shell-free review runner completed all six tasks against the compiled CLI and retained a real
+  wall-clock duration for each scripted expert procedure. Those values are explicitly not user task
+  times; zero errors/backtracking and CLI-help use also describe only the script.
+- Five tasks produced no heuristic issue. The prioritization task recorded one low-severity
+  observation: three accessibility findings tie at high severity, while the terminal report does
+  not explain a secondary priority policy. The corrective action is to document canonical ordering
+  and consider an explicit secondary sort or control in a future version.
+- Focused contract tests lock the canonical JSON, exact six-task order, controlled expected report
+  values, observation severities, and participant/SUS status. `npm run test:usability:m06`
+  independently builds and executes the real CLI review.
+
+## M06 final integrated validation
+
+- The definitive Node.js 24 gate passed 619 tests across 56 files with zero failed, skipped, or todo
+  tests. Coverage was 95.84% statements, 91.50% branches, 99.82% functions, and 95.79% lines.
+- The isolated collector executed a locked install, quality gate, coverage, machine-readable test
+  record, 11 compiled smokes, the five-project scenario, eight-rule accuracy, 15-case robustness/
+  security/performance, six-task expert review, harness validation, and dependency audit.
+- The retained accuracy totals are 11 TP, zero FP, eight TN, and zero FN; eight unsupported cases
+  remain outside denominators. Five performance executions used 240 generated source files without
+  a machine-dependent threshold.
+- Two definitive collections used the same source digest and matched every stable artifact or
+  documented volatile projection. The second execution preserved the first 42-artifact base
+  package; its SHA-256 manifest, sanitization, canonical JSON, and exact file contract all passed.

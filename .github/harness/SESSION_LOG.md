@@ -562,3 +562,69 @@
 - Global V8 coverage measured 95.84% statements, 91.50% branches, 99.82% functions, and 95.79%
   lines. All 11 compiled smokes, the five-project deterministic scenario, the 27-case accuracy
   scenario, and harness validation also passed.
+- Completed M06-T04 in local commit `709ddc5`. Its non-interactive HTTPS push again failed because
+  no GitHub username/credential is available; the remote remained unchanged.
+- Implemented the M06-T05 expert heuristic substitute with six compiled-CLI tasks. All six scripted
+  procedures completed; five observations have no issue and one low-severity observation records
+  the tie among three high-severity accessibility findings. Per-task duration/error/backtracking/help
+  values belong only to the expert script.
+- Participant testing remains unexecuted with participant count zero. No SUS responses exist, so
+  SUS is not applicable and its score is null; no user-performance or satisfaction claim is made.
+- Repaired the harness final lifecycle without weakening normal ready-state gates. Fourteen focused
+  tests cover ready, all-tasks-complete transitional, terminal, adversarial, documentation/status,
+  and the real final `advance → sync → validate → show` sequence in temporary repositories.
+- Added an exact 42-artifact M06 evidence contract, credential-free allowlisted collector, stable
+  versus volatile second-run comparison, first-package preservation, and separately authorized
+  milestone-report finalizer. The package records Activity 3 summaries, thirteen corrected defects,
+  and explicit unexecuted/unsupported work.
+- The pre-collection Node.js 24 product gate passed 619 tests across 56 files plus formatting,
+  strict lint, typecheck, build, and the live ready-state harness. Coverage measured 95.84%
+  statements, 91.50% branches, 99.82% functions, and 95.79% lines.
+- Three independent pre-collection reviews found no product or terminal-lifecycle blocker, but found
+  that the initial collector accepted under-specified robustness/usability states and normalized too
+  much stable evidence. T05 now requires exact scenario, per-rule, 15-case, 16-check, and six-task
+  identities/counts; validates JSON/CSV agreement; and compares complete robustness/usability
+  projections after removing only measured performance timing/RSS and expert-procedure time.
+- The review also tightened the evidence boundary with empty npm user/global configuration, a
+  bounded executable search path, package-lock credential-URL inspection, neutral remote-
+  publication status, fuller Activity 3 summaries/environment context, and a structured non-empty
+  milestone-report finalization gate.
+- The first isolated collection failed closed before publication because the strengthened usability
+  check compared equivalent severity-count objects by serialized property order. The destination
+  retained its exact two placeholders. Replacing serialization equality with deep strict value
+  equality preserves ordered-array checks while correctly treating JSON object key order as
+  irrelevant; syntax, formatting, and lint then passed.
+- The second isolated collection also failed closed before publication: the evidence-package
+  contract reserialized semantic JSON from a compact string, while the accuracy runner canonically
+  formats an explicitly indented value. The same Prettier release legitimately preserves different
+  object wrapping for those two inputs. The contract, collector writer, and artifact reader now all
+  canonicalize from the identical two-space-indented semantic value; a retained temporary accuracy
+  output confirmed byte equality before the next collection attempt.
+- The next collection published the first complete 42-artifact base package with source digest
+  `sha256:3d2addf089db870c1b6f55e2b275ecada892c7ddf903bb24a9428c249e8c5767`. Its manifest,
+  sanitization, canonical JSON, 619-test/56-file record, coverage, scenario, accuracy, robustness,
+  and usability summaries all validated.
+- The mandatory second collection preserved that first package and then rejected one stable-byte
+  mismatch: the scenario's normalized HTML still contained the raw duration because its replacement
+  expected text with `ms`, while the reporter uses a duration table cell. T05 now normalizes the
+  exact duration-row structure and asserts one placeholder. Two fresh scenario outputs were
+  byte-identical with SHA-256
+  `0cc1b8b865e1e1da9df296f780294fa6c363657952892b05c19f7eb280d1f945`.
+- A subsequent pair of base collections passed and preserved the first package, but the formal
+  repository review found that the global format gate attempted to rewrite the exact generated
+  normalized HTML because `.prettierignore` covered only the older `audit-report.html` name.
+  T05 now excludes generated `*.normalized.html` evidence from formatting while retaining its
+  scenario byte comparison, sanitization, contract, and SHA-256 checks. The package must therefore
+  be regenerated once more from this final source before closure.
+- The definitive source passed the full Node.js 24 product gate and then two isolated M06 evidence
+  collections. The retained first package has source digest
+  `sha256:92bd1c57cf85126082270c9111b03cd00fe28491d77a8c9cba7aa0b4d8ad404b`;
+  the second execution matched every stable projection and preserved it unchanged.
+- The base package contains exactly 42 manifested artifacts plus `MANIFEST.sha256`. It records 619
+  passed tests across 56 files with zero failed/skipped/todo; 95.84% statements, 91.50% branches,
+  99.82% functions, and 95.79% lines; 11 TP/0 FP/8 TN/0 FN; 15 robustness cases; five 240-file
+  performance runs; six expert tasks; zero dependency vulnerabilities; and explicit unexecuted
+  participant/SUS/CodeQL/hosted checks.
+- The `verify-uxaudit-milestone` review checked all twelve product acceptance criteria, the M06
+  gates, dependency direction, shared public result/model contracts, hostile-input controls,
+  traceability, documentation, and retained evidence. No remaining in-scope blocker was found.

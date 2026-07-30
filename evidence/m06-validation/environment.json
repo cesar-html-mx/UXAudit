@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "evidenceId": "M06-VALIDATION",
+  "observedAt": "2026-07-30T08:09:32.690Z",
+  "source": {
+    "baseCommit": "709ddc5fde5059e3e3ae728bc46ad048389e4a78",
+    "branch": "milestone/m06-integration-validation",
+    "state": "M06-T05 working tree copied without generated or retained evidence",
+    "treeDigest": "sha256:92bd1c57cf85126082270c9111b03cd00fe28491d77a8c9cba7aa0b4d8ad404b"
+  },
+  "productVersion": "0.1.0",
+  "runtime": {
+    "node": "v24.18.0",
+    "npm": "11.16.0"
+  },
+  "system": {
+    "architecture": "x64",
+    "kernelRelease": "6.8.0-134-generic",
+    "logicalCpuCount": 12,
+    "platform": "linux",
+    "totalMemoryBytes": 33421438976
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "manifest": "MANIFEST.sha256"
+  },
+  "results": {
+    "accuracy": {
+      "falseNegatives": 0,
+      "falsePositives": 0,
+      "trueNegatives": 8,
+      "truePositives": 11,
+      "unsupported": 8,
+      "expectedMatched": true,
+      "rules": 8
+    },
+    "robustness": {
+      "cases": 15,
+      "codeql": "unexecuted",
+      "failedCases": 0,
+      "memoryMeasurement": "observed-linux-proc",
+      "performanceRuns": 5,
+      "sourceFiles": 240
+    },
+    "scenario": {
+      "deterministic": true,
+      "findingsByProject": {
+        "valid-project": 0,
+        "invalid-project": 8,
+        "mixed-project": 3,
+        "hostile-project": 1,
+        "large-project": 0
+      },
+      "parserErrorsByProject": {
+        "valid-project": 0,
+        "invalid-project": 0,
+        "mixed-project": 1,
+        "hostile-project": 0,
+        "large-project": 0
+      },
+      "projects": 5
+    },
+    "usability": {
+      "completedTasks": 6,
+      "method": "expert-heuristic-review",
+      "participantTesting": "unexecuted",
+      "sus": "not-applicable"
+    }
+  },
+  "verification": {
+    "commands": [
+      {
+        "fileName": "npm-ci.txt",
+        "label": "Locked clean installation",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "verify.txt",
+        "label": "Product quality gate",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "coverage.txt",
+        "label": "Coverage thresholds",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "test-results.txt",
+        "label": "No skipped or todo tests",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "cli-smoke.txt",
+        "label": "Compiled CLI smoke tests",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "m06-scenario.txt",
+        "label": "Controlled M06 end-to-end scenario",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "m06-accuracy.txt",
+        "label": "M06 per-rule accuracy scenario",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "m06-robustness.txt",
+        "label": "M06 robustness, security, and performance scenario",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "m06-usability.txt",
+        "label": "M06 expert heuristic usability review",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "harness-validation.txt",
+        "label": "Harness integrity",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "npm-audit.json.txt",
+        "label": "Dependency audit",
+        "observedExitCode": 0,
+        "passed": true
+      }
+    ],
+    "coverage": {
+      "branches": 91.5,
+      "functions": 99.82,
+      "lines": 95.79,
+      "statements": 95.84
+    },
+    "dependencyAuditVulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "skippedTests": 0,
+    "testFiles": 56,
+    "tests": 619,
+    "todoTests": 0
+  }
+}

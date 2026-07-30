@@ -879,3 +879,75 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   RNF-10, M06-T04, R-004 through R-006, R-009, R-010, R-012, R-015, R-018, R-021, and R-023.
 - Evidence: `scripts/run-m06-robustness.mjs`, `src/validation/performance-summary.ts`, its focused
   tests, the security checklist, and the final M06 evidence package.
+
+## D-039 — Expert heuristic usability evidence without participant substitution
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: M06 requires either executed usability work or a truthful unexecuted status. The
+  repository contains no participant observations or SUS responses, so populating user timings,
+  satisfaction, errors, or a SUS score would fabricate evidence.
+- Decision: Version six developer tasks and execute them as an expert heuristic procedure against
+  the compiled CLI. Retain completion, scripted-procedure wall-clock time, procedure errors,
+  backtracking, help use, observation, severity, and corrective action. Label every timing and
+  interaction count as belonging to the script, not a user. Record participant testing as
+  unexecuted with count zero and SUS as not applicable with zero responses and a null score.
+- Alternatives considered: fabricating sample participants; treating automated command time as user
+  task time; calculating SUS without responses; omitting usability entirely; or calling one expert
+  execution a user test.
+- Consequences: Command discovery, complete scan, prioritization, source location, recommendation,
+  and report-location tasks are reproducibly inspected. One low-severity observation records the
+  three-way high-severity tie. No learnability, satisfaction, population, or SUS claim is made.
+- Requirements/contracts affected: RNF-06, M06-T05, R-011, R-022, and R-024.
+- Evidence: `fixtures/m06-validation/heuristic-review.json`,
+  `scripts/run-m06-usability.mjs`, focused contract tests, and retained usability JSON/CSV.
+
+## D-040 — Strict ready, transitional, and terminal harness lifecycle
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: Closing the final configured milestone intentionally produces `status=complete`, null
+  active milestone/task, and zero active milestone records. The original validator and renderers
+  required exactly one active milestone and therefore rejected that coherent terminal state.
+- Decision: Preserve strict `ready` validation with exactly one active milestone and either the next
+  incomplete task or a null transitional task after all work is complete. Accept `complete` only
+  when every milestone/task is completed, the completed-ID set is exact, no milestone is active,
+  and both active identifiers are null. Render a completion section instead of another execution
+  prompt. Test the real final `advance → sync → validate → show` path entirely in a temporary
+  repository plus adversarial incoherent combinations.
+- Alternatives considered: leaving M06 active forever; weakening the one-active invariant globally;
+  special-casing only M06; editing terminal state after validation; or testing helper-shaped data
+  without executing the scripts.
+- Consequences: Ordinary and final lifecycle states are both explicit and fail closed. The same
+  scripts now represent the terminal project state truthfully without accepting an incomplete
+  project as complete.
+- Requirements/contracts affected: M06-T05, R-009.
+- Evidence: harness lifecycle tests and the final post-advance harness execution.
+
+## D-041 — Exact isolated Activity 3 evidence lifecycle
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: Activity 3 needs raw commands, measurements, controlled outputs, accuracy, security,
+  performance, usability, defects, limitations, and a final report. Timing varies between runs,
+  source trees may contain credentials or symlinks, and evidence reruns must not overwrite a valid
+  first package merely because performance samples differ.
+- Decision: Copy only allowlisted, non-secret, non-symlink source into a credential-free temporary
+  workspace. Run locked installation and every required gate without a shell. Publish exactly 42
+  sanitized base artifacts plus one manifest. Compare source/stable results on the second run,
+  compare normalized performance and usability projections while retaining the first volatile
+  measurements, and preserve an existing valid package. Reject the milestone report during base
+  collection; finalization reauthorizes the destination, verifies the unchanged base manifest, and
+  adds only that report.
+- Alternatives considered: collecting from the mutable working directory; inheriting credentials;
+  retaining arbitrary files; requiring byte-identical durations; overwriting first-run evidence;
+  omitting raw commands; or adding the report without validating the base package.
+- Consequences: The retained package is factual, sanitized, bounded, reproducible in stable claims,
+  and explicit about unsupported/unexecuted work. Machine and expert-procedure timing remains
+  observed evidence rather than a deterministic result. Portable rename retains the previously
+  documented narrow final-interval limitation.
+- Requirements/contracts affected: RNF-03, RNF-04, RNF-09, M06-T05, R-009, R-010, R-012, R-016,
+  R-023 through R-025.
+- Evidence: the M06 evidence contract, collector, and finalizer plus two successful base
+  collections recorded in the session log. The finalized package under
+  `evidence/m06-validation/` remains the closure gate until the milestone report is added.

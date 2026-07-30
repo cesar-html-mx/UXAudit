@@ -147,6 +147,7 @@ npm run test:coverage
 npm run test:smoke
 npm run test:accuracy:m06
 npm run test:robustness:m06
+npm run test:usability:m06
 npm run test:scenario:m02
 npm run test:scenario:m03
 npm run test:scenario:m04
@@ -168,6 +169,7 @@ Useful individual commands:
 | `npm run test:smoke`            | Build and execute eleven compiled CLI scenarios without a shell.         |
 | `npm run test:accuracy:m06`     | Compare per-rule CLI findings with reviewed instance-level ground truth. |
 | `npm run test:robustness:m06`   | Run built-CLI robustness, security, and performance cases without shell. |
+| `npm run test:usability:m06`    | Execute the six-task expert heuristic review without claiming user data. |
 | `npm run test:scenario:m02`     | Verify reviewed inventory, exclusions, links, determinism, and no exec.  |
 | `npm run test:scenario:m03`     | Exercise the controlled four-kind parser/model scenario without exec.    |
 | `npm run test:scenario:m04`     | Validate the deterministic eight-rule catalog without executing source.  |
@@ -181,6 +183,8 @@ Useful individual commands:
 | `npm run evidence:m04:finalize` | Add the milestone report to the retained M04 SHA-256 manifest.           |
 | `npm run evidence:m05`          | Collect or verify the isolated, sanitized M05 evidence package.          |
 | `npm run evidence:m05:finalize` | Add the milestone report to the retained M05 SHA-256 manifest.           |
+| `npm run evidence:m06`          | Collect or verify the isolated 42-artifact Activity 3 evidence package.  |
+| `npm run evidence:m06:finalize` | Add the M06 milestone report to the retained SHA-256 manifest.           |
 | `npm run verify`                | Run format, lint, typecheck, unit tests, and build in one gate.          |
 
 Husky invokes `npm run verify` before local commits. CI is configured for Node.js 24 on Ubuntu

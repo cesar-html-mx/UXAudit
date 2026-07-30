@@ -571,7 +571,10 @@ const normalizeHtmlSample = (html, result) =>
     .replaceAll(result.projectRoot, '&lt;PROJECT_ROOT&gt;')
     .replaceAll(result.timing.completedAt, '&lt;COMPLETED_AT&gt;')
     .replaceAll(result.timing.startedAt, '&lt;STARTED_AT&gt;')
-    .replaceAll(`>${String(result.timing.durationMs)} ms<`, '>&lt;DURATION_MS&gt; ms<');
+    .replace(
+      /(<th scope="row">Duration \(ms\)<\/th>\s*<td><code>)[^<]+(<\/code>)/u,
+      '$1&lt;DURATION_MS&gt;$2',
+    );
 
 const writeOutputs = async ({
   comparison,
@@ -608,6 +611,11 @@ const writeOutputs = async ({
   const terminalSample = invalidSample.stdout;
   const htmlSample = normalizeHtmlSample(invalidSample.html, invalidSample.json);
 
+  assert.equal(
+    htmlSample.split('&lt;DURATION_MS&gt;').length - 1,
+    1,
+    'The retained HTML sample must normalize exactly one duration value.',
+  );
   assertPortableContent(terminalSample, [repositoryRoot, temporaryRoot], 'terminal sample');
   assertPortableContent(htmlSample, [repositoryRoot, temporaryRoot], 'HTML sample');
   await writeFile(
