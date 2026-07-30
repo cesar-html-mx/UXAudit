@@ -628,3 +628,16 @@
 - The `verify-uxaudit-milestone` review checked all twelve product acceptance criteria, the M06
   gates, dependency direction, shared public result/model contracts, hostile-input controls,
   traceability, documentation, and retained evidence. No remaining in-scope blocker was found.
+- Completed M06-T05 in local commit `691a4ea`. Its pre-commit gate passed all 619 tests and the
+  remaining quality checks. The non-interactive HTTPS push failed because Git credentials were not
+  available; `gh` is also absent, so no remote branch or pull request is claimed.
+- Finalized `evidence/m06-validation/` after validating the unchanged base manifest. The final
+  `MANIFEST.sha256` contains 43 entries: 42 base artifacts plus `MILESTONE_REPORT.md`; the complete
+  package contains 44 files including the manifest itself.
+- Advanced M06 with task commit `691a4ea`, synchronized `CURRENT_STATE.md`, and validated the live
+  terminal lifecycle. The harness now reports `status=complete`, no active milestone/task, and
+  completed milestones M01 through M06.
+- An independent staged-closure review found stale pending entries in `TASK_QUEUE.md` and
+  `EVIDENCE_INDEX.md`, an obsolete active-milestone note, and future-tense wording in the finalized
+  report. The closure metadata was reconciled, the report finalizer passed again from the validated
+  42-entry base manifest, and the resulting 43-entry manifest passed full SHA-256 verification.

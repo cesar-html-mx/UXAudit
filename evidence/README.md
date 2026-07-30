@@ -51,4 +51,5 @@ Do not commit secrets, private absolute paths, or modified raw output.
   3 artifacts after an isolated locked install, complete gate, controlled projects, per-rule
   accuracy, robustness/security/performance execution, and expert heuristic review. A second
   execution matched stable results and preserved the first package.
-  `npm run evidence:m06:finalize` adds only the factual milestone report to the final manifest.
+  `npm run evidence:m06:finalize` added only the factual milestone report; the final manifest covers
+  all 42 base artifacts plus that report.

@@ -948,6 +948,6 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   documented narrow final-interval limitation.
 - Requirements/contracts affected: RNF-03, RNF-04, RNF-09, M06-T05, R-009, R-010, R-012, R-016,
   R-023 through R-025.
-- Evidence: the M06 evidence contract, collector, and finalizer plus two successful base
-  collections recorded in the session log. The finalized package under
-  `evidence/m06-validation/` remains the closure gate until the milestone report is added.
+- Evidence: the M06 evidence contract, collector, finalizer, two successful base collections, and
+  the finalized package under `evidence/m06-validation/`. Its manifest covers all 42 base artifacts
+  plus the milestone report.

@@ -104,4 +104,5 @@ vulnerabilities. A second isolated execution matched the stable results and pres
 
 The package does not convert unexecuted participant testing, SUS, hosted CodeQL/CI, browser-runtime
 behavior, or remote publication into completed evidence. The milestone report is added only by the
-separate finalizer after task completion and self-review.
+separate finalizer after task completion and self-review. Finalization passed, and the resulting
+SHA-256 manifest covers the 42 base artifacts plus `MILESTONE_REPORT.md`.

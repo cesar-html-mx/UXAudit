@@ -210,7 +210,7 @@ The final package under `evidence/m06-validation/` must include:
 - [x] Quality gate passed.
 - [x] Evidence collected.
 - [x] Documentation and traceability updated.
-- [ ] Milestone closed and state advanced.
+- [x] Milestone closed and state advanced.
 
 ## Discoveries
 
@@ -306,8 +306,8 @@ The final package under `evidence/m06-validation/` must include:
 
 M06 composes the complete local CLI, validates five controlled projects, measures every stable rule,
 and retains factual system, security, performance, usability, and Activity 3 evidence. T01-T04 are
-committed as `c5eb8bc`, `79454e4`, `e7ea7b5`, and `709ddc5`; T05 adds the terminal harness lifecycle,
-expert review, exact evidence lifecycle, and final documentation.
+committed as `c5eb8bc`, `79454e4`, `e7ea7b5`, and `709ddc5`; T05 is committed as `691a4ea` and adds
+the terminal harness lifecycle, expert review, exact evidence lifecycle, and final documentation.
 
 The definitive Node.js 24 gate passed 619 tests across 56 files with no skipped/todo tests and
 95.84% statement / 91.50% branch / 99.82% function / 95.79% line coverage. Controlled results were
@@ -320,4 +320,5 @@ Participant testing and SUS remain unexecuted/N/A, browser/runtime behavior and 
 remain outside the executed evidence, and the performance values are one-machine observations
 without a portable threshold. Publication remains best-effort because the prior non-interactive
 HTTPS push lacked credentials and `gh` was unavailable. M06 is the final configured milestone, so
-successful closure transitions the harness to terminal `complete` with no next milestone.
+closure transitioned the harness to terminal `complete` with no active milestone/task and no next
+milestone. The finalized manifest covers all 42 base artifacts plus `MILESTONE_REPORT.md`.

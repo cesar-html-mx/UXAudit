@@ -3,23 +3,21 @@
 ## Status
 
 - Project: UXAudit
-- Harness status: ready
-- Active milestone: **M06 — End-to-end integration, validation, usability, and security evidence**
+- Harness status: complete
+- Active milestone: **None**
 - Active task: **None**
-- Completed milestones: M01, M02, M03, M04, M05
+- Completed milestones: M01, M02, M03, M04, M05, M06
 - Current branch: milestone/m06-integration-validation
 - Last verification: PASS
-- Last verified at: 2026-07-30T08:12:28.739Z
-- Last commit: bd22ef5eec2ea538c43d9197f4dc184de7f921f6
+- Last verified at: 2026-07-30T08:15:24.144Z
+- Last commit: 691a4ea974d0ea01bf6a75292f10cabe39125a03
 
 ## Blockers
 
 None
 
-## Next execution
+## Completion
 
-Open Codex at the repository root and use:
-
-> Ejecuta el harness definido en AGENTS.md y completa el hito activo de principio a fin.
+All configured milestones are complete. No active milestone or task remains.
 
 This file was generated from `.github/harness/state/state.json`.

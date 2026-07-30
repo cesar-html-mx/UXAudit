@@ -46,4 +46,4 @@
 - [x] M06-T02 Create controlled valid and invalid React/TypeScript projects.
 - [x] M06-T03 Calculate true positives, false positives, false negatives, precision, and recall.
 - [x] M06-T04 Execute system, robustness, performance, dependency, and security checks.
-- [ ] M06-T05 Run the usability protocol and assemble all evidence for Activity 3.
+- [x] M06-T05 Run the usability protocol and assemble all evidence for Activity 3.

@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "project": "UXAudit",
-  "status": "ready",
-  "activeMilestone": "M06",
+  "status": "complete",
+  "activeMilestone": null,
   "activeTask": null,
-  "completedMilestones": ["M01", "M02", "M03", "M04", "M05"],
+  "completedMilestones": ["M01", "M02", "M03", "M04", "M05", "M06"],
   "currentBranch": "milestone/m06-integration-validation",
-  "lastVerifiedAt": "2026-07-30T08:12:28.739Z",
-  "lastVerificationCommand": "npm run verify; coverage 95.84/91.50/99.82/95.79; 619/619 zero skip/todo; smoke, scenario, accuracy, robustness, usability, audit, harness PASS; evidence:m06 twice PASS; self-review PASS",
+  "lastVerifiedAt": "2026-07-30T08:15:24.144Z",
+  "lastVerificationCommand": "619/619 tests; coverage/smoke/scenario/accuracy/robustness/usability/audit/harness PASS; evidence collected twice and finalized; self-review PASS",
   "lastVerificationResult": "PASS",
-  "lastCommit": "bd22ef5eec2ea538c43d9197f4dc184de7f921f6",
+  "lastCommit": "691a4ea974d0ea01bf6a75292f10cabe39125a03",
   "blockers": [],
   "notes": [
     "Harness initialized from the approved TFM methodology and architecture.",
-    "Start Codex from the repository root and execute the active milestone."
+    "All configured milestones are complete; no active milestone or task remains."
   ]
 }

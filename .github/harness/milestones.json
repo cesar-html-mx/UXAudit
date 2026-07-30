@@ -230,8 +230,8 @@
       "id": "M06",
       "slug": "integration-validation",
       "title": "End-to-end integration, validation, usability, and security evidence",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M06-integration-validation.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M06-integration-validation.md",
       "branch": "milestone/m06-integration-validation",
       "tasks": [
         {
