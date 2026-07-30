@@ -13,15 +13,15 @@ import { createRuleRegistry } from '../../src/rules/rule-registry.js';
 import { modelFromSource } from './model-from-source.js';
 
 const catalogFixtureUrl = new URL(
-  '../fixtures/m04-rules/catalog-cases.tsx.fixture',
+  '../fixtures/rule-catalog/catalog-cases.tsx.fixture',
   import.meta.url,
 );
 const expectedCatalogResultUrl = new URL(
-  '../fixtures/m04-rules/expected-catalog-result.json',
+  '../fixtures/rule-catalog/expected-catalog-result.json',
   import.meta.url,
 );
 const targetCodeSentinelUrl = new URL(
-  '../fixtures/m04-rules/TARGET_CODE_EXECUTED',
+  '../fixtures/rule-catalog/TARGET_CODE_EXECUTED',
   import.meta.url,
 );
 const catalogFilePath = 'src/catalog-cases.tsx';
@@ -45,7 +45,7 @@ interface ExpectedCatalogScenario {
     readonly targetCodeExecuted: boolean;
   };
   readonly evaluation: RuleEvaluationResult;
-  readonly scenarioId: 'M04-RULE-CATALOG';
+  readonly scenarioId: 'UXAUDIT-RULE-CATALOG';
   readonly schemaVersion: 1;
 }
 
@@ -85,7 +85,7 @@ const buildObservedScenario = async (
     targetCodeExecuted: await fileExists(targetCodeSentinelUrl),
   },
   evaluation,
-  scenarioId: 'M04-RULE-CATALOG',
+  scenarioId: 'UXAUDIT-RULE-CATALOG',
   schemaVersion: 1,
 });
 
@@ -99,7 +99,7 @@ afterEach(async () => {
   await rm(targetCodeSentinelUrl, { force: true });
 });
 
-describe('initial M04 catalog integration', () => {
+describe('initial rule-catalog integration', () => {
   it('matches the complete controlled result with one deterministic finding per stable rule', async () => {
     const { expected, model } = await readCatalogFixture();
     const loadedRules = loadRules({ registry: initialRuleRegistry });
@@ -196,7 +196,7 @@ describe('initial M04 catalog integration', () => {
 
   it('isolates one throwing rule without exposing its error or losing catalog siblings', async () => {
     const { expected, model } = await readCatalogFixture();
-    const privateFailureDetail = 'private M04 integration failure detail';
+    const privateFailureDetail = 'private rule-catalog integration failure detail';
     const throwingEvaluate = vi.fn<Rule['evaluate']>(() => {
       throw new Error(privateFailureDetail);
     });

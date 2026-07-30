@@ -1,5 +1,0 @@
-{
-  "exitCode": 0,
-  "stderr": "(empty)",
-  "stdout": "Project path validated: <PROJECT_ROOT>\nDiscovery summary: discovered=8 inventory=8 candidates=8 exclusions=0 issues=0\nParsing summary: parsed=7 failed=1 components=7 jsx=15\n"
-}

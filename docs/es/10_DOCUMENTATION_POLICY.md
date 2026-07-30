@@ -2,57 +2,80 @@
 
 # Política de documentación
 
-La documentación forma parte de la implementación; no es una tarea final de limpieza.
+## Audiencias
 
-## Documentación pública bilingüe
+La documentación se organiza para:
 
-- Los documentos públicos se mantienen en inglés y en español latinoamericano dentro del mismo
-  pull request.
-- Las traducciones al español usan español latinoamericano neutral.
-- El código, los identificadores, los comandos y las salidas exactas no se traducen.
-- Los archivos internos del harness y la evidencia generada o finalizada de los hitos permanecen en
-  inglés.
-- Los originales en inglés en sus rutas establecidas siguen siendo la referencia operativa para la
-  automatización.
-- Cualquier divergencia entre un documento público en inglés y su espejo en español es un defecto
-  de documentación.
+- personas que instalan y ejecutan la CLI;
+- quienes la integran en scripts del proyecto o CI;
+- quienes contribuyen a arquitectura, reglas, pruebas, paquete o documentación;
+- quienes revisan los límites de confianza y seguridad local.
 
-## Siempre actualizados
+El recorrido de uso aparece primero. Los registros históricos de implementación no deben interrumpir
+la instalación, configuración, interpretación de reglas ni solución de problemas.
 
-- `README.md`, `README.en.md` y `README.es.md`
-- `docs/00_INDEX.md`, cada documento público en inglés y su equivalente en `docs/es/`
-- orientación pública de seguridad, pull requests, entrada a la evidencia, usabilidad y metodología
-  de evidencia
-- comportamiento del producto y opciones de la CLI
-- arquitectura y contratos públicos
-- catálogo de reglas y limitaciones
-- trazabilidad de requisitos
-- ExecPlan activo
-- estado, decisiones, riesgos, bloqueadores, registro de sesión e índice de evidencia
+## Idiomas
 
-## Documentación de componentes
+La documentación informativa duradera se mantiene en inglés y español latinoamericano natural. Esto
+incluye el README raíz, guías del producto y contribución, seguridad, reglas e historia.
 
-Un nuevo componente principal debe documentar:
+El código, identificadores, IDs de reglas, claves de configuración, comandos, rutas, nombres de
+archivo y paquete, valores de esquemas y formatos legibles por máquinas permanecen en inglés.
+Traducir esos literales haría incorrectos los ejemplos.
 
-- responsabilidad;
-- entradas y salidas;
-- dependencias;
-- comportamiento ante errores;
-- consideraciones de rendimiento o seguridad;
-- requisitos y pruebas relacionados.
+## Emparejamiento de documentos
 
-## Documentación de reglas
+- `README.md` contiene secciones sustanciales de entrada en español e inglés.
+- `README.en.md` y `README.es.md` son guías completas y recíprocas.
+- Cada documento en inglés debajo de `docs/` tiene la misma ruta debajo de `docs/es/`.
+- Cada par comienza con un selector recíproco visible de idioma.
+- La jerarquía, forma de tablas, ejemplos delimitados y literales técnicos permanecen alineados.
+- Los enlaces relativos deben quedarse en el repositorio y apuntar a archivos y encabezados existentes.
 
-Una regla no está completa hasta que el catálogo incluye su alcance, activador, ejemplos válidos,
-limitaciones, severidad, recomendación y referencias.
+`npm run docs:check` valida estas garantías mecánicas. La revisión humana sigue siendo responsable
+del significado, fluidez, tono y equivalencia veraz.
 
-## Historial de cambios
+## Contenido según el tipo
 
-Usa el historial de Git para dar seguimiento a los cambios por archivo y `DECISIONS.md` para las
-razones que las futuras personas contribuidoras necesiten comprender. No dupliques cada commit en
-forma de prosa.
+| Tipo                     | Contenido requerido                                                                            |
+| ------------------------ | ---------------------------------------------------------------------------------------------- |
+| Guía de uso              | Instalación, inicio, opciones, configuración, informes, reglas, salidas, privacidad y límites. |
+| Catálogo de reglas       | Alcance, activador, no activador, recomendación, severidad, confianza y limitaciones.          |
+| Arquitectura             | Límites actuales, flujo de datos, contratos, determinismo y propiedad de errores.              |
+| Estrategia de pruebas    | Capas, escenarios, seguridad, distribución y expectativas de publicación actuales.             |
+| Seguridad                | Amenazas, controles, privacidad, riesgos residuales y canal privado.                           |
+| Criterios de publicación | Condiciones observables y comprobables para un artefacto público.                              |
+| Historia                 | Contexto breve del archivo sin convertir el proceso interno en instrucciones del producto.     |
 
-## Evidencia académica
+## Fuente de verdad
 
-Las notas de implementación deben ser objetivas. Conserva los comandos y resultados observados para
-que el capítulo de pruebas del TFM pueda distinguir los planes del trabajo completado.
+El comportamiento observable de la CLI se basa en la implementación y las pruebas, y después se
+explica en la especificación. La arquitectura define los límites previstos. El catálogo debe
+coincidir con las reglas registradas. Los comandos e instrucciones de instalación deben coincidir con
+`package.json` y el tarball probado.
+
+Cuando las fuentes discrepen, no copies el conflicto silenciosamente entre idiomas. Resuelve el
+contrato, actualiza implementación o pruebas cuando esté autorizado y después actualiza ambos
+documentos.
+
+## Guía de redacción
+
+- Comienza con el resultado para la persona usuaria.
+- Usa lenguaje sencillo y ejemplos breves ejecutables.
+- Distingue un hallazgo estático de un hecho en ejecución.
+- Indica las limitaciones junto a la afirmación que restringen.
+- No anuncies comandos, informes, políticas, métricas ni integraciones no implementadas.
+- No presentes una revisión experta como investigación con participantes.
+- Evita IDs de tareas internas, cronología de construcción o comandos de archivo en guías públicas.
+- Excluye valores sensibles, credenciales, rutas privadas y fuentes no confiables de los ejemplos.
+
+## Lista de actualización
+
+Cuando cambie un comportamiento público:
+
+1. actualiza las pruebas y el contrato correspondiente;
+2. actualiza inglés y español en el mismo cambio;
+3. conserva literales exactos y ejemplos delimitados idénticos byte por byte;
+4. actualiza el índice y la trazabilidad cuando cambie una página o contrato duradero;
+5. ejecuta `npm run docs:check` y las comprobaciones de formato;
+6. revisa la instalación y los enlaces desde la perspectiva de alguien nuevo.

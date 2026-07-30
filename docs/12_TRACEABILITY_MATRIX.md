@@ -1,34 +1,53 @@
 [Español](es/12_TRACEABILITY_MATRIX.md) | **English**
 
-# Traceability Matrix
+# Traceability matrix
 
-This table is updated when implementation and exact test filenames exist.
+This map connects durable requirements to their main implementation and verification boundaries. It
+is a navigation aid, not a substitute for source-level tests.
 
-| Requirement | Primary component                                            | Milestone | Verification                                                                                                                                          |
-| ----------- | ------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| RF-01       | CLI, audit facade, sanitizer, and executable boundary        | M01-M06   | CLI tests/smokes: help/version, complete options, source-aware precedence, safe output, exit codes, progress, and full audit                          |
-| RF-02       | `src/project/validate-project-path.ts`                       | M01       | `tests/project/validate-project-path.test.ts` and typed CLI error tests                                                                               |
-| RF-03       | `src/project/discovery/` contracts and traversal             | M02/M06   | traversal tests plus complete valid/invalid/mixed/security/large built-CLI project scenario                                                           |
-| RF-04       | `src/project/discovery/discovery-config.ts`                  | M02/M06   | exact exclusions/alias-bypass tests plus versioned mixed-project generated/declaration/config exclusions                                              |
-| RF-05       | `src/project/inventory/`                                     | M02       | inventory normalization/invariant/deduplication/order tests and reviewed expected/actual inventory JSON                                               |
-| RF-06       | `src/project/classification/`                                | M02/M06   | extension matrix plus exact versioned source/exclusion inventories for five controlled projects                                                       |
-| RF-07       | secure reader, Babel composite, and candidate batch          | M03/M06   | reader/batch tests plus built-CLI four-kind mixed project, malformed isolation, large corpus, and no-execution sentinels                              |
-| RF-08       | extraction, model builder, and `analyzeProject`              | M03/M06   | model tests plus five twice-executed controlled projects with exact parsing/model summaries                                                           |
-| RF-09       | Registry, configuration loader, audit facade, and CLI        | M04-M06   | eight-rule catalog; null/empty/category/ID/intersection filters; file/explicit-CLI precedence; integrated zero-rule scan                              |
-| RF-10       | `Rule`, evaluator, and `audit-project.ts`                    | M04-M06   | model-only exact-once tests plus integrated one-analysis/one-model rule evaluation and thrown-rule sibling isolation                                  |
-| RF-11       | Rules, controlled corpus, and detection metrics              | M04/M06   | 27 reviewed positive/negative/unsupported instances; per-rule TP/FP/TN/FN, precision, and recall                                                      |
-| RF-12       | `SourceLocation`, model, and accuracy matcher                | M03-M06   | canonical provenance plus project/rule/file/half-open-range matching for all controlled findings                                                      |
-| RF-13       | Rule metadata, ground truth, and normalized findings         | M04/M06   | complete metadata/limitations plus exact case rationales and expected/actual finding identities                                                       |
-| RF-14       | Rule classification, `AuditResult`, and validation           | M04-M06   | deterministic result counters plus per-rule confusion matrices with unsupported observations kept separate                                            |
-| RF-15       | Audit facade, CLI, reporters, and shared writer              | M05/M06   | exact reporters plus integrated scans, exclusive-write/path/symlink/permission failures, and writer-confirmed claims                                  |
-| RNF-01      | CLI, audit/application, project, parsing, domain layers      | All       | injected stages, preserved scan/analyze facades, full M06 composition, typed/sanitized errors, and real-filesystem integration                        |
-| RNF-02      | Rule/Finding/Reporter interfaces                             | M04/M05   | typed model-only rule plus pure `Reporter`/versioned `AuditResult` contracts without core modification                                                |
-| RNF-03      | `package.json`, strict TypeScript, and focused modules       | All       | Node.js 24 format/lint/typecheck/test/build, coverage, no-skip JSON, isolated evidence, and lifecycle gates                                           |
-| RNF-04      | scan/analyze/configuration, engine, result, reporters        | M02-M06   | canonical frozen rebuilds, exact reporter reruns, and integrated stable projections excluding documented root/timing volatility                       |
-| RNF-05      | `Finding`/`Rule`                                             | M04       | full copied `SourceLocation`, exact model-location provenance, rule identity, and classification assertions                                           |
-| RNF-06      | Rule guidance, reporters, and usability review               | M04-M06   | complete terminal/HTML guidance plus six executed expert tasks; participant testing/SUS explicitly unexecuted/N/A                                     |
-| RNF-07      | Discovery, parser/model pipeline, rule engine, facade        | M02-M06   | bounded stages plus five complete fresh-root all-format measurements over the versioned 240-file project                                              |
-| RNF-08      | Classifier, reader, parser, and model facade                 | M02/M03   | classification/Babel four-kind matrices and mixed real-filesystem application integration                                                             |
-| RNF-09      | Node.js 24 package engines, portable paths, CI matrix        | M01-M06   | capability-aware links/permissions, 32-level traversal, workflow matrix, and real/injected boundary tests                                             |
-| RNF-10      | Rule engine/`AuditResult`/reporters/audit facade             | M04-M06   | one frozen result for terminal/JSON/HTML, cross-format identity, separate persistence, and no analysis/rule reruns                                    |
-| DOC-I18N    | public README, `docs/`, `.github/`, and `evidence/` guidance | Post-M06  | paired or inline bilingual public documents; formatting, discovery, reciprocal-selector, technical-literal, structure, and safe local-link validation |
+## Functional requirements
+
+| Requirement | Main implementation                                           | Primary verification                                                  |
+| ----------- | ------------------------------------------------------------- | --------------------------------------------------------------------- |
+| RF-01       | `src/cli/`, `src/application/audit-project.ts`                | CLI audit and application integration tests                           |
+| RF-02       | `src/project/validate-project-path.ts`                        | project-path unit and real-filesystem tests                           |
+| RF-03       | `src/project/discovery/`                                      | discovery traversal and controlled discovery scenario                 |
+| RF-04       | `src/project/discovery/discovery-config.ts`                   | exclusion, alias, generated-content, and link cases                   |
+| RF-05       | `src/project/inventory/`                                      | inventory normalization, identity, deduplication, and ordering tests  |
+| RF-06       | `src/project/classification/`                                 | extension matrix and conservative exclusion tests                     |
+| RF-07       | `src/parsing/`, `src/parsing/babel/`                          | reader, parser, batch-isolation, and four-source-kind tests           |
+| RF-08       | `src/domain/models/`, `src/application/analyze-project.ts`    | extraction, model invariant, location, and integration tests          |
+| RF-09       | `src/rules/`, `src/configuration/`                            | registry, selection, configuration, and catalog integration tests     |
+| RF-10       | `src/rules/evaluate-rules.ts`                                 | one-execution, model-only, observation, and isolation tests           |
+| RF-11       | `src/domain/findings/`, `src/rules/evaluate-rules.ts`         | zero, one, multiple, duplicate, and invalid observation cases         |
+| RF-12       | `src/domain/models/source-location.ts`, finding normalization | half-open source location and reporter location assertions            |
+| RF-13       | rule metadata and normalized findings                         | metadata validation and per-rule recommendation/limitation tests      |
+| RF-14       | `src/domain/rules/`, `src/domain/findings/`                   | category, severity, confidence, identity, and summary tests           |
+| RF-15       | `src/reporting/`, `src/domain/audit/audit-result.ts`          | reporter contracts, schema validation, cross-format, and writer tests |
+
+## Non-functional requirements
+
+| Requirement | Main implementation                                        | Primary verification                                                  |
+| ----------- | ---------------------------------------------------------- | --------------------------------------------------------------------- |
+| RNF-01      | layered directories below `src/`                           | dependency review, injected facades, and integration tests            |
+| RNF-02      | `Rule`, `Reporter`, `Finding`, and `AuditResult` contracts | closed contract validators and extension-focused tests                |
+| RNF-03      | strict TypeScript, ESM, focused modules, and documentation | format, docs, lint, typecheck, tests, coverage, and build             |
+| RNF-04      | canonical ordering throughout the pipeline                 | repeated controlled runs and stable-result comparisons                |
+| RNF-05      | normalized finding identity and source locations           | exact rule/file/range matching in rule and accuracy tests             |
+| RNF-06      | terminal and HTML recommendations plus public rule docs    | reporter assertions and repeatable core-task usability review         |
+| RNF-07      | one scan, one model, one evaluation, one normalized result | application spies, large-project checks, and descriptive measurements |
+| RNF-08      | source classification and Babel parser adapter             | `.ts`, `.tsx`, `.js`, and `.jsx` parser/model cases                   |
+| RNF-09      | package engines, portable paths, and CI platform matrix    | runtime enforcement, platform CI, links, permissions, and depth cases |
+| RNF-10      | normalized result and pure reporters                       | exact JSON schema, terminal/JSON/HTML consistency, and no-rerun tests |
+
+## Distribution and documentation
+
+| Requirement | Main implementation                                              | Primary verification                                             |
+| ----------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
+| DIST-01     | `package.json`, `dist/`, `schemas/`, and public README files     | `npm run test:package` and clean temporary consumer installation |
+| DOC-I18N    | `README.md`, `README.en.md`, `README.es.md`, `docs/`, `docs/es/` | `npm run docs:check`, formatting, link checks, and human review  |
+
+## Maintenance rule
+
+When a requirement, public option, schema, rule, or report changes, update its implementation, tests,
+paired documentation, and this map in the same coherent change.

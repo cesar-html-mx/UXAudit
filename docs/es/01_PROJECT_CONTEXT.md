@@ -4,52 +4,39 @@
 
 ## Problema
 
-La calidad del frontend depende de varias áreas relacionadas: UX, accesibilidad, SEO técnico y
-rendimiento. Existen estándares y herramientas especializadas, pero el conocimiento y las
-comprobaciones están distribuidos. La calidad de la revisión puede depender demasiado de la
-experiencia y la memoria de cada desarrollador.
+Los equipos de React pueden introducir riesgos revisables de usabilidad, accesibilidad, SEO y
+rendimiento directamente en JSX y TSX. Los linters generales cubren bien la sintaxis y las
+convenciones de código, pero no siempre presentan estos aspectos transversales como una sola
+auditoría local y comprensible.
 
-## Contribución
+## Propósito del producto
 
-UXAudit proporcionará un proceso repetible de análisis estático para código fuente React y
-TypeScript. No reemplazará la revisión experta. Ayudará a los desarrolladores a identificar
-determinados problemas con anticipación, entender por qué son importantes, localizar el código
-pertinente y recibir una recomendación.
+UXAudit ofrece a quienes desarrollan una revisión estática temprana y repetible antes de validar con
+navegadores y personas. Descubre fuentes `.js`, `.jsx`, `.ts` y `.tsx`, construye un modelo
+normalizado, evalúa reglas independientes y produce informes de terminal, JSON y HTML.
 
-## Usuario principal
+El producto ayuda a priorizar la revisión. No certifica cumplimiento ni sustituye pruebas con
+navegadores, tecnologías de asistencia, herramientas de rendimiento o participantes.
 
-Un desarrollador frontend que trabaja en un proyecto React desde una terminal.
+## Personas usuarias previstas
 
-## Flujo principal
+- Quienes desarrollan con React y TypeScript y quieren retroalimentación mientras programan.
+- Quienes mantienen proyectos y quieren un comando reproducible de auditoría en integración continua.
+- Especialistas en UX, accesibilidad, SEO y rendimiento que necesitan un informe revisable en
+  distintas plataformas.
+- Quienes contribuyen al escáner, modelo, reglas o generadores de informes.
 
-1. El desarrollador proporciona la ruta de un proyecto.
-2. UXAudit valida el acceso al proyecto.
-3. Descubre y clasifica los archivos pertinentes.
-4. Analiza sintácticamente el código fuente y crea un modelo normalizado.
-5. Las reglas habilitadas evalúan el modelo.
-6. Los hallazgos se normalizan y ordenan.
-7. Los generadores de informes para terminal, JSON y HTML presentan el mismo resultado.
+## Límites del producto
 
-## Alcance
+- Herramienta local de línea de comandos; no hay servicio alojado, base de datos ni telemetría.
+- Solo análisis estático; el código objetivo no se importa, ejecuta ni modifica.
+- Las extensiones compatibles son `.js`, `.jsx`, `.ts` y `.tsx`.
+- Los hallazgos son observaciones deterministas con recomendaciones y limitaciones explícitas.
+- El diseño, comportamiento, estilos, red y experiencia real en ejecución quedan fuera del alcance.
+- Los informes permanecen en el sistema de archivos local salvo que la persona decida compartirlos.
 
-- Ejecución local desde la línea de comandos.
-- Análisis estático.
-- Proyectos React y TypeScript, incluidos aquellos que combinan `.js`/`.jsx`.
-- Reglas iniciales de UX, accesibilidad, SEO y rendimiento.
-- Hallazgos explicables con ubicación en el código fuente y recomendación.
-- Proyectos de validación controlados y cercanos a casos reales.
+## Principios del producto
 
-## Exclusiones
-
-- Ejecutar la aplicación analizada.
-- Automatización del navegador o medición del rendimiento en tiempo de ejecución en el MVP.
-- Modificación automática del código analizado.
-- Un servicio alojado, cuentas de usuario, base de datos o telemetría.
-- Una afirmación de conformidad completa con WCAG, SEO, UX o Core Web Vitals.
-- Compatibilidad con todos los frameworks o lenguajes de programación.
-
-## Éxito
-
-La primera versión será exitosa cuando pueda analizar de forma reproducible proyectos controlados,
-producir los hallazgos esperados con un comportamiento aceptable de falsos positivos y falsos
-negativos para las reglas implementadas, y generar salidas coherentes para terminal, JSON y HTML.
+La seguridad, el determinismo, los límites honestos, la salida accionable y un comando sencillo son
+más importantes que maximizar la cantidad de hallazgos especulativos. Los casos dinámicos no
+compatibles deben permanecer como desconocidos en lugar de presentarse como defectos comprobados.

@@ -12,14 +12,8 @@ import {
   createAuditResultRequestFixture,
 } from '../audit-result-fixture.js';
 
-const schemaUrl = new URL(
-  '../../../.github/harness/schemas/audit-result.schema.json',
-  import.meta.url,
-);
-const findingSchemaUrl = new URL(
-  '../../../.github/harness/schemas/finding.schema.json',
-  import.meta.url,
-);
+const schemaUrl = new URL('../../../schemas/audit-result.schema.json', import.meta.url);
+const findingSchemaUrl = new URL('../../../schemas/finding.schema.json', import.meta.url);
 
 const createEmptyResult = (): AuditResult => {
   const request = createAuditResultRequestFixture();

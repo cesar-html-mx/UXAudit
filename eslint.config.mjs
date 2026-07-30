@@ -8,7 +8,7 @@ const typeCheckedFiles = ['src/**/*.ts', 'tests/**/*.ts', '*.config.ts'];
 
 export default defineConfig(
   {
-    ignores: ['coverage/**', 'dist/**', 'evidence/**/raw/**', 'node_modules/**'],
+    ignores: ['coverage/**', 'dist/**', 'node_modules/**'],
   },
   {
     files: javascriptFiles,

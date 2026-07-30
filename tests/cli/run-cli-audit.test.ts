@@ -295,7 +295,7 @@ describe('runCli complete audit integration', () => {
     },
   );
 
-  it('lists every M06 option in scan help without invoking the audit', async () => {
+  it('lists every supported option in scan help without invoking the audit', async () => {
     const output = createIo();
     const auditProject = vi.fn<AuditProject>();
 

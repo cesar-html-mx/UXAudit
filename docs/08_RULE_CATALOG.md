@@ -1,247 +1,170 @@
 [Español](es/08_RULE_CATALOG.md) | **English**
 
-# Initial Rule Catalog
+# Rule catalog
 
-Rule status:
+## Summary
 
-- **required**: must be implemented and validated in M04.
-- **stable**: implemented with a reviewed static scope and retained verification evidence.
-- **experimental**: may be prototyped but cannot be presented as reliable without evidence.
-- **deferred**: documented future work.
+UXAudit ships eight stable static-analysis rules. Each finding includes a rule ID, category, default
+severity, confidence, source location when available, explanation, recommendation, and limitations.
+
+| Rule ID                        | Category      | Severity | Static review                                                                |
+| ------------------------------ | ------------- | -------- | ---------------------------------------------------------------------------- |
+| `accessibility/button-name`    | accessibility | high     | Intrinsic button without supported static accessible-name evidence.          |
+| `accessibility/img-alt`        | accessibility | high     | Intrinsic image without an explicit, statically known alternative attribute. |
+| `accessibility/input-label`    | accessibility | high     | Supported intrinsic form control without supported static label evidence.    |
+| `performance/img-dimensions`   | performance   | medium   | Intrinsic image without valid positive width and height reservation.         |
+| `performance/img-lazy-loading` | performance   | low      | Intrinsic image not statically configured for lazy loading.                  |
+| `seo/ambiguous-link-text`      | seo           | medium   | Intrinsic link whose retained text exactly matches a generic phrase.         |
+| `seo/multiple-h1`              | seo           | medium   | Recognized component containing more than one intrinsic H1.                  |
+| `ux/small-inline-text`         | ux            | medium   | Retained text with a literal inline pixel size below the threshold.          |
+
+## Interpret findings
+
+A finding is a review prompt, not proof of runtime behavior or complete compliance. Confidence
+describes the quality of static evidence, while severity describes the default review priority.
+Dynamic values and unresolved spreads often remain unknown instead of producing a speculative
+finding.
+
+Rule severity is fixed metadata in the current catalog. `--severity` and `minimumSeverity` filter
+terminal detail; they do not rewrite finding severity, hide JSON/HTML records, or change the exit
+code.
 
 ## Accessibility
 
-### A11Y-001 — Image alternative text
+### `accessibility/button-name`
 
-- ID: `accessibility/img-alt`
-- Status: stable (required for M04)
-- Severity: high
-- Finding confidence: high when the effective `alt` attribute is provably absent.
-- Scope and trigger: intrinsic `<img>` nodes only. Resolve JSX attributes from right to left; emit
-  one finding at the element range when no named `alt` and no later unresolved spread exists.
-- Valid examples: `<img alt="Quarterly revenue chart" />` and `<img alt="" />` for a decorative
-  image.
-- Unsupported/boundary behavior: an effective spread is unknown and produces no finding. Any
-  explicit named `alt`, including a dynamic value, satisfies this initial presence-only check; the
-  rule does not claim that its value is descriptive.
-- Recommendation: add descriptive `alt`, or `alt=""` for an intentionally decorative image.
-- Limitations: custom image components/aliases are not inferred, runtime spread values are not
-  evaluated, and alternative-text quality is not scored.
-- Reference: WCAG 1.1.1 concept.
-- Verification: `tests/rules/accessibility/img-alt.test.ts` and the committed accessibility
-  integration fixture.
+Reports an intrinsic `button` when the retained static model establishes that supported accessible
+name evidence is absent.
 
-### A11Y-002 — Form input label
+Review by providing descriptive visible text, `aria-label`, or `aria-labelledby` with a non-empty
+name.
 
-- ID: `accessibility/input-label`
-- Status: stable (required for M04)
-- Severity: high
-- Finding confidence: high inside the documented static association scope.
-- Scope and trigger: intrinsic `input`, `select`, and `textarea` nodes. Emit when a label-required
-  control has no intrinsic ancestor `<label>`, no exact same-component `htmlFor`/`for` plus `id`
-  association, and no exact non-empty `aria-label` or `aria-labelledby`.
-- Valid examples: `<label>Email <input /></label>`, `<label htmlFor="email">…</label>` plus
-  `<input id="email" />`, and a control with a non-empty ARIA naming attribute.
-- Exclusions: exact case-insensitive input types `hidden`, `button`, `submit`, `reset`, and `image`.
-- Unsupported/boundary behavior: dynamic type/ID/ARIA values and effective JSX spreads produce no
-  finding because association or label applicability cannot be proved. Empty IDs/ARIA strings and
-  exact `null` ARIA values remain label-required. The default/null input type remains
-  label-required. External labels require exact, untrimmed literal `htmlFor`/`for` and `id` equality
-  inside one recognized component; labels are not paired across component boundaries or unowned JSX
-  scopes.
-- Recommendation: use intrinsic label nesting, exact `htmlFor`/`id`, or a non-empty ARIA name.
-- Limitations: custom label/control abstractions, dynamic associations, referenced ARIA target
-  existence, and the complete accessible-name algorithm are not resolved. The rule deliberately
-  excludes `hidden`, `button`, `submit`, `reset`, and `image` input types and does not validate the
-  one-labelable-descendant constraint of a nested label.
-- Reference: WCAG 1.3.1 concept.
-- Verification: `tests/rules/accessibility/input-label.test.ts` and the committed accessibility
-  integration fixture.
+Limitations:
 
-### A11Y-003 — Button accessible name
+- it does not implement the complete accessible-name computation;
+- dynamic-only content, unresolved JSX spreads, and custom icon components are unknown;
+- referenced `aria-labelledby` targets and CSS-hidden content are not resolved.
 
-- ID: `accessibility/button-name`
-- Status: stable (required for M04)
-- Severity: high
-- Finding confidence: high when text and supported ARIA naming evidence are all provably empty or
-  absent.
-- Scope and trigger: intrinsic `<button>` nodes only. Emit at the button range when retained text is
-  exactly empty and both `aria-label` and `aria-labelledby` are absent or exact empty strings.
-- Valid examples: visible static text, known static text combined with dynamic content, or an exact
-  non-empty supported ARIA naming attribute.
-- Unsupported/boundary behavior: dynamic-only text, a custom icon child, dynamic ARIA values, or
-  an effective JSX spread produces no finding. Exact `null` ARIA values are treated as absent.
-  Custom `<Button>` components are not inferred.
-- Recommendation: provide visible descriptive text or a non-empty supported ARIA name.
-- Limitations: the complete accessible-name computation, referenced target existence, CSS-hidden
-  content, and custom icon semantics are not resolved.
-- Reference: WCAG 4.1.2 concept.
-- Verification: `tests/rules/accessibility/button-name.test.ts` and the committed accessibility
-  integration fixture.
+### `accessibility/img-alt`
+
+Reports an intrinsic `img` when an explicit effective `alt` attribute is statically absent. An empty
+`alt` value is accepted because it can intentionally mark a decorative image.
+
+Review by adding descriptive alternative text or `alt=""` for an intentionally decorative image.
+
+Limitations:
+
+- custom image components and aliases are not inferred;
+- a later unresolved JSX spread can provide `alt` and remains unknown;
+- the rule checks attribute presence, not descriptive quality.
+
+### `accessibility/input-label`
+
+Reviews supported intrinsic form controls for static label or accessible-name evidence. Supported
+evidence includes applicable label nesting, a matching literal `htmlFor`/`id`, non-empty
+`aria-label`, or non-empty `aria-labelledby`.
+
+Limitations:
+
+- dynamic IDs, labels, and spreads remain unknown;
+- custom control or label abstractions are not resolved across component boundaries;
+- referenced `aria-labelledby` targets and the complete accessible-name computation are not validated;
+- hidden, button, submit, reset, and image input types are outside this label rule;
+- nested labels are not validated for every HTML content-model constraint.
 
 ## Performance
 
-### PERF-001 — Image lazy loading
+### `performance/img-dimensions`
 
-- ID: `performance/img-lazy-loading`
-- Status: stable, advisory (required for M04)
-- Severity: low
-- Finding confidence: medium because visual priority requires contextual review.
-- Scope and trigger: intrinsic `<img>` nodes only. Emit at the image range when the effective
-  `loading` attribute is absent, is `eager`, or has another known literal value. A case-insensitive
-  exact `lazy` keyword is the supported non-finding.
-- Unsupported/boundary behavior: dynamic values and effective JSX spreads are unknown and produce
-  no finding. Custom image components are not inferred.
-- Recommendation: use `loading="lazy"` when the image is not intentionally above the fold.
-- Limitations: static analysis cannot know visual priority, preload behavior, or runtime fetch
-  priority; every finding requests review and does not claim that eager loading is incorrect.
-- Reference: HTML Standard lazy-loading attributes.
-- Verification: `tests/rules/performance/img-lazy-loading.test.ts` and the performance integration
-  suite.
+Reports an intrinsic `img` that lacks statically valid positive integer `width` and `height`
+attributes or contains a reviewable invalid pair. A literal zero-by-zero image is treated as content
+not intended for the user; zero paired with a positive dimension remains reviewable.
 
-### PERF-002 — Image dimensions and layout-shift risk
+Review by providing dimensions that preserve the aspect ratio or verifying that CSS reserves
+equivalent space.
 
-- ID: `performance/img-dimensions`
-- Status: stable (required for M04)
-- Severity: medium
-- Finding confidence: medium because other layout mechanisms can reserve space.
-- Scope and trigger: intrinsic `<img>` nodes only. Both effective `width` and `height` normally must
-  be positive safe-integer number literals or ASCII decimal-integer strings. Emit at the image range
-  when either is provably missing/invalid even if its sibling is unknown, or when zero is paired with
-  a positive dimension.
-- Unsupported/boundary behavior: a dynamic dimension or effective JSX spread produces no finding
-  only when no sibling violation is already proved. Literal zero-by-zero is treated as content not
-  intended for the user and is a non-finding. Custom image components are not inferred.
-- Recommendation: provide positive integer dimensions preserving the image aspect ratio, or verify
-  equivalent CSS space reservation.
-- Limitations: external CSS, `aspect-ratio`, component layout, and runtime image metadata are not
-  evaluated; a finding describes layout-shift risk rather than observed layout shift.
-- Reference: HTML Standard dimension attributes.
-- Verification: `tests/rules/performance/img-dimensions.test.ts` and the performance integration
-  suite.
+Limitations:
+
+- the rule describes layout-shift risk; it does not observe layout shift;
+- CSS, `aspect-ratio`, and component-level layout may reserve equivalent space;
+- dynamic dimensions and unresolved spreads remain unknown unless a sibling value proves a violation;
+- custom image components and runtime metadata are not inferred.
+
+### `performance/img-lazy-loading`
+
+Reports an intrinsic `img` whose effective static `loading` value is absent, eager, or invalid rather
+than `loading="lazy"`.
+
+Review whether the image is below the fold and should use lazy loading. Keep eager loading when visual
+priority requires it.
+
+Limitations:
+
+- static analysis cannot know whether an image is above the fold, so every finding is advisory;
+- dynamic values and unresolved spreads remain unknown;
+- custom components, preload behavior, and runtime priorities are not inferred.
 
 ## SEO
 
-### SEO-001 — Multiple H1 elements
+### `seo/ambiguous-link-text`
 
-- ID: `seo/multiple-h1`
-- Status: stable, advisory (required for M04)
-- Severity: medium
-- Finding confidence: medium because static ownership is not rendered-page composition.
-- Scope and trigger: count intrinsic `<h1>` nodes separately inside each syntactically recognized
-  component. Emit one finding per affected component at its second `<h1>`, even when more headings
-  follow. Unowned JSX is not combined into a file/project count.
-- Valid/boundary behavior: zero or one intrinsic `<h1>` per component produces no finding. Custom
-  heading components are ignored. Headings in mutually exclusive branches remain a medium-confidence
-  advisory finding because runtime branch selection is not evaluated.
-- Recommendation: review the component and retain one primary heading for each rendered page
-  context.
-- Limitations: routes, conditional rendering, component composition, custom headings, and heading
-  roles can change the rendered hierarchy; the rule does not claim a project-wide page count.
-- Verification: `tests/rules/seo/multiple-h1.test.ts` and the SEO integration suite.
+Reports an intrinsic `a` when its exact normalized retained text matches the default generic phrases:
+“click here”, “here”, “read more”, “aquí”, or “ver más”.
 
-### SEO-002 — Ambiguous link text
+Review by using visible text that identifies the destination or purpose.
 
-- ID: `seo/ambiguous-link-text`
-- Status: stable (required for M04)
-- Severity: medium
-- Finding confidence: medium because surrounding accessible context is outside the initial scope.
-- Scope and trigger: intrinsic `<a>` with exact retained text that, after deterministic NFKC,
-  whitespace-collapse, trim, and lowercase normalization, completely matches the configured set.
-  Defaults are `click here`, `here`, `read more`, `aquí`, and `ver más`.
-- Configuration: `createAmbiguousLinkTextRule` accepts a validated non-empty string array; configured
-  values replace the defaults and are normalized/deduplicated.
-- Unsupported/boundary behavior: descriptive supersets, punctuation differences, partial/dynamic
-  text, and custom link components produce no finding.
-- Recommendation: use visible text that identifies the destination or purpose and review its
-  accessible context.
-- Limitations: surrounding content, ARIA naming, destination URLs, visual context, and rendered
-  custom components are not evaluated.
-- Verification: `tests/rules/seo/ambiguous-link-text.test.ts` and the SEO integration suite.
+Limitations:
+
+- only exact retained text is compared; partial and dynamic text are not reported;
+- custom link components are not inferred;
+- surrounding text, ARIA naming, destination URL, and visual context are not evaluated.
+
+### `seo/multiple-h1`
+
+Reports the second intrinsic `h1` owned by each syntactically recognized component that contains more
+than one.
+
+Review the rendered page context and keep one primary heading when appropriate, using lower levels
+for subordinate sections.
+
+Limitations:
+
+- counting occurs within each recognized component, not across the rendered page;
+- conditional rendering, routes, and whether headings appear together are not evaluated;
+- custom heading components, composition, and heading roles are not inferred.
 
 ## UX
 
-### UX-001 — Very small literal inline text
+### `ux/small-inline-text`
 
-- ID: `ux/small-inline-text`
-- Status: stable (required for M04)
-- Severity: medium
-- Finding confidence: high for exact retained text and medium for partial retained text inside the
-  narrow literal inline-style scope.
-- Scope and trigger: intrinsic elements with retained non-empty known static text and an effective
-  exact object-literal `style`. Emit at the effective `fontSize` property when its last literal
-  value is a finite non-negative number or `px` string below the configured threshold; the default
-  is `12px` and equality is a non-finding.
-- Configuration: `createSmallInlineTextRule` accepts one finite positive numeric `thresholdPx`.
-- Unsupported/boundary behavior: custom elements, empty/dynamic-only text, dynamic/partial style
-  objects, unknown object properties/spreads, negative sizes, and `rem`/`em`/`%`/`calc()` or
-  non-numeric values produce no finding. Known partial text with a non-empty retained static portion
-  is evaluated at medium confidence. Metadata, inert, void, and other intrinsically non-rendered text
-  containers are excluded.
-- Recommendation: use at least the configured pixel threshold or an equivalent readable size in
-  the project style system.
-- Limitations: external CSS, classes, inheritance, cascade, relative-unit calculation, zoom, user
-  settings, and rendered context are not evaluated.
-- Verification: `tests/rules/ux/small-inline-text.test.ts`.
+Reports retained non-empty text on an intrinsic rendered element when an exact non-negative inline
+`fontSize` literal resolves to fewer than 12 pixels.
 
-### UX-002 — Ambiguous button text
+Review by using at least 12 pixels or an equivalent readable size in the project's style system.
 
-- ID: `ux/ambiguous-button-text`
-- Status: experimental
-- Severity: low
-- Detect: configurable generic static labels whose action cannot be inferred from the button itself.
-- Promotion requirement: controlled examples and acceptable precision.
+Limitations:
 
-### UX-003 — Missing loading state
+- external stylesheets, class names, inheritance, and the rendered cascade are not evaluated;
+- dynamic styles, unresolved spreads, and objects with unknown properties remain unknown;
+- relative units, percentages, calculations, browser zoom, and display settings are not resolved;
+- only intrinsic elements with retained static text are evaluated.
 
-- ID: `ux/missing-loading-state`
-- Status: deferred/experimental
-- Severity: low
-- Goal: identify narrow static patterns where an asynchronous user action has no visible loading
-  feedback.
-- Reason for status: a general reliable decision requires runtime and state-flow understanding beyond
-  the initial model.
+## Select rules
 
-## Rule contract
+Use categories, exact IDs, or both:
 
-Every implemented rule must provide:
+```bash
+npm exec --offline -- ux-audit scan . --category accessibility
+npm exec --offline -- ux-audit scan . --rule accessibility/img-alt
+npm exec --offline -- ux-audit scan . --category performance --rule performance/img-dimensions
+```
 
-- stable ID;
-- title;
-- category;
-- default severity;
-- catalog status;
-- explanation;
-- recommendation;
-- nullable standard/reference with a label and optional URL;
-- evaluation operation;
-- one or more explicit limitations;
-- positive and negative fixtures;
-- boundary or unsupported fixture;
-- traceability to tests and evidence.
+Repeat `--category` or `--rule` to select more values. When both filters are supplied, a rule must
+match both. An empty array in configuration intentionally selects no rules for that filter; `null`
+means no filter.
 
-The M04 domain contract distinguishes a rule's catalog status from finding confidence. Status
-describes catalog maturity or delivery (`required`, `stable`, `experimental`, or `deferred`);
-confidence (`high`, `medium`, or `low`) describes how strongly one finding is justified by the
-available static evidence. Findings retain the complete half-open `SourceLocation` when available;
-reporters may derive display coordinates later but rules do not flatten or convert them.
+## Add or change a rule
 
-## M06 controlled accuracy result
-
-The built CLI was compared with reviewed instance-level ground truth rather than treating every
-unreported JSX node as a true negative.
-
-| Rule ID                        |  TP |  FP |  TN |  FN | Precision | Recall | Unsupported |
-| ------------------------------ | --: | --: | --: | --: | --------: | -----: | ----------: |
-| `accessibility/button-name`    |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
-| `accessibility/img-alt`        |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
-| `accessibility/input-label`    |   2 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
-| `performance/img-dimensions`   |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
-| `performance/img-lazy-loading` |   2 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
-| `seo/ambiguous-link-text`      |   2 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
-| `seo/multiple-h1`              |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
-| `ux/small-inline-text`         |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
-
-These values apply only to 19 supported and eight unsupported controlled instances. They validate
-the implemented static contracts and do not estimate accuracy on representative external projects,
-rendered pages, dynamic component abstractions, or runtime behavior.
+A contribution must define scope, metadata, positive and negative fixtures, unsupported cases,
+location behavior, limitations, documentation, deterministic ordering, and isolation behavior. Rules
+consume only the normalized analysis model and must not read, execute, or modify target files.

@@ -1,70 +1,68 @@
 **Español** | [English](../09_ACCEPTANCE_CRITERIA.md)
 
-# Criterios de aceptación
+# Criterios de aceptación de una versión pública
 
-## Nivel de producto
+## Comportamiento del producto
 
-UXAudit es aceptable para la contribución inicial del TFM cuando:
+- `ux-audit scan <project-path>` completa la auditoría estática integral documentada.
+- Las fuentes `.js`, `.jsx`, `.ts` y `.tsx` compatibles se descubren y procesan de forma determinista.
+- El código objetivo nunca se importa, ejecuta ni modifica.
+- Todas las reglas estables publicadas evalúan el modelo normalizado y exponen límites documentados.
+- Los fallos recuperables de fuentes y reglas se aíslan e incluyen en el resultado normalizado.
+- Terminal, JSON y HTML informan los mismos hechos subyacentes.
+- Comandos, opciones, campos, nombres de archivo y códigos coinciden con la especificación pública.
 
-1. `ux-audit scan <path>` ejecuta el flujo completo de análisis estático.
-2. La entrada no válida se rechaza claramente antes del recorrido.
-3. Los archivos fuente pertinentes se seleccionan sin procesar las carpetas excluidas de
-   dependencias o compilación.
-4. Los archivos JSX/TSX/JS/TS se analizan en un modelo interno normalizado.
-5. Las reglas estables de las cuatro categorías se ejecutan de manera independiente.
-6. Los hallazgos incluyen regla, categoría, severidad, explicación, recomendación, archivo y
-   ubicación cuando están disponibles.
-7. Las salidas de terminal, JSON y HTML contienen datos de hallazgos congruentes.
-8. La ejecución repetida es determinista.
-9. Los proyectos controlados producen resultados esperados versionados.
-10. Las limitaciones y la evidencia de falsos positivos y falsos negativos se informan con
-    veracidad.
-11. Las pruebas de límites de seguridad pasan.
-12. La documentación y las instrucciones de uso permiten que otra persona desarrolladora ejecute y
-    comprenda la herramienta.
+## Experiencia de uso
 
-## Criterios de cierre de los hitos
+- La instalación del paquete `@cesar-html-mx/uxaudit` expone el ejecutable `ux-audit`.
+- El README raíz ofrece una instalación funcional y un inicio rápido de dos comandos sin requerir una
+  copia del código ni compilación.
+- La ayuda describe cada opción pública y una entrada inválida devuelve un mensaje seguro y accionable.
+- Los hallazgos incluyen regla, ubicación disponible, explicación, recomendación y limitaciones.
+- El comportamiento predeterminado es útil sin configuración; los filtros avanzados son explícitos.
 
-### M01
+## Seguridad y privacidad
 
-- Esqueleto de CLI en TypeScript que puede compilarse.
-- Comando de ayuda y comando de análisis disponibles.
-- Comportamiento de rutas válidas y no válidas probado.
-- Comandos de calidad y CI existentes.
-- Primer paquete de evidencia registrado.
+- Los análisis se ejecutan localmente sin telemetría, carga, servicio alojado ni base de datos.
+- Recorrido, lecturas de fuentes, configuración e informes respetan sus límites de autorización.
+- Enlaces, salidas de ruta, destinos existentes, entradas malformadas, UTF-8 inválido y archivos
+  demasiado grandes fallan de forma segura.
+- Los valores no confiables de terminal y HTML no inyectan controles, marcado, scripts ni enlaces inseguros.
+- Los informes no se anuncian hasta confirmar su escritura.
+- La auditoría de dependencias y regresiones sensibles a seguridad aprueban al publicar.
 
-### M02
+## Distribución del paquete
 
-- El recorrido seguro, las exclusiones, el inventario y la clasificación funcionan en árboles
-  controlados.
-- No hay duplicados; el orden es estable; la política de enlaces simbólicos está probada.
-- La CLI puede mostrar o exponer internamente el resumen de descubrimiento.
+- Los metadatos nombran licencia, repositorio, issues, entorno compatible, binario y acceso público.
+- `npm pack --dry-run` contiene solo la salida de ejecución, esquemas, licencia y archivos README
+  públicos previstos.
+- Un consumidor temporal limpio puede instalar el tarball, resolver `ux-audit`, imprimir ayuda y
+  versión, y analizar un proyecto controlado fuera del repositorio.
+- El paquete publicado se construye desde una copia limpia y no depende de artefactos locales ignorados.
+- `dist/cli/index.js` conserva su declaración ejecutable y el tarball excluye pruebas, fixtures
+  internos, credenciales y registros exclusivos de desarrollo.
 
-### M03
+## Calidad de ingeniería
 
-- La sintaxis compatible se analiza con ubicaciones.
-- Los errores de archivos malformados se aíslan.
-- El modelo de análisis expone la información JSX y de componentes requerida sin nodos de Babel en
-  los contratos de las reglas.
+- Aprueban formato, docs bilingües, lint, tipos estrictos, pruebas, cobertura, compilación, humo,
+  sistema, robustez, exactitud y paquete.
+- Ninguna prueba requerida se omite ni marca como pendiente.
+- La cobertura global de sentencias, ramas, funciones y líneas permanece al menos en 90 %.
+- Resultados e informes tienen orden determinista; solo los campos volátiles documentados se excluyen.
+- El comportamiento público tiene aserciones significativas positivas, negativas, de límite y fallo.
+- El árbol de trabajo contiene únicamente cambios intencionales revisados.
 
-### M04
+## Documentación
 
-- El registro y el evaluador de reglas funcionan de manera determinista.
-- Todas las reglas requeridas tienen pruebas positivas, negativas y de limitaciones.
-- El fallo de una regla no descarta resultados de reglas no relacionadas cuando es seguro
-  conservarlos.
+- La documentación de uso y contribución está disponible en inglés y español latinoamericano.
+- Instalación, uso, configuración, informes, reglas, códigos de salida, privacidad, seguridad,
+  limitaciones y desarrollo desde fuente son claros y están enlazados.
+- Los literales técnicos y ejemplos de código son idénticos entre pares de idiomas.
+- Las guías se enfocan en instalación, uso, contribución y contratos mantenidos del producto.
 
-### M05
+## Decisión de publicación
 
-- La configuración se valida y se combina con los valores predeterminados.
-- Los generadores de informes de terminal, JSON y HTML usan el mismo `AuditResult`.
-- Las pruebas de inyección en HTML pasan.
-- Los informes generados son reproducibles, salvo los metadatos volátiles documentados.
-
-### M06
-
-- La CLI de extremo a extremo pasa con los proyectos controlados.
-- Existe una tabla de exactitud por cada regla estable.
-- Existe evidencia de robustez, rendimiento y seguridad.
-- El protocolo de usabilidad se ejecuta o su estado no ejecutado se declara con veracidad.
-- El paquete de evidencia de la Actividad 3 y la documentación de implementación están completos.
+Ejecuta `npm run release:check` desde un entorno compatible y limpio. Una versión está lista solo
+cuando cumple cada criterio o una limitación documentada explica por qué no aplica. La falta de
+credenciales o permisos del registro puede bloquear la publicación aunque el artefacto local esté
+listo; no justifica debilitar las comprobaciones.

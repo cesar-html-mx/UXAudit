@@ -35,8 +35,8 @@ export interface AuditConfiguration {
 }
 
 /**
- * Programmatic representation of CLI values. M05 validates and merges it after
- * file configuration, while Commander wiring remains an M06 responsibility.
+ * Programmatic representation of CLI values. Configuration validation and merging happen after
+ * file loading, while Commander wiring remains in the CLI adapter.
  */
 export interface AuditConfigurationOverrides {
   readonly categories?: readonly RuleCategory[];

@@ -1,7 +1,0 @@
-{
-  "byteIdenticalAcrossRuns": true,
-  "expectedMatchesActual": true,
-  "expected": "sha256:48501cab384bb28885899c3646ddc4521470c777339ff15c951cc2789d1b3225",
-  "run1": "sha256:48501cab384bb28885899c3646ddc4521470c777339ff15c951cc2789d1b3225",
-  "run2": "sha256:48501cab384bb28885899c3646ddc4521470c777339ff15c951cc2789d1b3225"
-}

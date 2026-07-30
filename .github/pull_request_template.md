@@ -1,8 +1,8 @@
-## Hito o tarea / Milestone or task
+## Cambio / Change
 
-## Resultado observable / Observable outcome
+## Motivo / Why
 
-## Requisitos / Requirements
+## Comportamiento observable / Observable behavior
 
 ## Verificación / Verification
 
@@ -12,11 +12,9 @@
 - [ ] Verificación de tipos / Typecheck
 - [ ] Pruebas / Tests
 - [ ] Compilación / Build
-- [ ] Integridad del harness / Harness integrity
 - [ ] Impacto de seguridad revisado / Security impact reviewed
-- [ ] Documentación y trazabilidad actualizadas / Documentation and traceability updated
-- [ ] Evidencia almacenada / Evidence stored
+- [ ] Compatibilidad revisada / Compatibility reviewed
 
 ## Riesgos y limitaciones / Risks and limitations
 
-## Rutas de evidencia / Evidence paths
+## Notas para revisión / Review notes

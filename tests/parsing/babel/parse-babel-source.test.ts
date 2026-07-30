@@ -29,7 +29,7 @@ interface FixtureManifest {
   readonly schemaVersion: 1;
 }
 
-const fixturesDirectory = new URL('../../fixtures/m03-parsing/', import.meta.url);
+const fixturesDirectory = new URL('../../fixtures/parsing/', import.meta.url);
 const fixturesPath = fileURLToPath(fixturesDirectory);
 const sentinelPath = fileURLToPath(new URL('TARGET_CODE_EXECUTED', fixturesDirectory));
 
@@ -44,7 +44,7 @@ const loadManifest = async (): Promise<FixtureManifest> => {
   const parsed: unknown = JSON.parse(content);
 
   if (!isRecord(parsed) || parsed['schemaVersion'] !== 1 || !Array.isArray(parsed['fixtures'])) {
-    throw new TypeError('M03 fixture manifest is invalid.');
+    throw new TypeError('Parsing fixture manifest is invalid.');
   }
 
   const fixtures = parsed['fixtures'].map((entry) => {
@@ -54,7 +54,7 @@ const loadManifest = async (): Promise<FixtureManifest> => {
       typeof entry['logicalName'] !== 'string' ||
       !isSourceKind(entry['sourceKind'])
     ) {
-      throw new TypeError('M03 fixture entry is invalid.');
+      throw new TypeError('Parsing fixture entry is invalid.');
     }
 
     return {

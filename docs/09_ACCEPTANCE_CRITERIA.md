@@ -1,64 +1,72 @@
 [Español](es/09_ACCEPTANCE_CRITERIA.md) | **English**
 
-# Acceptance Criteria
+# Public release acceptance criteria
 
-## Product-level
+## Product behavior
 
-UXAudit is acceptable for the initial TFM contribution when:
+- `ux-audit scan <project-path>` completes the documented end-to-end static audit.
+- Supported `.js`, `.jsx`, `.ts`, and `.tsx` sources are discovered and processed deterministically.
+- Target code is never imported, executed, or modified.
+- All published stable rules evaluate the normalized model and expose documented limitations.
+- Recoverable source and rule failures are isolated and included in the normalized result.
+- Terminal, JSON, and HTML report the same underlying facts.
+- Commands, options, configuration fields, filenames, and exit codes match the public specification.
 
-1. `ux-audit scan <path>` performs the complete static-analysis flow.
-2. Invalid input is rejected clearly before traversal.
-3. Relevant source files are selected without processing excluded dependency/build folders.
-4. JSX/TSX/JS/TS files are parsed into a normalized internal model.
-5. Stable rules in all four categories execute independently.
-6. Findings include rule, category, severity, explanation, recommendation, file, and location when
-   available.
-7. Terminal, JSON, and HTML outputs contain consistent finding data.
-8. Repeated execution is deterministic.
-9. Controlled projects produce versioned expected results.
-10. Limitations and false-positive/false-negative evidence are reported honestly.
-11. Security boundary tests pass.
-12. Documentation and usage instructions allow another developer to run and understand the tool.
+## User experience
 
-## Milestone gates
+- Installation from the `@cesar-html-mx/uxaudit` package exposes the `ux-audit` executable.
+- The root README provides a working install and two-command quick start without requiring a source
+  checkout or build.
+- Help describes every public option and invalid input returns a safe actionable message.
+- Findings include rule identity, location when available, explanation, recommendation, and
+  limitations.
+- Default behavior is useful without configuration; advanced filters remain explicit.
 
-### M01
+## Safety and privacy
 
-- Buildable TypeScript CLI skeleton.
-- Help and scan command available.
-- Valid and invalid path behavior tested.
-- Quality commands and CI exist.
-- First evidence package recorded.
+- Scans run locally without telemetry, upload, hosted service, or database.
+- Traversal, source reads, configuration reads, and report writes stay within their documented
+  authorization boundaries.
+- Links, path escape, existing report targets, malformed input, invalid UTF-8, and oversized files
+  fail safely.
+- Untrusted terminal and HTML values cannot inject control records, markup, scripts, or unsafe links.
+- Reports are not announced until their writes are confirmed.
+- Dependency audit and security-sensitive regression cases pass at release time.
 
-### M02
+## Package distribution
 
-- Safe traversal, exclusions, inventory, and classification work on controlled trees.
-- No duplicates; stable ordering; symlink policy tested.
-- CLI can display or internally expose discovery summary.
+- Package metadata names the license, repository, issue tracker, supported runtime, binary, and
+  public access policy.
+- `npm pack --dry-run` contains only the intended runtime output, schemas, license, and public
+  README files.
+- A fresh temporary consumer can install the tarball, resolve `ux-audit`, print help and version, and
+  scan a controlled project outside the repository.
+- The published package builds from a clean checkout and does not depend on ignored local artifacts.
+- `dist/cli/index.js` retains its executable declaration and the tarball excludes source tests,
+  internal fixtures, credentials, and development-only records.
 
-### M03
+## Engineering quality
 
-- Supported syntax parses with locations.
-- Malformed file errors are isolated.
-- Analysis model exposes required JSX/component information without Babel nodes in rule contracts.
+- Formatting, bilingual docs, lint, strict type checking, tests, coverage, build, smoke, system,
+  robustness, accuracy, and package checks pass.
+- No required test is skipped or marked todo.
+- Global statement, branch, function, and line coverage remain at or above 90%.
+- Results and reports have deterministic ordering; documented volatile fields are the only normalized
+  comparison exclusions.
+- Public behavior has meaningful positive, negative, boundary, and failure assertions.
+- The working tree contains only intentional reviewed changes.
 
-### M04
+## Documentation
 
-- Rule registry and evaluator work deterministically.
-- All required rules have positive, negative, and limitation tests.
-- One rule failure does not discard unrelated rule results when safe.
+- User and contributor documentation is available in English and Latin American Spanish.
+- Installation, usage, configuration, reports, rules, exit codes, privacy, security, limitations, and
+  source-development steps are clear and internally linked.
+- Technical literals and code examples are identical across language pairs.
+- Product guides stay focused on installation, use, contribution, and maintained product contracts.
 
-### M05
+## Release decision
 
-- Configuration is validated and merged with defaults.
-- Terminal, JSON, and HTML reporters use the same `AuditResult`.
-- HTML injection tests pass.
-- Generated reports are reproducible aside from documented volatile metadata.
-
-### M06
-
-- End-to-end CLI passes controlled projects.
-- Accuracy table exists per stable rule.
-- Robustness, performance, and security evidence exists.
-- Usability protocol is executed or its unexecuted status is stated truthfully.
-- Activity 3 evidence package and implementation documentation are complete.
+Run `npm run release:check` from a clean supported environment. A release is ready only when every
+criterion above is met or a documented limitation explicitly defines why an item is not applicable.
+Missing credentials or registry permissions can block publication even when the local artifact is
+ready; they do not justify weakening the artifact checks.

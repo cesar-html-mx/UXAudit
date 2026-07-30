@@ -15,7 +15,7 @@ const expectedRuleIds = [
 ];
 
 describe('initial rule registry', () => {
-  it('publishes exactly the eight stable M04 rules in canonical order', () => {
+  it('publishes exactly the eight stable rules in canonical order', () => {
     expect(Object.isFrozen(initialRuleRegistry)).toBe(true);
     expect(Object.isFrozen(initialRuleRegistry.rules)).toBe(true);
     expect(initialRuleRegistry.rules.map((rule) => rule.metadata.id)).toEqual(expectedRuleIds);

@@ -2,34 +2,52 @@
 
 # Matriz de trazabilidad
 
-Esta tabla se actualiza cuando existen la implementación y los nombres exactos de los archivos de
-prueba.
+Este mapa relaciona requisitos duraderos con sus límites principales de implementación y
+verificación. Sirve para navegar, no sustituye las pruebas a nivel de código.
 
-| Requisito | Componente principal                                                        | Hito     | Verificación                                                                                                                                                                |
-| --------- | --------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| RF-01     | CLI, fachada de auditoría, sanitizador y límite ejecutable                  | M01-M06  | pruebas/smokes de CLI: ayuda/versión, opciones completas, precedencia según la fuente, salida segura, códigos de salida, progreso y auditoría completa                      |
-| RF-02     | `src/project/validate-project-path.ts`                                      | M01      | `tests/project/validate-project-path.test.ts` y pruebas tipadas de errores de la CLI                                                                                        |
-| RF-03     | contratos y recorrido de `src/project/discovery/`                           | M02/M06  | pruebas de recorrido más escenario completo de proyectos válido/no válido/mixto/seguridad/grande con la CLI compilada                                                       |
-| RF-04     | `src/project/discovery/discovery-config.ts`                                 | M02/M06  | pruebas exactas de exclusión/elusión por alias más exclusiones versionadas de contenido generado, declaraciones y configuración del proyecto mixto                          |
-| RF-05     | `src/project/inventory/`                                                    | M02      | pruebas de normalización/invariantes/desduplicación/orden del inventario y JSON de inventario esperado/real revisado                                                        |
-| RF-06     | `src/project/classification/`                                               | M02/M06  | matriz de extensiones más inventarios exactos y versionados de fuentes/exclusiones para cinco proyectos controlados                                                         |
-| RF-07     | lector seguro, composición de Babel y lote de candidatos                    | M03/M06  | pruebas del lector/lote más proyecto mixto de cuatro tipos con CLI compilada, aislamiento de contenido malformado, corpus grande y centinelas de no ejecución               |
-| RF-08     | extracción, constructor del modelo y `analyzeProject`                       | M03/M06  | pruebas del modelo más cinco proyectos controlados ejecutados dos veces con resúmenes exactos de análisis sintáctico/modelo                                                 |
-| RF-09     | registro, cargador de configuración, fachada de auditoría y CLI             | M04-M06  | catálogo de ocho reglas; filtros nulos/vacíos/por categoría/ID/intersección; precedencia archivo/CLI explícita; análisis integrado con cero reglas                          |
-| RF-10     | `Rule`, evaluador y `audit-project.ts`                                      | M04-M06  | pruebas exactas de una ejecución y solo con modelo, más una evaluación integrada de reglas con un análisis/un modelo y aislamiento de reglas que lanzan errores             |
-| RF-11     | reglas, corpus controlado y métricas de detección                           | M04/M06  | 27 instancias positivas/negativas/no compatibles revisadas; TP/FP/TN/FN, precisión y exhaustividad por regla                                                                |
-| RF-12     | `SourceLocation`, modelo y comparador de exactitud                          | M03-M06  | procedencia canónica más correspondencia por proyecto/regla/archivo/rango semiabierto para todos los hallazgos controlados                                                  |
-| RF-13     | metadatos de reglas, verdad de referencia y hallazgos normalizados          | M04/M06  | metadatos/limitaciones completos más justificaciones exactas de casos e identidades de hallazgos esperados/reales                                                           |
-| RF-14     | clasificación de reglas, `AuditResult` y validación                         | M04-M06  | contadores deterministas de resultados más matrices de confusión por regla con observaciones no compatibles separadas                                                       |
-| RF-15     | fachada de auditoría, CLI, generadores de informes y escritor compartido    | M05/M06  | informes exactos más análisis integrados, fallos de escritura exclusiva/ruta/enlace simbólico/permisos y afirmaciones confirmadas por el escritor                           |
-| RNF-01    | capas de CLI, auditoría/aplicación, proyecto, análisis sintáctico y dominio | Todos    | etapas inyectadas, fachadas de scan/análisis conservadas, composición M06 completa, errores tipados/sanitizados e integración con sistema de archivos real                  |
-| RNF-02    | interfaces de Rule/Finding/Reporter                                         | M04/M05  | regla tipada solo con modelo más contratos puros de `Reporter`/`AuditResult` versionado sin modificar el núcleo                                                             |
-| RNF-03    | `package.json`, TypeScript estricto y módulos enfocados                     | Todos    | formato/lint/typecheck/pruebas/compilación con Node.js 24, cobertura, JSON sin omisiones, evidencia aislada y criterios del ciclo de vida                                   |
-| RNF-04    | scan/análisis/configuración, motor, resultado e informes                    | M02-M06  | reconstrucciones canónicas congeladas, nuevas ejecuciones exactas de informes y proyecciones estables integradas que excluyen la volatilidad documentada de raíz/tiempo     |
-| RNF-05    | `Finding`/`Rule`                                                            | M04      | copia completa de `SourceLocation`, procedencia exacta de ubicación del modelo, identidad de regla y aserciones de clasificación                                            |
-| RNF-06    | orientación de reglas, informes y revisión de usabilidad                    | M04-M06  | orientación completa en terminal/HTML más seis tareas expertas ejecutadas; pruebas con participantes/SUS explícitamente no ejecutadas/N/A                                   |
-| RNF-07    | descubrimiento, canalización parser/modelo, motor de reglas y fachada       | M02-M06  | etapas acotadas más cinco mediciones completas con raíz nueva y todos los formatos sobre el proyecto versionado de 240 archivos                                             |
-| RNF-08    | clasificador, lector, parser y fachada del modelo                           | M02/M03  | matrices de clasificación/Babel para cuatro tipos e integración mixta de aplicación con sistema de archivos real                                                            |
-| RNF-09    | engines de Node.js 24 en package, rutas portables y matriz de CI            | M01-M06  | enlaces/permisos según capacidades, recorrido de 32 niveles, matriz de workflows y pruebas de límites reales/inyectados                                                     |
-| RNF-10    | motor de reglas/`AuditResult`/informes/fachada de auditoría                 | M04-M06  | un resultado congelado para terminal/JSON/HTML, identidad entre formatos, persistencia separada y sin nuevas ejecuciones de análisis/reglas                                 |
-| DOC-I18N  | README público y orientación en `docs/`, `.github/` y `evidence/`           | Post-M06 | documentos públicos bilingües emparejados o integrados; validación de formato, descubrimiento, selector recíproco, literales técnicos, estructura y enlaces locales seguros |
+## Requisitos funcionales
+
+| Requisito | Implementación principal                                           | Verificación principal                                           |
+| --------- | ------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| RF-01     | `src/cli/`, `src/application/audit-project.ts`                     | pruebas de auditoría CLI e integración de aplicación             |
+| RF-02     | `src/project/validate-project-path.ts`                             | pruebas unitarias y de sistema de archivos para rutas            |
+| RF-03     | `src/project/discovery/`                                           | recorrido y escenario controlado de descubrimiento               |
+| RF-04     | `src/project/discovery/discovery-config.ts`                        | casos de exclusión, alias, contenido generado y enlaces          |
+| RF-05     | `src/project/inventory/`                                           | pruebas de normalización, identidad, desduplicación y orden      |
+| RF-06     | `src/project/classification/`                                      | matriz de extensiones y exclusiones conservadoras                |
+| RF-07     | `src/parsing/`, `src/parsing/babel/`                               | pruebas de lector, parser, aislamiento y cuatro tipos de fuente  |
+| RF-08     | `src/domain/models/`, `src/application/analyze-project.ts`         | extracción, invariantes, ubicaciones e integración               |
+| RF-09     | `src/rules/`, `src/configuration/`                                 | registro, selección, configuración e integración del catálogo    |
+| RF-10     | `src/rules/evaluate-rules.ts`                                      | ejecución única, solo modelo, observaciones y aislamiento        |
+| RF-11     | `src/domain/findings/`, `src/rules/evaluate-rules.ts`              | casos de cero, uno, varios, duplicados y observaciones inválidas |
+| RF-12     | `src/domain/models/source-location.ts`, normalización de hallazgos | aserciones de ubicación semiabierta y presentación               |
+| RF-13     | metadatos de reglas y hallazgos normalizados                       | validación de metadatos y pruebas de recomendaciones y límites   |
+| RF-14     | `src/domain/rules/`, `src/domain/findings/`                        | categoría, severidad, confianza, identidad y resúmenes           |
+| RF-15     | `src/reporting/`, `src/domain/audit/audit-result.ts`               | contratos, esquemas, consistencia entre formatos y escritor      |
+
+## Requisitos no funcionales
+
+| Requisito | Implementación principal                                    | Verificación principal                                                   |
+| --------- | ----------------------------------------------------------- | ------------------------------------------------------------------------ |
+| RNF-01    | directorios por capas debajo de `src/`                      | revisión de dependencias, fachadas inyectadas e integración              |
+| RNF-02    | contratos `Rule`, `Reporter`, `Finding` y `AuditResult`     | validadores cerrados y pruebas enfocadas en extensión                    |
+| RNF-03    | TypeScript estricto, ESM, módulos enfocados y documentación | formato, docs, lint, tipos, pruebas, cobertura y compilación             |
+| RNF-04    | orden canónico en toda la canalización                      | ejecuciones controladas repetidas y comparaciones de resultados estables |
+| RNF-05    | identidad normalizada y ubicaciones de fuente               | correspondencia exacta de regla, archivo y rango                         |
+| RNF-06    | recomendaciones en terminal/HTML y documentación pública    | aserciones de informes y revisión repetible de tareas principales        |
+| RNF-07    | un escaneo, modelo, evaluación y resultado normalizado      | spies de aplicación, proyecto grande y mediciones descriptivas           |
+| RNF-08    | clasificación y adaptador de parser Babel                   | casos `.ts`, `.tsx`, `.js` y `.jsx` de parser/modelo                     |
+| RNF-09    | engines, rutas entre plataformas y matriz de CI             | entorno, CI, enlaces, permisos y casos de profundidad                    |
+| RNF-10    | resultado normalizado y generadores puros                   | esquema JSON, consistencia terminal/JSON/HTML y ausencia de reevaluación |
+
+## Distribución y documentación
+
+| Requisito | Implementación principal                                         | Verificación principal                                   |
+| --------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
+| DIST-01   | `package.json`, `dist/`, `schemas/` y archivos README públicos   | `npm run test:package` e instalación temporal limpia     |
+| DOC-I18N  | `README.md`, `README.en.md`, `README.es.md`, `docs/`, `docs/es/` | `npm run docs:check`, formato, enlaces y revisión humana |
+
+## Regla de mantenimiento
+
+Cuando cambie un requisito, opción pública, esquema, regla o informe, actualiza implementación,
+pruebas, documentación emparejada y este mapa en el mismo cambio coherente.

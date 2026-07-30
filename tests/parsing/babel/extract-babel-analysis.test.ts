@@ -36,7 +36,7 @@ import {
   type SourceKind,
 } from '../../../src/project/classification/source-candidate.js';
 
-const fixturesDirectory = new URL('../../fixtures/m03-parsing/', import.meta.url);
+const fixturesDirectory = new URL('../../fixtures/parsing/', import.meta.url);
 const fixturesPath = fileURLToPath(fixturesDirectory);
 
 const requireParseSuccess = (result: BabelParseResult): BabelParseSuccess => {

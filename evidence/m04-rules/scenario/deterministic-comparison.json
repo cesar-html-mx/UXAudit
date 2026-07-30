@@ -1,9 +1,0 @@
-{
-  "schemaVersion": 1,
-  "scenarioId": "M04-RULE-CATALOG",
-  "firstDigest": "sha256:addd44ef69132d3f2954274444cf622657f0e51ed466ec260b0a409553ec73a6",
-  "secondDigest": "sha256:addd44ef69132d3f2954274444cf622657f0e51ed466ec260b0a409553ec73a6",
-  "expectedDigest": "sha256:addd44ef69132d3f2954274444cf622657f0e51ed466ec260b0a409553ec73a6",
-  "byteIdentical": true,
-  "expectedMatched": true
-}
