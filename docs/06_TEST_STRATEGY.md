@@ -358,3 +358,24 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   source/package sentinels. Six focused manifest/corpus tests lock the physical and semantic
   contract. The complete Node.js 24 gate passed 554 tests across 51 files; coverage remained at
   95.88% statements, 91.46% branches, 99.80% functions, and 95.84% lines.
+
+## M06-T03 executed accuracy baseline
+
+- A separate closed ground truth versions 27 instance-level cases: 11 positive, eight negative,
+  and eight unsupported. Every stable rule has at least one positive plus exactly one explicit
+  negative and one unsupported boundary; absent nodes and unrelated combinations are never counted
+  as true negatives.
+- The built CLI produces the observed JSON findings. A second analysis pass is used only to map
+  `data-uxaudit-case` nodes to half-open model ranges; matching requires the same project, rule,
+  portable file, and contained offsets. Duplicate or unassigned findings count as false positives.
+- Positive detections/misses become TP/FN; negative detections/clear cases become FP/TN.
+  Unsupported cases and their observed count are reported separately and excluded from both
+  precision and recall denominators.
+- The pure metrics boundary validates closed plain input, deterministic rule order, safe integer
+  arithmetic, duplicate case identity per rule, null zero-denominator ratios, and input
+  immutability. Twenty-one focused tests cover normal, adversarial, and overflow cases.
+- All eight rules matched reviewed expectations: 11 TP, zero FP, eight TN, zero FN, and zero
+  unsupported detections. Per-rule precision and recall were both 1.0 within this controlled
+  synthetic corpus only; no aggregate or real-world generalization is claimed.
+- The final Node.js 24 gate passed 577 tests across 53 files. Global V8 coverage measured 95.84%
+  statements, 91.39% branches, 99.81% functions, and 95.80% lines.

@@ -203,6 +203,7 @@ The final package under `evidence/m06-validation/` must include:
 - [x] Repository inspected and plan reconciled with reality.
 - [x] M06-T01 complete audit pipeline implemented and verified.
 - [x] M06-T02 controlled project corpus and built-CLI scenario implemented and verified.
+- [x] M06-T03 per-rule ground truth, matching, and accuracy evidence implemented and verified.
 - [ ] Tasks completed.
 - [ ] Quality gate passed.
 - [ ] Evidence collected.
@@ -240,6 +241,13 @@ The final package under `evidence/m06-validation/` must include:
 - M06-T02's Node.js 24 gate passed 554 tests across 51 files, 95.88% statement / 91.46% branch /
   99.80% function / 95.84% line coverage, the twice-executed system scenario, harness validation,
   and independent review.
+- M06-T03 ground truth contains 11 positive, eight negative, and eight unsupported instances.
+  Observed results matched every reviewed case with 11 TP, zero FP, eight TN, zero FN, zero
+  unmatched findings, and zero unsupported detections; per-rule precision/recall is 1.0 only for
+  this controlled corpus.
+- Accuracy matching uses the built CLI for observed findings and a separate model pass only to
+  resolve source case ranges. Same project/rule/file containment is required; duplicate findings
+  become unmatched FP rather than satisfying one instance twice.
 
 ## Decision log
 

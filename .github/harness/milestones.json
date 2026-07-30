@@ -251,7 +251,9 @@
         {
           "id": "M06-T03",
           "title": "Measure expected versus obtained findings",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (577 tests/53 files), coverage 95.84% statements / 91.39% branches / 99.81% functions / 95.80% lines, five-project scenario, 27-case per-rule accuracy scenario, harness, and two independent reviews PASS",
+          "completedAt": "2026-07-30T06:43:12.852Z"
         },
         {
           "id": "M06-T04",

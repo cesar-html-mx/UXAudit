@@ -223,3 +223,23 @@ describes catalog maturity or delivery (`required`, `stable`, `experimental`, or
 confidence (`high`, `medium`, or `low`) describes how strongly one finding is justified by the
 available static evidence. Findings retain the complete half-open `SourceLocation` when available;
 reporters may derive display coordinates later but rules do not flatten or convert them.
+
+## M06 controlled accuracy result
+
+The built CLI was compared with reviewed instance-level ground truth rather than treating every
+unreported JSX node as a true negative.
+
+| Rule ID                        |  TP |  FP |  TN |  FN | Precision | Recall | Unsupported |
+| ------------------------------ | --: | --: | --: | --: | --------: | -----: | ----------: |
+| `accessibility/button-name`    |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
+| `accessibility/img-alt`        |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
+| `accessibility/input-label`    |   2 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
+| `performance/img-dimensions`   |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
+| `performance/img-lazy-loading` |   2 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
+| `seo/ambiguous-link-text`      |   2 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
+| `seo/multiple-h1`              |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
+| `ux/small-inline-text`         |   1 |   0 |   1 |   0 |      1.00 |   1.00 |           1 |
+
+These values apply only to 19 supported and eight unsupported controlled instances. They validate
+the implemented static contracts and do not estimate accuracy on representative external projects,
+rendered pages, dynamic component abstractions, or runtime behavior.

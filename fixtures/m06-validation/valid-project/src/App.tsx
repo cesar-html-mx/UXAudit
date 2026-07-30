@@ -4,7 +4,7 @@ writeFileSync(new URL('../TARGET_SOURCE_EXECUTED', import.meta.url), 'executed')
 
 export const App = () => (
   <main>
-    <h1>Account overview</h1>
+    <h1 data-uxaudit-case="valid-single-h1">Account overview</h1>
     <img
       alt="Account activity chart"
       data-uxaudit-case="valid-image"

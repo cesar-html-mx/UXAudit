@@ -824,3 +824,29 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   M06-T02, R-001 through R-006, R-009, R-021.
 - Evidence: `fixtures/m06-validation/`, its six manifest/corpus tests, and
   `scripts/run-m06-scenario.mjs`.
+
+## D-037 — Instance-level per-rule accuracy without implicit true negatives
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: Counting every unreported JSX node as a true negative would inflate accuracy, while
+  combining rule results would hide differences and unsupported static boundaries. Findings retain
+  locations but not fixture case IDs.
+- Decision: Version explicit positive, negative, and unsupported instances for every stable rule.
+  Obtain findings from the built JSON CLI and use a separate analysis pass only to map literal
+  `data-uxaudit-case` values to normalized half-open ranges. Match one finding to at most one
+  instance by project, rule, file, and containment. Classify positives as TP/FN and negatives as
+  FP/TN; count duplicate/unmatched findings as FP. Report unsupported totals/detections separately
+  and exclude them from precision/recall. Preserve rule-level results and use `null` for a zero
+  denominator.
+- Alternatives considered: project-level binary accuracy; implicit TN from all other nodes;
+  aggregate-only scores; counting unsupported as negative; matching only by line; deriving expected
+  cases from observed findings; or silently dropping duplicate/unmatched findings.
+- Consequences: The measurement is reproducible and auditable but intentionally small. A 1.0 value
+  proves conformance to these reviewed static cases, not external validity on arbitrary applications
+  or runtime behavior. Diagnostic artifacts are written before a mismatch exits nonzero when an
+  output directory is requested.
+- Requirements/contracts affected: RF-11 through RF-14, RNF-04 through RNF-06, RNF-10, M06-T03,
+  R-001, R-002, R-011, R-021, R-022.
+- Evidence: `fixtures/m06-validation/ground-truth.json`, focused ground-truth/metrics tests, and
+  `scripts/run-m06-accuracy.mjs`.

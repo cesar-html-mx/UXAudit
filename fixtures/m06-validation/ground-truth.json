@@ -1,0 +1,351 @@
+{
+  "schemaVersion": 1,
+  "groundTruthId": "M06-RULE-ACCURACY-GROUND-TRUTH",
+  "contract": {
+    "additionalProperties": false,
+    "instanceFields": [
+      "projectId",
+      "sourcePath",
+      "caseId",
+      "ruleId",
+      "classification",
+      "expectedDetected",
+      "rationale"
+    ],
+    "classificationValues": ["positive", "negative", "unsupported"],
+    "projectScope": "committed-projects-only",
+    "pathFormat": "portable-relative-forward-slash",
+    "metricFields": ["tp", "fp", "tn", "fn", "unsupported", "precision", "recall"],
+    "unsupportedMetricPolicy": "excluded-from-confusion-matrix"
+  },
+  "stableRuleIds": [
+    "accessibility/button-name",
+    "accessibility/img-alt",
+    "accessibility/input-label",
+    "performance/img-dimensions",
+    "performance/img-lazy-loading",
+    "seo/ambiguous-link-text",
+    "seo/multiple-h1",
+    "ux/small-inline-text"
+  ],
+  "committedProjectIds": ["valid-project", "invalid-project", "mixed-project"],
+  "instances": [
+    {
+      "projectId": "invalid-project",
+      "sourcePath": "src/violations.tsx",
+      "caseId": "invalid-button-name",
+      "ruleId": "accessibility/button-name",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The intrinsic button has no statically determinable visible or ARIA accessible name."
+    },
+    {
+      "projectId": "valid-project",
+      "sourcePath": "src/App.tsx",
+      "caseId": "valid-button-name",
+      "ruleId": "accessibility/button-name",
+      "classification": "negative",
+      "expectedDetected": false,
+      "rationale": "The intrinsic button has retained descriptive visible text."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "unsupported-button-name",
+      "ruleId": "accessibility/button-name",
+      "classification": "unsupported",
+      "expectedDetected": false,
+      "rationale": "Accessible-name computation for a custom button abstraction is outside the rule scope."
+    },
+    {
+      "projectId": "invalid-project",
+      "sourcePath": "src/violations.tsx",
+      "caseId": "invalid-img-alt",
+      "ruleId": "accessibility/img-alt",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The intrinsic image has no explicit alt attribute."
+    },
+    {
+      "projectId": "valid-project",
+      "sourcePath": "src/App.tsx",
+      "caseId": "valid-image",
+      "ruleId": "accessibility/img-alt",
+      "classification": "negative",
+      "expectedDetected": false,
+      "rationale": "The intrinsic image provides an explicit descriptive alt attribute."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "unsupported-img-alt",
+      "ruleId": "accessibility/img-alt",
+      "classification": "unsupported",
+      "expectedDetected": false,
+      "rationale": "Alternative-text behavior for a custom image abstraction is not inferred."
+    },
+    {
+      "projectId": "invalid-project",
+      "sourcePath": "src/violations.tsx",
+      "caseId": "invalid-input-label",
+      "ruleId": "accessibility/input-label",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The intrinsic input has no static label association or accessible name."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/components/Settings.tsx",
+      "caseId": "mixed-input-label",
+      "ruleId": "accessibility/input-label",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The mixed-project intrinsic input has no static label association or accessible name."
+    },
+    {
+      "projectId": "valid-project",
+      "sourcePath": "src/App.tsx",
+      "caseId": "valid-input-label",
+      "ruleId": "accessibility/input-label",
+      "classification": "negative",
+      "expectedDetected": false,
+      "rationale": "The input id is statically associated with a matching intrinsic label."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "unsupported-input-label",
+      "ruleId": "accessibility/input-label",
+      "classification": "unsupported",
+      "expectedDetected": false,
+      "rationale": "Label association across a custom form-control abstraction is not resolved."
+    },
+    {
+      "projectId": "invalid-project",
+      "sourcePath": "src/violations.tsx",
+      "caseId": "invalid-img-dimensions",
+      "ruleId": "performance/img-dimensions",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The intrinsic image pairs a literal zero width with a positive height."
+    },
+    {
+      "projectId": "valid-project",
+      "sourcePath": "src/App.tsx",
+      "caseId": "valid-image",
+      "ruleId": "performance/img-dimensions",
+      "classification": "negative",
+      "expectedDetected": false,
+      "rationale": "The intrinsic image provides positive integer width and height attributes."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "unsupported-img-dimensions",
+      "ruleId": "performance/img-dimensions",
+      "classification": "unsupported",
+      "expectedDetected": false,
+      "rationale": "Layout reservation for a custom responsive-image abstraction is not inferred."
+    },
+    {
+      "projectId": "invalid-project",
+      "sourcePath": "src/violations.tsx",
+      "caseId": "invalid-img-lazy-loading",
+      "ruleId": "performance/img-lazy-loading",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The intrinsic image explicitly uses the reviewable eager loading value."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "mixed-img-lazy-loading",
+      "ruleId": "performance/img-lazy-loading",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The mixed-project intrinsic image explicitly uses eager loading."
+    },
+    {
+      "projectId": "valid-project",
+      "sourcePath": "src/App.tsx",
+      "caseId": "valid-image",
+      "ruleId": "performance/img-lazy-loading",
+      "classification": "negative",
+      "expectedDetected": false,
+      "rationale": "The intrinsic image is statically configured with loading=\"lazy\"."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "unsupported-img-lazy-loading",
+      "ruleId": "performance/img-lazy-loading",
+      "classification": "unsupported",
+      "expectedDetected": false,
+      "rationale": "Runtime priority behavior for a custom image abstraction is not inferred."
+    },
+    {
+      "projectId": "invalid-project",
+      "sourcePath": "src/violations.tsx",
+      "caseId": "invalid-ambiguous-link-text",
+      "ruleId": "seo/ambiguous-link-text",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The intrinsic link retains the configured ambiguous text \"Read more\"."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "mixed-ambiguous-link-text",
+      "ruleId": "seo/ambiguous-link-text",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The mixed-project intrinsic link retains the configured ambiguous text \"Here\"."
+    },
+    {
+      "projectId": "valid-project",
+      "sourcePath": "src/App.tsx",
+      "caseId": "valid-link-text",
+      "ruleId": "seo/ambiguous-link-text",
+      "classification": "negative",
+      "expectedDetected": false,
+      "rationale": "The intrinsic link text identifies its account-security destination."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "unsupported-ambiguous-link-text",
+      "ruleId": "seo/ambiguous-link-text",
+      "classification": "unsupported",
+      "expectedDetected": false,
+      "rationale": "Rendered text from a custom navigation-link abstraction is not inferred."
+    },
+    {
+      "projectId": "invalid-project",
+      "sourcePath": "src/violations.tsx",
+      "caseId": "invalid-multiple-h1",
+      "ruleId": "seo/multiple-h1",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "This is the second intrinsic h1 owned by the same recognized component."
+    },
+    {
+      "projectId": "valid-project",
+      "sourcePath": "src/App.tsx",
+      "caseId": "valid-single-h1",
+      "ruleId": "seo/multiple-h1",
+      "classification": "negative",
+      "expectedDetected": false,
+      "rationale": "The recognized component owns exactly one intrinsic h1."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "unsupported-multiple-h1",
+      "ruleId": "seo/multiple-h1",
+      "classification": "unsupported",
+      "expectedDetected": false,
+      "rationale": "Heading semantics exposed by a custom heading abstraction are not inferred."
+    },
+    {
+      "projectId": "invalid-project",
+      "sourcePath": "src/violations.tsx",
+      "caseId": "invalid-small-inline-text",
+      "ruleId": "ux/small-inline-text",
+      "classification": "positive",
+      "expectedDetected": true,
+      "rationale": "The intrinsic text element has an exact inline fontSize below the 12 px threshold."
+    },
+    {
+      "projectId": "valid-project",
+      "sourcePath": "src/App.tsx",
+      "caseId": "valid-inline-text",
+      "ruleId": "ux/small-inline-text",
+      "classification": "negative",
+      "expectedDetected": false,
+      "rationale": "The exact inline fontSize equals the 12 px threshold and is not below it."
+    },
+    {
+      "projectId": "mixed-project",
+      "sourcePath": "src/App.jsx",
+      "caseId": "unsupported-small-inline-text",
+      "ruleId": "ux/small-inline-text",
+      "classification": "unsupported",
+      "expectedDetected": false,
+      "rationale": "Rendered styles for a custom text abstraction are outside the intrinsic-element scope."
+    }
+  ],
+  "expectedMetricsByRule": {
+    "accessibility/button-name": {
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0,
+      "unsupported": 1,
+      "precision": 1,
+      "recall": 1
+    },
+    "accessibility/img-alt": {
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0,
+      "unsupported": 1,
+      "precision": 1,
+      "recall": 1
+    },
+    "accessibility/input-label": {
+      "tp": 2,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0,
+      "unsupported": 1,
+      "precision": 1,
+      "recall": 1
+    },
+    "performance/img-dimensions": {
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0,
+      "unsupported": 1,
+      "precision": 1,
+      "recall": 1
+    },
+    "performance/img-lazy-loading": {
+      "tp": 2,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0,
+      "unsupported": 1,
+      "precision": 1,
+      "recall": 1
+    },
+    "seo/ambiguous-link-text": {
+      "tp": 2,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0,
+      "unsupported": 1,
+      "precision": 1,
+      "recall": 1
+    },
+    "seo/multiple-h1": {
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0,
+      "unsupported": 1,
+      "precision": 1,
+      "recall": 1
+    },
+    "ux/small-inline-text": {
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0,
+      "unsupported": 1,
+      "precision": 1,
+      "recall": 1
+    }
+  }
+}

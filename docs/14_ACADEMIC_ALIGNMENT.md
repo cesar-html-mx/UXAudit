@@ -45,3 +45,11 @@ The testing delivery must be based on executed evidence from the real UXAudit im
 - honest list of unexecuted or unsupported tests.
 
 Plans must not be reported as completed tests.
+
+## M06-T03 executed validation evidence
+
+The validation runner executes the built CLI against reviewed committed projects, maps observed
+finding locations to explicit ground-truth instances, and retains JSON/CSV per-rule confusion
+matrices. The current corpus contains 11 positive, eight negative, and eight unsupported instances.
+Observed supported outcomes were 11 TP, zero FP, eight TN, and zero FN; unsupported detections were
+zero. Precision and recall are reported per rule and explicitly bounded to this synthetic corpus.

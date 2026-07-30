@@ -515,3 +515,24 @@
 - The final T02 Node.js 24 gate passed formatting, strict lint, typecheck, build, 554 tests across
   51 files, the five-project/two-run scenario, harness validation, and coverage at 95.88%
   statements, 91.46% branches, 99.80% functions, and 95.84% lines.
+- The T02 HTTPS publication attempt again failed without a configured GitHub credential; no remote
+  branch or hosted result is claimed.
+- Completed M06-T03 with a closed ground-truth contract covering 27 explicit source instances:
+  11 positives, one negative per stable rule, and one unsupported boundary per stable rule.
+- Added a pure defensive metrics boundary that classifies positive detections/misses as TP/FN,
+  negative detections/clear cases as FP/TN, adds duplicate/unmatched findings to FP, and reports
+  unsupported cases outside precision/recall denominators. Safe integer, null denominator,
+  duplicate identity, exotic input, immutability, and deterministic order behavior are tested.
+- The shell-free accuracy runner executes the built JSON CLI on valid, invalid, and mixed projects,
+  separately derives only model case ranges, and matches each finding by project, rule, portable
+  file, and half-open containment. It retains exact case/finding identities, expected/actual JSON,
+  per-rule and per-case CSV, unsupported observations, notes, and corrective-action status.
+- Observed metrics matched ground truth for all eight rules: 11 TP, zero FP, eight TN, zero FN, no
+  unmatched findings, and no unsupported detections. Precision and recall are 1.0 per rule only
+  within this small controlled corpus; no real-world accuracy claim is made.
+- Independent methodology and implementation reviews found no blocking/high/medium defect. Their
+  safe-integer denominator residual was corrected, and failure-mode evidence now writes diagnostic
+  artifacts before the runner exits nonzero.
+- The final T03 Node.js 24 gate passed formatting, strict lint, typecheck, build, 577 tests across
+  53 files, the complete system and accuracy scenarios, harness validation, and coverage at 95.84%
+  statements, 91.39% branches, 99.81% functions, and 95.80% lines.

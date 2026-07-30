@@ -145,6 +145,7 @@ npm run dev -- scan .
 npm run verify
 npm run test:coverage
 npm run test:smoke
+npm run test:accuracy:m06
 npm run test:scenario:m02
 npm run test:scenario:m03
 npm run test:scenario:m04
@@ -164,6 +165,7 @@ Useful individual commands:
 | `npm run test:coverage`         | Run V8 coverage with 90% global thresholds.                              |
 | `npm run build`                 | Emit ESM JavaScript, declarations, and source maps to `dist/`.           |
 | `npm run test:smoke`            | Build and execute eleven compiled CLI scenarios without a shell.         |
+| `npm run test:accuracy:m06`     | Compare per-rule CLI findings with reviewed instance-level ground truth. |
 | `npm run test:scenario:m02`     | Verify reviewed inventory, exclusions, links, determinism, and no exec.  |
 | `npm run test:scenario:m03`     | Exercise the controlled four-kind parser/model scenario without exec.    |
 | `npm run test:scenario:m04`     | Validate the deterministic eight-rule catalog without executing source.  |
@@ -264,3 +266,9 @@ excluded output, three controlled findings, and one recoverable syntax error. Th
 constructs a hostile/security project with default-skipped links and a 240-file safe project from
 versioned parameters. It verifies exit codes, exact terminal/JSON/HTML consistency, expected
 finding/error counts, byte-identical stable projections, and absence of target-code sentinels.
+
+`npm run test:accuracy:m06` executes the built JSON-report flow on the committed valid, invalid, and
+mixed projects. It matches findings to 27 reviewed source instances by rule and half-open model
+location, then records TP, FP, TN, FN, precision, recall, unmatched findings, and unsupported
+observations for each stable rule. The current 1.0 precision/recall values describe only this small
+controlled corpus; they are not a claim about arbitrary React projects or runtime behavior.
