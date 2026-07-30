@@ -1,0 +1,14 @@
+Command: "npm" "test" "--" "--reporter=json" "--outputFile=coverage/vitest-results.json"
+Working directory: isolated temporary workspace
+Expected exit code: 0
+Observed exit code: 0
+
+--- stdout ---
+
+> ux-audit@0.1.0 test
+> vitest run --reporter=json --outputFile=coverage/vitest-results.json
+
+JSON report written to <TEST_RESULTS>
+
+--- stderr ---
+(empty)

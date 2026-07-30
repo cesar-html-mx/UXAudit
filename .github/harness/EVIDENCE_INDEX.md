@@ -8,7 +8,7 @@ actually executed.
 | M01       | `evidence/m01-bootstrap/`  | Complete: source digest/manifest, clean install, gate, 100% coverage, six smokes, harness, audit |
 | M02       | `evidence/m02-discovery/`  | Complete: 66 tests/no skips, coverage, six smokes, deterministic scenario, audit, SHA-256 report |
 | M03       | `evidence/m03-parsing/`    | Complete: 208 tests, coverage, six smokes, four-kind scenario, audit, SHA-256 report             |
-| M04       | `evidence/m04-rules/`      | Pending                                                                                          |
+| M04       | `evidence/m04-rules/`      | Complete: 344 tests, coverage, 8-rule scenario, isolation, audit, SHA-256 report                 |
 | M05       | `evidence/m05-reporting/`  | Pending                                                                                          |
 | M06       | `evidence/m06-validation/` | Pending                                                                                          |
 | Usability | `evidence/usability/`      | Pending                                                                                          |

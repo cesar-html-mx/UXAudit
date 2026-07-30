@@ -228,3 +228,102 @@
 - Closed M03 against verified task commit `6a33946a07bf2d8db5e81d201b59a038bf994e5e`
   and activated M04-T01. The M03 ExecPlan moved to `exec-plans/completed/`; no M04 implementation
   work was started.
+
+## M04 rule engine and initial catalog — 2026-07-29
+
+- Validated the harness, reconciled the clean `main` merge `2625bf6` with the stale M03 branch field
+  in state, created `milestone/m04-rule-engine-catalog`, and updated the active ExecPlan before
+  product work.
+- Defined M04-T01's model-only `Rule`, complete metadata/classification, rule-local observation,
+  self-contained normalized `Finding`, stable recoverable execution error, and evaluation-result
+  counter contracts. Finding normalization defensively copies limitations, the M03 half-open
+  location, and the structured reference without report-specific coordinate conversion.
+- Focused T01 verification passed seven contract tests, strict TypeScript, and ESLint.
+- Implemented M04-T02's explicit validated registry, category/ID intersection loader, exact-once
+  evaluator, transactional result validation, stable per-rule isolation, canonical model-location
+  provenance, deterministic finding/error order, and complete counters.
+- Independent T02 review found fail-open filter containers, runtime model-mutation exposure, unsafe
+  reference schemes, confidence-sensitive duplicate identity, and implicit experimental/deferred
+  execution. The implementation now fails filters closed, deep-freezes the model once, admits only
+  safe HTTP(S) references, rejects contradictory duplicates/deferred rules, and requires exact ID
+  opt-in for experiments.
+- T02's 53 focused contract/registry/loader/evaluator tests passed. The full 261-test coverage run
+  passed with 97.34% statements, 91.72% branches, 99.62% functions, and 97.35% lines.
+- Implemented M04-T03's three stable intrinsic accessibility rules with ordered JSX-spread
+  semantics, conservative unknown-case handling, exact source ranges, complete metadata, committed
+  TSX integration input, and documented custom/dynamic/accessibility-algorithm limitations.
+- Twenty-five focused accessibility tests cover positive, negative, multiple, boundary,
+  association, unsupported, metadata, and engine-integration behavior. Review-driven cases now
+  prove conservative dynamic/spread association handling, exact ID equality, component isolation,
+  explicit and null nested-label targets, known-null ARIA values, and the documented multi-control
+  limit.
+- The post-review full run passed all 286 tests with 96.85% statements, 92.01% branches, 99.65%
+  functions, and 96.85% lines.
+- Implemented M04-T04's two performance, two SEO, and one UX stable rules plus the explicit initial
+  registry containing exactly eight rules across the reviewed three/two/two/one category
+  distribution. Factories validate/capture configurable ambiguous-link phrases and the default
+  12px inline-text threshold without expanding `RuleContext`.
+- Independent category reviews drove regressions for known-invalid dimensions beside uncertainty,
+  literal zero-by-zero, unsafe numeric dimensions, sparse/accessor/proxy configuration, invalid CSS
+  numeric syntax/Unicode whitespace, inert or void text containers, and medium confidence for
+  partial text. Final re-reviews exercised 19 dimension probes, hostile SEO configuration, and 14
+  CSS-whitespace probes without finding a remaining blocker.
+- Fifty-four focused T04 rule/registry tests passed. The full 340-test coverage run passed with
+  97.14% statements, 92.79% branches, 99.70% functions, and 97.14% lines.
+- Integrated M04-T05 through the production analysis-model and rule-engine boundaries with one
+  inert controlled TSX project. The reviewed expected result contains exactly one finding for each
+  of the eight stable rules; two evaluations serialize byte-identically and the target-code
+  sentinel is never executed.
+- Added complete catalog integration assertions for deterministic ordering/counters, category and
+  ID filter intersections, metadata and limitations, safe and unsupported cases, canonical
+  locations, and one injected throwing ninth rule that preserves all eight stable sibling findings.
+  The pre-evidence gate passed all 343 tests across 38 files with no skips or todos.
+- Defined an exact M04 evidence contract and finalizer with whole-header credential sanitization,
+  source-path redaction, strict file/directory allowlisting, fail-before-mutation validation, and a
+  SHA-256 manifest. Independent adversarial review confirmed that extra files, empty directories,
+  Basic/Bearer authorization headers, and manifest mutation on rejection are all prevented.
+- Collected the isolated `M04-RULES` evidence package twice under the pinned Node.js `24.18.0` and
+  npm `11.16.0` runtimes. Locked install, the 343-test product gate, coverage, zero-skip/todo tests,
+  six CLI smokes, the full-catalog scenario, harness validation, and moderate-threshold audit all
+  passed; npm reported zero known vulnerabilities.
+- The initial shell resolved Node.js 22 and the collector rejected it before running product checks
+  or publishing evidence. The official pinned-runtime execution wrote 20 artifacts, and the second
+  execution preserved the package after matching its source digest and stable scenario/measurement
+  results. Every retained SHA-256 manifest entry verifies.
+- Final self-review found that two auxiliary scenario JSON files were semantically valid and
+  manifested but did not satisfy repository formatting. The initial package was moved intact out of
+  the repository, the runner was corrected to canonicalize every retained JSON with the repository
+  Prettier options, and a temporary eight-file reproduction passed formatting while retaining the
+  reviewed expected/actual digest.
+- The same review hardened the collector to reject noncanonical scenario JSON, source-snapshot
+  mutation during gates, unsafe/symlinked evidence destinations, and destination changes before
+  publication. The finalizer now verifies the exact preexisting 20-artifact manifest before adding
+  the milestone report, so it cannot legitimize prior drift.
+- Recollected an interim corrected package twice under Node.js `24.18.0`. The first execution passed
+  the complete isolated gate and published 20 canonically formatted artifacts; the second matched
+  its source digest and preserved the package. The repository-wide format check, evidence contract,
+  sanitization, and all 20 manifest hashes passed before the later product-review correction.
+- Final product review then found one accessibility false negative: surrounding whitespace was
+  incorrectly stripped before matching excluded input types. HTML treats values such as
+  `type=" hidden "` as invalid and therefore defaults them to a label-required text state. Removed
+  that trimming and added two regression cases while preserving exact case-insensitive matches.
+- Final evidence review also extended destination reauthorization to the finalizer, preventing a
+  symlinked `evidence/` or `m04-rules/` directory, manifest, or report from redirecting manifest
+  publication outside the repository.
+- After both review findings were resolved, the final isolated package was collected twice. It
+  records all 344 tests across 38 files with zero skips/todos, the unchanged coverage thresholds,
+  zero known vulnerabilities, and source digest
+  `sha256:2db86840585dfc1622c0abcad7ff00fea1bccdcd895b291b5d3c6b482f9edfb2`; the second execution
+  preserved all 20 base artifacts.
+- Three independent closure reviews collectively covered product semantics, evidence security and
+  integrity, documentation, traceability, and harness transition readiness. The discovered
+  canonical-JSON, padded-input-type, finalizer-symlink, and RNF-06/RNF-07 traceability gaps were
+  corrected and revalidated; no blocking, high, or medium defect remains.
+- Committed completed M04-T05 as `3afa4bb3eaab415a7792aa0c4f3862464bc89efb`.
+  A non-interactive HTTPS push then failed because this process has no GitHub username/credential;
+  the remote was unchanged and no pull request or hosted CI result is claimed.
+- Finalized the 21-entry M04 SHA-256 manifest with `MILESTONE_REPORT.md`, marked the evidence index
+  complete, and verified every retained hash after finalization.
+- Closed M04 against verified task commit `3afa4bb3eaab415a7792aa0c4f3862464bc89efb`,
+  moved its ExecPlan to `exec-plans/completed/`, and activated M05-T01. No M05 implementation work
+  was started.

@@ -89,8 +89,10 @@ src/cli/index.ts
 - The focused project modules traverse with Node APIs, build an invariant-checked inventory, and
   classify parser candidates without reading or executing source code.
 
-This slice ends after parser-independent model construction. It does not run rules, produce
-findings, or create an `AuditResult`.
+The current CLI slice still ends after parser-independent model construction. M04 adds a
+report-independent domain rule engine that can evaluate an already constructed model and produce
+normalized findings/errors in isolation, but application/CLI integration and `AuditResult`
+construction remain M05 work.
 
 ## Core contracts
 
@@ -224,13 +226,64 @@ native cause, absolute path, or source text.
 
 ### Rule
 
-Contains metadata and an evaluation operation over the analysis model. A rule is independent of
-report format and should not depend on another rule's execution.
+M04-T01 defines one immutable `Rule` as:
+
+- `RuleMetadata`: stable ID, title, category, default severity, catalog status, explanation,
+  actionable recommendation, nullable structured reference, and explicit limitations;
+- `RuleContext`: the normalized `AnalysisModel` and no parser or reporter state;
+- a synchronous `evaluate` operation that returns zero, one, or multiple rule-local observations
+  containing a message, confidence, and nullable `SourceLocation`.
+
+Categories are `accessibility`, `performance`, `seo`, and `ux`. Severities are `info`, `low`,
+`medium`, `high`, and `critical`; finding confidence is independently `low`, `medium`, or `high`.
+A rule is independent of report format, does not import Babel, and does not depend on another
+rule's execution.
+
+### Finding
+
+M04-T01 normalizes a rule observation and its metadata into one self-contained `Finding`. It
+retains rule ID/title, category, severity, message, explanation, recommendation, reference,
+limitations, confidence, and a nullable defensive copy of the complete M03 half-open source
+location.
+Coordinates remain one-based for lines and zero-based for columns/offsets. Presentation-specific
+line/column conversion belongs to reporters in M05.
+
+Rule failures are not findings. A recoverable `RuleExecutionError` contains only the rule ID,
+category, stable code/message, and recoverability flag; native causes and target-project content do
+not cross this boundary. `RuleEvaluationResult` keeps findings, execution errors, and explicit
+available/enabled/succeeded/failed/finding counters without any presentation state.
+The executed counter records every attempted enabled rule and equals succeeded plus failed.
 
 ### RuleEvaluator
 
-Runs enabled rules in deterministic order, isolates rule failures when safe, and returns findings plus
-execution errors.
+M04-T02 separates registry, loading, and evaluation:
+
+- `createRuleRegistry` validates and defensively copies an explicit rule list, rejects malformed
+  metadata, unsafe/non-HTTP(S) references, deferred executable rules, or duplicate IDs through
+  stable fatal errors; it freezes the registered contracts and orders them ordinally by rule ID.
+- `loadRules` validates optional category and rule-ID allowlists. When both exist they intersect;
+  an empty allowlist selects no rules, an unknown rule ID is an error, and absent filters select the
+  stable/required portion of the explicit registry. Experimental rules require exact rule-ID
+  opt-in. Invalid containers, unknown keys, and throwing accessors fail closed.
+- `evaluateRules` calls every loaded rule exactly once over the same trusted `AnalysisModel`.
+  Thrown evaluation failures and malformed results become stable recoverable per-rule errors. A
+  malformed rule's entire candidate batch is discarded before safe sibling results are accepted.
+
+Every non-null finding location must exactly match a file, component, JSX node, attribute, or
+retained object-property location in the model. This prevents a rule result from introducing an
+absolute or otherwise untraceable path. Accepted findings sort by rule ID, portable file path,
+start/end offset, and message; execution errors sort by rule ID. The result records
+available, enabled, executed, succeeded, failed, and finding counts.
+
+Isolation assumes the M03 model remains valid and rules respect the readonly contract. The engine
+deep-freezes that model once before evaluation so an unsafe runtime cast cannot mutate it and
+contaminate a later rule. It does not clone or reparse the project per rule.
+
+`initialRuleRegistry` explicitly assembles the eight stable M04 rules: three accessibility, two
+performance, two SEO, and one UX rule. Category modules remain independently testable; the registry
+is the canonical default catalog and sorts their IDs before loading. Rule-specific factories
+capture validated ambiguous-link phrases and the inline-text pixel threshold without adding mutable
+configuration to `RuleContext`.
 
 ### Reporter
 

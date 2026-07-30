@@ -4,16 +4,25 @@
   "type": "object",
   "required": [
     "ruleId",
+    "ruleTitle",
     "category",
     "severity",
     "message",
     "explanation",
     "recommendation",
-    "file"
+    "limitations",
+    "reference",
+    "confidence",
+    "location"
   ],
   "properties": {
     "ruleId": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^[a-z]+/[a-z0-9-]+$"
+    },
+    "ruleTitle": {
+      "type": "string",
+      "minLength": 1
     },
     "category": {
       "enum": ["ux", "accessibility", "seo", "performance"]
@@ -22,31 +31,99 @@
       "enum": ["info", "low", "medium", "high", "critical"]
     },
     "message": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "explanation": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "recommendation": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
-    "file": {
-      "type": "string"
-    },
-    "line": {
-      "type": ["integer", "null"],
-      "minimum": 1
-    },
-    "column": {
-      "type": ["integer", "null"],
-      "minimum": 1
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "reference": {
-      "type": ["string", "null"]
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["label", "url"],
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "url": {
+              "type": ["string", "null"],
+              "pattern": "^https?://",
+              "description": "Nullable absolute HTTP(S) URL without embedded credentials."
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "confidence": {
-      "enum": ["high", "medium", "low", null]
+      "enum": ["high", "medium", "low"]
+    },
+    "location": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/sourceLocation"
+        },
+        {
+          "type": "null"
+        }
+      ]
     }
   },
-  "additionalProperties": true
+  "$defs": {
+    "sourcePosition": {
+      "type": "object",
+      "required": ["line", "column", "offset"],
+      "properties": {
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "sourceLocation": {
+      "type": "object",
+      "required": ["filePath", "start", "end"],
+      "properties": {
+        "filePath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "$ref": "#/$defs/sourcePosition"
+        },
+        "end": {
+          "$ref": "#/$defs/sourcePosition"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
 }

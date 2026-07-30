@@ -2,7 +2,17 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "UXAudit Rule Metadata",
   "type": "object",
-  "required": ["id", "title", "category", "severity", "status", "explanation", "recommendation"],
+  "required": [
+    "id",
+    "title",
+    "category",
+    "defaultSeverity",
+    "status",
+    "explanation",
+    "recommendation",
+    "reference",
+    "limitations"
+  ],
   "properties": {
     "id": {
       "type": "string",
@@ -15,7 +25,7 @@
     "category": {
       "enum": ["ux", "accessibility", "seo", "performance"]
     },
-    "severity": {
+    "defaultSeverity": {
       "enum": ["info", "low", "medium", "high", "critical"]
     },
     "status": {
@@ -30,7 +40,27 @@
       "minLength": 1
     },
     "reference": {
-      "type": ["string", "null"]
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["label", "url"],
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "url": {
+              "type": ["string", "null"],
+              "pattern": "^https?://",
+              "description": "Nullable absolute HTTP(S) URL without embedded credentials."
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "limitations": {
       "type": "array",
@@ -39,5 +69,5 @@
       }
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

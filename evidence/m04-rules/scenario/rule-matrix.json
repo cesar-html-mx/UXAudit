@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "M04-RULE-CATALOG",
+  "ruleCount": 8,
+  "findingCount": 8,
+  "rules": [
+    {
+      "ruleId": "accessibility/button-name",
+      "positiveCase": "button-missing-name",
+      "safeCases": ["button-static-name"],
+      "unsupportedCases": ["button-dynamic-unsupported"],
+      "expectedFindingCount": 1,
+      "actualFindingCount": 1,
+      "positiveCaseMatched": true,
+      "safeCasesClear": true,
+      "unsupportedCasesClear": true
+    },
+    {
+      "ruleId": "accessibility/img-alt",
+      "positiveCase": "img-missing-alt",
+      "safeCases": ["img-complete"],
+      "unsupportedCases": ["img-spread-unsupported", "custom-image-unsupported"],
+      "expectedFindingCount": 1,
+      "actualFindingCount": 1,
+      "positiveCaseMatched": true,
+      "safeCasesClear": true,
+      "unsupportedCasesClear": true
+    },
+    {
+      "ruleId": "accessibility/input-label",
+      "positiveCase": "input-missing-label",
+      "safeCases": ["input-nested-label"],
+      "unsupportedCases": ["input-spread-unsupported"],
+      "expectedFindingCount": 1,
+      "actualFindingCount": 1,
+      "positiveCaseMatched": true,
+      "safeCasesClear": true,
+      "unsupportedCasesClear": true
+    },
+    {
+      "ruleId": "performance/img-dimensions",
+      "positiveCase": "img-invalid-dimensions",
+      "safeCases": ["img-complete"],
+      "unsupportedCases": ["img-spread-unsupported", "custom-image-unsupported"],
+      "expectedFindingCount": 1,
+      "actualFindingCount": 1,
+      "positiveCaseMatched": true,
+      "safeCasesClear": true,
+      "unsupportedCasesClear": true
+    },
+    {
+      "ruleId": "performance/img-lazy-loading",
+      "positiveCase": "img-not-lazy",
+      "safeCases": ["img-complete"],
+      "unsupportedCases": ["img-spread-unsupported", "custom-image-unsupported"],
+      "expectedFindingCount": 1,
+      "actualFindingCount": 1,
+      "positiveCaseMatched": true,
+      "safeCasesClear": true,
+      "unsupportedCasesClear": true
+    },
+    {
+      "ruleId": "seo/ambiguous-link-text",
+      "positiveCase": "link-ambiguous-text",
+      "safeCases": ["link-specific-text"],
+      "unsupportedCases": ["link-dynamic-unsupported"],
+      "expectedFindingCount": 1,
+      "actualFindingCount": 1,
+      "positiveCaseMatched": true,
+      "safeCasesClear": true,
+      "unsupportedCasesClear": true
+    },
+    {
+      "ruleId": "seo/multiple-h1",
+      "positiveCase": "h1-secondary",
+      "safeCases": ["h1-single-safe"],
+      "unsupportedCases": ["custom-heading-unsupported"],
+      "expectedFindingCount": 1,
+      "actualFindingCount": 1,
+      "positiveCaseMatched": true,
+      "safeCasesClear": true,
+      "unsupportedCasesClear": true
+    },
+    {
+      "ruleId": "ux/small-inline-text",
+      "positiveCase": "text-too-small",
+      "safeCases": ["text-threshold"],
+      "unsupportedCases": ["text-dynamic-size-unsupported"],
+      "expectedFindingCount": 1,
+      "actualFindingCount": 1,
+      "positiveCaseMatched": true,
+      "safeCasesClear": true,
+      "unsupportedCasesClear": true
+    }
+  ]
+}

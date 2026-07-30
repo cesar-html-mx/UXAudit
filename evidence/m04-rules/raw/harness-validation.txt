@@ -1,0 +1,12 @@
+Command: "node" ".github/harness/scripts/validate-harness.mjs"
+Working directory: isolated temporary workspace
+Expected exit code: 0
+Observed exit code: 0
+
+--- stdout ---
+UXAudit harness validation: PASS
+Active milestone: M04
+Active task: M04-T05
+
+--- stderr ---
+(empty)

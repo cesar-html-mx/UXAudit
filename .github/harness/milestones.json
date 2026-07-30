@@ -140,34 +140,44 @@
       "id": "M04",
       "slug": "rule-engine-catalog",
       "title": "Rule engine and initial validation catalog",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M04-rule-engine-catalog.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M04-rule-engine-catalog.md",
       "branch": "milestone/m04-rule-engine-catalog",
       "tasks": [
         {
           "id": "M04-T01",
           "title": "Define Rule, Finding, severity, and category contracts",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0: 7 focused rule-contract tests pass; strict typecheck, lint, schema parse, format, and diff checks pass",
+          "completedAt": "2026-07-29T22:02:30.398Z"
         },
         {
           "id": "M04-T02",
           "title": "Implement rule registry, loader, and evaluator",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0: 53 focused engine tests and 261 full tests pass; coverage 97.34% statements, 91.72% branches, 99.62% functions, 97.35% lines; strict typecheck, lint, format, schema, isolation review, and diff checks pass",
+          "completedAt": "2026-07-29T22:20:17.138Z"
         },
         {
           "id": "M04-T03",
           "title": "Implement accessibility rules",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0: 25 focused accessibility tests, 286-test full verify, and coverage 96.85% statements / 92.01% branches / 99.65% functions / 96.85% lines PASS; independent semantic re-review found no blockers.",
+          "completedAt": "2026-07-29T22:36:46.478Z"
         },
         {
           "id": "M04-T04",
           "title": "Implement SEO, performance, and UX rules",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0: 54 focused T04 tests, 340-test full verify, and coverage 97.14% statements / 92.79% branches / 99.70% functions / 97.14% lines PASS; independent performance, SEO, and UX re-reviews found no blockers.",
+          "completedAt": "2026-07-29T23:01:00.449Z"
         },
         {
           "id": "M04-T05",
           "title": "Validate rule isolation and deterministic findings",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0/npm 11.16.0: 344 tests across 38 files with zero skips/todos; coverage 97.14% statements, 92.79% branches, 99.70% functions, 97.14% lines; format, lint, typecheck, build, six CLI smokes, deterministic eight-rule scenario, harness, audit, two isolated evidence collections, and final independent reviews PASS",
+          "completedAt": "2026-07-30T00:01:07.416Z"
         }
       ]
     },
@@ -175,8 +185,8 @@
       "id": "M05",
       "slug": "configuration-reporting",
       "title": "Configuration and terminal, JSON, and HTML reporting",
-      "status": "queued",
-      "plan": ".github/harness/exec-plans/queued/M05-configuration-reporting.md",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M05-configuration-reporting.md",
       "branch": "milestone/m05-configuration-reporting",
       "tasks": [
         {

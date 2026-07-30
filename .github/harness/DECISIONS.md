@@ -390,3 +390,166 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   RNF-08, R-003, R-006, R-014, and R-015.
 - Evidence: batch isolation/invariant tests, real-filesystem application integration, compiled CLI
   scenario, no-execution sentinel, measurements, and `evidence/m03-parsing/`.
+
+## D-024 — Self-contained rule and finding contracts
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M04 rules need one typed, extensible input/output boundary while M05 reporters must later
+  consume normalized results without loading rules again. The planning finding schema flattened
+  source coordinates, but M03 already established a canonical half-open location with one-based
+  lines and zero-based UTF-16 columns/offsets.
+- Decision: A `Rule` owns complete immutable metadata and a synchronous model-only evaluation
+  function that returns rule-local message, confidence, and nullable source-location observations.
+  Normalize each observation into a self-contained `Finding` by copying the metadata, limitations,
+  structured reference, and complete M03 `SourceLocation`; do not convert coordinates at the domain
+  boundary.
+  Keep finding confidence independent from default severity and catalog status. Represent an
+  isolated rule failure as a stable recoverable `RuleExecutionError`, never as a finding, and keep
+  explicit available/enabled/executed/succeeded/failed/finding counters in the report-independent
+  result contract.
+- Alternatives considered: Returning partially populated findings directly from every rule;
+  flattening file/line/column and dropping the end range; using one value for severity and
+  confidence; exposing thrown errors or native causes; asynchronous rule I/O; or requiring a
+  reporter to reload rule metadata.
+- Consequences: Reporters can consume one normalized record without reevaluation, every finding is
+  traceable to a rule and canonical source range, and rule failures remain separately countable.
+  M05 owns any display-coordinate conversion. Runtime validation and deterministic execution remain
+  M04-T02 responsibilities.
+- Requirements/contracts affected: RF-10 through RF-14, RNF-02 through RNF-05, RNF-10, R-007, and
+  the rule/finding schemas.
+- Evidence: `tests/domain/rules/rule-contracts.test.ts`, focused typecheck/lint, and the eventual
+  `evidence/m04-rules/` package.
+
+## D-025 — Validated deterministic rule execution
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: RF-09 through RF-11 require configurable rule selection and independent zero/one/multiple
+  results, while RNF-04/RNF-05 require deterministic traceable output. A thrown rule or malformed
+  extension result must not discard unrelated valid findings or introduce an untrusted path.
+- Decision: Build an explicit registry that validates, copies, freezes, deduplicates, and ordinally
+  sorts rules by ID. Permit only nullable credential-free HTTP(S) references and reject deferred
+  executable rules. Treat category and ID allowlists as fail-closed validated intersections;
+  absent filters enable required/stable rules, empty filters enable none, unknown IDs fail clearly,
+  and experimental rules require exact ID opt-in. Deep-freeze the trusted model once, then execute
+  each loaded rule synchronously exactly once. Validate its complete returned batch before accepting
+  any finding, require every non-null location to equal a canonical location already present in the
+  M03 model, and treat the same rule/message/location as duplicate regardless of confidence.
+  Collapse thrown versus invalid-result failures into separate stable recoverable codes. Sort
+  normalized findings by rule ID, portable path, source range, and message, and retain explicit
+  available/enabled/executed/succeeded/failed/finding counters.
+- Alternatives considered: Implicit filesystem discovery; registry insertion order; locale-aware
+  sorting; silently ignoring unknown filters; accepting partial results before a malformed
+  candidate; copying native exception messages; synthesizing arbitrary finding ranges; reparsing or
+  cloning the full model per rule; permitting executable deferred rules or implicit experimental
+  rules; accepting arbitrary URL schemes; or terminating on the first failure.
+- Consequences: Equivalent registry/filter/model input produces stable normalized output, extension
+  failures are isolated transactionally, and every source finding is traceable to trusted model
+  evidence. One deep-freeze enforces the readonly model contract at runtime without duplicating the
+  model per rule. Reference strings remain owned metadata, and future reporters still must escape
+  them for their output context.
+- Requirements/contracts affected: RF-09 through RF-12, RNF-02 through RNF-05, RNF-07, RNF-10,
+  R-007, R-008, and R-014.
+- Evidence: `tests/rules/rule-registry.test.ts`, `tests/rules/load-rules.test.ts`,
+  `tests/rules/evaluate-rules.test.ts`, repeated serialization, full coverage gate, and the eventual
+  `evidence/m04-rules/` package.
+
+## D-026 — Conservative intrinsic accessibility scope
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: A11Y-001 through A11Y-003 must identify useful review situations without evaluating React
+  or turning dynamic JSX, spreads, and component abstractions into false certainty. The catalog's
+  `required` label expresses M04 delivery selection, while runtime metadata needs to express the
+  validated maturity reached after implementation.
+- Decision: Publish all three implemented accessibility rules with `stable` runtime status and keep
+  “required for M04” as catalog planning provenance. Analyze exact intrinsic tag names only. Resolve
+  attributes from right to left so a later spread makes an earlier value unknown. A11Y-001 is an
+  explicit-`alt` presence check and does not score value quality. A11Y-002 covers intrinsic
+  `input`/`select`/`textarea`, excludes exact hidden/button/submit/reset/image input types, accepts
+  nested labels, recognized-same-component exact untrimmed `htmlFor`/`for` plus `id`, and exact
+  non-empty ARIA names. Known `null` ARIA values are absence, while dynamic values remain unknown.
+  A11Y-003 accepts retained non-empty static text or exact non-empty supported ARIA names. Suppress
+  findings whenever dynamic-only evidence or a spread could satisfy the supported condition; keep
+  excluded input types and unsupported nested-label cardinality in metadata, fixtures, and catalog
+  documentation.
+- Alternatives considered: Inferring custom components by name; ignoring JSX override order;
+  flagging every dynamic or spread case; validating alternative-text quality; pairing labels across
+  components; treating all input types as text controls; or claiming the complete accessible-name
+  algorithm.
+- Consequences: Findings are high-confidence inside a narrow reproducible static scope, while
+  wrapper/alias/dynamic cases can remain false negatives and require review. The complete
+  accessible-name algorithm, CSS visibility, runtime spread values, and ARIA target resolution
+  remain explicit limitations rather than implicit claims.
+- Requirements/contracts affected: RF-09 through RF-14, RNF-02 through RNF-07, R-001, R-002,
+  R-007, and the A11Y-001/A11Y-002/A11Y-003 catalog contracts.
+- Evidence: focused rule tests, `tests/fixtures/m04-rules/accessibility-cases.tsx.fixture`,
+  `tests/rules/accessibility/accessibility-rules.integration.test.ts`, and the eventual
+  `evidence/m04-rules/` package.
+
+## D-027 — Explicit advisory scopes for performance, SEO, and UX rules
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: PERF-001/PERF-002, SEO-001/SEO-002, and UX-001 need useful static findings without
+  claiming viewport priority, observed layout shift, rendered page composition, complete accessible
+  context, or computed CSS. The M03 model retains exact/partial/dynamic evidence, component
+  ownership, ordered JSX attributes/object properties, and canonical property locations.
+- Decision: Publish all five rules as stable within narrow intrinsic scopes. PERF-001 emits a
+  medium-confidence, low-severity review for absent/eager/invalid known `loading` values while
+  suppressing dynamic/spread uncertainty. PERF-002 normally requires two positive integer
+  dimensions, lets a proved missing/invalid sibling prevail over unrelated uncertainty, and treats
+  literal zero-by-zero as content not intended for the user. SEO-001 emits one medium-confidence
+  finding at the second intrinsic H1 of each recognized component and ignores unowned/project-wide
+  aggregation. SEO-002 matches only exact static anchor text after NFKC/whitespace/case normalization
+  against a descriptor-validated, dense replace-all phrase set. UX-001 reports the last exact
+  literal inline `fontSize` property on eligible intrinsic known text when a finite non-negative
+  numeric/px value is below an exclusively compared, validated `12px` default threshold; exact text
+  has high confidence and partial text has medium confidence. Assemble these with the accessibility
+  rules in one explicit eight-rule registry.
+- Alternatives considered: Project-wide or file-wide H1 counts; inferring pages/routes, custom
+  components, surrounding accessible names, above-fold position, CSS layout reservation, relative
+  units, or computed styles; reporting dynamic/spread values as violations; treating all eager
+  images as defects; or exposing mutable rule configuration through `RuleContext`.
+- Consequences: The initial catalog has deterministic coverage in all four product categories and
+  provides reviewable locations without runtime claims. It can miss wrapper, CSS, routed, and
+  dynamic cases; advisory wording, confidence, metadata limitations, and boundary fixtures make
+  those tradeoffs explicit. M05 can construct configured rule instances before registration without
+  changing the evaluator contract.
+- Requirements/contracts affected: RF-09 through RF-14, RNF-02 through RNF-07, RNF-10, R-001,
+  R-002, R-011, PERF-001/PERF-002, SEO-001/SEO-002, and UX-001.
+- Evidence: category-focused and registry integration tests, the eventual mixed-catalog scenario,
+  independent semantic review, and `evidence/m04-rules/`.
+
+## D-028 — Reviewed full-catalog scenario and isolated evidence lifecycle
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M04 acceptance requires more than isolated rule tests: the exact eight-rule registry must
+  demonstrate deterministic normalized output, filtering, metadata/limitations, and failure
+  isolation over one realistic model. The CLI intentionally does not invoke rules until M05, so a
+  CLI audit claim would violate the active boundary.
+- Decision: Build and run a domain-level controlled TSX project through the production
+  analyze-model and rule-engine modules. Version one full normalized expected result with exactly
+  one finding for each stable rule, plus explicit safe/unsupported case mappings. Compare two
+  serialized evaluations byte-for-byte; retain filters, metadata, limitations, finding samples, and
+  one injected throwing-rule result that preserves all eight siblings. Reuse the M03 isolated
+  evidence lifecycle: allowlisted source copy, credential-free child environment, clean locked
+  install, full gates, exact no-skip/todo record, source digest, sanitized exact artifact contract,
+  atomic initial publication, stable second-run comparison, and a finalizable SHA-256 manifest.
+- Alternatives considered: Calling the scan-only CLI and implying rule integration; retaining only
+  test console output; generating expected data without committing/reviewing it; project-wide
+  aggregate counts without rule identity; overwriting evidence on rerun; or inheriting the parent
+  environment and credentials.
+- Consequences: M04 behavior is reproducible and auditable without changing the CLI contract.
+  Expected/actual drift, missing rules, nondeterminism, failure contagion, skipped tests, source
+  changes, noncanonical JSON, unsafe publication paths, extra evidence files, secrets, and manifest
+  mismatch fail the scenario/collector. Finalization first verifies the exact base manifest before
+  adding the report. The evidence is a controlled functional validation, not M06 precision/recall
+  or hosted CI evidence.
+- Requirements/contracts affected: RF-09 through RF-14, RNF-03 through RNF-07, RNF-09, RNF-10,
+  M04 acceptance criteria, R-007, R-009, R-010, R-011, and R-012.
+- Evidence: `tests/rules/initial-catalog.integration.test.ts`,
+  `scripts/run-m04-scenario.mjs`, the expected fixture, two collector executions, and
+  `evidence/m04-rules/`.

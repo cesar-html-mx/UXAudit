@@ -26,11 +26,11 @@
 
 ## M04 — Rule engine and initial catalog
 
-- [ ] M04-T01 Define rule metadata, category, severity, and finding contracts.
-- [ ] M04-T02 Implement rule registry, loading, filtering, and isolated evaluation.
-- [ ] M04-T03 Implement the initial accessibility rules.
-- [ ] M04-T04 Implement the initial SEO, performance, and UX rules.
-- [ ] M04-T05 Verify deterministic ordering, rule isolation, and catalog traceability.
+- [x] M04-T01 Define rule metadata, category, severity, and finding contracts.
+- [x] M04-T02 Implement rule registry, loading, filtering, and isolated evaluation.
+- [x] M04-T03 Implement the initial accessibility rules.
+- [x] M04-T04 Implement the initial SEO, performance, and UX rules.
+- [x] M04-T05 Verify deterministic ordering, rule isolation, and catalog traceability.
 
 ## M05 — Configuration and reporting
 

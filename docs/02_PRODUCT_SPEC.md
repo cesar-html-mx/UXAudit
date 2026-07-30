@@ -22,6 +22,21 @@ ux-audit scan <project-path> [options]
 - Stable path, discovery-summary, and parsing-summary messages without rule, finding, or audit
   claims.
 
+### Implemented in the active M04 domain layer
+
+- Immutable rule metadata, normalized self-contained findings, stable rule-execution errors, and
+  report-independent evaluation counters.
+- Explicit validated registry plus fail-closed category/rule-ID filtering.
+- Exact-once deterministic evaluation with per-rule isolation, transactional output validation,
+  canonical source-location provenance, and runtime model immutability.
+- Eight stable rules within documented static scopes: three accessibility checks, image
+  lazy-loading/dimension advisories, component-local multiple-H1 review, exact ambiguous-link text,
+  and literal inline small-text review.
+
+The CLI remains intentionally unchanged during M04: `scan` still stops after model construction and
+does not yet claim an audit result. Application integration, configuration, finding policy, and
+terminal/JSON/HTML reporting remain M05/M06 responsibilities.
+
 ### Planned options
 
 - `--config <path>`: configuration file; default search is `uxaudit.config.json` at project root.
@@ -33,7 +48,7 @@ ux-audit scan <project-path> [options]
 - `--no-color`: terminal output without ANSI color.
 - `--verbose`: processing detail and recoverable errors.
 
-These options are not implemented through M03. Final option names may be refined in M05, but
+These options are not implemented through the current M04 task. Final option names may be refined in M05, but
 documented behavior and compatibility must be preserved after release.
 
 ## Current scan result
@@ -115,11 +130,13 @@ Each finding contains at least:
 - severity;
 - message and explanation;
 - recommendation;
-- file path relative to the project;
-- line and column when available;
+- limitations and confidence;
+- a complete project-relative half-open source location when available;
 - optional evidence snippet or metadata;
-- optional standard/reference;
-- optional confidence or limitations.
+- nullable structured standard/reference.
+
+The M04 domain contract retains one-based lines and zero-based UTF-16 columns/offsets. M05 reporters
+own any conversion to display coordinates.
 
 ## Configuration
 
