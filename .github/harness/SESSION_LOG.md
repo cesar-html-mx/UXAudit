@@ -462,3 +462,32 @@
 - Finalized the retained evidence manifest with 23 valid SHA-256 entries, including the formatted
   milestone report. The final package passed its exact file contract, integrity, sanitization, and
   canonical-JSON checks.
+
+## M06 integration and validation — 2026-07-30
+
+- Validated the active harness, reconciled the merged M05 baseline `bd22ef5`, created
+  `milestone/m06-integration-validation`, and activated Node.js `24.18.0`/npm `11.16.0`.
+- Reconciled the M06 ExecPlan before implementation. The completed M05 configuration and reporters
+  were independent of the production CLI, and the final harness lifecycle did not yet recognize a
+  project with zero active milestones.
+- Completed M06-T01 with one application audit facade that performs canonical validation,
+  configuration loading, exactly one source analysis, stable-rule evaluation, one normalized
+  `AuditResult`, and selected JSON/HTML persistence. Null filters remain omitted while explicit
+  empty arrays intentionally select no rules.
+- Extended `ux-audit scan` with configuration, format, output, category, rule, severity, color, and
+  verbosity controls while preserving the three established progress lines. Commander value
+  sources prevent defaults from overriding configuration-file values.
+- Completed findings and recoverable discovery/source/rule errors return exit `0`; invalid
+  command/path/configuration input returns `2`; fatal pipeline and report failures return `3`.
+  Exit `1` remains reserved because the current configuration has no finding-failure policy.
+- The CLI writes trusted terminal-reporter ANSI directly, sanitizes all dynamic progress and file
+  claims, and reports only `WrittenReport` records returned after successful persistence.
+  Configured `reportPaths` are targets rather than proof of a completed write.
+- Added application, real-filesystem, CLI, and compiled-smoke coverage for filter semantics,
+  precedence, recoverable parser/rule errors, root loss, hostile terminal data, report selection,
+  overwrite refusal, partial persistence, and stable error boundaries. Independent reviews found
+  no blocking defect; their renderer/writer attribution residual was corrected and regression
+  tested.
+- The final T01 Node.js 24 gate passed formatting, strict lint, typecheck, build, 548 tests across
+  50 files, all 11 compiled CLI scenarios, harness validation, and V8 coverage at 95.88%
+  statements, 91.46% branches, 99.80% functions, and 95.84% lines.

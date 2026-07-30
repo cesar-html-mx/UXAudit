@@ -50,35 +50,44 @@ src/
 The exact filenames may evolve, but the dependency direction and responsibility boundaries may not
 be collapsed without an architecture decision.
 
-## Implemented through M03
+## Implemented production composition
 
 ```text
 src/cli/index.ts
   -> src/cli/run-cli.ts
+       -> src/application/audit-project.ts
+            -> src/project/validate-project-path.ts
+            -> src/configuration/load-configuration.ts
+            -> src/application/analyze-project.ts
+            -> src/rules/load-rules.ts / evaluate-rules.ts
+            -> src/domain/audit/audit-result.ts
+            -> src/reporting/json/ and html/
+            -> src/reporting/files/write-report-file.ts
+       -> src/reporting/terminal/terminal-reporter.ts
        -> src/cli/sanitize-terminal.ts (compatibility re-export)
             -> src/shared/sanitize-terminal.ts
-  -> src/application/analyze-project.ts
+src/application/analyze-project.ts
   -> src/application/scan-project.ts
-       -> src/project/validate-project-path.ts
-       -> src/project/discovery/
-       -> src/project/inventory/
-       -> src/project/classification/
+       -> validation / discovery / inventory / classification
   -> src/parsing/analyze-source-candidates.ts
-       -> src/parsing/babel/parse-source-candidate.ts
-            -> src/parsing/read-source-candidate.ts
-            -> src/parsing/babel/parse-babel-source.ts
-            -> src/parsing/babel/extract-babel-analysis.ts
+       -> verified source read / Babel parse / AST-free extraction
   -> src/domain/models/build-analysis-model.ts
 ```
 
 - `cli/index.ts` is the only process boundary. It supplies arguments and streams and assigns
   `process.exitCode`.
-- `run-cli.ts` owns Commander grammar and maps `ScanProjectError` application errors to terminal
-  output and exit codes. It receives I/O, the preserved scan application function, and an optional
-  analysis facade as dependencies. Existing injected scan-only callers keep their two-line behavior;
-  the production entry point supplies `analyzeProject` and appends the stable parsing summary. It
-  does not import project or parsing adapters. Its output boundary converts terminal control and
-  bidirectional characters in untrusted values to visible Unicode escapes.
+- `run-cli.ts` owns the complete Commander grammar and stable exit mapping. Existing injected
+  scan-only and analysis callers retain their completed behavior; production supplies the additive
+  audit facade. Command/path/configuration input errors use `2`, fatal pipeline/report errors use
+  `3`, and a completed audit uses `0` even with findings or recoverable errors. Progress,
+  diagnostics, and generated-path claims convert untrusted controls/bidirectional characters to
+  visible escapes. The already safe terminal report is written directly so fixed trusted ANSI is not
+  neutralized by a second whole-output sanitizer.
+- `audit-project.ts` authorizes the root, loads inert configuration before traversal/parsing, invokes
+  `analyzeProject` exactly once, loads and evaluates the selected stable rules over its one model,
+  constructs one immutable result, and then writes selected JSON/HTML reports in canonical order.
+  It returns the preserved analysis progress, completed result, and only the `WrittenReport` values
+  actually returned by the writer.
 - `scan-project.ts` composes `validation → discovery → inventory → classification`, retains each
   normalized stage result, computes the discovery summary, and maps fatal stage failures into stable
   application errors. M03 does not change this completed M02 public contract.
@@ -90,12 +99,28 @@ src/cli/index.ts
 - The focused project modules traverse with Node APIs, build an invariant-checked inventory, and
   classify parser candidates without reading or executing source code.
 
-The current CLI slice still ends after parser-independent model construction. M04 adds a
-report-independent domain rule engine that can evaluate an already constructed model and produce
-normalized findings/errors in isolation, but application/CLI integration and `AuditResult`
-construction remain M05 work.
-
 ## Core contracts
+
+### AuditApplication
+
+Input: project path, optional explicit configuration path, and validated CLI override values.
+Output: preserved `AnalyzeProjectResult`, one `AuditResult`, and ordered successful
+`WrittenReport` claims.
+
+M06 implements this contract additively in `audit-project.ts`. It performs an initial canonical path
+authorization so configuration can fail before traversal/parsing, then passes that canonical root to
+the completed analysis facade. The analysis facade revalidates the root but performs discovery,
+source reading, parsing, and model construction only once.
+
+`null` category/rule selections are omitted when constructing M04 rule filters; explicit empty
+arrays remain present and enable zero rules. File counters map discovered files, source candidates,
+parsed files, and parser failures exactly. An injected clock closes timing immediately before the
+result builder, so persistence time is not represented as analysis time.
+
+Configured JSON/HTML paths are part of the result before rendering and do not prove filesystem
+success. File formats are rendered from that same frozen value and persisted sequentially through
+the M05 writer. Only its exact returned format/path pairs enter `writtenReports`. A JSON success
+followed by an HTML failure is propagated without an unsafe deletion or a completed-result claim.
 
 ### ProjectDiscovery
 
@@ -329,8 +354,9 @@ user authority; it rejects links/nonregular files and observed root/path/descrip
 at most 64 KiB, and decodes strict UTF-8. The loader parses JSON, validates closed version-1 own-data
 records and bounded dense arrays, resolves rule IDs against the stable registry, canonicalizes
 selection order, and merges `defaults < file < CLI`. The returned configuration is a defensive
-frozen copy. No project configuration module is imported or executed, and Commander remains outside
-this boundary until M06.
+frozen copy. No project configuration module is imported or executed. The M06 Commander adapter
+constructs the CLI layer only from options whose value source is explicitly `cli`; framework defaults
+therefore cannot shadow file settings.
 
 ### AuditResult
 
@@ -346,6 +372,9 @@ every reporter. It contains:
 - nullable project-relative JSON/HTML paths resolved from the controlled output directory and fixed
   `audit-report.json`/`audit-report.html` names.
 
+The nullable paths are selected/configured targets, not persistence receipts. The separate M06
+`writtenReports` list contains only writer-confirmed paths that the CLI may announce.
+
 The builder defensively copies upstream data, derives summaries, restores canonical finding/error
 order, rejects contradictory counters or malformed boundary data through one detail-free invariant
 error, and freezes the result without freezing caller-owned input. Stored source coordinates keep
@@ -354,8 +383,9 @@ display; JSON must preserve the domain coordinates.
 
 ## Persistence
 
-The initial version has no database. Configuration, JSON, HTML, and optional logs are local files.
-Transient inventory, AST adapter output, model, and findings remain in memory during an audit.
+The initial version has no database. Configuration, JSON, and HTML are local files. Transient
+inventory, AST adapter output, model, and findings remain in memory during an audit. The product does
+not currently generate an execution-log format.
 
 The shared report writer creates an approved output directory one segment at a time, reauthorizes
 the canonical root and directory device/inode identities, rejects links and path escape, and opens
@@ -368,14 +398,16 @@ rather than risking deletion of a replaced pathname.
 
 ## Error boundaries
 
-- Invalid CLI/path/configuration: stop before analysis.
+- Invalid CLI/path/configuration: stop after the minimum root authorization needed for configuration
+  and before traversal/parsing.
 - Fatal discovery, inventory, or classification failure: stop with a stable application error.
 - Descendant discovery or expected read/parse/extraction error: record it and continue other files
   when safe.
 - Non-portable candidate declaration, canonical-root authorization loss, candidate-batch invariant,
   unexpected extraction invariant, or invalid normalized model: stop with a stable fatal error.
 - Individual rule error: record it and continue other rules when model integrity remains valid.
-- Report write failure: report the failure clearly; do not claim that output was generated.
+- Report write failure: return exit `3`, report the stable failure clearly, and do not claim a
+  completed report set. An earlier sibling or partial target may remain without rollback.
 - Internal invariant failure: stop with an unrecoverable error.
 
 ## Security boundaries

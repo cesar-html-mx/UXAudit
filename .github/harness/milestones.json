@@ -237,7 +237,9 @@
         {
           "id": "M06-T01",
           "title": "Complete end-to-end CLI pipeline",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (548 tests/50 files), coverage 95.88% statements / 91.46% branches / 99.80% functions / 95.84% lines, 11 compiled smoke scenarios, harness validation, and two independent reviews PASS",
+          "completedAt": "2026-07-30T06:04:52.636Z"
         },
         {
           "id": "M06-T02",

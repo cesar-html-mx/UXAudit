@@ -4,8 +4,8 @@
 
 UXAudit runs on the Node.js 24 LTS line (`>=24.18.0 <25`) with npm 11 (`>=11.16.0 <12`); M01 pins
 Node.js `24.18.0` and npm `11.16.0` for development and CI. It reads project files and writes
-optional local reports in later milestones. No backend, container, database, cloud service, or
-network connection is required by the product.
+selected JSON/HTML reports locally. No backend, container, database, cloud service, or network
+connection is required by the product.
 
 ## Development
 
@@ -31,7 +31,7 @@ The M01 GitHub Actions configuration verifies:
 - focused tests;
 - coverage generation and thresholds on Linux;
 - build;
-- six compiled-CLI smoke scenarios on every matrix platform;
+- the compiled-CLI smoke suite on every matrix platform;
 - npm audit with a moderate-severity failure threshold on Linux;
 - CodeQL on pushes/pull requests to `main`, weekly schedule, and manual dispatch where GitHub Code
   Security is available;
@@ -54,7 +54,9 @@ Audit outputs:
 - terminal summary;
 - `audit-report.json`;
 - `audit-report.html`;
-- optional execution log.
+
+The product does not currently generate an execution-log format. Raw command logs belong only to
+engineering evidence.
 
 Engineering evidence:
 
@@ -75,6 +77,12 @@ M02 adds a shell-free controlled discovery scenario and an isolated evidence col
   checksummed records under `evidence/m02-discovery/`.
 - `npm run evidence:m02:finalize` runs after the milestone report is written and regenerates the
   manifest atomically so the report is covered by the same integrity contract.
+
+M06-T01 expands the shell-free compiled smoke suite to eleven scenarios. It now covers hostile
+terminal diagnostics, the integrated
+default audit, all three reporters, recoverable syntax, configuration/CLI precedence, an explicit
+empty rule selection, stable input/fatal exit boundaries, and exclusive existing-target refusal.
+Each scenario uses Node process APIs rather than a shell, and target source remains inert.
 
 ## Portability
 

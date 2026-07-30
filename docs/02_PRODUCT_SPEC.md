@@ -8,7 +8,7 @@ The primary interface is:
 ux-audit scan <project-path> [options]
 ```
 
-### Implemented through M03
+### Implemented discovery and analysis foundation
 
 - `--help` and command help.
 - `--version`.
@@ -22,7 +22,7 @@ ux-audit scan <project-path> [options]
 - Stable path, discovery-summary, and parsing-summary messages without rule, finding, or audit
   claims.
 
-### Implemented in the active M04 domain layer
+### Implemented rule domain
 
 - Immutable rule metadata, normalized self-contained findings, stable rule-execution errors, and
   report-independent evaluation counters.
@@ -33,11 +33,7 @@ ux-audit scan <project-path> [options]
   lazy-loading/dimension advisories, component-local multiple-H1 review, exact ambiguous-link text,
   and literal inline small-text review.
 
-The CLI remains intentionally unchanged during M04: `scan` still stops after model construction and
-does not yet claim an audit result. Application integration, configuration, finding policy, and
-terminal/JSON/HTML reporting remain M05/M06 responsibilities.
-
-### Implemented in the active M05 contract slice
+### Implemented configuration and reporting contracts
 
 - Configuration schema version `1` with explicit category/rule filters, report formats, output
   directory, minimum display severity, color, and verbosity.
@@ -54,34 +50,44 @@ terminal/JSON/HTML reporting remain M05/M06 responsibilities.
   exclusively inside the authorized canonical root, and returns a path only after successful
   write, sync, close, and final authorization.
 
-The boundary defensively copies, validates, canonically orders, and freezes result data. It does not
-change the scan-only CLI behavior; M06 owns reporter orchestration and user-visible output claims.
+The boundary defensively copies, validates, canonically orders, and freezes result data.
 
-### Planned options
+### Implemented M06 CLI integration
+
+The production `scan` command composes canonical root validation, configuration loading, the
+existing analysis facade, rule loading/evaluation, one immutable `AuditResult`, terminal rendering,
+and selected JSON/HTML persistence. Configuration is loaded after the root is authorized but before
+source traversal/parsing. The analysis facade runs once; rules consume that one normalized model and
+reporters consume that one completed result.
+
+Configuration `null` filters become omitted rule-engine filters, while `[]` remains an intentional
+zero-rule selection. Only values whose Commander source is the command line form the override layer,
+so absent option defaults do not replace file settings.
+
+Implemented options:
 
 - `--config <path>`: configuration file; default search is `uxaudit.config.json` at project root.
-- `--format <terminal|json|html|all>`: selected reporters.
+- `--format <terminal|json|html|all>`: selected reporters; repeatable and deduplicated. `all` is a
+  CLI convenience and is not a configuration-file value.
 - `--output <directory>`: report output directory.
-- `--category <ux|accessibility|seo|performance>`: category filter; repeatable when appropriate.
-- `--rule <rule-id>`: explicit rule filter.
+- `--category <ux|accessibility|seo|performance>`: repeatable category filter.
+- `--rule <rule-id>`: repeatable explicit rule filter.
 - `--severity <info|low|medium|high|critical>`: minimum displayed severity where supported.
 - `--no-color`: terminal output without ANSI color.
 - `--verbose`: processing detail and recoverable errors.
 
-These options are not implemented through the current M04 task. Final option names may be refined in M05, but
-documented behavior and compatibility must be preserved after release.
-
-## Current scan result
+## Integrated scan result
 
 The completed `scanProject` contract continues to return the canonical project root, full discovery
-result, normalized inventory, classified source candidates, and discovery counts. M03 preserves that
-public behavior and adds a separate `analyzeProject` facade with:
+result, normalized inventory, classified source candidates, and discovery counts. The separate
+`analyzeProject` facade adds:
 
 - one normalized `AnalysisModel`;
 - one ordered list of recoverable per-file parser errors;
 - parsed-file, failed-file, component, and JSX-node counts.
 
-The production CLI uses the additive facade and renders:
+The production CLI preserves these progress lines before the selected terminal report and confirmed
+file-report claims:
 
 ```text
 Project path validated: <canonical-project-path>
@@ -108,9 +114,13 @@ imported or executed. The normalized model retains files, syntactically justifie
 elements/fragments, attributes, values, relationships, and half-open UTF-16 locations. It does not
 claim runtime React semantics.
 
+The terminal report is already sanitized per dynamic value and may add fixed trusted ANSI badges.
+The CLI writes it directly rather than applying the earlier whole-output sanitizer a second time.
+Progress, Commander diagnostics, typed errors, and generated-path claims remain sanitized.
+
 ## Successful execution
 
-A future successful audit returns an `AuditResult` containing:
+A successful audit returns an `AuditResult` containing:
 
 - project root;
 - start/end or duration metadata;
@@ -119,21 +129,22 @@ A future successful audit returns an `AuditResult` containing:
 - normalized findings;
 - recoverable execution errors;
 - summary by category and severity;
-- generated report paths.
+- configured JSON/HTML target paths.
+
+Those target paths describe selected output, not successful persistence. Only returned
+`WrittenReport` records are announced by the CLI as generated.
 
 ## Exit codes
 
-Implemented M03 policy:
+Implemented M06 policy:
 
-- `0`: help/version completed or discovery, source parsing, and model construction completed safely,
-  including when recoverable per-file errors were retained.
-- `1`: reserved for a future completed audit that meets the configured finding-failure policy.
-- `2`: command, argument, project-path, or access input error.
+- `0`: help/version or a completed audit, including when findings or recoverable
+  discovery/source/rule errors were retained.
+- `1`: reserved for a future configured finding-failure policy. The current configuration has no
+  such field, and `minimumSeverity` controls terminal presentation only.
+- `2`: command, argument, project-path/access, or configuration input error.
 - `3`: fatal validation, discovery, inventory, classification, root authorization, source-batch,
-  model, or unexpected application failure.
-
-M05/M06 must refine finding-policy behavior without changing these established input/internal
-boundaries incompatibly.
+  model, rule/result orchestration, report-write, or unexpected application failure.
 
 ## Determinism
 
@@ -172,8 +183,8 @@ detail, `uxaudit-reports`, and `null` category/rule filters. A file may override
 validated CLI values override the file. `null` category/rule filters select the stable catalog,
 whereas explicit empty arrays select no rules. Selection arrays are deduplicated and normalized to
 stable order. Output directories must be portable relative paths without dot segments, backslashes,
-control/bidirectional characters, or Windows-reserved components. M05-T02 exposes this loader;
-full Commander integration remains M06.
+control/bidirectional characters, or Windows-reserved components. An explicitly selected
+configuration is separate user authority and may be outside the project root.
 
 ## Reports
 
@@ -193,6 +204,11 @@ shared writer refuses existing targets and observed links, escapes, or identity 
 stable failures without claiming a generated path. A failure after exclusive creation can leave a
 partial target for manual review/removal; automatically unlinking after a pathname race would be
 unsafe.
+
+Audit timing ends when the immutable `AuditResult` is built and excludes subsequent persistence.
+When multiple file formats are selected, JSON is written before HTML. A later failure can therefore
+leave a completed sibling or partial target; the CLI returns `3`, announces no completed report set,
+and performs no unsafe rollback.
 
 The HTML document contains constant inline CSS, no script or external asset, and an early
 no-script/no-object/no-base/no-form CSP. Every dynamic value is neutralized for hostile controls,

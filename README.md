@@ -9,12 +9,12 @@ versioned configuration defaults and loading, one immutable normalized `AuditRes
 file/rule/finding/error summaries, pure deterministic terminal/lossless JSON/standalone HTML
 reporters, and a shared exclusive local report writer.
 
-The `scan` command validates and canonicalizes the selected root, discovers files, analyzes safe
-source candidates without executing target code, and prints discovery and parsing counts. The CLI
-does not invoke the rule/result/reporting layers yet. The terminal reporter is independently
-implemented; JSON and standalone HTML rendering plus JSON/HTML persistence are also available
-internally, while CLI integration remains M06, so a successful scan must
-not be interpreted as a completed audit.
+The `scan` command validates and canonicalizes the selected root, loads inert JSON configuration
+before source traversal and parsing, analyzes safe source candidates without executing target code,
+evaluates the selected stable rules over one normalized model, and builds one immutable
+`AuditResult`. It renders terminal output when selected and persists selected JSON/HTML reports
+locally through the exclusive writer. Findings and recoverable discovery, source, or rule errors do
+not by themselves make a completed audit fail.
 
 ## Requirements
 
@@ -42,15 +42,27 @@ npm run build
 node dist/cli/index.js --help
 node dist/cli/index.js --version
 node dist/cli/index.js scan .
+node dist/cli/index.js scan ./project --format all --output reports --no-color --verbose
 ```
 
-A valid directory produces its canonical path plus stable discovery and parsing summaries:
+A valid directory preserves the canonical-path, discovery, and parsing progress lines before the
+selected terminal report and any confirmed file-report paths:
 
 ```text
 Project path validated: <canonical-project-path>
 Discovery summary: discovered=<n> inventory=<n> candidates=<n> exclusions=<n> issues=<n>
 Parsing summary: parsed=<n> failed=<n> components=<n> jsx=<n>
+UXAudit <version>
+...
 ```
+
+The `scan` options are:
+
+- `--config <path>` for an explicit inert JSON configuration;
+- repeatable `--format <terminal|json|html|all>`, `--category <category>`, and `--rule <rule-id>`;
+- `--output <directory>` for a portable project-relative report directory;
+- `--severity <info|low|medium|high|critical>` for terminal detail only;
+- `--no-color` and `--verbose`.
 
 The default traversal skips symbolic links and dependency, generated-output, cache, coverage, and
 configuration names. The inventory retains canonical in-root file paths in stable project-relative
@@ -73,18 +85,18 @@ the terminal.
 
 Current CLI exit codes:
 
-| Code | Meaning                                                                               |
-| ---: | ------------------------------------------------------------------------------------- |
-|  `0` | Help/version completed or project discovery, parsing, and modeling completed safely.  |
-|  `1` | Reserved for a future completed audit that meets a configured finding-failure policy. |
-|  `2` | Invalid command, missing argument, or invalid/inaccessible project root.              |
-|  `3` | Fatal processing failure or unexpected application failure.                           |
+| Code | Meaning                                                                                                 |
+| ---: | ------------------------------------------------------------------------------------------------------- |
+|  `0` | Help/version or a completed audit, including findings and recoverable processing errors.                |
+|  `1` | Reserved for a future configured finding-failure policy; `minimumSeverity` does not activate this code. |
+|  `2` | Invalid command/argument, project root, or configuration input.                                         |
+|  `3` | Fatal pipeline, invariant, unexpected application, or report-write failure.                             |
 
 ## Configure an audit
 
 The configuration boundary loads optional `uxaudit.config.json` from an already canonical project
 root, or a user-selected JSON file, without importing or executing it. This example requests all
-three future reporters and restricts rules by category:
+three reporters and restricts rules by category:
 
 ```json
 {
@@ -102,22 +114,25 @@ Defaults are terminal output, `info`, color, non-verbose detail, `uxaudit-report
 rule catalog. `null` category/rule filters select that catalog; `[]` intentionally selects none.
 Validated CLI overrides take precedence over file values, which take precedence over defaults.
 Configuration files are strict UTF-8 JSON limited to 64 KiB, unknown keys and values are rejected,
-and output directories must be portable project-relative paths. The loader is available internally
-in M05; the current `scan` command does not expose `--config` or reporting options until M06.
+and output directories must be portable project-relative paths. Only options explicitly supplied on
+the command line become overrides, so Commander's default value for an absent `--no-color` option
+cannot replace a file setting.
 
-The internal terminal reporter consumes one completed `AuditResult`. It keeps canonical finding
+The terminal reporter consumes one completed `AuditResult`. It keeps canonical finding
 order, filters displayed details through the inclusive severity threshold, retains complete totals,
 uses one-based human column labels, and shows normalized processing details only in verbose mode.
 No-color output contains no escape bytes; color is limited to fixed badges after every dynamic value
-has been converted to terminal-safe visible text. The CLI will expose this behavior in M06.
+has been converted to terminal-safe visible text. The CLI writes this already safe output directly
+so a second whole-report sanitizer cannot neutralize its fixed trusted ANSI.
 
-The internal JSON reporter serializes the complete result with two-space indentation and one final
+The JSON reporter serializes the complete result with two-space indentation and one final
 LF; it preserves timing and stored zero-based columns. JSON/HTML persistence accepts only the fixed
 configured relative target, refuses links, path escape, and existing files, and returns a path only
 after write, sync, close, and final authorization. The writer does not automatically remove a
-partial target after failure because a pathname identity race can make deletion unsafe.
+partial target after failure because a pathname identity race can make deletion unsafe. Paths inside
+`AuditResult` are configured targets; only a returned writer result is announced as generated.
 
-The internal HTML reporter shows the complete result in fixed severity and processing-stage groups;
+The HTML reporter shows the complete result in fixed severity and processing-stage groups;
 terminal thresholds and verbosity do not hide its records. It uses a restrictive CSP, constant
 inline CSS, no scripts or external assets, visible hostile-Unicode neutralization followed by HTML
 escaping, and inert fallback for any reference that is not reparsed as credential-free HTTP(S).
@@ -147,7 +162,7 @@ Useful individual commands:
 | `npm test`                      | Run focused Vitest tests once.                                           |
 | `npm run test:coverage`         | Run V8 coverage with 90% global thresholds.                              |
 | `npm run build`                 | Emit ESM JavaScript, declarations, and source maps to `dist/`.           |
-| `npm run test:smoke`            | Build and execute six CLI scenarios without a shell.                     |
+| `npm run test:smoke`            | Build and execute eleven compiled CLI scenarios without a shell.         |
 | `npm run test:scenario:m02`     | Verify reviewed inventory, exclusions, links, determinism, and no exec.  |
 | `npm run test:scenario:m03`     | Exercise the controlled four-kind parser/model scenario without exec.    |
 | `npm run test:scenario:m04`     | Validate the deterministic eight-rule catalog without executing source.  |
@@ -180,16 +195,18 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
   normalized `AnalysisModel`.
 - Component recognition is intentionally syntactic and conservative; it does not resolve runtime
   aliases, higher-order abstractions, imports, or rendered behavior.
-- The domain engine can produce normalized findings and isolated rule errors, and M05 can assemble
-  them into an exact recursively frozen `AuditResult`; the CLI does not expose either layer yet.
-  Configuration-file loading and terminal rendering are implemented as independent boundaries;
-  JSON/HTML rendering and shared file persistence are implemented too. Finding-failure policy and
-  CLI wiring remain M06 work.
+- The complete CLI composes the domain engine, one recursively frozen `AuditResult`, and all three
+  M05 reporters. It does not define a finding-failure policy; `minimumSeverity` affects terminal
+  presentation only.
+- Audit timing ends when the immutable result is built and excludes subsequent file persistence. A
+  later file-write failure is exit `3`, may leave an already written sibling/partial target, and
+  never produces a false generation claim or an unsafe automatic rollback.
 
 ## Repository map
 
 - `src/cli/`: executable boundary and Commander adapter.
-- `src/application/`: preserved scan pipeline plus the additive source-analysis/model facade.
+- `src/application/`: preserved scan and source-analysis facades plus the additive complete-audit
+  orchestrator.
 - `src/project/`: root validation plus focused discovery, inventory, and classification modules.
 - `src/parsing/`: bounded source reader, Babel-only AST adapter, extraction, and error-isolated
   candidate batch.
@@ -216,19 +233,16 @@ node .github/harness/scripts/validate-harness.mjs
 node .github/harness/scripts/show-status.mjs
 ```
 
-Validate the compiled M05 configuration and reporting boundaries independently of the
-not-yet-integrated CLI:
+The M05 scenario remains available for independent configuration/reporter boundary validation:
 
 ```bash
 npm run test:scenario:m05
 ```
 
-The controlled scenario validates five configuration cases and renders one immutable result with
+That controlled scenario validates five configuration cases and renders one immutable result with
 all severity and processing-stage buckets through terminal, JSON, and HTML twice. It verifies exact
 cross-format projections, deterministic output, visible hostile-value escaping, restrictive HTML
 CSP, and safe fixed-path writes without executing target code. `npm run evidence:m05` reproduces the
-gate in an isolated, credential-free source snapshot while M05-T05 is active; a second unchanged run
-verifies the retained package instead of replacing it.
-
-This implementation slice exposes configuration and reporter APIs without changing the current
-scan-only CLI contract.
+historical M05 gate in an isolated, credential-free source snapshot. The compiled CLI smoke suite
+additionally executes the integrated default audit, all formats, configuration/CLI precedence, empty
+rule filters, recoverable syntax, and existing-target refusal.

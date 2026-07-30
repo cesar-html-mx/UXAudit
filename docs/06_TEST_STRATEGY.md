@@ -312,3 +312,27 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   passed 512 tests across 47 files. Global V8 coverage measured 95.81% statements, 91.39% branches,
   99.39% functions, and 95.77% lines; the HTML module measured 100% statements/functions/lines and
   97.82% branches. Final isolated M05 evidence recollects these metrics.
+
+## M06-T01 executed integration baseline
+
+- Application tests compose validated input, configuration precedence, one normalized analysis,
+  stable-rule loading/evaluation, exact audit counters, timing, and selected JSON/HTML persistence.
+  They distinguish omitted from explicit empty filters, retain recoverable rule/source errors,
+  reject root drift after authorization, preserve stable writer failures, and normalize unexpected
+  stage or renderer failures without leaking native detail.
+- Real-filesystem integration analyzes an inert React/TypeScript project with eight stable-rule
+  findings and one malformed sibling, writes complete JSON and HTML reports, refuses overwrite, and
+  proves that target code is not executed.
+- CLI tests cover every documented option, Commander source-aware file/CLI precedence, canonical
+  repeatable-value ordering, exit `0` for completed findings/recoverable errors, input exit `2`,
+  fatal/report exit `3`, direct trusted terminal ANSI, escaped hostile progress/report claims, and
+  claims derived only from successful writer results. Exit `1` remains reserved because no
+  finding-failure policy exists.
+- The compiled smoke suite now covers 11 complete scenarios: help, version, hostile unknown input,
+  empty/default audit, all reporters with a recoverable malformed source, overwrite refusal,
+  explicit empty filters and CLI precedence, invalid configuration, missing path, regular-file
+  input, and missing arguments.
+- The final task run under Node.js `24.18.0` passed format, lint, typecheck, build, all 548 tests
+  across 50 files, and all 11 compiled smokes. Global V8 coverage measured 95.88% statements,
+  91.46% branches, 99.80% functions, and 95.84% lines. Accuracy, performance, full security, and
+  usability claims remain assigned to M06-T03 through M06-T05.

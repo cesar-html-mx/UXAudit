@@ -765,3 +765,36 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   acceptance, R-005, R-009, R-010, R-012, R-018, and R-019.
 - Evidence: `scripts/run-m05-scenario.mjs`, the M05 evidence contract/collector/finalizer, two
   successful collections, and `evidence/m05-reporting/`.
+
+## D-035 — Additive complete-audit facade and explicit CLI success policy
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M06 must connect the completed path, parser/model, rule, configuration, result, reporter,
+  and writer boundaries without changing the public contracts closed in M01-M05. Configuration must
+  fail before traversal/parsing, existing progress output must remain available, trusted reporter
+  ANSI must not be neutralized, and report targets must not be mistaken for successful writes. The
+  M05 configuration has no finding-failure field.
+- Decision: Add `audit-project.ts` as an orchestration facade. It authorizes the root, loads inert
+  configuration, calls the existing analysis facade once, translates `null` versus empty rule
+  filters exactly, evaluates one model, builds one clock-bounded immutable `AuditResult`, and writes
+  JSON then HTML through the exclusive writer. It returns the preserved analysis result and only
+  exact writer-confirmed report records. Commander exposes the documented options, deduplicates
+  repeatable values, and constructs overrides only from values sourced explicitly from the CLI.
+  Progress/diagnostics/claims use safe value rendering, while the terminal reporter's already safe
+  output is written directly. A completed audit returns `0` even with findings or recoverable errors;
+  `1` remains reserved, input/configuration uses `2`, and fatal/report failures use `3`.
+- Alternatives considered: Collapsing or changing `analyzeProject`; loading configuration after
+  traversal; treating `minimumSeverity` as a failure threshold; re-sanitizing the completed terminal
+  report; announcing every configured target before persistence; or deleting a sibling/partial file
+  after a multi-report failure.
+- Consequences: The integration performs one discovery/parser/model/rule pass and preserves earlier
+  injected CLI behavior. Canonical root validation occurs twice so configuration can precede
+  traversal, but traversal/parsing occurs once. Audit timing ends before persistence. JSON may exist
+  if a later HTML write fails; the CLI returns `3`, makes no completed report-set claim, and performs
+  no unsafe rollback. A configured future finding-failure policy would require a deliberate public
+  contract change.
+- Requirements/contracts affected: RF-01, RF-02, RF-09, RF-10, RF-14, RF-15, RNF-01, RNF-04,
+  RNF-06, RNF-07, RNF-10, M06-T01, R-009, R-014, R-017, R-018, and R-019.
+- Evidence: application/CLI unit and real-filesystem integration tests, eleven compiled CLI smoke
+  scenarios, and the M06 evidence package as it is completed.
