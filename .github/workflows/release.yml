@@ -71,7 +71,5 @@ jobs:
       - name: Run release quality gate
         run: npm run release:check
 
-      - name: Publish with trusted provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish through npm trusted publishing
         run: npm publish --access public --ignore-scripts --provenance --tag "$NPM_DIST_TAG"
