@@ -115,6 +115,10 @@ Para la primera publicación:
 7. elimina el secret `NPM_TOKEN`, revoca el token temporal y configura el acceso de publicación como
    `Require two-factor authentication and disallow tokens`.
 
+Después de esta migración, el job de publicación se autentica únicamente mediante OIDC de GitHub. No
+vuelvas a agregar `NODE_AUTH_TOKEN`, `NPM_TOKEN` ni otra credencial de escritura al workflow de
+publicación.
+
 Para cada versión, actualiza `package.json`, `package-lock.json` y `PRODUCT_VERSION` en
 `src/index.ts` al mismo número semántico sin usar. Integra el cambio mediante el pull request y la CI
 habituales. Desde una rama `main` limpia y actualizada, valida y crea el tag:

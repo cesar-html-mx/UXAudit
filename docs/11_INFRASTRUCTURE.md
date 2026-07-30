@@ -113,6 +113,9 @@ For the first publication:
 7. delete the `NPM_TOKEN` secret, revoke the temporary token, and set package publishing access to
    `Require two-factor authentication and disallow tokens`.
 
+After this migration, the publish job authenticates only through GitHub OIDC. Do not restore
+`NODE_AUTH_TOKEN`, `NPM_TOKEN`, or another write credential to the release workflow.
+
 For every version, update `package.json`, `package-lock.json`, and `PRODUCT_VERSION` in
 `src/index.ts` to the same unused semantic version. Merge that change through the normal pull request
 and CI path. From a clean, up-to-date `main`, validate and create the release tag:
