@@ -1,0 +1,20 @@
+{
+  "expertHeuristicReview": {
+    "completedTaskCount": 6,
+    "status": "executed",
+    "timingInterpretation": "Durations measure the executed expert-review procedure, not user task time."
+  },
+  "participantTesting": {
+    "participantCount": 0,
+    "reason": "No real participant observations or responses are available in the repository.",
+    "status": "unexecuted"
+  },
+  "reviewId": "M06-EXPERT-HEURISTIC-REVIEW",
+  "schemaVersion": 1,
+  "sus": {
+    "reason": "SUS requires responses from real participants; no responses were collected.",
+    "responseCount": 0,
+    "score": null,
+    "status": "not-applicable"
+  }
+}

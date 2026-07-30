@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UXAudit audit report</title>
+    <style>
+      :root { color-scheme: light dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; line-height: 1.5; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: Canvas; color: CanvasText; }
+      a { color: LinkText; overflow-wrap: anywhere; }
+      code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+      .page-header, main, footer { width: min(76rem, calc(100% - 2rem)); margin-inline: auto; }
+      .page-header { padding-block: 2.5rem 1.5rem; border-bottom: 0.25rem solid #2563eb; }
+      .eyebrow { margin: 0; color: #2563eb; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      h1 { margin: 0.25rem 0; font-size: clamp(2rem, 6vw, 3.5rem); }
+      h2 { margin-top: 0; }
+      h3 { display: flex; align-items: center; gap: 0.6rem; }
+      h4, h5, p { margin-block: 0.5rem; }
+      main { padding-block: 1.5rem 3rem; }
+      main > section { margin-top: 1.5rem; padding: 1.25rem; border: 1px solid GrayText; border-radius: 0.65rem; }
+      .table-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem; }
+      .table-wrap { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; }
+      caption { padding: 0.6rem; background: #1d4ed8; color: white; font-weight: 700; text-align: left; }
+      th, td { padding: 0.55rem; border: 1px solid GrayText; text-align: left; vertical-align: top; }
+      th { width: 42%; }
+      .record-group { margin-top: 1.5rem; }
+      .finding, .processing-error { margin-top: 0.9rem; padding: 1rem; border: 1px solid GrayText; border-left: 0.4rem solid #64748b; border-radius: 0.5rem; }
+      .record-header { display: flex; align-items: center; flex-wrap: wrap; gap: 0.65rem; }
+      .record-header h4 { flex: 1 1 18rem; }
+      .badge { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; background: #475569; color: white; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+      .badge-critical { background: #7f1d1d; }
+      .badge-high { background: #b91c1c; }
+      .badge-medium { background: #a16207; }
+      .badge-low { background: #0369a1; }
+      .badge-info { background: #475569; }
+      .badge-discovery, .badge-read, .badge-parse, .badge-extract, .badge-rule { background: #6b21a8; }
+      .ordinal, .muted, .inert-reference { color: GrayText; }
+      .record-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 0.5rem; margin-block: 0.75rem; }
+      .record-facts div { padding: 0.55rem; background: color-mix(in srgb, CanvasText 7%, Canvas); border-radius: 0.35rem; }
+      .record-facts dt { font-weight: 700; }
+      .record-facts dd { margin: 0.2rem 0 0; overflow-wrap: anywhere; }
+      .compact-list { margin: 0; padding-left: 1.2rem; }
+      .empty-state { padding: 0.75rem; border: 1px dashed GrayText; border-radius: 0.35rem; }
+      footer { padding-block: 1.5rem 2.5rem; border-top: 1px solid GrayText; }
+      @media print { .page-header, main, footer { width: 100%; } main > section { break-inside: avoid; } }
+    </style>
+  </head>
+  <body>
+    <header class="page-header">
+      <p class="eyebrow">Static analysis report</p>
+      <h1>UXAudit audit report</h1>
+      <p>Project: <code>&lt;PROJECT_ROOT&gt;</code></p>
+    </header>
+    <main>
+      <section aria-labelledby="overview-heading">
+        <h2 id="overview-heading">Audit overview</h2>
+        <div class="table-grid">
+      <div class="table-wrap">
+        <table>
+          <caption>Result metadata and report paths</caption>
+          <tbody>
+            <tr>
+              <th scope="row">AuditResult schema</th>
+              <td><code>1.0.0</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Tool name</th>
+              <td><code>UXAudit</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Tool version</th>
+              <td><code>0.1.0</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Project root</th>
+              <td><code>&lt;PROJECT_ROOT&gt;</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Started at</th>
+              <td><code>&lt;STARTED_AT&gt;</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Completed at</th>
+              <td><code>&lt;COMPLETED_AT&gt;</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Duration (ms)</th>
+              <td><code>&lt;DURATION_MS&gt;</code></td>
+            </tr>
+            <tr>
+              <th scope="row">JSON report path</th>
+              <td><code>uxaudit-reports/audit-report.json</code></td>
+            </tr>
+            <tr>
+              <th scope="row">HTML report path</th>
+              <td><code>uxaudit-reports/audit-report.html</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>Normalized configuration</caption>
+          <tbody>
+            <tr>
+              <th scope="row">Schema version</th>
+              <td><code>1</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Categories</th>
+              <td><code>null</code> <span class="muted">(stable catalog)</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Rule IDs</th>
+              <td><code>null</code> <span class="muted">(stable catalog)</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Formats</th>
+              <td><ul class="compact-list">
+  <li><code>terminal</code></li>
+  <li><code>json</code></li>
+  <li><code>html</code></li>
+</ul></td>
+            </tr>
+            <tr>
+              <th scope="row">Output directory</th>
+              <td><code>uxaudit-reports</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Minimum terminal severity</th>
+              <td><code>info</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Terminal color</th>
+              <td><code>false</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Verbose processing detail</th>
+              <td><code>true</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        </div>
+      </section>
+      <section aria-labelledby="summary-heading">
+        <h2 id="summary-heading">Complete summary</h2>
+        <div class="table-grid">
+      <div class="table-wrap">
+        <table>
+          <caption>File processing</caption>
+          <tbody>
+            <tr>
+              <th scope="row">Discovered</th>
+              <td><code>2</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Selected</th>
+              <td><code>1</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Parsed</th>
+              <td><code>1</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Failed</th>
+              <td><code>0</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>Rule execution</caption>
+          <tbody>
+            <tr>
+              <th scope="row">Available</th>
+              <td><code>8</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Enabled</th>
+              <td><code>8</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Executed</th>
+              <td><code>8</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Succeeded</th>
+              <td><code>8</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Failed</th>
+              <td><code>0</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Findings</th>
+              <td><code>8</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>Findings by severity</caption>
+          <tbody>
+            <tr>
+              <th scope="row">Total</th>
+              <td><code>8</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Critical</th>
+              <td><code>0</code></td>
+            </tr>
+            <tr>
+              <th scope="row">High</th>
+              <td><code>3</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Medium</th>
+              <td><code>4</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Low</th>
+              <td><code>1</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Info</th>
+              <td><code>0</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>Findings by category</caption>
+          <tbody>
+            <tr>
+              <th scope="row">Accessibility</th>
+              <td><code>3</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Performance</th>
+              <td><code>2</code></td>
+            </tr>
+            <tr>
+              <th scope="row">SEO</th>
+              <td><code>2</code></td>
+            </tr>
+            <tr>
+              <th scope="row">UX</th>
+              <td><code>1</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>Processing errors by stage</caption>
+          <tbody>
+            <tr>
+              <th scope="row">Total</th>
+              <td><code>0</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Discovery</th>
+              <td><code>0</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Read</th>
+              <td><code>0</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Parse</th>
+              <td><code>0</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Extract</th>
+              <td><code>0</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Rule</th>
+              <td><code>0</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        </div>
+      </section>
+      <section aria-labelledby="findings-heading">
+        <h2 id="findings-heading">Findings <code>8</code></h2>
+        <p>All normalized findings are shown. The terminal minimum-severity setting does not filter this report.</p>
+      <section class="record-group" aria-labelledby="critical-findings">
+        <h3 id="critical-findings"><span class="badge badge-critical">Critical</span> <code>0</code></h3>
+        <p class="empty-state">No findings in this severity bucket.</p>
+      </section>
+      <section class="record-group" aria-labelledby="high-findings">
+        <h3 id="high-findings"><span class="badge badge-high">High</span> <code>3</code></h3>
+        <article class="finding">
+          <header class="record-header">
+            <span class="badge badge-high">High</span>
+            <h4>Button accessible name</h4>
+            <span class="ordinal">#1</span>
+          </header>
+          <dl class="record-facts">
+            <div><dt>Rule ID</dt><dd><code>accessibility/button-name</code></dd></div>
+            <div><dt>Category</dt><dd><code>accessibility</code></dd></div>
+            <div><dt>Severity</dt><dd><code>high</code></dd></div>
+            <div><dt>Confidence</dt><dd><code>high</code></dd></div>
+            <div><dt>Location</dt><dd><code>src/violations.tsx</code>:<code>15</code>:<code>5</code> <span class="muted">(offset <code>388</code>)</span> &rarr; <code>15</code>:<code>69</code> <span class="muted">(offset <code>452</code>; end exclusive)</span></dd></div>
+          </dl>
+          <h5>Message</h5>
+          <p>Button has no statically determinable accessible name.</p>
+          <h5>Explanation</h5>
+          <p>A button needs an accessible name so assistive-technology users can understand the action it performs.</p>
+          <h5>Recommendation</h5>
+          <p>Provide visible descriptive text, aria-label, or aria-labelledby with a non-empty accessible name.</p>
+          <h5>Limitations</h5>
+          <ul>
+            <li>The static text model does not implement the complete accessible-name computation.</li>
+            <li>Dynamic-only content, JSX spreads, and custom icon components are treated as unknown.</li>
+            <li>Referenced aria-labelledby targets and CSS-hidden content are not resolved.</li>
+          </ul>
+          <h5>Reference</h5>
+          <p>WCAG 2.2 — 4.1.2 Name, Role, Value <span class="muted">(URL: <code>null</code>)</span></p>
+        </article>
+        <article class="finding">
+          <header class="record-header">
+            <span class="badge badge-high">High</span>
+            <h4>Image alternative text</h4>
+            <span class="ordinal">#2</span>
+          </header>
+          <dl class="record-facts">
+            <div><dt>Rule ID</dt><dd><code>accessibility/img-alt</code></dd></div>
+            <div><dt>Category</dt><dd><code>accessibility</code></dd></div>
+            <div><dt>Severity</dt><dd><code>high</code></dd></div>
+            <div><dt>Confidence</dt><dd><code>high</code></dd></div>
+            <div><dt>Location</dt><dd><code>src/violations.tsx</code>:<code>7</code>:<code>5</code> <span class="muted">(offset <code>176</code>)</span> &rarr; <code>13</code>:<code>7</code> <span class="muted">(offset <code>316</code>; end exclusive)</span></dd></div>
+          </dl>
+          <h5>Message</h5>
+          <p>Intrinsic image has no explicit alt attribute.</p>
+          <h5>Explanation</h5>
+          <p>An intrinsic image without an explicit text alternative may be unavailable to people who cannot perceive the image.</p>
+          <h5>Recommendation</h5>
+          <p>Add a descriptive alt value, or use alt=&quot;&quot; when the image is intentionally decorative.</p>
+          <h5>Limitations</h5>
+          <ul>
+            <li>Custom image components and aliases are not inferred.</li>
+            <li>A later JSX spread can provide alt at runtime and is therefore treated as unknown.</li>
+            <li>The rule checks explicit attribute presence, not the descriptive quality of alt text.</li>
+          </ul>
+          <h5>Reference</h5>
+          <p>WCAG 2.2 — 1.1.1 Non-text Content <span class="muted">(URL: <code>null</code>)</span></p>
+        </article>
+        <article class="finding">
+          <header class="record-header">
+            <span class="badge badge-high">High</span>
+            <h4>Form input label</h4>
+            <span class="ordinal">#3</span>
+          </header>
+          <dl class="record-facts">
+            <div><dt>Rule ID</dt><dd><code>accessibility/input-label</code></dd></div>
+            <div><dt>Category</dt><dd><code>accessibility</code></dd></div>
+            <div><dt>Severity</dt><dd><code>high</code></dd></div>
+            <div><dt>Confidence</dt><dd><code>high</code></dd></div>
+            <div><dt>Location</dt><dd><code>src/violations.tsx</code>:<code>14</code>:<code>5</code> <span class="muted">(offset <code>321</code>)</span> &rarr; <code>14</code>:<code>67</code> <span class="muted">(offset <code>383</code>; end exclusive)</span></dd></div>
+          </dl>
+          <h5>Message</h5>
+          <p>Form control has no statically associated label or accessible name.</p>
+          <h5>Explanation</h5>
+          <p>A form control needs a programmatic label or accessible name so users can understand its purpose.</p>
+          <h5>Recommendation</h5>
+          <p>Associate an intrinsic label with nesting or htmlFor/id, or provide a non-empty aria-label or aria-labelledby value.</p>
+          <h5>Limitations</h5>
+          <ul>
+            <li>Dynamic IDs, labels, and JSX spreads are treated as unknown rather than violations.</li>
+            <li>Custom label or form-control abstractions are not resolved across component boundaries.</li>
+            <li>aria-labelledby target existence and the complete accessible-name computation are not validated.</li>
+            <li>Input types hidden, button, submit, reset, and image are outside this label rule.</li>
+            <li>A nested label is not checked for the one-labelable-descendant content constraint.</li>
+          </ul>
+          <h5>Reference</h5>
+          <p>WCAG 2.2 — 1.3.1 Info and Relationships <span class="muted">(URL: <code>null</code>)</span></p>
+        </article>
+      </section>
+      <section class="record-group" aria-labelledby="medium-findings">
+        <h3 id="medium-findings"><span class="badge badge-medium">Medium</span> <code>4</code></h3>
+        <article class="finding">
+          <header class="record-header">
+            <span class="badge badge-medium">Medium</span>
+            <h4>Image dimensions</h4>
+            <span class="ordinal">#1</span>
+          </header>
+          <dl class="record-facts">
+            <div><dt>Rule ID</dt><dd><code>performance/img-dimensions</code></dd></div>
+            <div><dt>Category</dt><dd><code>performance</code></dd></div>
+            <div><dt>Severity</dt><dd><code>medium</code></dd></div>
+            <div><dt>Confidence</dt><dd><code>medium</code></dd></div>
+            <div><dt>Location</dt><dd><code>src/violations.tsx</code>:<code>16</code>:<code>5</code> <span class="muted">(offset <code>457</code>)</span> &rarr; <code>23</code>:<code>7</code> <span class="muted">(offset <code>644</code>; end exclusive)</span></dd></div>
+          </dl>
+          <h5>Message</h5>
+          <p>Image does not provide statically verified positive integer width and height attributes; review its reserved layout space.</p>
+          <h5>Explanation</h5>
+          <p>An intrinsic image without positive integer width and height attributes may lack intrinsic space reservation and contribute to layout shift.</p>
+          <h5>Recommendation</h5>
+          <p>Provide positive integer width and height attributes that preserve the image aspect ratio, or verify that CSS reserves equivalent space.</p>
+          <h5>Limitations</h5>
+          <ul>
+            <li>External CSS, aspect-ratio, and component-level layout can reserve equivalent space, so the finding describes reviewable risk rather than observed layout shift.</li>
+            <li>Dynamic dimension values and unresolved JSX spreads are unknown and do not independently produce a finding; a proved sibling violation remains reviewable.</li>
+            <li>A literal zero-by-zero image is treated as content not intended for the user; zero paired with a positive dimension remains reviewable.</li>
+            <li>Only intrinsic img attributes are checked; custom image components and runtime image metadata are not inferred.</li>
+          </ul>
+          <h5>Reference</h5>
+          <p><a href="https://html.spec.whatwg.org/multipage/embedded-content-other.html#dimension-attributes" rel="noopener noreferrer" referrerpolicy="no-referrer">HTML Standard — Dimension attributes</a> <span class="muted">(<code>https://html.spec.whatwg.org/multipage/embedded-content-other.html#dimension-attributes</code>)</span></p>
+        </article>
+        <article class="finding">
+          <header class="record-header">
+            <span class="badge badge-medium">Medium</span>
+            <h4>Ambiguous link text</h4>
+            <span class="ordinal">#2</span>
+          </header>
+          <dl class="record-facts">
+            <div><dt>Rule ID</dt><dd><code>seo/ambiguous-link-text</code></dd></div>
+            <div><dt>Category</dt><dd><code>seo</code></dd></div>
+            <div><dt>Severity</dt><dd><code>medium</code></dd></div>
+            <div><dt>Confidence</dt><dd><code>medium</code></dd></div>
+            <div><dt>Location</dt><dd><code>src/violations.tsx</code>:<code>32</code>:<code>5</code> <span class="muted">(offset <code>831</code>)</span> &rarr; <code>34</code>:<code>9</code> <span class="muted">(offset <code>923</code>; end exclusive)</span></dd></div>
+          </dl>
+          <h5>Message</h5>
+          <p>Link uses configured ambiguous static text and needs contextual review.</p>
+          <h5>Explanation</h5>
+          <p>Generic link text can obscure the destination when the link is considered without its surrounding context.</p>
+          <h5>Recommendation</h5>
+          <p>Use visible link text that identifies the destination or purpose, and review its surrounding accessible context.</p>
+          <h5>Limitations</h5>
+          <ul>
+            <li>Only exact retained text on intrinsic links is compared; partial and dynamic text are not reported.</li>
+            <li>Custom link components and their rendered output are not inferred.</li>
+            <li>Surrounding content, ARIA naming, destination URLs, and visual context are not evaluated.</li>
+          </ul>
+          <h5>Reference</h5>
+          <p><span class="muted">None (<code>null</code>)</span></p>
+        </article>
+        <article class="finding">
+          <header class="record-header">
+            <span class="badge badge-medium">Medium</span>
+            <h4>Multiple H1 elements</h4>
+            <span class="ordinal">#3</span>
+          </header>
+          <dl class="record-facts">
+            <div><dt>Rule ID</dt><dd><code>seo/multiple-h1</code></dd></div>
+            <div><dt>Category</dt><dd><code>seo</code></dd></div>
+            <div><dt>Severity</dt><dd><code>medium</code></dd></div>
+            <div><dt>Confidence</dt><dd><code>medium</code></dd></div>
+            <div><dt>Location</dt><dd><code>src/violations.tsx</code>:<code>37</code>:<code>7</code> <span class="muted">(offset <code>975</code>)</span> &rarr; <code>37</code>:<code>73</code> <span class="muted">(offset <code>1041</code>; end exclusive)</span></dd></div>
+          </dl>
+          <h5>Message</h5>
+          <p>Component contains more than one intrinsic h1 element and needs review.</p>
+          <h5>Explanation</h5>
+          <p>Multiple intrinsic h1 elements owned by one component can make the rendered page hierarchy unclear.</p>
+          <h5>Recommendation</h5>
+          <p>Review the component and keep one primary h1 for each rendered page context, using lower heading levels for subordinate sections.</p>
+          <h5>Limitations</h5>
+          <ul>
+            <li>The initial scope counts intrinsic h1 elements only within each syntactically recognized component.</li>
+            <li>Conditional rendering, routes, and whether owned headings appear together at runtime are not evaluated.</li>
+            <li>Custom heading components, component composition, and heading roles are not inferred.</li>
+          </ul>
+          <h5>Reference</h5>
+          <p><span class="muted">None (<code>null</code>)</span></p>
+        </article>
+        <article class="finding">
+          <header class="record-header">
+            <span class="badge badge-medium">Medium</span>
+            <h4>Very small literal inline text</h4>
+            <span class="ordinal">#4</span>
+          </header>
+          <dl class="record-facts">
+            <div><dt>Rule ID</dt><dd><code>ux/small-inline-text</code></dd></div>
+            <div><dt>Category</dt><dd><code>ux</code></dd></div>
+            <div><dt>Severity</dt><dd><code>medium</code></dd></div>
+            <div><dt>Confidence</dt><dd><code>high</code></dd></div>
+            <div><dt>Location</dt><dd><code>src/violations.tsx</code>:<code>39</code>:<code>66</code> <span class="muted">(offset <code>1122</code>)</span> &rarr; <code>39</code>:<code>78</code> <span class="muted">(offset <code>1134</code>; end exclusive)</span></dd></div>
+          </dl>
+          <h5>Message</h5>
+          <p>Literal inline text may be too small.</p>
+          <h5>Explanation</h5>
+          <p>Text rendered with a very small literal inline pixel font size may be difficult to read.</p>
+          <h5>Recommendation</h5>
+          <p>Use an inline fontSize of at least 12px, or define an equivalent readable size in the project style system.</p>
+          <h5>Limitations</h5>
+          <ul>
+            <li>External stylesheets, class names, inherited styles, and the rendered cascade are not evaluated.</li>
+            <li>Dynamic styles, unresolved JSX spreads, and object styles with unknown properties are treated as unknown.</li>
+            <li>Relative units, percentages, calculations, browser zoom, and user display settings are not resolved.</li>
+            <li>Only intrinsic elements with retained non-empty static text are evaluated.</li>
+            <li>Metadata, inert, void, and other intrinsically non-rendered text containers are excluded.</li>
+          </ul>
+          <h5>Reference</h5>
+          <p><span class="muted">None (<code>null</code>)</span></p>
+        </article>
+      </section>
+      <section class="record-group" aria-labelledby="low-findings">
+        <h3 id="low-findings"><span class="badge badge-low">Low</span> <code>1</code></h3>
+        <article class="finding">
+          <header class="record-header">
+            <span class="badge badge-low">Low</span>
+            <h4>Image lazy loading</h4>
+            <span class="ordinal">#1</span>
+          </header>
+          <dl class="record-facts">
+            <div><dt>Rule ID</dt><dd><code>performance/img-lazy-loading</code></dd></div>
+            <div><dt>Category</dt><dd><code>performance</code></dd></div>
+            <div><dt>Severity</dt><dd><code>low</code></dd></div>
+            <div><dt>Confidence</dt><dd><code>medium</code></dd></div>
+            <div><dt>Location</dt><dd><code>src/violations.tsx</code>:<code>24</code>:<code>5</code> <span class="muted">(offset <code>649</code>)</span> &rarr; <code>31</code>:<code>7</code> <span class="muted">(offset <code>826</code>; end exclusive)</span></dd></div>
+          </dl>
+          <h5>Message</h5>
+          <p>Image is not statically configured with loading=&quot;lazy&quot;; review whether lazy loading is appropriate.</p>
+          <h5>Explanation</h5>
+          <p>An intrinsic image that is not configured for lazy loading may be fetched before it is needed and consume avoidable resources.</p>
+          <h5>Recommendation</h5>
+          <p>For images that are not intentionally above the fold, set loading=&quot;lazy&quot;; retain eager loading when visual priority requires it.</p>
+          <h5>Limitations</h5>
+          <ul>
+            <li>Static analysis cannot determine whether an image is above the fold or otherwise visually critical, so every finding is advisory.</li>
+            <li>Missing, eager, and invalid literal loading values are reviewable; dynamic values and unresolved JSX spreads are treated as unknown.</li>
+            <li>Custom image components, aliases, preload behavior, and runtime loading priorities are not inferred.</li>
+          </ul>
+          <h5>Reference</h5>
+          <p><a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes" rel="noopener noreferrer" referrerpolicy="no-referrer">HTML Standard — Lazy loading attributes</a> <span class="muted">(<code>https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes</code>)</span></p>
+        </article>
+      </section>
+      <section class="record-group" aria-labelledby="info-findings">
+        <h3 id="info-findings"><span class="badge badge-info">Info</span> <code>0</code></h3>
+        <p class="empty-state">No findings in this severity bucket.</p>
+      </section>
+      </section>
+      <section aria-labelledby="errors-heading">
+        <h2 id="errors-heading">Recoverable processing errors <code>0</code></h2>
+        <p>Errors are grouped by their normalized processing stage.</p>
+      <section class="record-group" aria-labelledby="discovery-errors">
+        <h3 id="discovery-errors"><span class="badge badge-discovery">Discovery</span> <code>0</code></h3>
+        <p class="empty-state">No errors in this processing-stage bucket.</p>
+      </section>
+      <section class="record-group" aria-labelledby="read-errors">
+        <h3 id="read-errors"><span class="badge badge-read">Read</span> <code>0</code></h3>
+        <p class="empty-state">No errors in this processing-stage bucket.</p>
+      </section>
+      <section class="record-group" aria-labelledby="parse-errors">
+        <h3 id="parse-errors"><span class="badge badge-parse">Parse</span> <code>0</code></h3>
+        <p class="empty-state">No errors in this processing-stage bucket.</p>
+      </section>
+      <section class="record-group" aria-labelledby="extract-errors">
+        <h3 id="extract-errors"><span class="badge badge-extract">Extract</span> <code>0</code></h3>
+        <p class="empty-state">No errors in this processing-stage bucket.</p>
+      </section>
+      <section class="record-group" aria-labelledby="rule-errors">
+        <h3 id="rule-errors"><span class="badge badge-rule">Rule</span> <code>0</code></h3>
+        <p class="empty-state">No errors in this processing-stage bucket.</p>
+      </section>
+      </section>
+    </main>
+    <footer>
+      <p>Rendered from AuditResult schema <code>1.0.0</code>. Stored locations use one-based lines and zero-based UTF-16 columns and offsets; this report displays columns as one-based, preserves offsets as zero-based, and keeps range ends exclusive.</p>
+      <p>Absolute timestamps and duration are explicit result data and may vary between audit executions.</p>
+    </footer>
+  </body>
+</html>

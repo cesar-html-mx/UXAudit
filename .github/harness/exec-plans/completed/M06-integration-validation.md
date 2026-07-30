@@ -1,0 +1,324 @@
+# M06 ExecPlan — End-to-end integration, validation, usability, and security evidence
+
+## Purpose and observable outcome
+
+UXAudit performs the complete scan from CLI input to reports. Controlled projects demonstrate the
+behavior and accuracy of every stable rule. System, robustness, usability, performance, and security
+evidence is assembled for the TFM testing delivery.
+
+## Prerequisites
+
+M01 through M05 are complete. Read all product acceptance criteria, test strategy, security plan,
+academic alignment, and the complete traceability matrix.
+
+## Repository context
+
+The clean baseline is the merged M05 commit `bd22ef5` on `main`. The harness correctly identifies
+M06/M06-T01, but `state.json` still names the merged M05 branch and task commit. The milestone branch
+must be created as `milestone/m06-integration-validation` and the state synchronized before product
+implementation.
+
+The production CLI currently composes only `scanProject` and `analyzeProject`, ending after the
+normalized analysis model and three established progress lines. M05 independently completed
+configuration loading, the rule/result contracts, the three pure reporters, and exclusive JSON/HTML
+file persistence. M06 must compose these existing boundaries without changing their completed public
+contracts.
+
+The repository shell initially resolves Node.js 22.14.0/npm 11.2.0, outside the enforced engines.
+Node.js 24.18.0/npm 11.16.0 is installed through nvm and must be activated for every product gate,
+commit hook, scenario, and evidence run.
+
+## Scope
+
+- complete CLI orchestration;
+- controlled valid, invalid, mixed, hostile, and large projects;
+- end-to-end and acceptance tests;
+- expected versus actual rule results;
+- precision and recall by rule;
+- exit codes and error scenarios;
+- performance baseline;
+- security verification;
+- developer usability protocol and SUS/heuristic evidence;
+- implementation and test documentation.
+
+## Out of scope
+
+- falsifying user-test results when participants are unavailable;
+- browser/runtime analysis;
+- claims of complete WCAG/SEO/UX/Core Web Vitals validation;
+- hosted deployment.
+
+## Requirements and traceability
+
+All RF and RNF requirements. Every requirement must map to implemented code, test/evidence, or a
+truthfully documented limitation.
+
+## Architecture and contracts
+
+- Add one application-level audit facade that canonicalizes the selected root, loads configuration
+  before traversal/parsing, invokes the existing analysis facade exactly once, loads/evaluates the
+  stable rules over the normalized model, builds one `AuditResult`, and writes selected JSON/HTML
+  reports through the M05 writer.
+- Preserve the completed scan/parsing progress contract alongside the final audit result so the CLI
+  can retain the established validation, discovery, and parsing lines.
+- Map configuration `null` filters to omitted rule-engine filters and preserve explicit empty arrays
+  as an intentional zero-rule selection.
+- Map file counters exactly as discovered files, selected source candidates, parsed files, and
+  parser failures. Configured report targets are non-null in `AuditResult` exactly when selected;
+  only returned `WrittenReport` values may be announced as generated.
+- Expose `--config`, `--format`, `--output`, `--category`, `--rule`, `--severity`, `--no-color`, and
+  `--verbose`. Build CLI overrides only from values whose Commander source is the command line so
+  defaults do not override configuration-file values.
+- Render progress and diagnostics with per-value sanitization. Write the already safe terminal
+  reporter output directly so its fixed ANSI badges are not neutralized by a second sanitizer.
+- Keep successful completed audits, findings, and recoverable discovery/source/rule errors at exit
+  code `0`; command/path/configuration input errors use `2`; fatal pipeline or report-write failures
+  use `3`. Exit code `1` remains reserved because the completed M05 configuration has no
+  finding-failure policy and `minimumSeverity` is presentation-only.
+- Use an injected clock in application tests. Audit timing ends when the immutable result is built;
+  report persistence occurs afterward and may leave an already completed sibling/partial target on
+  failure, consistent with the documented no-rollback security boundary.
+- Repair terminal harness validation before closure: the ready state must have one coherent active
+  milestone, while the completed final state must have zero active milestones, null active IDs, and
+  all milestones in the completed set. State display and generated documentation must also represent
+  final completion truthfully.
+
+## Milestone tasks
+
+### M06-T01 — Complete end-to-end pipeline
+
+Implement and verify the complete `ux-audit scan` flow, exit codes, progress/verbose behavior, report
+paths, and recoverable errors.
+
+Concrete work:
+
+- add the application audit facade and focused application integration tests;
+- wire every documented option and stable error boundary into Commander while preserving injected
+  scan/analyze compatibility tests;
+- exercise the compiled CLI with default terminal output, all formats, configuration precedence,
+  empty filters, recoverable syntax errors, existing report targets, and hostile terminal values;
+- update README, product specification, architecture, security boundaries, and traceability.
+
+Focused gate: format, lint, typecheck, application/CLI/reporting tests, build, and compiled smoke.
+
+### M06-T02 — Build controlled projects
+
+Create valid, invalid, mixed, hostile, and large fixtures with versioned expected results.
+
+Use committed `valid-project`, `invalid-project`, and `mixed-project` sources. Construct portable
+security links/hostile names and the repeated large project at scenario runtime from versioned
+parameters. Store one closed manifest that states each project's purpose, expected rules/errors, and
+volatile fields. Reuse reviewed M02-M05 cases only after projecting them through the complete built
+CLI.
+
+Focused gate: fixture-contract tests plus the built M06 scenario over all five controlled projects.
+
+### M06-T03 — Measure detection behavior
+
+Execute each stable rule, classify TP/FP/FN/TN where meaningful, calculate precision/recall, inspect
+failures, and correct justified defects without hiding limitations.
+
+Version instance-level ground truth for positive, negative, and unsupported cases. Positive cases
+become TP/FN; negative cases become TN/FP; unmatched findings become FP. Unsupported cases remain
+outside denominators and are reported separately. Retain per-rule JSON and CSV with exact counts,
+precision, recall, notes, expected-versus-actual finding identities, and any corrective action.
+
+Focused gate: accuracy-calculation tests and exact scenario comparison for all eight stable rules.
+
+### M06-T04 — System, robustness, performance, and security
+
+Run invalid inputs, malformed files, permissions where portable, deterministic reruns, dependency
+audit, symlink/path/HTML injection scenarios, and a documented performance baseline.
+
+Measure the complete built CLI on the generated large project across repeated runs and retain
+scale, environment, individual durations, min/median/max, memory observations, and conclusions
+without a machine-dependent pass threshold. Execute the security checklist against the real CLI and
+reuse focused injected-adapter evidence only where a portable real-filesystem operation is not
+available. Record CodeQL as unexecuted unless a hosted result is actually retrieved.
+
+Focused gate: system/robustness/security scenario, dependency audit, deterministic projections, and
+performance record validation.
+
+### M06-T05 — Usability and TFM evidence
+
+Run defined developer tasks with real participants when available; otherwise perform and label an
+expert heuristic review. Use the SUS template only with actual responses. Assemble the evidence
+index and draft factual implementation/testing summaries.
+
+No participant data is available in the repository, so execute an expert heuristic review and label
+participant testing and SUS as unexecuted/N/A. Record each protocol task, completion, time, errors,
+backtracking, help, observation, severity, and corrective action. Assemble the Activity 3 evidence,
+defect/correction list, unsupported/unexecuted checks, implementation/testing summaries, exact
+environment, raw commands, manifest, and milestone report.
+
+Repair and test final-state harness handling before transition. Run the full gate, coverage,
+zero-skip/todo test record, smoke, M06 scenario, harness, dependency audit, evidence collection twice,
+self-review, finalization, and milestone advance.
+
+## Validation and acceptance
+
+Run the complete repository verification and all controlled projects from the built CLI. Compare
+actual output to versioned expected results. Review every item in `docs/09_ACCEPTANCE_CRITERIA.md`
+and `docs/14_ACADEMIC_ALIGNMENT.md`.
+
+Required commands under Node.js 24.18.0/npm 11.16.0:
+
+```bash
+npm run verify
+npm run test:coverage
+npm run test:smoke
+npm run test:scenario:m06
+npm audit --audit-level=moderate
+node .github/harness/scripts/validate-harness.mjs
+npm run evidence:m06
+npm run evidence:m06
+```
+
+No required Vitest test may be skipped or marked todo. JSON/HTML reruns use fresh project copies
+because the report writer intentionally refuses overwrite; deterministic comparison removes only the
+documented canonical root, timestamp, and duration volatility.
+
+## Evidence to retain
+
+All items required by `docs/14_ACADEMIC_ALIGNMENT.md`, including raw machine outputs and concise
+human conclusions.
+
+The final package under `evidence/m06-validation/` must include:
+
+- environment/source digest and raw command records;
+- quality, coverage, zero-skip/todo, smoke, scenario, harness, and dependency-audit results;
+- controlled-project manifest plus expected/actual stable projections;
+- terminal, JSON, and HTML samples;
+- per-rule ground truth, confusion matrix, precision/recall, and unsupported cases;
+- security checklist and raw scenario observations;
+- repeated performance measurements and summary;
+- expert heuristic review, explicit participant/SUS status, and usability observations;
+- defects/corrections plus unsupported, unexecuted, or not-applicable checks;
+- factual Activity 3 implementation/testing summaries;
+- SHA-256 manifest finalized with the milestone report.
+
+## Progress
+
+- [x] Milestone started.
+- [x] Repository inspected and plan reconciled with reality.
+- [x] M06-T01 complete audit pipeline implemented and verified.
+- [x] M06-T02 controlled project corpus and built-CLI scenario implemented and verified.
+- [x] M06-T03 per-rule ground truth, matching, and accuracy evidence implemented and verified.
+- [x] M06-T04 system, robustness, performance, dependency, and security checks implemented and
+      verified.
+- [x] Tasks completed.
+- [x] Quality gate passed.
+- [x] Evidence collected.
+- [x] Documentation and traceability updated.
+- [x] Milestone closed and state advanced.
+
+## Discoveries
+
+- The merged M05 tree is clean on `main`, while branch and last-commit fields retain pre-merge M05
+  values that the current harness validator does not detect.
+- Commander 15 supplies `color=true` as the default source for `--no-color`; copying all parsed
+  options would incorrectly override a file's `color=false`.
+- JSON has a pure renderer plus the shared writer but no format-specific write helper; HTML has both.
+- The exclusive report writer rejects reruns into an existing target and deliberately performs no
+  unsafe rollback after a partial/post-create failure.
+- M02-M05 contain reusable discovery, parser, rule, hostile-report, writer, and evidence patterns,
+  but none is complete M06 end-to-end or rule-accuracy evidence.
+- Initial inspection found only M06 CSV/security/usability templates; T02-T05 subsequently added the
+  fixture projects, scenarios, evidence lifecycle, performance baseline, and heuristic observations.
+- Initial inspection also found that the final milestone transition produced a semantically correct
+  `status=complete` state unsupported by the harness renderers; T05 now validates and renders that
+  terminal state without weakening the ready-state gate.
+- `gh` is unavailable and prior non-interactive HTTPS pushes lacked credentials. Publication remains
+  best-effort and is not a product blocker.
+- M06-T01's final Node.js 24 gate passed 548 tests across 50 files, all 11 compiled CLI scenarios,
+  95.88% statement / 91.46% branch / 99.80% function / 95.84% line coverage, and harness
+  validation. Independent implementation and test reviews found no blocking defect.
+- Separating renderer and writer error boundaries prevents an injected renderer from masquerading
+  as a stable persistence failure; only the actual writer may propagate `ReportWriteError`.
+- Committing `.next`, `build`, and `out` examples avoids Git's conventional `node_modules`,
+  `coverage`, and `dist` ignore rules while still exercising three default generated-directory
+  exclusions in the mixed project.
+- The built scenario matched all five manifest contracts twice: findings were 0/8/3/1/0 for
+  valid/invalid/mixed/hostile/large, only mixed retained one recoverable parse error, target code
+  never executed, and stable projections were byte-identical.
+- M06-T02's Node.js 24 gate passed 554 tests across 51 files, 95.88% statement / 91.46% branch /
+  99.80% function / 95.84% line coverage, the twice-executed system scenario, harness validation,
+  and independent review.
+- M06-T03 ground truth contains 11 positive, eight negative, and eight unsupported instances.
+  Observed results matched every reviewed case with 11 TP, zero FP, eight TN, zero FN, zero
+  unmatched findings, and zero unsupported detections; per-rule precision/recall is 1.0 only for
+  this controlled corpus.
+- Accuracy matching uses the built CLI for observed findings and a separate model pass only to
+  resolve source case ranges. Same project/rule/file containment is required; duplicate findings
+  become unmatched FP rather than satisfying one instance twice.
+- M06-T04 executed 15 complete built-CLI cases on Linux. Real permission denials and all three
+  requested runtime links were available; malformed/configuration/path/write failures remained
+  isolated, hostile reports matched their pure renderers, and stable hostile reruns matched.
+- The generated performance baseline ran five times over 240 files. Durations are descriptive and
+  the maximum observed child `VmRSS` comes from 5 ms `/proc` sampling rather than an exact lifetime
+  peak. The moderate npm audit returned zero vulnerabilities; hosted CodeQL remained unexecuted.
+- The six-task expert heuristic procedure is executable from the built CLI and produces
+  machine-readable/CSV records. It contains one low prioritization observation, five no-issue
+  observations, participant count zero, participant testing unexecuted, and SUS N/A/null.
+- Terminal lifecycle tests execute the actual final advance/sync/validate/show sequence in a
+  temporary repository and reject incoherent ready, transitional, and complete combinations.
+- The M06 evidence lifecycle has an exact 42-artifact base contract. It executes in an allowlisted
+  credential-free snapshot, normalizes only machine-dependent performance timing/RSS and
+  expert-procedure timing for the second-run comparison, preserves the first package, and adds the
+  milestone report only through finalization.
+
+## Decision log
+
+- Preserve completed M01-M03 progress output through an additive audit result rather than replacing
+  those public lines.
+- Treat `minimumSeverity` only as terminal presentation. Do not introduce an unapproved M05 contract
+  change merely to emit exit code `1`.
+- Treat the hostile project required by this plan and the `security-project` required by the test
+  strategy as one controlled project with both names documented.
+- Generate the large fixture from committed parameters instead of versioning thousands of repeated
+  files.
+- Use expert heuristic review because no real participant responses are available; do not populate
+  SUS.
+- Treat performance as an environment-labelled observation with no pass threshold, and distinguish
+  sampled child memory, structural HTML validation, reviewed architecture, and hosted analysis from
+  stronger claims that were not executed.
+- Treat the scripted expert review as a substitute inspection, never as participant research or
+  SUS; retain its low-severity prioritization observation without turning it into a product failure.
+- Require terminal harness coherence and an exact, sanitized, two-pass evidence contract before
+  final milestone closure.
+
+## Risks and recovery
+
+- A JSON write can succeed before a later HTML write fails. Do not delete or claim the partial set;
+  surface one stable failure and use a fresh controlled copy for recovery.
+- Volatile roots/timing can create false determinism failures. Compare a documented stable projection
+  while retaining the raw result.
+- Dynamic JSX/custom abstractions can distort accuracy. Keep unsupported instances outside the
+  confusion-matrix denominator and publish limitations.
+- Permission and symlink behavior varies by OS. Execute when portable and label N/A truthfully while
+  retaining injected boundary tests.
+- Default Node.js 22 can invalidate evidence and hooks. Activate the pinned Node.js 24 runtime before
+  every gate.
+- Missing GitHub tooling/credentials may prevent push, PR, CodeQL, or hosted CI inspection. Record
+  those as unavailable without blocking locally verified closure.
+
+## Outcomes and retrospective
+
+M06 composes the complete local CLI, validates five controlled projects, measures every stable rule,
+and retains factual system, security, performance, usability, and Activity 3 evidence. T01-T04 are
+committed as `c5eb8bc`, `79454e4`, `e7ea7b5`, and `709ddc5`; T05 is committed as `691a4ea` and adds
+the terminal harness lifecycle, expert review, exact evidence lifecycle, and final documentation.
+
+The definitive Node.js 24 gate passed 619 tests across 56 files with no skipped/todo tests and
+95.84% statement / 91.50% branch / 99.82% function / 95.79% line coverage. Controlled results were
+0/8/3/1/0 findings, 11 TP/0 FP/8 TN/0 FN on the reviewed corpus, 15 robustness cases, five
+descriptive 240-file runs, and six expert-review tasks. Two isolated evidence collections matched
+stable results and preserved a 42-artifact base package with source digest
+`sha256:92bd1c57cf85126082270c9111b03cd00fe28491d77a8c9cba7aa0b4d8ad404b`.
+
+Participant testing and SUS remain unexecuted/N/A, browser/runtime behavior and hosted CodeQL/CI
+remain outside the executed evidence, and the performance values are one-machine observations
+without a portable threshold. Publication remains best-effort because the prior non-interactive
+HTTPS push lacked credentials and `gh` was unavailable. M06 is the final configured milestone, so
+closure transitioned the harness to terminal `complete` with no active milestone/task and no next
+milestone. The finalized manifest covers all 42 base artifacts plus `MILESTONE_REPORT.md`.

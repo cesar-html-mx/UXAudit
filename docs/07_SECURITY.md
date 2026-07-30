@@ -152,9 +152,9 @@ failing closed whenever an observable change occurs.
   comparison, and a SHA-256 manifest fail closed; finalization verifies the existing 20-artifact
   manifest before adding the milestone report.
 
-The M04 engine is not yet connected to the CLI and does not write reports. M05 must preserve these
-validated boundaries when loading user configuration and must treat every normalized finding field
-as untrusted when rendering terminal, JSON, or HTML output.
+The M06 CLI integration composes this engine with the M05 result/reporting boundaries without giving
+rules filesystem, parser, reporter, or process access. Every normalized finding field remains
+untrusted at presentation.
 
 ## M05-T02 implemented configuration controls and limits
 
@@ -166,7 +166,7 @@ as untrusted when rendering terminal, JSON, or HTML output.
   device/inode, size, modification-time, and change-time snapshots around a descriptor-only read.
   POSIX requests read-only, no-follow, and non-blocking flags; Windows uses read-only with the same
   portable identity checks.
-- File and future CLI layers are closed plain-data records. Accessors, proxies, sparse/exotic or
+- File and CLI layers are closed plain-data records. Accessors, proxies, sparse/exotic or
   oversized arrays, unknown keys/rules, duplicates, and invalid primitive values fail closed
   without invoking supplied getters.
 - Output directories are bounded portable relative paths. Absolute paths, drive prefixes,
@@ -194,10 +194,10 @@ symlink-resistant creation, and exclusive report writes.
 - Verbose mode exposes only already normalized recoverable error records. Native causes, stacks,
   source text, and additional absolute paths are not available to the reporter.
 
-The terminal renderer is pure and not yet connected to the CLI. M06 must not pass its already-safe
-color output through an assembled-output sanitizer that would neutralize trusted ANSI; it must
-preserve the rule that only the reporter introduces those fixed sequences. M05-T04 still owns
-canonical output-directory authorization, symlink-resistant creation, and exclusive report writes.
+The M06 CLI writes this pure renderer's output directly and does not pass it through an assembled
+output sanitizer that would neutralize trusted ANSI. Progress, diagnostics, and file-generation
+claims continue to use the safe value boundary, while only the reporter introduces fixed color
+sequences.
 
 ## M05-T04 implemented JSON and report-write controls
 
@@ -220,7 +220,7 @@ some network filesystems may not honor local `O_EXCL` semantics identically. The
 observable changes but cannot eliminate every pathname race. If a failure occurs after exclusive
 creation, UXAudit deliberately leaves the possibly partial target: blindly unlinking that pathname
 after an identity race could remove an attacker replacement. Only a returned `WrittenReport` may be
-claimed by M06 as generated.
+announced by the CLI as generated.
 
 ## M05-T05 implemented HTML controls
 
@@ -243,3 +243,55 @@ XSS validation consists of hostile fixtures, start-tag/attribute inspection, esc
 CSP inspection, and absence of executable/resource-bearing markup. It does not execute a browser
 and must not be described as a runtime exploit test. File persistence continues to use the T04
 writer and inherits its residual portable-filesystem limits.
+
+## M06-T01 implemented integration controls and limits
+
+- The project root is canonicalized before configuration loading. Conventional configuration stays
+  in-root; an explicit path remains separate user authority. Configuration completes before
+  discovery, source reads, or parsing.
+- Commander contributes only values explicitly sourced from the CLI. Its absent `--no-color`
+  default cannot override a file value, and repeatable selections are deduplicated before closed
+  configuration validation.
+- Rules receive the existing normalized model once, and all reporters receive the same frozen
+  `AuditResult`. Target project modules, package scripts, configuration modules, and shells remain
+  unexecuted.
+- Progress, Commander diagnostics, typed failures, and writer-confirmed relative paths sanitize
+  every dynamic value. The terminal reporter retains its own per-value sanitization and fixed ANSI.
+- Selected result paths are not treated as persistence receipts. JSON is attempted before HTML, and
+  only exact returned writer records are announced. An existing target or later write failure uses
+  exit `3`, produces no completed report-set claim, and triggers no unsafe rollback.
+- Findings and normalized recoverable errors use exit `0`; configuration/path input uses `2`. Exit
+  `1` remains unused because no finding-failure policy exists.
+
+Those focused integration controls and compiled smokes were subsequently complemented by M06-T04's
+complete hostile-project, symlink, dependency, permission, performance, and security-checklist
+execution.
+
+## M06-T04 executed system security controls and limits
+
+- A shell-free runner exercised 15 complete built-CLI cases on Linux, and every executable
+  assertion passed. Real project-root and report-output permission denials produced the stable
+  documented failures; capability-aware fallbacks remain available for platforms where `chmod`
+  cannot reproduce denial.
+- The hostile project created all three requested symbolic links. Internal, external, and cyclic
+  links were excluded under the default policy, the scan terminated, and no linked source escaped
+  into findings. Project/package-script sentinels remained absent throughout hostile, malformed,
+  overwrite, and large-project execution.
+- Project-relative output escape was rejected before writing. An output-directory symlink targeting
+  an external directory was rejected without creating an external report. Repeating a successful
+  JSON write returned the exclusive-target error, emitted no generated-report claim, and preserved
+  the original report bytes.
+- The hostile JSON report remained parseable with the original filename as data. Structural HTML
+  validation confirmed escaped hostile path text, the exact restrictive CSP, no executable or
+  resource-bearing tags, no event-handler attributes, no CSS resource loading, and no raw control
+  or bidirectional characters. This establishes renderer structure and escaping, not runtime browser
+  exploit resistance.
+- A 32-directory-deep controlled source and two fresh hostile roots completed; the hostile outputs
+  produced equal stable JSON and normalized HTML. Five complete scans of the generated 240-file
+  project recorded elapsed-time distributions and the maximum child `VmRSS` observed by 5 ms
+  `/proc` sampling; this is not claimed as an exact lifetime peak, and no environment-specific
+  performance threshold was imposed.
+- The locked, exact dependency set and strict install policy passed inspection, and
+  `npm audit --audit-level=moderate --json` reported zero vulnerabilities. No hosted CodeQL result
+  was retrieved, so CodeQL is truthfully recorded as unexecuted rather than inferred from the local
+  workflow file.

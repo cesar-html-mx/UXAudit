@@ -4,8 +4,8 @@
 
 UXAudit runs on the Node.js 24 LTS line (`>=24.18.0 <25`) with npm 11 (`>=11.16.0 <12`); M01 pins
 Node.js `24.18.0` and npm `11.16.0` for development and CI. It reads project files and writes
-optional local reports in later milestones. No backend, container, database, cloud service, or
-network connection is required by the product.
+selected JSON/HTML reports locally. No backend, container, database, cloud service, or network
+connection is required by the product.
 
 ## Development
 
@@ -31,7 +31,7 @@ The M01 GitHub Actions configuration verifies:
 - focused tests;
 - coverage generation and thresholds on Linux;
 - build;
-- six compiled-CLI smoke scenarios on every matrix platform;
+- the compiled-CLI smoke suite on every matrix platform;
 - npm audit with a moderate-severity failure threshold on Linux;
 - CodeQL on pushes/pull requests to `main`, weekly schedule, and manual dispatch where GitHub Code
   Security is available;
@@ -54,7 +54,9 @@ Audit outputs:
 - terminal summary;
 - `audit-report.json`;
 - `audit-report.html`;
-- optional execution log.
+
+The product does not currently generate an execution-log format. Raw command logs belong only to
+engineering evidence.
 
 Engineering evidence:
 
@@ -75,6 +77,42 @@ M02 adds a shell-free controlled discovery scenario and an isolated evidence col
   checksummed records under `evidence/m02-discovery/`.
 - `npm run evidence:m02:finalize` runs after the milestone report is written and regenerates the
   manifest atomically so the report is covered by the same integrity contract.
+
+M06-T01 expands the shell-free compiled smoke suite to eleven scenarios. It now covers hostile
+terminal diagnostics, the integrated
+default audit, all three reporters, recoverable syntax, configuration/CLI precedence, an explicit
+empty rule selection, stable input/fatal exit boundaries, and exclusive existing-target refusal.
+Each scenario uses Node process APIs rather than a shell, and target source remains inert.
+
+M06-T02 adds `npm run test:scenario:m06`. The script builds the real CLI, copies or generates five
+controlled projects in temporary roots, executes each twice with terminal/JSON/HTML output, and
+compares stable projections after omitting only canonical-root and timing volatility. It never
+reuses an output tree because report persistence is intentionally exclusive. Runtime symbolic-link
+creation is capability-aware, and every created link must be reported as excluded by the default
+policy.
+
+M06-T04 adds `npm run test:robustness:m06`. It builds the real CLI and executes 15 shell-free Linux
+cases covering input/configuration failures, output authorization and overwrite, malformed
+isolation, 32-directory-deep traversal, non-execution, hostile HTML, deterministic reruns, symbolic
+links, real permission denials, dependency audit, and a five-run 240-file performance baseline. The
+maximum observed Linux child `VmRSS` is sampled every 5 ms through `/proc` and is not represented as
+an exact lifetime peak; other platforms must record memory measurement as unavailable rather than
+substitute a different process. The runner imposes no machine-dependent timing threshold and
+records hosted CodeQL as unexecuted unless an actual hosted result is retrieved.
+
+M06-T05 adds `npm run test:usability:m06`, an expert-review runner over six controlled developer
+tasks. Its per-task wall-clock values measure the scripted review procedure, not participant task
+time. Participant testing remains unexecuted and SUS remains not applicable because no real
+responses exist.
+
+`npm run evidence:m06` copies an allowlisted source tree into a credential-free temporary workspace,
+performs a locked install, executes the complete product/coverage/no-skip/smoke/system/accuracy/
+robustness/usability/harness/audit gate without a shell, and publishes exactly 42 sanitized base
+artifacts with SHA-256 integrity. A second execution must match the source and stable projections
+while treating only recorded performance and expert-procedure timing as volatile; it preserves the
+first package. `npm run evidence:m06:finalize` validates that base manifest and adds only the
+milestone report. The collector never treats hosted CodeQL, participant testing, SUS, browser
+execution, or unavailable publication as executed work.
 
 ## Portability
 

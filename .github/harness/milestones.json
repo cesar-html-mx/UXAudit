@@ -230,34 +230,44 @@
       "id": "M06",
       "slug": "integration-validation",
       "title": "End-to-end integration, validation, usability, and security evidence",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M06-integration-validation.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M06-integration-validation.md",
       "branch": "milestone/m06-integration-validation",
       "tasks": [
         {
           "id": "M06-T01",
           "title": "Complete end-to-end CLI pipeline",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (548 tests/50 files), coverage 95.88% statements / 91.46% branches / 99.80% functions / 95.84% lines, 11 compiled smoke scenarios, harness validation, and two independent reviews PASS",
+          "completedAt": "2026-07-30T06:04:52.636Z"
         },
         {
           "id": "M06-T02",
           "title": "Build controlled React and TypeScript fixture projects",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (554 tests/51 files), coverage 95.88% statements / 91.46% branches / 99.80% functions / 95.84% lines, five-project built-CLI scenario twice, harness, and independent review PASS",
+          "completedAt": "2026-07-30T06:23:43.989Z"
         },
         {
           "id": "M06-T03",
           "title": "Measure expected versus obtained findings",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (577 tests/53 files), coverage 95.84% statements / 91.39% branches / 99.81% functions / 95.80% lines, five-project scenario, 27-case per-rule accuracy scenario, harness, and two independent reviews PASS",
+          "completedAt": "2026-07-30T06:43:12.852Z"
         },
         {
           "id": "M06-T04",
           "title": "Execute system, robustness, performance, and security checks",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (602 tests/54 files), coverage 95.84% statements / 91.50% branches / 99.82% functions / 95.79% lines, 11 smokes, five-project scenario, 27-case accuracy, 15-case robustness with five performance runs and npm audit, harness, and two independent reviews PASS",
+          "completedAt": "2026-07-30T07:17:34.695Z"
         },
         {
           "id": "M06-T05",
           "title": "Execute usability protocol and assemble TFM evidence",
-          "status": "pending"
+          "status": "completed",
+          "verification": "npm run verify; coverage 95.84/91.50/99.82/95.79; 619/619 zero skip/todo; smoke, scenario, accuracy, robustness, usability, audit, harness PASS; evidence:m06 twice PASS; self-review PASS",
+          "completedAt": "2026-07-30T08:12:28.739Z"
         }
       ]
     }

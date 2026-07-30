@@ -15,3 +15,9 @@ desacuerdo) to 5 (totalmente de acuerdo).
 10. Necesité aprender muchas cosas antes de poder utilizar UXAudit.
 
 Preserve raw answers separately and document the scoring method used.
+
+## M06 status
+
+Participant testing was not executed and no SUS responses were collected. The M06 SUS status is
+therefore `not-applicable`, with a null score and zero responses. This questionnaire remains only as
+a future protocol template and is not evidence of an executed survey.

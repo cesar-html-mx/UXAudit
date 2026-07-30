@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "evidenceId": "M06-DEFECTS-CORRECTIONS",
+  "defects": [
+    {
+      "correctiveAction": "Use Commander option-value sources so only explicit CLI values override inert JSON configuration.",
+      "defect": "The default value of an absent --no-color option could otherwise override a file color setting.",
+      "id": "M06-D01",
+      "status": "corrected-and-regression-tested"
+    },
+    {
+      "correctiveAction": "Normalize loss of root authority after initial validation as a fatal pipeline failure.",
+      "defect": "A post-authorization invalid-path error could otherwise be misclassified as initial user input.",
+      "id": "M06-D02",
+      "status": "corrected-and-regression-tested"
+    },
+    {
+      "correctiveAction": "Require exact total processing errors, zero unversioned discovery issues, and truthful projection field names.",
+      "defect": "The initial controlled-project projection could omit unexpected discovery or rule errors.",
+      "id": "M06-D03",
+      "status": "corrected-and-regression-tested"
+    },
+    {
+      "correctiveAction": "Validate every derived confusion-matrix denominator as a safe integer before calculating ratios.",
+      "defect": "The initial accuracy metrics boundary did not reject every safe-integer denominator overflow.",
+      "id": "M06-D04",
+      "status": "corrected-and-regression-tested"
+    },
+    {
+      "correctiveAction": "Write mismatch diagnostics before returning a nonzero accuracy result.",
+      "defect": "An accuracy mismatch could terminate before retaining the evidence needed to inspect it.",
+      "id": "M06-D05",
+      "status": "corrected-and-regression-tested"
+    },
+    {
+      "correctiveAction": "Pass the raw equivalent root spelling, await in-flight RSS sampling, strengthen report/sentinel assertions, and qualify review-only claims.",
+      "defect": "The first robustness runner pre-normalized its canonical-path input, could miss the final RSS sample, and had incomplete or overstated safety assertions.",
+      "id": "M06-D06",
+      "status": "corrected-and-regression-tested"
+    },
+    {
+      "correctiveAction": "Accept and render the coherent zero-active-milestone terminal state while retaining strict ready-state validation.",
+      "defect": "Harness validation and status rendering did not support completion of the final milestone.",
+      "id": "M06-D07",
+      "status": "corrected-and-regression-tested"
+    },
+    {
+      "correctiveAction": "Require exact project/rule/case/task identities and quantitative observations, closed robustness/usability statuses, JSON-to-CSV agreement, and full second-run comparison with only measured timing/RSS removed.",
+      "defect": "The first T05 collector validation accepted incomplete robustness/usability projections and over-normalized the second robustness execution.",
+      "id": "M06-D08",
+      "status": "corrected-and-independently-reviewed"
+    },
+    {
+      "correctiveAction": "Use empty user/global npm configuration, a bounded executable path, lockfile credential-URL inspection, execution-neutral publication wording, complete Activity 3 summaries, exact host context, and a non-empty structured milestone-report gate.",
+      "defect": "The first evidence lifecycle did not fully establish its credential/configuration boundary or validate every academic and final-report claim.",
+      "id": "M06-D09",
+      "status": "corrected-and-independently-reviewed"
+    },
+    {
+      "correctiveAction": "Use deep strict value comparison so JSON object property order is irrelevant while array order, types, and values remain exact.",
+      "defect": "The first isolated collection rejected the correct usability severity totals because their JSON object keys used a different insertion order.",
+      "id": "M06-D10",
+      "status": "corrected-and-static-verified"
+    },
+    {
+      "correctiveAction": "Canonicalize both runner and collector JSON from an explicitly two-space-indented semantic value before applying the same Prettier options.",
+      "defect": "The second isolated collection used a compact semantic reserialization in the package contract and rejected the canonical multiline accuracy output produced by the runner.",
+      "id": "M06-D11",
+      "status": "corrected-and-static-verified"
+    },
+    {
+      "correctiveAction": "Normalize the HTML duration through its exact table-row structure and assert that exactly one duration placeholder is present.",
+      "defect": "The first successful base package retained a raw duration in its normalized HTML sample, so the mandatory second collection correctly detected different bytes.",
+      "id": "M06-D12",
+      "status": "corrected-and-scenario-verified"
+    },
+    {
+      "correctiveAction": "Exclude exact generated normalized HTML evidence from repository-wide Prettier rewrites while retaining its byte-level scenario and manifest validation.",
+      "defect": "The first reproducible package exposed that the global formatting gate attempted to rewrite its normalized HTML sample because the evidence ignore policy covered only the older report filename.",
+      "id": "M06-D13",
+      "status": "corrected-and-full-gate-verified"
+    }
+  ],
+  "observedValidationMismatches": {
+    "falseNegatives": 0,
+    "falsePositives": 0,
+    "unmatchedFindings": 0
+  }
+}

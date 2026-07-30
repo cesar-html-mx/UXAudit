@@ -4,6 +4,7 @@ node_modules/
 package-lock.json
 evidence/**/raw/
 evidence/**/scenario/audit-report.html
+evidence/**/scenario/*.normalized.html
 evidence/**/scenario/audit-report.json
 evidence/**/scenario/audit-result-expected.json
 docs/architecture/diagrams/

@@ -15,6 +15,33 @@ const completed = state.completedMilestones.length ? state.completedMilestones.j
 const blockers = state.blockers.length
   ? state.blockers.map((item) => `- ${item}`).join('\n')
   : 'None';
+const completedMilestoneSet = new Set(state.completedMilestones);
+const allMilestonesComplete =
+  data.milestones.length > 0 &&
+  data.milestones.every(
+    (item) => item.status === 'completed' && completedMilestoneSet.has(item.id),
+  ) &&
+  completedMilestoneSet.size === state.completedMilestones.length &&
+  completedMilestoneSet.size === data.milestones.length;
+const terminalState =
+  state.status === 'complete' &&
+  state.activeMilestone === null &&
+  state.activeTask === null &&
+  allMilestonesComplete;
+
+if (state.status === 'complete' && !terminalState) {
+  throw new Error('Refusing to render an incoherent complete harness state.');
+}
+
+const continuation = terminalState
+  ? `## Completion
+
+All configured milestones are complete. No active milestone or task remains.`
+  : `## Next execution
+
+Open Codex at the repository root and use:
+
+> Ejecuta el harness definido en AGENTS.md y completa el hito activo de principio a fin.`;
 
 const content = `# Current State
 
@@ -34,11 +61,7 @@ const content = `# Current State
 
 ${blockers}
 
-## Next execution
-
-Open Codex at the repository root and use:
-
-> Ejecuta el harness definido en AGENTS.md y completa el hito activo de principio a fin.
+${continuation}
 
 This file was generated from \`.github/harness/state/state.json\`.
 `;

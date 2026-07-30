@@ -312,3 +312,133 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   passed 512 tests across 47 files. Global V8 coverage measured 95.81% statements, 91.39% branches,
   99.39% functions, and 95.77% lines; the HTML module measured 100% statements/functions/lines and
   97.82% branches. Final isolated M05 evidence recollects these metrics.
+
+## M06-T01 executed integration baseline
+
+- Application tests compose validated input, configuration precedence, one normalized analysis,
+  stable-rule loading/evaluation, exact audit counters, timing, and selected JSON/HTML persistence.
+  They distinguish omitted from explicit empty filters, retain recoverable rule/source errors,
+  reject root drift after authorization, preserve stable writer failures, and normalize unexpected
+  stage or renderer failures without leaking native detail.
+- Real-filesystem integration analyzes an inert React/TypeScript project with eight stable-rule
+  findings and one malformed sibling, writes complete JSON and HTML reports, refuses overwrite, and
+  proves that target code is not executed.
+- CLI tests cover every documented option, Commander source-aware file/CLI precedence, canonical
+  repeatable-value ordering, exit `0` for completed findings/recoverable errors, input exit `2`,
+  fatal/report exit `3`, direct trusted terminal ANSI, escaped hostile progress/report claims, and
+  claims derived only from successful writer results. Exit `1` remains reserved because no
+  finding-failure policy exists.
+- The compiled smoke suite now covers 11 complete scenarios: help, version, hostile unknown input,
+  empty/default audit, all reporters with a recoverable malformed source, overwrite refusal,
+  explicit empty filters and CLI precedence, invalid configuration, missing path, regular-file
+  input, and missing arguments.
+- The final task run under Node.js `24.18.0` passed format, lint, typecheck, build, all 548 tests
+  across 50 files, and all 11 compiled smokes. Global V8 coverage measured 95.88% statements,
+  91.46% branches, 99.80% functions, and 95.84% lines. Accuracy, performance, full security, and
+  usability claims remain assigned to M06-T03 through M06-T05.
+
+## M06-T02 executed controlled-project baseline
+
+- A closed, canonical manifest versions the exact eight-rule vocabulary, source candidates,
+  exclusions, parser errors, finding counts/case IDs, volatile result fields, non-execution
+  sentinels, runtime links, and large-project generation parameters.
+- The committed `valid-project` produces zero findings; `invalid-project` produces exactly one
+  finding for each stable rule; and `mixed-project` selects five `.js`/`.jsx`/`.ts`/`.tsx`
+  candidates, parses four, isolates one syntax error, and produces three reviewed findings while
+  excluding declarations, configuration, and generated directories.
+- The runtime hostile/security project adds three default-skipped internal, external, and cyclic
+  links plus a portable hostile filename that reaches escaped HTML through one controlled finding.
+  Link creation capability is recorded rather than assumed on platforms that prohibit symbolic
+  links.
+- The generated large project contains 240 safe TSX components across 12 directories. Its source
+  template, paths, package-script sentinel, and five-run performance parameter are versioned rather
+  than committing generated bulk.
+- The shell-free built-CLI scenario audits all five projects twice in fresh roots, verifies exact
+  expected results, terminal/JSON/HTML consistency, report claims, stable projections, and absent
+  source/package sentinels. Six focused manifest/corpus tests lock the physical and semantic
+  contract. The complete Node.js 24 gate passed 554 tests across 51 files; coverage remained at
+  95.88% statements, 91.46% branches, 99.80% functions, and 95.84% lines.
+
+## M06-T03 executed accuracy baseline
+
+- A separate closed ground truth versions 27 instance-level cases: 11 positive, eight negative,
+  and eight unsupported. Every stable rule has at least one positive plus exactly one explicit
+  negative and one unsupported boundary; absent nodes and unrelated combinations are never counted
+  as true negatives.
+- The built CLI produces the observed JSON findings. A second analysis pass is used only to map
+  `data-uxaudit-case` nodes to half-open model ranges; matching requires the same project, rule,
+  portable file, and contained offsets. Duplicate or unassigned findings count as false positives.
+- Positive detections/misses become TP/FN; negative detections/clear cases become FP/TN.
+  Unsupported cases and their observed count are reported separately and excluded from both
+  precision and recall denominators.
+- The pure metrics boundary validates closed plain input, deterministic rule order, safe integer
+  arithmetic, duplicate case identity per rule, null zero-denominator ratios, and input
+  immutability. Twenty-one focused tests cover normal, adversarial, and overflow cases.
+- All eight rules matched reviewed expectations: 11 TP, zero FP, eight TN, zero FN, and zero
+  unsupported detections. Per-rule precision and recall were both 1.0 within this controlled
+  synthetic corpus only; no aggregate or real-world generalization is claimed.
+- The final Node.js 24 gate passed 577 tests across 53 files. Global V8 coverage measured 95.84%
+  statements, 91.39% branches, 99.81% functions, and 95.80% lines.
+
+## M06-T04 executed robustness, performance, and security baseline
+
+- The shell-free robustness runner executed 15 built-CLI cases on Linux. All cases passed, including
+  canonical and missing roots, a missing scan argument, malformed configuration, output path
+  escape, symlinked output rejection, exclusive-write preservation, malformed-source isolation, a
+  source below 32 nested directories, hostile reporting, deterministic reruns, real permission
+  denial, and the generated large project.
+- The real filesystem denied both the selected project root and report destination as intended.
+  UXAudit returned the documented input and report-write failures without leaking native details;
+  the runner retains portable fallback references for environments where permission denial cannot
+  be reproduced.
+- All three runtime links in the hostile project—internal, external, and cyclic—were created and
+  excluded by the default policy. JSON remained valid, while structural HTML assertions confirmed
+  hostile-path escaping, the restrictive CSP, and the absence of executable/resource-bearing
+  markup, event handlers, raw controls, and CSS resource loading. This was not a browser exploit
+  execution.
+- Fresh hostile roots produced identical stable JSON and normalized HTML. Five complete built-CLI
+  runs processed the generated 240-file project, retained exact expected results and absent
+  execution sentinels, and recorded elapsed samples plus the maximum child `VmRSS` observed through
+  5 ms `/proc` sampling. The performance record is a descriptive baseline with minimum, median, and
+  maximum values and no machine-dependent pass threshold; the memory value is not claimed as an
+  exact lifetime peak.
+- The moderate-threshold dependency audit reported zero vulnerabilities. Lockfile and strict
+  installation policy checks passed. Hosted CodeQL was not executed because no hosted result was
+  retrieved; the local workflow inspection is recorded separately and is not presented as an
+  analysis result.
+- The Node.js 24 gate passed all 602 tests across 54 files, all 11 compiled CLI smokes, the
+  controlled-project, accuracy, and 15-case robustness scenarios, and harness validation. Global V8
+  coverage measured 95.84% statements, 91.50% branches, 99.82% functions, and 95.79% lines.
+
+## M06-T05 executed expert heuristic review
+
+- No real participant data or SUS responses were available. Participant testing is recorded as
+  unexecuted and SUS as not applicable with a null score; neither is represented as completed user
+  research.
+- A closed versioned contract defines six developer tasks: discover the scan command, analyze the
+  controlled invalid project, identify maximum severity, locate source, understand the
+  recommendation, and find the JSON/HTML reports.
+- The shell-free review runner completed all six tasks against the compiled CLI and retained a real
+  wall-clock duration for each scripted expert procedure. Those values are explicitly not user task
+  times; zero errors/backtracking and CLI-help use also describe only the script.
+- Five tasks produced no heuristic issue. The prioritization task recorded one low-severity
+  observation: three accessibility findings tie at high severity, while the terminal report does
+  not explain a secondary priority policy. The corrective action is to document canonical ordering
+  and consider an explicit secondary sort or control in a future version.
+- Focused contract tests lock the canonical JSON, exact six-task order, controlled expected report
+  values, observation severities, and participant/SUS status. `npm run test:usability:m06`
+  independently builds and executes the real CLI review.
+
+## M06 final integrated validation
+
+- The definitive Node.js 24 gate passed 619 tests across 56 files with zero failed, skipped, or todo
+  tests. Coverage was 95.84% statements, 91.50% branches, 99.82% functions, and 95.79% lines.
+- The isolated collector executed a locked install, quality gate, coverage, machine-readable test
+  record, 11 compiled smokes, the five-project scenario, eight-rule accuracy, 15-case robustness/
+  security/performance, six-task expert review, harness validation, and dependency audit.
+- The retained accuracy totals are 11 TP, zero FP, eight TN, and zero FN; eight unsupported cases
+  remain outside denominators. Five performance executions used 240 generated source files without
+  a machine-dependent threshold.
+- Two definitive collections used the same source digest and matched every stable artifact or
+  documented volatile projection. The second execution preserved the first 42-artifact base
+  package; its SHA-256 manifest, sanitization, canonical JSON, and exact file contract all passed.

@@ -765,3 +765,189 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   acceptance, R-005, R-009, R-010, R-012, R-018, and R-019.
 - Evidence: `scripts/run-m05-scenario.mjs`, the M05 evidence contract/collector/finalizer, two
   successful collections, and `evidence/m05-reporting/`.
+
+## D-035 — Additive complete-audit facade and explicit CLI success policy
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M06 must connect the completed path, parser/model, rule, configuration, result, reporter,
+  and writer boundaries without changing the public contracts closed in M01-M05. Configuration must
+  fail before traversal/parsing, existing progress output must remain available, trusted reporter
+  ANSI must not be neutralized, and report targets must not be mistaken for successful writes. The
+  M05 configuration has no finding-failure field.
+- Decision: Add `audit-project.ts` as an orchestration facade. It authorizes the root, loads inert
+  configuration, calls the existing analysis facade once, translates `null` versus empty rule
+  filters exactly, evaluates one model, builds one clock-bounded immutable `AuditResult`, and writes
+  JSON then HTML through the exclusive writer. It returns the preserved analysis result and only
+  exact writer-confirmed report records. Commander exposes the documented options, deduplicates
+  repeatable values, and constructs overrides only from values sourced explicitly from the CLI.
+  Progress/diagnostics/claims use safe value rendering, while the terminal reporter's already safe
+  output is written directly. A completed audit returns `0` even with findings or recoverable errors;
+  `1` remains reserved, input/configuration uses `2`, and fatal/report failures use `3`.
+- Alternatives considered: Collapsing or changing `analyzeProject`; loading configuration after
+  traversal; treating `minimumSeverity` as a failure threshold; re-sanitizing the completed terminal
+  report; announcing every configured target before persistence; or deleting a sibling/partial file
+  after a multi-report failure.
+- Consequences: The integration performs one discovery/parser/model/rule pass and preserves earlier
+  injected CLI behavior. Canonical root validation occurs twice so configuration can precede
+  traversal, but traversal/parsing occurs once. Audit timing ends before persistence. JSON may exist
+  if a later HTML write fails; the CLI returns `3`, makes no completed report-set claim, and performs
+  no unsafe rollback. A configured future finding-failure policy would require a deliberate public
+  contract change.
+- Requirements/contracts affected: RF-01, RF-02, RF-09, RF-10, RF-14, RF-15, RNF-01, RNF-04,
+  RNF-06, RNF-07, RNF-10, M06-T01, R-009, R-014, R-017, R-018, and R-019.
+- Evidence: application/CLI unit and real-filesystem integration tests, eleven compiled CLI smoke
+  scenarios, and the M06 evidence package as it is completed.
+
+## D-036 — Closed controlled-project corpus with runtime security and scale variants
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: M06 needs reviewed end-to-end expectations for safe, violating, mixed, hostile, and
+  large projects. Committing symbolic links is platform-sensitive, and committing hundreds of
+  repeated sources would obscure the validation contract.
+- Decision: Commit minimal valid, invalid, and mixed React/TypeScript projects plus one canonical
+  closed manifest. Version exact candidates, exclusions, parser errors, complete eight-rule count
+  maps, finding case IDs, volatile fields, and non-execution sentinels. Generate the hostile/security
+  project from the valid seed with portable hostile content and capability-aware internal,
+  external, and cyclic links. Generate 240 safe TSX components from versioned parameters. Execute
+  all five projects twice through the built CLI in fresh roots; verify one shared result across
+  terminal/JSON/HTML and compare a stable projection that removes only root/timing volatility.
+- Alternatives considered: committing links or generated bulk; using only model-level rule calls;
+  deriving expectations from observed reports; reusing report directories; or normalizing finding,
+  location, error, and summary differences.
+- Consequences: The corpus remains small, portable, reviewable, and strict about actual product
+  behavior. Link observations remain capability-dependent on platforms that prohibit creation.
+  The 240-file size is a controlled validation scale, not a maximum supported project or a
+  machine-independent performance threshold.
+- Requirements/contracts affected: RF-03 through RF-15, RNF-04, RNF-07, RNF-09, RNF-10,
+  M06-T02, R-001 through R-006, R-009, R-021.
+- Evidence: `fixtures/m06-validation/`, its six manifest/corpus tests, and
+  `scripts/run-m06-scenario.mjs`.
+
+## D-037 — Instance-level per-rule accuracy without implicit true negatives
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: Counting every unreported JSX node as a true negative would inflate accuracy, while
+  combining rule results would hide differences and unsupported static boundaries. Findings retain
+  locations but not fixture case IDs.
+- Decision: Version explicit positive, negative, and unsupported instances for every stable rule.
+  Obtain findings from the built JSON CLI and use a separate analysis pass only to map literal
+  `data-uxaudit-case` values to normalized half-open ranges. Match one finding to at most one
+  instance by project, rule, file, and containment. Classify positives as TP/FN and negatives as
+  FP/TN; count duplicate/unmatched findings as FP. Report unsupported totals/detections separately
+  and exclude them from precision/recall. Preserve rule-level results and use `null` for a zero
+  denominator.
+- Alternatives considered: project-level binary accuracy; implicit TN from all other nodes;
+  aggregate-only scores; counting unsupported as negative; matching only by line; deriving expected
+  cases from observed findings; or silently dropping duplicate/unmatched findings.
+- Consequences: The measurement is reproducible and auditable but intentionally small. A 1.0 value
+  proves conformance to these reviewed static cases, not external validity on arbitrary applications
+  or runtime behavior. Diagnostic artifacts are written before a mismatch exits nonzero when an
+  output directory is requested.
+- Requirements/contracts affected: RF-11 through RF-14, RNF-04 through RNF-06, RNF-10, M06-T03,
+  R-001, R-002, R-011, R-021, R-022.
+- Evidence: `fixtures/m06-validation/ground-truth.json`, focused ground-truth/metrics tests, and
+  `scripts/run-m06-accuracy.mjs`.
+
+## D-038 — Executed robustness matrix and descriptive performance observations
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: M06 needs system, security, dependency, and performance evidence from the complete built
+  CLI. Filesystem permissions and symlink creation are platform-dependent, hosted CodeQL cannot be
+  inferred from a workflow file, and elapsed time or memory observations from one machine are not
+  portable acceptance thresholds.
+- Decision: Execute a closed shell-free runner over fresh temporary projects. Cover canonical,
+  missing, argument, configuration, path, symlink, exclusive-write, malformed-source, deep-tree,
+  hostile-report, permission, determinism, and generated-scale cases. Execute the moderate npm audit
+  in the same focused scenario. Generate all links at runtime and label unsupported capabilities
+  rather than simulating success; use injected unit evidence only when a real permission denial is
+  unavailable. Validate hostile JSON/HTML against the actual renderers and structural CSP/escaping
+  constraints. Measure five complete all-format runs over 240 files, summarize individual duration
+  samples and Linux child `VmRSS` observations, and apply no machine-dependent threshold. Record
+  hosted CodeQL as unexecuted unless a real hosted result is retrieved.
+- Alternatives considered: timing pass/fail limits; parent-process RSS; treating a workflow as a
+  CodeQL result; claiming browser exploit execution; silently skipping permissions/links; or using
+  only injected adapters instead of the real compiled CLI.
+- Consequences: The Linux baseline is reproducible in method and exact in retained inputs/results,
+  but durations remain environment-specific. `/proc/<pid>/status` is sampled every 5 ms, so its
+  maximum observed `VmRSS` is not an exact lifetime peak. Other platforms record memory as
+  unavailable. Structural HTML checks establish inert serialized output, not browser behavior.
+- Requirements/contracts affected: RF-01, RF-03, RF-09, RF-15, RNF-03, RNF-04, RNF-07, RNF-09,
+  RNF-10, M06-T04, R-004 through R-006, R-009, R-010, R-012, R-015, R-018, R-021, and R-023.
+- Evidence: `scripts/run-m06-robustness.mjs`, `src/validation/performance-summary.ts`, its focused
+  tests, the security checklist, and the final M06 evidence package.
+
+## D-039 — Expert heuristic usability evidence without participant substitution
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: M06 requires either executed usability work or a truthful unexecuted status. The
+  repository contains no participant observations or SUS responses, so populating user timings,
+  satisfaction, errors, or a SUS score would fabricate evidence.
+- Decision: Version six developer tasks and execute them as an expert heuristic procedure against
+  the compiled CLI. Retain completion, scripted-procedure wall-clock time, procedure errors,
+  backtracking, help use, observation, severity, and corrective action. Label every timing and
+  interaction count as belonging to the script, not a user. Record participant testing as
+  unexecuted with count zero and SUS as not applicable with zero responses and a null score.
+- Alternatives considered: fabricating sample participants; treating automated command time as user
+  task time; calculating SUS without responses; omitting usability entirely; or calling one expert
+  execution a user test.
+- Consequences: Command discovery, complete scan, prioritization, source location, recommendation,
+  and report-location tasks are reproducibly inspected. One low-severity observation records the
+  three-way high-severity tie. No learnability, satisfaction, population, or SUS claim is made.
+- Requirements/contracts affected: RNF-06, M06-T05, R-011, R-022, and R-024.
+- Evidence: `fixtures/m06-validation/heuristic-review.json`,
+  `scripts/run-m06-usability.mjs`, focused contract tests, and retained usability JSON/CSV.
+
+## D-040 — Strict ready, transitional, and terminal harness lifecycle
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: Closing the final configured milestone intentionally produces `status=complete`, null
+  active milestone/task, and zero active milestone records. The original validator and renderers
+  required exactly one active milestone and therefore rejected that coherent terminal state.
+- Decision: Preserve strict `ready` validation with exactly one active milestone and either the next
+  incomplete task or a null transitional task after all work is complete. Accept `complete` only
+  when every milestone/task is completed, the completed-ID set is exact, no milestone is active,
+  and both active identifiers are null. Render a completion section instead of another execution
+  prompt. Test the real final `advance → sync → validate → show` path entirely in a temporary
+  repository plus adversarial incoherent combinations.
+- Alternatives considered: leaving M06 active forever; weakening the one-active invariant globally;
+  special-casing only M06; editing terminal state after validation; or testing helper-shaped data
+  without executing the scripts.
+- Consequences: Ordinary and final lifecycle states are both explicit and fail closed. The same
+  scripts now represent the terminal project state truthfully without accepting an incomplete
+  project as complete.
+- Requirements/contracts affected: M06-T05, R-009.
+- Evidence: harness lifecycle tests and the final post-advance harness execution.
+
+## D-041 — Exact isolated Activity 3 evidence lifecycle
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: Activity 3 needs raw commands, measurements, controlled outputs, accuracy, security,
+  performance, usability, defects, limitations, and a final report. Timing varies between runs,
+  source trees may contain credentials or symlinks, and evidence reruns must not overwrite a valid
+  first package merely because performance samples differ.
+- Decision: Copy only allowlisted, non-secret, non-symlink source into a credential-free temporary
+  workspace. Run locked installation and every required gate without a shell. Publish exactly 42
+  sanitized base artifacts plus one manifest. Compare source/stable results on the second run,
+  compare normalized performance and usability projections while retaining the first volatile
+  measurements, and preserve an existing valid package. Reject the milestone report during base
+  collection; finalization reauthorizes the destination, verifies the unchanged base manifest, and
+  adds only that report.
+- Alternatives considered: collecting from the mutable working directory; inheriting credentials;
+  retaining arbitrary files; requiring byte-identical durations; overwriting first-run evidence;
+  omitting raw commands; or adding the report without validating the base package.
+- Consequences: The retained package is factual, sanitized, bounded, reproducible in stable claims,
+  and explicit about unsupported/unexecuted work. Machine and expert-procedure timing remains
+  observed evidence rather than a deterministic result. Portable rename retains the previously
+  documented narrow final-interval limitation.
+- Requirements/contracts affected: RNF-03, RNF-04, RNF-09, M06-T05, R-009, R-010, R-012, R-016,
+  R-023 through R-025.
+- Evidence: the M06 evidence contract, collector, finalizer, two successful base collections, and
+  the finalized package under `evidence/m06-validation/`. Its manifest covers all 42 base artifacts
+  plus the milestone report.

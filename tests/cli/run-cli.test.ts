@@ -94,7 +94,7 @@ describe('runCli', () => {
     expect(exitCode).toBe(EXIT_CODES.success);
     expect(invoked).toBe(false);
     expect(output.stdout.join('')).toContain('Usage: ux-audit');
-    expect(output.stdout.join('')).toContain('scan <project-path>');
+    expect(output.stdout.join('')).toContain('scan [options] <project-path>');
     expect(output.stderr).toEqual([]);
   });
 

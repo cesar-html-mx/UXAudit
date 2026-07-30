@@ -1,0 +1,117 @@
+Command: "npm" "run" "verify"
+Working directory: isolated temporary workspace
+Expected exit code: 0
+Observed exit code: 0
+Observed signal: none
+
+--- stdout ---
+
+> ux-audit@0.1.0 verify
+> node .github/harness/scripts/check-quality.mjs
+
+
+> npm run format:check
+
+> ux-audit@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> npm run lint
+
+> ux-audit@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> npm run typecheck
+
+> ux-audit@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> npm run test
+
+> ux-audit@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.10 <REDACTED_PATH>
+
+ ✓ tests/domain/models/build-analysis-model.test.ts (26 tests) 22ms
+ ✓ tests/configuration/read-configuration-file.test.ts (24 tests) 24ms
+ ✓ tests/project/discovery/discover-project.test.ts (13 tests) 28ms
+ ✓ tests/parsing/read-source-candidate.test.ts (52 tests) 53ms
+ ✓ tests/reporting/html/html-reporter.test.ts (22 tests) 49ms
+ ✓ tests/parsing/babel/extract-babel-analysis.test.ts (22 tests) 111ms
+ ✓ tests/reporting/terminal/terminal-reporter.test.ts (14 tests) 20ms
+ ✓ tests/domain/audit/audit-result.test.ts (16 tests) 27ms
+ ✓ tests/fixtures/m06-validation/manifest.test.ts (6 tests) 126ms
+ ✓ tests/cli/run-cli.test.ts (19 tests) 23ms
+ ✓ tests/reporting/files/write-report-file.test.ts (35 tests) 324ms
+ ✓ tests/parsing/analyze-source-candidates.test.ts (8 tests) 37ms
+ ✓ tests/configuration/load-configuration.test.ts (39 tests) 19ms
+ ✓ tests/application/audit-project.test.ts (21 tests) 30ms
+ ✓ tests/validation/detection-metrics.test.ts (21 tests) 25ms
+ ✓ tests/validation/performance-summary.test.ts (25 tests) 13ms
+ ✓ tests/rules/evaluate-rules.test.ts (12 tests) 22ms
+ ✓ tests/rules/ux/small-inline-text.test.ts (10 tests) 71ms
+ ✓ tests/cli/run-cli-audit.test.ts (14 tests) 27ms
+ ✓ tests/fixtures/m06-validation/ground-truth.test.ts (2 tests) 118ms
+ ✓ tests/parsing/babel/parse-babel-source.test.ts (9 tests) 60ms
+ ✓ tests/application/analyze-project.test.ts (5 tests) 12ms
+ ✓ tests/application/scan-project.test.ts (9 tests) 9ms
+ ✓ tests/reporting/json/json-reporter.test.ts (6 tests) 20ms
+ ✓ tests/rules/initial-catalog.integration.test.ts (3 tests) 96ms
+ ✓ tests/domain/rules/rule-contracts.test.ts (7 tests) 11ms
+ ✓ tests/parsing/babel/parse-source-candidate.test.ts (7 tests) 33ms
+ ✓ tests/project/validate-project-path.test.ts (13 tests) 18ms
+ ✓ tests/domain/models/analysis-model.test.ts (2 tests) 9ms
+ ✓ tests/rules/seo/ambiguous-link-text.test.ts (18 tests) 40ms
+ ✓ tests/rules/rule-registry.test.ts (19 tests) 26ms
+ ✓ tests/fixtures/m06-validation/heuristic-review.test.ts (3 tests) 80ms
+ ✓ tests/harness/harness-lifecycle.test.ts (14 tests) 1086ms
+ ✓ tests/rules/accessibility/input-label.test.ts (13 tests) 66ms
+ ✓ tests/parsing/parser-contracts.test.ts (5 tests) 6ms
+ ✓ tests/rules/load-rules.test.ts (15 tests) 11ms
+ ✓ tests/rules/performance/img-dimensions.test.ts (8 tests) 52ms
+ ✓ tests/project/inventory/build-file-inventory.test.ts (7 tests) 12ms
+ ✓ tests/application/scan-project.integration.test.ts (1 test) 31ms
+ ✓ tests/rules/seo/multiple-h1.test.ts (6 tests) 43ms
+ ✓ tests/project/classification/classify-source-candidates.test.ts (4 tests) 7ms
+ ✓ tests/configuration/configuration-contracts.test.ts (11 tests) 15ms
+ ✓ tests/application/audit-project.integration.test.ts (1 test) 123ms
+ ✓ tests/rules/initial-rule-registry.test.ts (3 tests) 6ms
+ ✓ tests/rules/performance/img-lazy-loading.test.ts (5 tests) 44ms
+ ✓ tests/rules/accessibility/img-alt.test.ts (5 tests) 36ms
+ ✓ tests/application/analyze-project.integration.test.ts (1 test) 65ms
+ ✓ tests/project/discovery/discovery-contracts.test.ts (2 tests) 5ms
+ ✓ tests/rules/accessibility/button-name.test.ts (6 tests) 41ms
+ ✓ tests/parsing/parser-dependencies.test.ts (1 test) 7ms
+ ✓ tests/domain/models/source-location.test.ts (1 test) 3ms
+ ✓ tests/rules/accessibility/accessibility-rules.integration.test.ts (2 tests) 25ms
+ ✓ tests/rules/seo/seo-rules.integration.test.ts (2 tests) 19ms
+ ✓ tests/rules/performance/performance-rules.test.ts (2 tests) 26ms
+ ✓ tests/product.test.ts (1 test) 2ms
+ ✓ tests/reporting/reporter-contracts.test.ts (1 test) 4ms
+
+ Test Files  56 passed (56)
+      Tests  619 passed (619)
+   Start at  02:09:47
+   Duration  1.90s (transform 2.75s, setup 0ms, import 7.71s, tests 3.32s, environment 7ms)
+
+
+> npm run build
+
+> ux-audit@0.1.0 build
+> npm run clean && tsc -p tsconfig.build.json
+
+
+> ux-audit@0.1.0 clean
+> node scripts/clean.mjs
+
+
+UXAudit product quality checks: PASS
+
+--- stderr ---
+(empty)

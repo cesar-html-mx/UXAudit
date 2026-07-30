@@ -1,0 +1,368 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "M06-CONTROLLED-PROJECTS",
+  "contract": {
+    "additionalProperties": false,
+    "expectedFindingCountRuleKeyPolicy": "exact-stable-rule-ids",
+    "parserErrorProjectionFields": ["code", "filePath", "message", "recoverable", "stage"],
+    "pathFormat": "portable-relative-forward-slash"
+  },
+  "stableRuleIds": [
+    "accessibility/button-name",
+    "accessibility/img-alt",
+    "accessibility/input-label",
+    "performance/img-dimensions",
+    "performance/img-lazy-loading",
+    "seo/ambiguous-link-text",
+    "seo/multiple-h1",
+    "ux/small-inline-text"
+  ],
+  "committedProjects": {
+    "valid-project": {
+      "directory": "valid-project",
+      "purpose": "A safe intrinsic React and TypeScript baseline that exercises every stable rule without an expected finding.",
+      "sourceCandidates": ["src/App.tsx"],
+      "excludedPaths": [],
+      "expected": {
+        "sourceCandidateCount": 1,
+        "parsedFileCount": 1,
+        "failedFileCount": 0,
+        "findingRuleIds": [],
+        "findingCounts": {
+          "accessibility/button-name": 0,
+          "accessibility/img-alt": 0,
+          "accessibility/input-label": 0,
+          "performance/img-dimensions": 0,
+          "performance/img-lazy-loading": 0,
+          "seo/ambiguous-link-text": 0,
+          "seo/multiple-h1": 0,
+          "ux/small-inline-text": 0
+        },
+        "totalFindings": 0,
+        "parserErrors": []
+      },
+      "expectedFindingCases": {
+        "accessibility/button-name": [],
+        "accessibility/img-alt": [],
+        "accessibility/input-label": [],
+        "performance/img-dimensions": [],
+        "performance/img-lazy-loading": [],
+        "seo/ambiguous-link-text": [],
+        "seo/multiple-h1": [],
+        "ux/small-inline-text": []
+      },
+      "sentinelPaths": ["TARGET_PACKAGE_SCRIPT_EXECUTED", "TARGET_SOURCE_EXECUTED"]
+    },
+    "invalid-project": {
+      "directory": "invalid-project",
+      "purpose": "One isolated positive instance for each of the eight stable rules, with overlapping image rules held safe by explicit attributes.",
+      "sourceCandidates": ["src/violations.tsx"],
+      "excludedPaths": [],
+      "expected": {
+        "sourceCandidateCount": 1,
+        "parsedFileCount": 1,
+        "failedFileCount": 0,
+        "findingRuleIds": [
+          "accessibility/button-name",
+          "accessibility/img-alt",
+          "accessibility/input-label",
+          "performance/img-dimensions",
+          "performance/img-lazy-loading",
+          "seo/ambiguous-link-text",
+          "seo/multiple-h1",
+          "ux/small-inline-text"
+        ],
+        "findingCounts": {
+          "accessibility/button-name": 1,
+          "accessibility/img-alt": 1,
+          "accessibility/input-label": 1,
+          "performance/img-dimensions": 1,
+          "performance/img-lazy-loading": 1,
+          "seo/ambiguous-link-text": 1,
+          "seo/multiple-h1": 1,
+          "ux/small-inline-text": 1
+        },
+        "totalFindings": 8,
+        "parserErrors": []
+      },
+      "expectedFindingCases": {
+        "accessibility/button-name": ["invalid-button-name"],
+        "accessibility/img-alt": ["invalid-img-alt"],
+        "accessibility/input-label": ["invalid-input-label"],
+        "performance/img-dimensions": ["invalid-img-dimensions"],
+        "performance/img-lazy-loading": ["invalid-img-lazy-loading"],
+        "seo/ambiguous-link-text": ["invalid-ambiguous-link-text"],
+        "seo/multiple-h1": ["invalid-multiple-h1"],
+        "ux/small-inline-text": ["invalid-small-inline-text"]
+      },
+      "sentinelPaths": ["TARGET_PACKAGE_SCRIPT_EXECUTED", "TARGET_SOURCE_EXECUTED"]
+    },
+    "mixed-project": {
+      "directory": "mixed-project",
+      "purpose": "A nested JavaScript, JSX, TypeScript, and TSX project with safe and violating code, one recoverable syntax error, declarations, excluded output, dependencies, and configuration.",
+      "sourceCandidates": [
+        "src/App.jsx",
+        "src/components/Settings.tsx",
+        "src/legacy.js",
+        "src/malformed.tsx",
+        "src/models/settings.ts"
+      ],
+      "excludedPaths": [
+        ".next/excluded.tsx",
+        "build/excluded.ts",
+        "out/excluded.jsx",
+        "src/types.d.ts",
+        "vite.config.ts"
+      ],
+      "expected": {
+        "sourceCandidateCount": 5,
+        "parsedFileCount": 4,
+        "failedFileCount": 1,
+        "findingRuleIds": [
+          "accessibility/input-label",
+          "performance/img-lazy-loading",
+          "seo/ambiguous-link-text"
+        ],
+        "findingCounts": {
+          "accessibility/button-name": 0,
+          "accessibility/img-alt": 0,
+          "accessibility/input-label": 1,
+          "performance/img-dimensions": 0,
+          "performance/img-lazy-loading": 1,
+          "seo/ambiguous-link-text": 1,
+          "seo/multiple-h1": 0,
+          "ux/small-inline-text": 0
+        },
+        "totalFindings": 3,
+        "parserErrors": [
+          {
+            "code": "SOURCE_PARSE_FAILED",
+            "filePath": "src/malformed.tsx",
+            "message": "Source file contains invalid or unsupported syntax.",
+            "recoverable": true,
+            "stage": "parse"
+          }
+        ]
+      },
+      "expectedFindingCases": {
+        "accessibility/button-name": [],
+        "accessibility/img-alt": [],
+        "accessibility/input-label": ["mixed-input-label"],
+        "performance/img-dimensions": [],
+        "performance/img-lazy-loading": ["mixed-img-lazy-loading"],
+        "seo/ambiguous-link-text": ["mixed-ambiguous-link-text"],
+        "seo/multiple-h1": [],
+        "ux/small-inline-text": []
+      },
+      "sentinelPaths": [
+        "TARGET_EXCLUDED_SOURCE_EXECUTED",
+        "TARGET_PACKAGE_SCRIPT_EXECUTED",
+        "TARGET_SOURCE_EXECUTED"
+      ]
+    }
+  },
+  "generatedProjects": {
+    "hostile-project": {
+      "aliases": ["security-project"],
+      "generatedAtRuntime": true,
+      "baseProject": "valid-project",
+      "directoryName": "security-project",
+      "purpose": "A portable hostile-content and link-policy project generated in a temporary directory from the valid baseline.",
+      "portableHostileFilePath": "src/hostile-&-'quoted'-(script).tsx",
+      "sourceTemplateLines": [
+        "export const HostileContent = () => (",
+        "  <main>",
+        "    <h1>{'<script>alert(\"m06-html\")</script> & \"quoted\" \\'single\\' \\u001b[31m'}</h1>",
+        "    <img alt={'<img src=x onerror=alert(\"m06-attribute\")>'} height={90} loading=\"lazy\" src=\"/hostile.png\" width={160} />",
+        "    <button data-uxaudit-case=\"hostile-button-name\" />",
+        "    <a href=\"/safe\">Review &amp; escape hostile report content</a>",
+        "  </main>",
+        ");",
+        ""
+      ],
+      "runtimeLinks": [
+        {
+          "path": "src/internal-alias.tsx",
+          "target": "App.tsx",
+          "targetAuthority": "project",
+          "type": "file",
+          "expectedDefaultDisposition": "skipped"
+        },
+        {
+          "path": "src/external-alias.tsx",
+          "target": "runtime-external-file",
+          "targetAuthority": "outside-project",
+          "type": "file",
+          "expectedDefaultDisposition": "skipped"
+        },
+        {
+          "path": "src/cycle",
+          "target": ".",
+          "targetAuthority": "project",
+          "type": "directory",
+          "expectedDefaultDisposition": "skipped"
+        }
+      ],
+      "expected": {
+        "sourceCandidateCount": 2,
+        "parsedFileCount": 2,
+        "failedFileCount": 0,
+        "findingRuleIds": ["accessibility/button-name"],
+        "findingCounts": {
+          "accessibility/button-name": 1,
+          "accessibility/img-alt": 0,
+          "accessibility/input-label": 0,
+          "performance/img-dimensions": 0,
+          "performance/img-lazy-loading": 0,
+          "seo/ambiguous-link-text": 0,
+          "seo/multiple-h1": 0,
+          "ux/small-inline-text": 0
+        },
+        "totalFindings": 1,
+        "parserErrors": []
+      },
+      "expectedFindingCases": {
+        "accessibility/button-name": ["hostile-button-name"],
+        "accessibility/img-alt": [],
+        "accessibility/input-label": [],
+        "performance/img-dimensions": [],
+        "performance/img-lazy-loading": [],
+        "seo/ambiguous-link-text": [],
+        "seo/multiple-h1": [],
+        "ux/small-inline-text": []
+      },
+      "sentinelPaths": ["TARGET_PACKAGE_SCRIPT_EXECUTED", "TARGET_SOURCE_EXECUTED"]
+    },
+    "large-project": {
+      "aliases": [],
+      "generatedAtRuntime": true,
+      "directoryName": "large-project",
+      "purpose": "A repeated safe-component corpus for measuring the complete built CLI without a machine-dependent pass threshold.",
+      "generation": {
+        "sourceFileCount": 240,
+        "directoryCount": 12,
+        "filesPerDirectory": 20,
+        "componentsPerFile": 1,
+        "repeatRuns": 5,
+        "directoryNamePattern": "src/batch-{{BATCH_PADDED}}",
+        "fileNamePattern": "Component-{{INDEX_PADDED}}.tsx",
+        "componentNamePattern": "LargeComponent{{INDEX_PADDED}}",
+        "indexOrigin": 0,
+        "paddingWidth": 3,
+        "sourceTemplateLines": [
+          "export const {{COMPONENT_NAME}} = () => (",
+          "  <main>",
+          "    <h1>Large component {{INDEX}}</h1>",
+          "    <img alt=\"Item {{INDEX}} preview\" height={90} loading=\"lazy\" src=\"/items/{{INDEX}}.png\" width={160} />",
+          "    <label htmlFor=\"field-{{INDEX}}\">Field {{INDEX}}</label>",
+          "    <input id=\"field-{{INDEX}}\" />",
+          "    <button type=\"button\">Save item {{INDEX}}</button>",
+          "    <a href=\"/items/{{INDEX}}\">Open item {{INDEX}}</a>",
+          "    <span style={{ fontSize: 12 }}>Item {{INDEX}} details</span>",
+          "  </main>",
+          ");",
+          ""
+        ],
+        "packageScriptName": "uxaudit:sentinel",
+        "packageScriptCommand": "node -e \"require('node:fs').writeFileSync('TARGET_PACKAGE_SCRIPT_EXECUTED', 'executed')\""
+      },
+      "expected": {
+        "sourceCandidateCount": 240,
+        "parsedFileCount": 240,
+        "failedFileCount": 0,
+        "findingRuleIds": [],
+        "findingCounts": {
+          "accessibility/button-name": 0,
+          "accessibility/img-alt": 0,
+          "accessibility/input-label": 0,
+          "performance/img-dimensions": 0,
+          "performance/img-lazy-loading": 0,
+          "seo/ambiguous-link-text": 0,
+          "seo/multiple-h1": 0,
+          "ux/small-inline-text": 0
+        },
+        "totalFindings": 0,
+        "parserErrors": []
+      },
+      "expectedFindingCases": {
+        "accessibility/button-name": [],
+        "accessibility/img-alt": [],
+        "accessibility/input-label": [],
+        "performance/img-dimensions": [],
+        "performance/img-lazy-loading": [],
+        "seo/ambiguous-link-text": [],
+        "seo/multiple-h1": [],
+        "ux/small-inline-text": []
+      },
+      "sentinelPaths": ["TARGET_PACKAGE_SCRIPT_EXECUTED"]
+    }
+  },
+  "volatileFields": [
+    "/projectRoot",
+    "/timing/completedAt",
+    "/timing/durationMs",
+    "/timing/startedAt"
+  ],
+  "nonExecutionSentinels": [
+    {
+      "projectId": "valid-project",
+      "path": "TARGET_PACKAGE_SCRIPT_EXECUTED",
+      "trigger": "package-script",
+      "expectedAfterAudit": "absent"
+    },
+    {
+      "projectId": "valid-project",
+      "path": "TARGET_SOURCE_EXECUTED",
+      "trigger": "parsed-source-top-level",
+      "expectedAfterAudit": "absent"
+    },
+    {
+      "projectId": "invalid-project",
+      "path": "TARGET_PACKAGE_SCRIPT_EXECUTED",
+      "trigger": "package-script",
+      "expectedAfterAudit": "absent"
+    },
+    {
+      "projectId": "invalid-project",
+      "path": "TARGET_SOURCE_EXECUTED",
+      "trigger": "parsed-source-top-level",
+      "expectedAfterAudit": "absent"
+    },
+    {
+      "projectId": "mixed-project",
+      "path": "TARGET_EXCLUDED_SOURCE_EXECUTED",
+      "trigger": "excluded-source-top-level",
+      "expectedAfterAudit": "absent"
+    },
+    {
+      "projectId": "mixed-project",
+      "path": "TARGET_PACKAGE_SCRIPT_EXECUTED",
+      "trigger": "package-script",
+      "expectedAfterAudit": "absent"
+    },
+    {
+      "projectId": "mixed-project",
+      "path": "TARGET_SOURCE_EXECUTED",
+      "trigger": "parsed-source-top-level",
+      "expectedAfterAudit": "absent"
+    },
+    {
+      "projectId": "hostile-project",
+      "path": "TARGET_PACKAGE_SCRIPT_EXECUTED",
+      "trigger": "inherited-package-script",
+      "expectedAfterAudit": "absent"
+    },
+    {
+      "projectId": "hostile-project",
+      "path": "TARGET_SOURCE_EXECUTED",
+      "trigger": "inherited-parsed-source-top-level",
+      "expectedAfterAudit": "absent"
+    },
+    {
+      "projectId": "large-project",
+      "path": "TARGET_PACKAGE_SCRIPT_EXECUTED",
+      "trigger": "generated-package-script",
+      "expectedAfterAudit": "absent"
+    }
+  ]
+}

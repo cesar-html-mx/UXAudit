@@ -1,0 +1,28 @@
+project_id,rule_id,case_id,classification,detected,expected_detected,outcome,matched_finding_count,rationale
+invalid-project,accessibility/button-name,invalid-button-name,positive,true,true,true-positive,1,The intrinsic button has no statically determinable visible or ARIA accessible name.
+valid-project,accessibility/button-name,valid-button-name,negative,false,false,true-negative,0,The intrinsic button has retained descriptive visible text.
+mixed-project,accessibility/button-name,unsupported-button-name,unsupported,false,false,unsupported-clear,0,Accessible-name computation for a custom button abstraction is outside the rule scope.
+invalid-project,accessibility/img-alt,invalid-img-alt,positive,true,true,true-positive,1,The intrinsic image has no explicit alt attribute.
+valid-project,accessibility/img-alt,valid-image,negative,false,false,true-negative,0,The intrinsic image provides an explicit descriptive alt attribute.
+mixed-project,accessibility/img-alt,unsupported-img-alt,unsupported,false,false,unsupported-clear,0,Alternative-text behavior for a custom image abstraction is not inferred.
+invalid-project,accessibility/input-label,invalid-input-label,positive,true,true,true-positive,1,The intrinsic input has no static label association or accessible name.
+mixed-project,accessibility/input-label,mixed-input-label,positive,true,true,true-positive,1,The mixed-project intrinsic input has no static label association or accessible name.
+valid-project,accessibility/input-label,valid-input-label,negative,false,false,true-negative,0,The input id is statically associated with a matching intrinsic label.
+mixed-project,accessibility/input-label,unsupported-input-label,unsupported,false,false,unsupported-clear,0,Label association across a custom form-control abstraction is not resolved.
+invalid-project,performance/img-dimensions,invalid-img-dimensions,positive,true,true,true-positive,1,The intrinsic image pairs a literal zero width with a positive height.
+valid-project,performance/img-dimensions,valid-image,negative,false,false,true-negative,0,The intrinsic image provides positive integer width and height attributes.
+mixed-project,performance/img-dimensions,unsupported-img-dimensions,unsupported,false,false,unsupported-clear,0,Layout reservation for a custom responsive-image abstraction is not inferred.
+invalid-project,performance/img-lazy-loading,invalid-img-lazy-loading,positive,true,true,true-positive,1,The intrinsic image explicitly uses the reviewable eager loading value.
+mixed-project,performance/img-lazy-loading,mixed-img-lazy-loading,positive,true,true,true-positive,1,The mixed-project intrinsic image explicitly uses eager loading.
+valid-project,performance/img-lazy-loading,valid-image,negative,false,false,true-negative,0,"The intrinsic image is statically configured with loading=""lazy""."
+mixed-project,performance/img-lazy-loading,unsupported-img-lazy-loading,unsupported,false,false,unsupported-clear,0,Runtime priority behavior for a custom image abstraction is not inferred.
+invalid-project,seo/ambiguous-link-text,invalid-ambiguous-link-text,positive,true,true,true-positive,1,"The intrinsic link retains the configured ambiguous text ""Read more""."
+mixed-project,seo/ambiguous-link-text,mixed-ambiguous-link-text,positive,true,true,true-positive,1,"The mixed-project intrinsic link retains the configured ambiguous text ""Here""."
+valid-project,seo/ambiguous-link-text,valid-link-text,negative,false,false,true-negative,0,The intrinsic link text identifies its account-security destination.
+mixed-project,seo/ambiguous-link-text,unsupported-ambiguous-link-text,unsupported,false,false,unsupported-clear,0,Rendered text from a custom navigation-link abstraction is not inferred.
+invalid-project,seo/multiple-h1,invalid-multiple-h1,positive,true,true,true-positive,1,This is the second intrinsic h1 owned by the same recognized component.
+valid-project,seo/multiple-h1,valid-single-h1,negative,false,false,true-negative,0,The recognized component owns exactly one intrinsic h1.
+mixed-project,seo/multiple-h1,unsupported-multiple-h1,unsupported,false,false,unsupported-clear,0,Heading semantics exposed by a custom heading abstraction are not inferred.
+invalid-project,ux/small-inline-text,invalid-small-inline-text,positive,true,true,true-positive,1,The intrinsic text element has an exact inline fontSize below the 12 px threshold.
+valid-project,ux/small-inline-text,valid-inline-text,negative,false,false,true-negative,0,The exact inline fontSize equals the 12 px threshold and is not below it.
+mixed-project,ux/small-inline-text,unsupported-small-inline-text,unsupported,false,false,unsupported-clear,0,Rendered styles for a custom text abstraction are outside the intrinsic-element scope.
