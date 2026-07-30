@@ -244,7 +244,9 @@
         {
           "id": "M06-T02",
           "title": "Build controlled React and TypeScript fixture projects",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (554 tests/51 files), coverage 95.88% statements / 91.46% branches / 99.80% functions / 95.84% lines, five-project built-CLI scenario twice, harness, and independent review PASS",
+          "completedAt": "2026-07-30T06:23:43.989Z"
         },
         {
           "id": "M06-T03",

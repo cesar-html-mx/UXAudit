@@ -35,6 +35,7 @@
     "test:scenario:m03": "npm run build && node scripts/run-m03-scenario.mjs",
     "test:scenario:m04": "npm run build && node scripts/run-m04-scenario.mjs",
     "test:scenario:m05": "npm run build && node scripts/run-m05-scenario.mjs",
+    "test:scenario:m06": "npm run build && node scripts/run-m06-scenario.mjs",
     "test:smoke": "npm run build && node scripts/smoke-cli.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "verify": "node .github/harness/scripts/check-quality.mjs"

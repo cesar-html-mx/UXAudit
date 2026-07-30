@@ -798,3 +798,29 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   RNF-06, RNF-07, RNF-10, M06-T01, R-009, R-014, R-017, R-018, and R-019.
 - Evidence: application/CLI unit and real-filesystem integration tests, eleven compiled CLI smoke
   scenarios, and the M06 evidence package as it is completed.
+
+## D-036 — Closed controlled-project corpus with runtime security and scale variants
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: M06 needs reviewed end-to-end expectations for safe, violating, mixed, hostile, and
+  large projects. Committing symbolic links is platform-sensitive, and committing hundreds of
+  repeated sources would obscure the validation contract.
+- Decision: Commit minimal valid, invalid, and mixed React/TypeScript projects plus one canonical
+  closed manifest. Version exact candidates, exclusions, parser errors, complete eight-rule count
+  maps, finding case IDs, volatile fields, and non-execution sentinels. Generate the hostile/security
+  project from the valid seed with portable hostile content and capability-aware internal,
+  external, and cyclic links. Generate 240 safe TSX components from versioned parameters. Execute
+  all five projects twice through the built CLI in fresh roots; verify one shared result across
+  terminal/JSON/HTML and compare a stable projection that removes only root/timing volatility.
+- Alternatives considered: committing links or generated bulk; using only model-level rule calls;
+  deriving expectations from observed reports; reusing report directories; or normalizing finding,
+  location, error, and summary differences.
+- Consequences: The corpus remains small, portable, reviewable, and strict about actual product
+  behavior. Link observations remain capability-dependent on platforms that prohibit creation.
+  The 240-file size is a controlled validation scale, not a maximum supported project or a
+  machine-independent performance threshold.
+- Requirements/contracts affected: RF-03 through RF-15, RNF-04, RNF-07, RNF-09, RNF-10,
+  M06-T02, R-001 through R-006, R-009, R-021.
+- Evidence: `fixtures/m06-validation/`, its six manifest/corpus tests, and
+  `scripts/run-m06-scenario.mjs`.

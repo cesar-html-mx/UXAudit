@@ -84,6 +84,13 @@ default audit, all three reporters, recoverable syntax, configuration/CLI preced
 empty rule selection, stable input/fatal exit boundaries, and exclusive existing-target refusal.
 Each scenario uses Node process APIs rather than a shell, and target source remains inert.
 
+M06-T02 adds `npm run test:scenario:m06`. The script builds the real CLI, copies or generates five
+controlled projects in temporary roots, executes each twice with terminal/JSON/HTML output, and
+compares stable projections after omitting only canonical-root and timing volatility. It never
+reuses an output tree because report persistence is intentionally exclusive. Runtime symbolic-link
+creation is capability-aware, and every created link must be reported as excluded by the default
+policy.
+
 ## Portability
 
 Avoid operating-system-specific shell behavior in product code. CI should include more than one

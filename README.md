@@ -149,6 +149,7 @@ npm run test:scenario:m02
 npm run test:scenario:m03
 npm run test:scenario:m04
 npm run test:scenario:m05
+npm run test:scenario:m06
 ```
 
 Useful individual commands:
@@ -167,6 +168,7 @@ Useful individual commands:
 | `npm run test:scenario:m03`     | Exercise the controlled four-kind parser/model scenario without exec.    |
 | `npm run test:scenario:m04`     | Validate the deterministic eight-rule catalog without executing source.  |
 | `npm run test:scenario:m05`     | Verify configuration and all reporters over one controlled result.       |
+| `npm run test:scenario:m06`     | Audit five controlled projects twice through the complete built CLI.     |
 | `npm run evidence:m02`          | Collect the isolated, sanitized, integrity-checked M02 evidence package. |
 | `npm run evidence:m02:finalize` | Add the milestone report to the retained SHA-256 manifest.               |
 | `npm run evidence:m03`          | Collect the isolated, sanitized, integrity-checked M03 evidence package. |
@@ -221,6 +223,8 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
   plus shared exclusive JSON/HTML file writing.
 - `src/shared/`: neutral terminal-value sanitization reused by CLI and reporting.
 - `tests/`: focused domain, parser, rule, application, CLI, and project tests.
+- `fixtures/m06-validation/`: reviewed valid, invalid, mixed, hostile/security, and generated-large
+  project contracts.
 - `.github/harness/`: milestone state, plans, decisions, risks, and lifecycle scripts.
 - `.github/workflows/`: quality, harness, CodeQL, and dependency-review automation.
 - `docs/`: product and engineering system of record.
@@ -246,3 +250,17 @@ CSP, and safe fixed-path writes without executing target code. `npm run evidence
 historical M05 gate in an isolated, credential-free source snapshot. The compiled CLI smoke suite
 additionally executes the integrated default audit, all formats, configuration/CLI precedence, empty
 rule filters, recoverable syntax, and existing-target refusal.
+
+The M06 system scenario builds the CLI and audits five controlled projects twice in fresh temporary
+roots:
+
+```bash
+npm run test:scenario:m06
+```
+
+The committed valid project produces no findings, the invalid project produces one finding for
+each of the eight stable rules, and the mixed project exercises nested JavaScript/TypeScript,
+excluded output, three controlled findings, and one recoverable syntax error. The runner also
+constructs a hostile/security project with default-skipped links and a 240-file safe project from
+versioned parameters. It verifies exit codes, exact terminal/JSON/HTML consistency, expected
+finding/error counts, byte-identical stable projections, and absence of target-code sentinels.

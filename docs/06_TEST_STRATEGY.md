@@ -336,3 +336,25 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   across 50 files, and all 11 compiled smokes. Global V8 coverage measured 95.88% statements,
   91.46% branches, 99.80% functions, and 95.84% lines. Accuracy, performance, full security, and
   usability claims remain assigned to M06-T03 through M06-T05.
+
+## M06-T02 executed controlled-project baseline
+
+- A closed, canonical manifest versions the exact eight-rule vocabulary, source candidates,
+  exclusions, parser errors, finding counts/case IDs, volatile result fields, non-execution
+  sentinels, runtime links, and large-project generation parameters.
+- The committed `valid-project` produces zero findings; `invalid-project` produces exactly one
+  finding for each stable rule; and `mixed-project` selects five `.js`/`.jsx`/`.ts`/`.tsx`
+  candidates, parses four, isolates one syntax error, and produces three reviewed findings while
+  excluding declarations, configuration, and generated directories.
+- The runtime hostile/security project adds three default-skipped internal, external, and cyclic
+  links plus a portable hostile filename that reaches escaped HTML through one controlled finding.
+  Link creation capability is recorded rather than assumed on platforms that prohibit symbolic
+  links.
+- The generated large project contains 240 safe TSX components across 12 directories. Its source
+  template, paths, package-script sentinel, and five-run performance parameter are versioned rather
+  than committing generated bulk.
+- The shell-free built-CLI scenario audits all five projects twice in fresh roots, verifies exact
+  expected results, terminal/JSON/HTML consistency, report claims, stable projections, and absent
+  source/package sentinels. Six focused manifest/corpus tests lock the physical and semantic
+  contract. The complete Node.js 24 gate passed 554 tests across 51 files; coverage remained at
+  95.88% statements, 91.46% branches, 99.80% functions, and 95.84% lines.

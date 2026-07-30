@@ -491,3 +491,27 @@
 - The final T01 Node.js 24 gate passed formatting, strict lint, typecheck, build, 548 tests across
   50 files, all 11 compiled CLI scenarios, harness validation, and V8 coverage at 95.88%
   statements, 91.46% branches, 99.80% functions, and 95.84% lines.
+- The required T01 publication attempt failed non-interactively because no HTTPS GitHub credential
+  is available. The remote was unchanged; the local conventional commit is `c5eb8bc`.
+- Completed M06-T02 with a canonical closed manifest and committed valid, invalid, and mixed
+  React/TypeScript projects. Exact candidates, exclusions, parser errors, rule counts, case IDs,
+  volatile fields, and source/package non-execution sentinels are versioned.
+- The invalid project produces exactly one finding for each of the eight stable rules. The mixed
+  project selects five language candidates, parses four, retains one recoverable syntax error, and
+  produces three controlled findings while default generated directories, a declaration file, and
+  configuration remain excluded.
+- The same contract generates a portable hostile/security project with internal, external, and
+  cyclic links plus an HTML-relevant hostile path, and a 240-file safe project across 12
+  directories. Bulk and platform-specific links are generated only at runtime.
+- The shell-free M06 runner invoked the complete built CLI over all five projects twice in fresh
+  roots. Expected result maps, exit `0`, exact JSON/HTML rendering, terminal consistency, writer
+  claims, link exclusions when supported, stable projections, and absent sentinels all passed.
+- Six focused tests lock the manifest schema, physical corpus, rule maps/case IDs, generator
+  parameters, and absence of committed links, sentinels, or generated reports.
+- Independent review found that the first runner projection ignored unexpected discovery/rule
+  errors. The final contract now requires exact total errors and zero unversioned discovery issues,
+  normalizes both raw and escaped roots in retained HTML samples, and uses non-overstated evidence
+  field names.
+- The final T02 Node.js 24 gate passed formatting, strict lint, typecheck, build, 554 tests across
+  51 files, the five-project/two-run scenario, harness validation, and coverage at 95.88%
+  statements, 91.46% branches, 99.80% functions, and 95.84% lines.

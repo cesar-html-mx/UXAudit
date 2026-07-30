@@ -43,7 +43,7 @@
 ## M06 — Integration, validation, usability, and security evidence
 
 - [x] M06-T01 Connect `ux-audit scan` from path input to all reporters.
-- [ ] M06-T02 Create controlled valid and invalid React/TypeScript projects.
+- [x] M06-T02 Create controlled valid and invalid React/TypeScript projects.
 - [ ] M06-T03 Calculate true positives, false positives, false negatives, precision, and recall.
 - [ ] M06-T04 Execute system, robustness, performance, dependency, and security checks.
 - [ ] M06-T05 Run the usability protocol and assemble all evidence for Activity 3.

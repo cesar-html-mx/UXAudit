@@ -202,6 +202,7 @@ The final package under `evidence/m06-validation/` must include:
 - [x] Milestone started.
 - [x] Repository inspected and plan reconciled with reality.
 - [x] M06-T01 complete audit pipeline implemented and verified.
+- [x] M06-T02 controlled project corpus and built-CLI scenario implemented and verified.
 - [ ] Tasks completed.
 - [ ] Quality gate passed.
 - [ ] Evidence collected.
@@ -230,6 +231,15 @@ The final package under `evidence/m06-validation/` must include:
   validation. Independent implementation and test reviews found no blocking defect.
 - Separating renderer and writer error boundaries prevents an injected renderer from masquerading
   as a stable persistence failure; only the actual writer may propagate `ReportWriteError`.
+- Committing `.next`, `build`, and `out` examples avoids Git's conventional `node_modules`,
+  `coverage`, and `dist` ignore rules while still exercising three default generated-directory
+  exclusions in the mixed project.
+- The built scenario matched all five manifest contracts twice: findings were 0/8/3/1/0 for
+  valid/invalid/mixed/hostile/large, only mixed retained one recoverable parse error, target code
+  never executed, and stable projections were byte-identical.
+- M06-T02's Node.js 24 gate passed 554 tests across 51 files, 95.88% statement / 91.46% branch /
+  99.80% function / 95.84% line coverage, the twice-executed system scenario, harness validation,
+  and independent review.
 
 ## Decision log
 
