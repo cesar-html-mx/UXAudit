@@ -367,6 +367,18 @@
   public configuration vocabulary.
 - T02 verification under Node.js `24.18.0` passed formatting, strict lint, typecheck, build, all 435
   tests across 43 files, and coverage at 95.77% statements, 91.08% branches, 99.29% functions, and
-  95.72% lines. Final independent re-review found no remaining defect. The earlier non-interactive
-  task push remained unavailable because the HTTPS remote
-  has no supplied GitHub credentials; local task commits remain the system of record.
+  95.72% lines. Final independent re-review found no remaining defect.
+- Committed M05-T02 as `80f846f`. Its non-interactive HTTPS push was attempted immediately and
+  failed because this process has no GitHub username/credential; the remote was unchanged and no
+  hosted result is claimed.
+- Completed M05-T03 with a pure frozen terminal reporter, complete deterministic summaries,
+  inclusive minimum-severity detail filtering, canonical record order, one-based display columns,
+  explicit empty/null states, and verbose normalized processing errors.
+- Moved terminal sanitization to a neutral shared boundary while preserving the CLI re-export.
+  Every dynamic value is escaped before fixed badge-only ANSI; C0/C1, terminal controls, bidi,
+  isolates, BOM, injected lines, and unpaired surrogates become visible escapes while valid Unicode
+  remains intact. Color output strips exactly to the no-color report.
+- T03 verification under Node.js `24.18.0` passed 33 focused terminal/CLI tests, formatting, strict
+  lint, typecheck, build, all 449 tests across 44 files, and coverage at 95.94% statements, 91.42%
+  branches, 99.31% functions, and 95.90% lines. Independent adversarial re-review found no
+  remaining defect.

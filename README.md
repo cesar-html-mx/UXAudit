@@ -6,13 +6,13 @@ parses them through an internal Babel boundary, and builds a deterministic parse
 analysis model. The completed M04 domain layer adds a deterministic isolated rule engine and eight
 stable rules across accessibility, performance, SEO, and UX. The active M05 slice defines
 versioned configuration defaults and loading, one immutable normalized `AuditResult`, complete
-file/rule/finding/error summaries, and a pure reporter boundary.
+file/rule/finding/error summaries, and a pure deterministic terminal reporter.
 
 The `scan` command validates and canonicalizes the selected root, discovers files, analyzes safe
 source candidates without executing target code, and prints discovery and parsing counts. The CLI
-does not invoke the rule/result/reporting layers yet, and terminal/JSON/HTML renderer
-implementations remain the rest of M05/M06, so a successful scan must not be interpreted as a
-completed audit.
+does not invoke the rule/result/reporting layers yet. The terminal reporter is independently
+implemented, while JSON/HTML and their CLI integration remain M05/M06, so a successful scan must
+not be interpreted as a completed audit.
 
 ## Requirements
 
@@ -103,6 +103,12 @@ Configuration files are strict UTF-8 JSON limited to 64 KiB, unknown keys and va
 and output directories must be portable project-relative paths. The loader is available internally
 in M05; the current `scan` command does not expose `--config` or reporting options until M06.
 
+The internal terminal reporter consumes one completed `AuditResult`. It keeps canonical finding
+order, filters displayed details through the inclusive severity threshold, retains complete totals,
+uses one-based human column labels, and shows normalized processing details only in verbose mode.
+No-color output contains no escape bytes; color is limited to fixed badges after every dynamic value
+has been converted to terminal-safe visible text. The CLI will expose this behavior in M06.
+
 ## Develop and verify
 
 ```bash
@@ -157,8 +163,8 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
   aliases, higher-order abstractions, imports, or rendered behavior.
 - The domain engine can produce normalized findings and isolated rule errors, and M05 can assemble
   them into an exact recursively frozen `AuditResult`; the CLI does not expose either layer yet.
-  Configuration-file loading is implemented as an independent inert JSON boundary; finding-failure
-  policy, CLI wiring, and rendered audit reports remain M05/M06 work.
+  Configuration-file loading and terminal rendering are implemented as independent boundaries;
+  finding-failure policy, CLI wiring, and JSON/HTML reports remain M05/M06 work.
 
 ## Repository map
 
@@ -174,7 +180,9 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
 - `src/rules/`: validated engine plus category-organized static rules.
 - `src/configuration/`: bounded JSON reading, closed validation, precedence, immutable defaults,
   overrides, formats, filenames, and stable errors.
-- `src/reporting/`: pure one-result reporter contract; concrete adapters follow in M05.
+- `src/reporting/`: pure one-result reporter contract and deterministic terminal adapter; JSON,
+  shared file writing, and HTML follow in M05.
+- `src/shared/`: neutral terminal-value sanitization reused by CLI and reporting.
 - `tests/`: focused domain, parser, rule, application, CLI, and project tests.
 - `.github/harness/`: milestone state, plans, decisions, risks, and lifecycle scripts.
 - `.github/workflows/`: quality, harness, CodeQL, and dependency-review automation.

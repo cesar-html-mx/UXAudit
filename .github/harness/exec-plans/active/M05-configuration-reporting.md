@@ -94,6 +94,14 @@ recoverable processing detail.
 Planned verification: exact color/no-color output, hostile-control rendering, empty/error/finding
 cases, threshold behavior, source display coordinates, deterministic reruns, and input immutability.
 
+Status: completed. A pure frozen terminal reporter presents complete file/rule/category/severity/
+error-stage summaries, filters only finding detail through an inclusive configured threshold,
+preserves canonical finding/error order, converts start columns only for display, and exposes
+normalized processing detail only in verbose mode. Every untrusted value is sanitized through the
+shared terminal boundary before trusted badge-only ANSI is added. The final Node.js 24 task gate
+passed 449 tests across 44 files plus build/type/lint/format, with 95.94% statement / 91.42% branch /
+99.31% function / 95.90% line coverage.
+
 ### M05-T04 — Implement JSON reporter
 
 Serialize complete stable data, document schema/version, and test repeated output.
@@ -192,6 +200,17 @@ Record implementation facts, library behavior, and assumptions discovered during
   normalization, and the portable path policy omitted Windows superscript device names and UTF-8
   byte/well-formedness limits. The fixes add fail-closed regression matrices plus explicit
   duplicate top-level JSON-key rejection; final independent re-review found no remaining defect.
+- `AuditResult.findings` is already frozen and ordered by rule/path/location/message rather than
+  severity. T03 will preserve that canonical order with an inclusive filter and make priority
+  visible through fixed badges plus critical-to-info summary buckets; it will not regroup or sort
+  the result.
+- The existing terminal sanitizer is CLI-owned even though reporting will become a CLI dependency
+  in M06. T03 should move the implementation to a neutral shared module, preserve the CLI import as
+  a compatibility re-export, sanitize every untrusted value before adding trusted ANSI, and keep
+  structural LF separators outside sanitized values.
+- Independent T03 review exercised the shared sanitizer, ANSI/no-color equivalence, threshold/order,
+  summary/detail semantics, coordinates, empty/null/error cases, determinism, and immutability and
+  found no remaining defect.
 
 ## Decision log
 
@@ -211,6 +230,9 @@ Record decisions made within the authority allowed by `AGENTS.md`.
 - D-030 fixes JSON-only bounded loading, default-versus-explicit path authorization, closed
   schema-versioned validation, stable errors, canonical ordering, and
   `defaults < file < CLI` precedence for the configuration boundary.
+- D-031 fixes the terminal structure, inclusive display threshold, canonical ordering, one-based
+  display columns, optional error detail, shared per-value sanitization, and trusted badge-only ANSI
+  behavior without consulting process/TTY state.
 
 ## Risks and recovery
 

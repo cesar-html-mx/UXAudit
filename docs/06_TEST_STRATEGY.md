@@ -257,3 +257,20 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
 - The final task run under Node.js `24.18.0` passed all 435 tests across 43 files plus format, lint,
   typecheck, and build. Global V8 coverage passed at 95.77% statements, 91.08% branches, 99.29%
   functions, and 95.72% lines; final milestone metrics will be recollected with all M05 tasks.
+
+## M05-T03 executed terminal baseline
+
+- Exact no-color output covers complete file/rule/category/severity/error summaries, canonical
+  findings, recommendations, limitations, references, display coordinates, and verbose discovery,
+  source, and rule errors.
+- Color tests prove that only fixed badges receive ANSI and stripping those sequences yields the
+  no-color report byte-for-byte. The five inclusive thresholds preserve full totals and input order.
+- Empty/hidden findings, null locations/references, non-verbose errors, every source stage, and
+  repeat rendering have explicit cases. Frozen input remains unchanged.
+- Hostile project, file, title, message, explanation, recommendation, limitation, reference, and
+  tool strings cover C0/C1 controls, injected lines, ANSI/OSC, bidi/isolates, unpaired surrogates,
+  and valid astral Unicode. Existing CLI hostile-output cases pass through the compatibility
+  re-export.
+- The final task run under Node.js `24.18.0` passed all 449 tests across 44 files plus format, lint,
+  typecheck, and build. Global V8 coverage passed at 95.94% statements, 91.42% branches, 99.31%
+  functions, and 95.90% lines; final milestone metrics will be recollected with all M05 tasks.

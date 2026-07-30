@@ -172,6 +172,9 @@ full Commander integration remains M06.
 
 ## Reports
 
-- Terminal: concise immediate summary and readable findings.
+- Terminal: concise immediate summary, complete category/severity/error-stage buckets, canonically
+  ordered readable findings at or above the inclusive display threshold, one-based display
+  columns, optional normalized error detail, and explicit color/no-color modes. Summary totals
+  always describe the complete result even when finding detail is filtered.
 - JSON: complete stable machine-readable result.
 - HTML: standalone, escaped, readable report requiring no external service.

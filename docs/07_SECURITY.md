@@ -177,5 +177,24 @@ as untrusted when rendering terminal, JSON, or HTML output.
 An explicit configuration file is separate user authority and may be outside the analyzed project;
 it is still subject to the regular-file and identity policy. Portable user-space checks cannot
 eliminate every pathname race, so observed changes fail closed and only bytes from the verified
-descriptor are parsed. T04 still owns canonical output-directory authorization, symlink-resistant
-creation, and exclusive report writes.
+descriptor are parsed. M05-T04 still owns canonical output-directory authorization,
+symlink-resistant creation, and exclusive report writes.
+
+## M05-T03 implemented terminal controls
+
+- The terminal reporter interpolates no raw project/result string. Each value is sanitized before
+  structural separators or trusted ANSI are added, so injected newlines cannot forge report records
+  and source-provided escapes cannot change terminal state.
+- The shared sanitizer renders C0/C1 controls, ANSI/OSC bytes, bidirectional marks and isolates,
+  Unicode line separators, BOM, and unpaired UTF-16 surrogates as visible lowercase `\uXXXX`
+  sequences while preserving well-formed Unicode.
+- Color is a normalized configuration value rather than TTY/environment behavior. Only fixed
+  severity/stage badges receive ANSI; no-color output contains no escape character, and stripping
+  reporter-owned ANSI produces the exact no-color bytes.
+- Verbose mode exposes only already normalized recoverable error records. Native causes, stacks,
+  source text, and additional absolute paths are not available to the reporter.
+
+The terminal renderer is pure and not yet connected to the CLI. M06 must not pass its already-safe
+color output through an assembled-output sanitizer that would neutralize trusted ANSI; it must
+preserve the rule that only the reporter introduces those fixed sequences. M05-T04 still owns
+canonical output-directory authorization, symlink-resistant creation, and exclusive report writes.

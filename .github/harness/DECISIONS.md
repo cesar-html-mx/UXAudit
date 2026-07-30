@@ -623,3 +623,33 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   R-015, and R-017.
 - Evidence: configuration reader/loader tests and the 435-test Node.js 24 task gate with 95.77%
   statements, 91.08% branches, 99.29% functions, and 95.72% lines.
+
+## D-031 — Pure terminal report with per-value sanitization
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: The terminal is an immediate human presentation of the same frozen result used by JSON
+  and HTML. Reordering by severity would contradict the canonical result, sanitizing a completed
+  report would preserve attacker-supplied line structure or neutralize trusted color, and deriving
+  options from TTY/environment state would make rendering nondeterministic.
+- Decision: Define one frozen terminal `Reporter` that renders LF text synchronously from exactly
+  one `AuditResult`. Present complete file/rule/finding/error summaries with fixed category,
+  severity, and stage bucket order. Apply the configured minimum severity inclusively to finding
+  detail only, preserving the result's canonical order and retaining total counts. Display source
+  start columns as stored column plus one, render null locations/references explicitly, and include
+  normalized error records only when `verbose` is true. Move terminal sanitization to a neutral
+  shared module with the original CLI module as a compatibility re-export. Sanitize every dynamic
+  value—including controls, bidirectional markers, BOM, and unpaired surrogates—before adding fixed
+  ANSI only around severity/stage badges. `color: false` emits no escape character; stripping the
+  trusted ANSI from color output reproduces no-color output byte-for-byte.
+- Alternatives considered: Sorting/grouping findings by severity; filtering summary totals;
+  converting stored result coordinates; sanitizing the assembled report; coloring whole
+  attacker-controlled lines; reading `NO_COLOR`/TTY state; or printing native error causes.
+- Consequences: Terminal output is deterministic, injection-resistant, readable, and independent
+  of discovery/rules/filesystem I/O. M06 must pass external color/verbosity choices into normalized
+  configuration and write the already-sanitized reporter output through a boundary that preserves
+  its trusted ANSI rather than sanitizing the assembled report again.
+- Requirements/contracts affected: RF-15, RNF-01, RNF-04, RNF-06, RNF-09, RNF-10, M05 acceptance,
+  R-014, and R-019.
+- Evidence: terminal/CLI focused tests and the 449-test Node.js 24 task gate with 95.94% statements,
+  91.42% branches, 99.31% functions, and 95.90% lines.

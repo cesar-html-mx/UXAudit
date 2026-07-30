@@ -55,7 +55,8 @@ be collapsed without an architecture decision.
 ```text
 src/cli/index.ts
   -> src/cli/run-cli.ts
-       -> src/cli/sanitize-terminal.ts
+       -> src/cli/sanitize-terminal.ts (compatibility re-export)
+            -> src/shared/sanitize-terminal.ts
   -> src/application/analyze-project.ts
   -> src/application/scan-project.ts
        -> src/project/validate-project-path.ts
@@ -291,6 +292,14 @@ M05-T01 defines a pure reporter as a format identity plus `render(result): strin
 exactly one completed `AuditResult` into a representation and never discovers, parses, reevaluates
 rules, mutates the result, or writes through the domain contract. Terminal/JSON/HTML adapters and
 their optional filesystem writer remain presentation boundaries.
+
+M05-T03 implements the terminal adapter as deterministic LF text. It preserves canonical finding
+and error order, uses complete summary buckets, filters only displayed finding records through the
+inclusive configured severity, converts stored start columns to one-based labels, and includes
+individual normalized processing errors only when verbose. A neutral shared sanitizer turns
+untrusted controls, bidirectional markers, BOM, and unpaired surrogates into visible escapes before
+the reporter adds fixed ANSI around badges. It does not inspect process, TTY, environment, or
+filesystem state.
 
 ### Configuration
 
