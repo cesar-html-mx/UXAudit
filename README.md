@@ -4,16 +4,16 @@ UXAudit is a local, static-analysis CLI for React and TypeScript projects. The c
 implementation safely discovers and classifies `.js`, `.jsx`, `.ts`, and `.tsx` source candidates,
 parses them through an internal Babel boundary, and builds a deterministic parser-independent
 analysis model. The completed M04 domain layer adds a deterministic isolated rule engine and eight
-stable rules across accessibility, performance, SEO, and UX. The active M05 slice defines
+stable rules across accessibility, performance, SEO, and UX. The completed M05 reporting layer adds
 versioned configuration defaults and loading, one immutable normalized `AuditResult`, complete
-file/rule/finding/error summaries, pure deterministic terminal and lossless JSON reporters, and a
-shared exclusive local report writer.
+file/rule/finding/error summaries, pure deterministic terminal/lossless JSON/standalone HTML
+reporters, and a shared exclusive local report writer.
 
 The `scan` command validates and canonicalizes the selected root, discovers files, analyzes safe
 source candidates without executing target code, and prints discovery and parsing counts. The CLI
 does not invoke the rule/result/reporting layers yet. The terminal reporter is independently
-implemented; JSON rendering and JSON/HTML persistence are also available internally, while HTML
-rendering and CLI integration remain M05/M06, so a successful scan must
+implemented; JSON and standalone HTML rendering plus JSON/HTML persistence are also available
+internally, while CLI integration remains M06, so a successful scan must
 not be interpreted as a completed audit.
 
 ## Requirements
@@ -117,6 +117,12 @@ configured relative target, refuses links, path escape, and existing files, and 
 after write, sync, close, and final authorization. The writer does not automatically remove a
 partial target after failure because a pathname identity race can make deletion unsafe.
 
+The internal HTML reporter shows the complete result in fixed severity and processing-stage groups;
+terminal thresholds and verbosity do not hide its records. It uses a restrictive CSP, constant
+inline CSS, no scripts or external assets, visible hostile-Unicode neutralization followed by HTML
+escaping, and inert fallback for any reference that is not reparsed as credential-free HTTP(S).
+Human locations include one-based columns, UTF-16 offsets, and an explicit end-exclusive label.
+
 ## Develop and verify
 
 ```bash
@@ -126,6 +132,8 @@ npm run test:coverage
 npm run test:smoke
 npm run test:scenario:m02
 npm run test:scenario:m03
+npm run test:scenario:m04
+npm run test:scenario:m05
 ```
 
 Useful individual commands:
@@ -143,12 +151,15 @@ Useful individual commands:
 | `npm run test:scenario:m02`     | Verify reviewed inventory, exclusions, links, determinism, and no exec.  |
 | `npm run test:scenario:m03`     | Exercise the controlled four-kind parser/model scenario without exec.    |
 | `npm run test:scenario:m04`     | Validate the deterministic eight-rule catalog without executing source.  |
+| `npm run test:scenario:m05`     | Verify configuration and all reporters over one controlled result.       |
 | `npm run evidence:m02`          | Collect the isolated, sanitized, integrity-checked M02 evidence package. |
 | `npm run evidence:m02:finalize` | Add the milestone report to the retained SHA-256 manifest.               |
 | `npm run evidence:m03`          | Collect the isolated, sanitized, integrity-checked M03 evidence package. |
 | `npm run evidence:m03:finalize` | Add the milestone report to the retained M03 SHA-256 manifest.           |
 | `npm run evidence:m04`          | Collect the isolated, sanitized, integrity-checked M04 evidence package. |
 | `npm run evidence:m04:finalize` | Add the milestone report to the retained M04 SHA-256 manifest.           |
+| `npm run evidence:m05`          | Collect or verify the isolated, sanitized M05 evidence package.          |
+| `npm run evidence:m05:finalize` | Add the milestone report to the retained M05 SHA-256 manifest.           |
 | `npm run verify`                | Run format, lint, typecheck, unit tests, and build in one gate.          |
 
 Husky invokes `npm run verify` before local commits. CI is configured for Node.js 24 on Ubuntu
@@ -172,8 +183,8 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
 - The domain engine can produce normalized findings and isolated rule errors, and M05 can assemble
   them into an exact recursively frozen `AuditResult`; the CLI does not expose either layer yet.
   Configuration-file loading and terminal rendering are implemented as independent boundaries;
-  JSON rendering and shared file persistence are implemented too. Finding-failure policy, CLI
-  wiring, and HTML rendering remain M05/M06 work.
+  JSON/HTML rendering and shared file persistence are implemented too. Finding-failure policy and
+  CLI wiring remain M06 work.
 
 ## Repository map
 
@@ -189,8 +200,8 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
 - `src/rules/`: validated engine plus category-organized static rules.
 - `src/configuration/`: bounded JSON reading, closed validation, precedence, immutable defaults,
   overrides, formats, filenames, and stable errors.
-- `src/reporting/`: pure one-result reporter contract, deterministic terminal and lossless JSON
-  adapters, and shared exclusive JSON/HTML file writing; HTML rendering follows in M05.
+- `src/reporting/`: pure one-result terminal, lossless JSON, and escaped standalone HTML adapters
+  plus shared exclusive JSON/HTML file writing.
 - `src/shared/`: neutral terminal-value sanitization reused by CLI and reporting.
 - `tests/`: focused domain, parser, rule, application, CLI, and project tests.
 - `.github/harness/`: milestone state, plans, decisions, risks, and lifecycle scripts.
@@ -205,16 +216,19 @@ node .github/harness/scripts/validate-harness.mjs
 node .github/harness/scripts/show-status.mjs
 ```
 
-Validate the compiled M04 domain catalog independently of the not-yet-integrated CLI:
+Validate the compiled M05 configuration and reporting boundaries independently of the
+not-yet-integrated CLI:
 
 ```bash
-npm run test:scenario:m04
+npm run test:scenario:m05
 ```
 
-The controlled scenario analyzes one inert TSX project, matches the reviewed eight-finding
-expectation twice, exercises filtering and one isolated rule failure, and proves that target code is
-not executed. `npm run evidence:m04` additionally reproduces the gate in an isolated,
-credential-free source snapshot while M04-T05 is active.
+The controlled scenario validates five configuration cases and renders one immutable result with
+all severity and processing-stage buckets through terminal, JSON, and HTML twice. It verifies exact
+cross-format projections, deterministic output, visible hostile-value escaping, restrictive HTML
+CSP, and safe fixed-path writes without executing target code. `npm run evidence:m05` reproduces the
+gate in an isolated, credential-free source snapshot while M05-T05 is active; a second unchanged run
+verifies the retained package instead of replacing it.
 
-This implementation slice evaluates M04 rules over parser-independent input without changing the
-current CLI contract.
+This implementation slice exposes configuration and reporter APIs without changing the current
+scan-only CLI contract.

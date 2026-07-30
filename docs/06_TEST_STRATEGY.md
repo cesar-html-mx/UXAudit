@@ -290,3 +290,25 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
 - The final task run under Node.js `24.18.0` passed all 490 tests across 46 files plus format, lint,
   typecheck, and build. Global V8 coverage passed at 95.66% statements, 91.19% branches, 99.36%
   functions, and 95.62% lines; final milestone metrics will be recollected with all M05 tasks.
+
+## M05-T05 executed HTML baseline
+
+- Standalone-document tests lock the exact deterministic digest, UTF-8/LF envelope, early CSP,
+  constant inline styling, and absence of script, event-handler attributes, resource-bearing tags,
+  external assets, `@import`, or CSS URLs.
+- Complete-result cases cover metadata, configuration null versus empty selections, report paths,
+  timing, all file/rule/category/severity/stage counters, every finding/error variant, null
+  locations/references/URLs, both UTF-16 offsets, one-based display columns, and end-exclusive
+  ranges. Terminal severity and verbosity settings do not suppress HTML records.
+- Hostile values exercise closing tags, script/image/event payloads, C0/C1 and terminal controls,
+  bidi/isolates, BOM, line separators, lone surrogates, metacharacters, and valid emoji. Forged URL
+  tests keep non-HTTP(S), credential-bearing, malformed, controlled, and object values inert while
+  canonical credential-free HTTP(S) becomes one escaped link.
+- Cross-reporter assertions compare every finding field and processing-error discriminator in
+  contextual records, account for JSON zero-based versus human one-based coordinates, and prove
+  canonical order inside a shared severity bucket. Exact writer delegation, null selection, stable
+  failure propagation, repeat rendering, and frozen-input immutability are covered.
+- The final focused reporter/writer run passed 77 tests. The complete Node.js `24.18.0` product run
+  passed 512 tests across 47 files. Global V8 coverage measured 95.81% statements, 91.39% branches,
+  99.39% functions, and 95.77% lines; the HTML module measured 100% statements/functions/lines and
+  97.82% branches. Final isolated M05 evidence recollects these metrics.

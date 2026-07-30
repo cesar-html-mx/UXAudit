@@ -140,6 +140,17 @@ Planned verification: cross-reporter identity assertions, deterministic HTML, no
 hostile filename/message/reference payloads, XSS non-execution shape, empty/error/finding cases,
 safe write and write-failure behavior, plus the complete M05 scenario/evidence gate.
 
+Status: completed. The pure frozen HTML reporter emits a deterministic standalone HTML5 document
+with fixed summary/finding/error groups, complete result metadata, one-based human columns,
+UTF-16 offsets, explicit end-exclusive ranges, constant inline CSS, and no scripts or external
+assets. It visibly neutralizes hostile Unicode before context-specific HTML escaping, reparses only
+control-free credential-free HTTP(S) references as links, and delegates persistence to the shared
+writer. The final Node.js 24 task gate passed 512 tests across 47 files plus
+build/type/lint/format, with 95.81% statement / 91.39% branch / 99.39% function / 95.77% line
+coverage. Two isolated evidence runs published and then preserved a 22-artifact base package with
+valid SHA-256 hashes; independent reporter and evidence reviews found no remaining blocking or
+medium defect.
+
 ## Validation and acceptance
 
 Feed the same prepared `AuditResult` to all reporters and verify identity of essential data. Execute
@@ -154,10 +165,10 @@ write-failure test, tests and coverage.
 
 - [x] Milestone started.
 - [x] Repository inspected and plan reconciled with reality.
-- [ ] Tasks completed.
-- [ ] Quality gate passed.
-- [ ] Evidence collected.
-- [ ] Documentation and traceability updated.
+- [x] Tasks completed.
+- [x] Quality gate passed.
+- [x] Evidence collected.
+- [x] Documentation and traceability updated.
 - [ ] Milestone closed and state advanced.
 
 ## Discoveries
@@ -234,6 +245,23 @@ Record implementation facts, library behavior, and assumptions discovered during
   invalid byte counts, sync/close failures, proxy/accessor inputs, and hostile native errors. A
   failed operation after exclusive creation can deliberately leave a partial target: automatically
   unlinking a pathname after an identity race could delete an attacker replacement.
+- T05 HTML can remain a pure deterministic renderer over the same result. It will use a strict
+  no-script CSP and inline CSS only; expose every summary/finding/error in fixed bucket order; render
+  human columns one-based with the stored end remaining exclusive; visibly neutralize controls,
+  bidi, BOM, and malformed UTF-16 before HTML escaping; and make only revalidated credential-free
+  HTTP(S) references clickable.
+- M05 evidence can follow the isolated M04 lifecycle while validating reporter-specific facts:
+  one controlled result will produce terminal, JSON, and HTML artifacts plus configuration,
+  cross-reporter, deterministic, XSS-shape, and safe-write records. The XSS record is a structural
+  escaping/CSP validation rather than a browser-execution claim, and CLI smoke remains scan-only
+  until M06 owns orchestration.
+- Independent evidence security review found that the initial base contract allowed the optional
+  milestone report and that failure cleanup could follow a concurrently replaced ancestor. The
+  corrected collector enforces exact base counts before and after staging, leaves failed staging
+  for manual inspection, and the finalizer performs exclusive handle write/sync plus repeated
+  parent/directory/file identity authorization immediately before its fixed rename without
+  pathname cleanup. The corrected package was collected twice and re-review found no remaining
+  blocking or medium defect.
 
 ## Decision log
 
@@ -258,6 +286,12 @@ Record decisions made within the authority allowed by `AGENTS.md`.
   behavior without consulting process/TTY state.
 - D-032 fixes lossless canonical JSON plus the shared exclusive, reauthorized file-writer boundary,
   stable write errors, success-path claims, and explicit portable-filesystem residual limits.
+- D-033 fixes the complete standalone HTML structure, fixed grouping, display coordinates,
+  hostile-Unicode and HTML escaping order, revalidated safe links, terminal-filter independence,
+  restrictive CSP, and reuse of the shared writer.
+- D-034 fixes the isolated M05 scenario/evidence contract, exact artifact allowlist, hostile-output
+  sanitization, two-run preservation, manifest finalization, honest CLI/browser claims, and the
+  explicitly bounded POSIX empty-destination rename residual.
 
 ## Risks and recovery
 
@@ -269,6 +303,10 @@ Maintain task-specific risks, rollback steps, and any remaining debt.
 - Output-path containment checked only lexically can be bypassed with symlinks or races. The shared
   writer must authorize the canonical root/directory, reject link targets, create only controlled
   directories, and use exclusive file creation so an unrelated existing file is never overwritten.
+- Evidence publication uses same-filesystem staging and reauthorizes the dedicated destination
+  immediately before rename. Portable Node has no no-replace directory rename; POSIX may replace a
+  concurrently created empty directory in the final interval, while a non-empty destination fails.
+  Record this narrow milestone-placeholder residual and never generalize the publisher to user data.
 - Absolute timing values make otherwise identical full results vary. Determinism tests will use one
   prepared result; documentation and evidence will distinguish volatile metadata from canonical
   rendering/order.

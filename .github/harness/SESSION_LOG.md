@@ -399,3 +399,54 @@
 - Independent final review confirmed the post-close target snapshot is the last asynchronous
   filesystem observation before success, the replacement race fails closed, and no blocking T04
   defect remains. Residual portable-filesystem and partial-target limits are recorded in D-032.
+- Committed M05-T04 as `44195f4`. Its non-interactive HTTPS push was attempted immediately and
+  failed because this process has no GitHub username/credential; the remote was unchanged and no
+  hosted result is claimed.
+- Reconciled M05-T05 before implementation: HTML will be a pure standalone no-script document over
+  the same result, with visible hostile-Unicode neutralization, context-specific escaping, fixed
+  summary groups, one-based display columns, safe-link revalidation, and reuse of the T04 writer.
+  Retained evidence will distinguish structural CSP/escaping validation from browser execution and
+  will not imply M06 CLI reporter integration.
+- Implemented the pure HTML reporter and its shared-writer adapter. The standalone document exposes
+  complete metadata, configuration, timing, report paths, counters, findings, and normalized errors
+  in fixed severity/stage groups without applying terminal filters. It displays one-based columns,
+  both UTF-16 offsets, and end-exclusive ranges.
+- Every dynamic value is neutralized for controls/C1/bidi/BOM/lone surrogates before HTML escaping.
+  Constant inline CSS plus a restrictive CSP require no script or external asset; forged references
+  become links only after control-free credential-free HTTP(S) reparsing and otherwise remain inert.
+- Independent review found the initial cross-reporter test and scenario overclaimed complete
+  identity after comparing only a subset of fields. The tests now compare every finding field and
+  error discriminator contextually and prove order within a shared bucket; the scenario records the
+  exact format-specific coordinate projections and fields it verifies.
+- Final HTML verification under Node.js `24.18.0` passed 77 focused reporter/writer tests and 512
+  total tests across 47 files. Coverage measured 95.81% statements, 91.39% branches, 99.39%
+  functions, and 95.77% lines globally, with 100% statements/functions/lines and 97.82% branches
+  for the HTML module. Independent final review found no remaining reporter defect.
+- Independent pre-collection review found that portable Node directory rename has no no-replace
+  mode: on POSIX, a destination created empty after the final absence check can be replaced. M05
+  limits publication to its dedicated absent/`.gitkeep` evidence target, rechecks immediately before
+  same-filesystem rename, fails for non-empty concurrent data, and records the narrow residual in
+  D-034 rather than claiming atomic no-clobber behavior.
+- Collected the M05 package twice from an isolated, credential-free, symlink-free allowlisted
+  snapshot. The first run published 22 base artifacts with a complete SHA-256 manifest; the second
+  reproduced the same source/result and preserved the existing package after validating every
+  artifact. The source-tree digest was
+  `sha256:1755405d825a726b7eecf8ccbbb492131cd29f353a09340292a746e53df2b0a0`.
+- Retained evidence records 512 passing tests across 47 files with zero skipped/todo tests, 95.81%
+  statement / 91.39% branch / 99.39% function / 95.77% line coverage, zero known dependency
+  vulnerabilities, five configuration cases, all five severities and processing stages, exact
+  cross-reporter projections, deterministic rerenders, terminal ANSI equivalence, structural
+  HTML/CSP/XSS checks, and safe-write failure cases.
+- Independent evidence review verified the package contract, sanitization, source isolation,
+  canonicity, manifest hashes, finalizer prevalidation, honest browser/CLI claims, and the bounded
+  rename residual. It found no remaining blocking or medium defect.
+- A separate adversarial security review then found that the base collector still permitted the
+  optional milestone report and that finalizer/staging failure cleanup could follow a replaced
+  ancestor. The collector now rejects the report and enforces the exact 22-artifact/23-file base
+  contract at every boundary. The finalizer uses exclusive handle write/sync, handle/path identity,
+  repeated parent/directory/file authorization immediately before rename, and no pathname cleanup;
+  failed publication staging is also retained rather than recursively removed.
+- The corrected tooling passed Node syntax, Prettier, and focused ESLint checks. Both isolated
+  evidence passes were regenerated after the correction, and the security re-review approved the
+  result with no remaining blocking or medium defect. Only the already documented portable
+  pathname-to-rename interval remains.

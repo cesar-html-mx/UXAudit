@@ -686,3 +686,82 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   R-018, and R-019.
 - Evidence: exact JSON and shared-writer tests plus the 490-test Node.js 24 task gate with 95.66%
   statements, 91.19% branches, 99.36% functions, and 95.62% lines.
+
+## D-033 — Complete standalone HTML with context-specific escaping
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: HTML must present the same normalized result as terminal and JSON without treating source,
+  configuration, path, error, or reference text as markup. Terminal thresholds and verbosity would
+  make HTML incomplete, and trusting an already typed URL would leave forged or normalized control
+  sequences able to become active navigation.
+- Decision: Render one deterministic UTF-8 HTML5 document with constant inline CSS, one early
+  restrictive CSP (`default-src 'none'`, no scripts, inline style only, and no objects, base, or
+  forms), and no external assets or executable content. Show complete result metadata,
+  configuration, report paths, timing, all summary buckets, all findings, and all processing errors.
+  Group findings in fixed critical/high/medium/low/info order and errors in fixed
+  discovery/read/parse/extract/rule order while retaining canonical order inside each group. Do not
+  apply the terminal severity or verbosity presentation filters. Display one-based lines/columns,
+  both UTF-16 offsets, and the end-exclusive range contract. Neutralize controls, C1, bidi/isolates,
+  BOM, Unicode line separators, and lone surrogates before escaping HTML metacharacters for every
+  dynamic value. Reparse even typed reference URLs, accept only well-formed control-free
+  credential-free HTTP(S), use the parsed URL for the escaped `href`, and otherwise render the
+  escaped label/value inert. Keep writing in a small adapter over the shared T04 writer.
+- Alternatives considered: JavaScript filtering; external CSS/fonts; terminal-threshold filtering;
+  verbose-only error detail; interpolating typed values directly; linking every non-null URL;
+  omitting null/empty buckets or UTF-16 offsets; sorting input arrays; or implementing a separate
+  HTML filesystem path.
+- Consequences: The report is portable, complete, readable offline, deterministic for one prepared
+  result, and resilient to markup/script/URL injection without mutating the result. CSP/escaping
+  tests are structural and do not claim browser execution. Absolute timestamps remain explicit
+  volatile audit data, and the shared writer retains D-032's portable-filesystem limits.
+- Requirements/contracts affected: RF-15, RNF-02 through RNF-04, RNF-06, RNF-09, RNF-10, M05
+  acceptance, R-005, R-018, and R-019.
+- Evidence: focused HTML, cross-reporter, hostile-value, URL, null/empty, determinism, and writer
+  tests plus the controlled M05 reporting scenario.
+
+## D-034 — Isolated, exact, and finalizable M05 evidence package
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M05 acceptance needs reproducible configuration and reporter facts rather than edited
+  console excerpts or claims that the scan-only CLI already orchestrates audits. Retained hostile
+  output also must not preserve terminal controls, misleading directional text, credentials, or
+  personal paths.
+- Decision: Copy an allowlisted, symlink-free source snapshot into a credential-free temporary
+  environment pinned to Node.js `24.18.0` and npm `11.16.0`. Run clean locked installation, the
+  product gate, coverage, a machine-readable no-skip/todo test run, compiled CLI smokes, the
+  controlled M05 reporter scenario, harness validation, and a moderate-threshold dependency audit.
+  Retain exactly 22 base artifacts: summary/environment, two measurements, eight raw command
+  records, and ten scenario records covering exact JSON/expected result, standalone HTML,
+  no-color terminal, transient color validation, configuration, cross-reporter fields,
+  determinism, structural XSS/CSP validation, and safe writes. Reject source mutation, unexpected
+  files, symlinks, noncanonical JSON, secrets/personal paths, ill-formed Unicode, raw terminal/C1/
+  bidi/BOM characters, and manifest drift. A second execution must match the source/stable results
+  and preserve the first package. The collector rejects the milestone report and enforces exactly
+  those 22 artifacts before creating the manifest, then exactly 23 package files including that
+  manifest at every staging/publication boundary. Finalization alone accepts the report, verifies
+  the unchanged 22-entry base manifest, and adds the report as entry 23.
+- Alternatives considered: Retaining raw colored output; browser-execution or CLI-integration
+  claims; keeping unfiltered environment variables; allowing arbitrary evidence files; overwriting
+  the first package on rerun; omitting a reviewed expected result; or adding the milestone report
+  without first verifying the base manifest.
+- Consequences: The package is reviewable, sanitized, reproducible, and explicit that XSS validation
+  is structural and reporter APIs remain outside the CLI until M06. Standard JSON fidelity is
+  preserved: the retained result uses control/lone-surrogate payloads that `JSON.stringify` escapes;
+  a separate non-retained render validates C1/bidi/BOM visible escaping without storing those raw
+  characters. Portable Node lacks a no-replace directory rename. Initial publication reauthorizes
+  the dedicated empty/absent destination immediately before a same-filesystem staging rename and
+  fails if a concurrent destination is non-empty, but POSIX may replace a concurrently created
+  empty directory in that final interval. The target is the milestone-owned placeholder rather than
+  user data; this narrow residual is documented instead of claiming atomic no-clobber semantics.
+  Failed publication deliberately retains its staging directory instead of recursively deleting a
+  path after an ancestor race. Finalization writes a `0600` temporary manifest exclusively through
+  a file handle, syncs it, compares handle/path identity, repeatedly reauthorizes the evidence
+  parent/directory/manifest/report and temporary file immediately before rename, and never performs
+  pathname cleanup after failure or success. The final pathname-to-rename interval remains subject
+  to the same portable Node limitation.
+- Requirements/contracts affected: RF-09, RF-15, RNF-03, RNF-04, RNF-06, RNF-09, RNF-10, M05
+  acceptance, R-005, R-009, R-010, R-012, R-018, and R-019.
+- Evidence: `scripts/run-m05-scenario.mjs`, the M05 evidence contract/collector/finalizer, two
+  successful collections, and `evidence/m05-reporting/`.

@@ -306,6 +306,15 @@ M05-T04 implements the JSON adapter as the exact supplied `AuditResult` encoded 
 mutate data. A separate writer is shared by JSON and HTML: rendering remains pure, while persistence
 validates the exact fixed format target and returns a relative path only after completion.
 
+M05-T05 implements HTML as another pure adapter. It builds one fixed semantic HTML5 structure with
+constant inline CSS and a restrictive CSP, includes complete metadata/configuration/summaries and
+every normalized finding/error, and groups records through fixed enum orders without sorting the
+input. Terminal-only severity and verbosity settings are reported but do not suppress HTML data.
+The renderer converts columns to one-based human labels, preserves both offsets and the
+end-exclusive contract, neutralizes hostile Unicode before context-specific HTML escaping, and
+reparses potential links into credential-free HTTP(S) URLs or inert text. `writeHtmlReport`
+delegates the exact rendered bytes and fixed configured path to the shared writer.
+
 ### Configuration
 
 The normalized M05 configuration is a complete schema-versioned value with category/rule filters,

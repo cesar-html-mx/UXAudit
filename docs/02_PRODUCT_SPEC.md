@@ -183,10 +183,18 @@ full Commander integration remains M06.
   always describe the complete result even when finding detail is filtered.
 - JSON: the complete stable machine-readable result, including timing metadata and stored zero-based
   UTF-16 columns, serialized with two-space indentation and one final LF.
-- HTML: standalone, escaped, readable report requiring no external service.
+- HTML: a complete standalone escaped report requiring no external service. It shows all findings
+  and normalized errors regardless of terminal severity/verbosity settings, groups them in fixed
+  severity/stage order, displays one-based columns plus UTF-16 offsets and end-exclusive ranges, and
+  keeps unsafe references inert.
 
 JSON and HTML targets use only the configured portable output directory and fixed filenames. The
 shared writer refuses existing targets and observed links, escapes, or identity changes, and reports
 stable failures without claiming a generated path. A failure after exclusive creation can leave a
 partial target for manual review/removal; automatically unlinking after a pathname race would be
 unsafe.
+
+The HTML document contains constant inline CSS, no script or external asset, and an early
+no-script/no-object/no-base/no-form CSP. Every dynamic value is neutralized for hostile controls,
+directional formatting, BOM, and malformed UTF-16 before HTML escaping. Only a separately reparsed,
+control-free, credential-free HTTP(S) reference becomes an anchor.

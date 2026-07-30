@@ -221,3 +221,25 @@ observable changes but cannot eliminate every pathname race. If a failure occurs
 creation, UXAudit deliberately leaves the possibly partial target: blindly unlinking that pathname
 after an identity race could remove an attacker replacement. Only a returned `WrittenReport` may be
 claimed by M06 as generated.
+
+## M05-T05 implemented HTML controls
+
+- The document has fixed trusted tags, IDs, classes, and CSS; no result value selects markup or
+  style. It contains no script, event-handler attribute, form, frame, object, embedded resource,
+  image, stylesheet link, `@import`, or CSS `url()`.
+- An early CSP allows only the inline constant style and denies other default, script, object, base,
+  and form sources/actions. The report is one local UTF-8 HTML5 file with no runtime service.
+- Every dynamic value first uses the shared visible neutralization for C0/C1, ESC/terminal
+  sequences, bidirectional marks/isolates, Unicode line separators, BOM, and lone surrogates, then
+  escapes `&`, `<`, `>`, `"`, and `'` for HTML. Well-formed Unicode such as emoji remains intact.
+- Reference URLs are distrusted again at presentation time, even if the object is forged as an
+  `AuditResult`. Raw controls or directional formatting, malformed UTF-16, non-HTTP(S) schemes, and
+  credentials make the reference inert. Accepted links use the parsed URL in the escaped attribute,
+  while the original value remains escaped text.
+- HTML never hides errors through `verbose` or findings through `minimumSeverity`, so security and
+  processing records remain reviewable. Null/empty values and every zero bucket are explicit.
+
+XSS validation consists of hostile fixtures, start-tag/attribute inspection, escaping assertions,
+CSP inspection, and absence of executable/resource-bearing markup. It does not execute a browser
+and must not be described as a runtime exploit test. File persistence continues to use the T04
+writer and inherits its residual portable-filesystem limits.

@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 8,
+  "evidenceId": "M05-REPORTING",
+  "observedAt": "2026-07-30T03:48:38.694Z",
+  "source": {
+    "baseCommit": "44195f4e1327b53927adffe965641a2ae9865558",
+    "branch": "milestone/m05-configuration-reporting",
+    "state": "M05-T05 working tree copied without generated or retained evidence",
+    "treeDigest": "sha256:1755405d825a726b7eecf8ccbbb492131cd29f353a09340292a746e53df2b0a0"
+  },
+  "productVersion": "0.1.0",
+  "runtime": { "node": "v24.18.0", "npm": "11.16.0" },
+  "system": { "architecture": "x64", "platform": "linux" },
+  "integrity": { "algorithm": "sha256", "manifest": "MANIFEST.sha256" },
+  "scenario": {
+    "auditResultDigest": "sha256:79fc3de63ae1f8650a9626609a184e94e45d9af0d92d154ab704a8dd1c905ca5",
+    "browserExecutionPerformed": false,
+    "configurationCases": 5,
+    "crossReporterConsistent": true,
+    "deterministicReports": true,
+    "errors": 5,
+    "findings": 5,
+    "htmlDigest": "sha256:928cebe87f46722deb73966bcf3b1f215642e53aa67e66def984beb9761f0900",
+    "htmlStructurallyValidated": true,
+    "noRawAnsiRetained": true,
+    "scenarioId": "M05-CONFIGURATION-REPORTING",
+    "secondaryUnicodeEscapingValidated": true,
+    "terminalDigest": "sha256:20ff05aa2aef41d949d06539269169e11e25a46cade491426a312fab1cd8a714",
+    "writeFailuresValidated": true,
+    "writesValidated": true
+  },
+  "verification": {
+    "commands": [
+      {
+        "fileName": "npm-ci.txt",
+        "label": "Locked clean installation",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "verify.txt",
+        "label": "Product quality gate",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "coverage.txt",
+        "label": "Coverage thresholds",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "test-results.txt",
+        "label": "No skipped or todo tests",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "cli-smoke.txt",
+        "label": "Compiled CLI smoke tests",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "m05-scenario.txt",
+        "label": "Controlled M05 configuration and reporting scenario",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "harness-validation.txt",
+        "label": "Harness integrity",
+        "observedExitCode": 0,
+        "passed": true
+      },
+      {
+        "fileName": "npm-audit.json.txt",
+        "label": "Dependency audit",
+        "observedExitCode": 0,
+        "passed": true
+      }
+    ],
+    "coverage": { "branches": 91.39, "functions": 99.39, "lines": 95.77, "statements": 95.81 },
+    "dependencyAuditVulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "skippedTests": 0,
+    "testFiles": 47,
+    "tests": 512,
+    "todoTests": 0
+  }
+}

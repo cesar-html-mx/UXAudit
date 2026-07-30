@@ -1,0 +1,265 @@
+{
+  "configuration": {
+    "categories": null,
+    "color": false,
+    "formats": [
+      "terminal",
+      "json",
+      "html"
+    ],
+    "minimumSeverity": "info",
+    "outputDirectory": "reports/m05",
+    "ruleIds": null,
+    "schemaVersion": 1,
+    "verbose": true
+  },
+  "errors": [
+    {
+      "code": "DISCOVERY_NOT_ACCESSIBLE",
+      "filePath": "private/<script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀",
+      "message": "Project entry was not accessible during discovery.",
+      "operation": "read-directory",
+      "recoverable": true,
+      "stage": "discovery"
+    },
+    {
+      "code": "SOURCE_EXTRACTION_FAILED",
+      "filePath": "src/Unsupported.tsx",
+      "message": "Source extraction failed: <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "position": {
+        "column": 1,
+        "line": 7,
+        "offset": 81
+      },
+      "recoverable": true,
+      "stage": "extract"
+    },
+    {
+      "code": "SOURCE_PARSE_FAILED",
+      "filePath": "src/Broken.tsx",
+      "message": "Source file contains invalid syntax: <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "position": {
+        "column": 2,
+        "line": 3,
+        "offset": 19
+      },
+      "recoverable": true,
+      "stage": "parse"
+    },
+    {
+      "code": "SOURCE_FILE_READ_FAILED",
+      "filePath": "src/Unreadable.tsx",
+      "message": "Source file could not be read: <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "recoverable": true,
+      "stage": "read"
+    },
+    {
+      "category": "seo",
+      "code": "RULE_EVALUATION_FAILED",
+      "message": "Rule evaluation failed.",
+      "recoverable": true,
+      "ruleId": "seo/scenario-failed-rule",
+      "stage": "rule"
+    }
+  ],
+  "findings": [
+    {
+      "category": "accessibility",
+      "confidence": "high",
+      "explanation": "Controlled explanation for accessibility/button-name; hostile text is <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "limitations": [
+        "Static evidence for accessibility/button-name does not claim rendered browser behavior."
+      ],
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 4,
+          "offset": 52
+        },
+        "filePath": "src/<script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.tsx",
+        "start": {
+          "column": 4,
+          "line": 4,
+          "offset": 40
+        }
+      },
+      "message": "Controlled critical finding from accessibility/button-name: <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "recommendation": "Apply the documented accessibility/button-name remediation and review the result.",
+      "reference": null,
+      "ruleId": "accessibility/button-name",
+      "ruleTitle": "Button accessible name <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀",
+      "severity": "critical"
+    },
+    {
+      "category": "accessibility",
+      "confidence": "high",
+      "explanation": "Controlled explanation for accessibility/img-alt; hostile text is <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "limitations": [
+        "Static evidence for accessibility/img-alt does not claim rendered browser behavior."
+      ],
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 9,
+          "offset": 142
+        },
+        "filePath": "src/Images.tsx",
+        "start": {
+          "column": 4,
+          "line": 9,
+          "offset": 130
+        }
+      },
+      "message": "Controlled high finding from accessibility/img-alt: <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "recommendation": "Apply the documented accessibility/img-alt remediation and review the result.",
+      "reference": {
+        "label": "WCAG image alternatives <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html?source=m05&mode=evidence"
+      },
+      "ruleId": "accessibility/img-alt",
+      "ruleTitle": "Image alternative text",
+      "severity": "high"
+    },
+    {
+      "category": "performance",
+      "confidence": "medium",
+      "explanation": "Controlled explanation for performance/img-lazy-loading; hostile text is <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "limitations": [
+        "Static evidence for performance/img-lazy-loading does not claim rendered browser behavior."
+      ],
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 14,
+          "offset": 252
+        },
+        "filePath": "src/Gallery.tsx",
+        "start": {
+          "column": 4,
+          "line": 14,
+          "offset": 240
+        }
+      },
+      "message": "Controlled medium finding from performance/img-lazy-loading: <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "recommendation": "Apply the documented performance/img-lazy-loading remediation and review the result.",
+      "reference": null,
+      "ruleId": "performance/img-lazy-loading",
+      "ruleTitle": "Image lazy loading",
+      "severity": "medium"
+    },
+    {
+      "category": "seo",
+      "confidence": "high",
+      "explanation": "Controlled explanation for seo/multiple-h1; hostile text is <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "limitations": [
+        "Static evidence for seo/multiple-h1 does not claim rendered browser behavior."
+      ],
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 18,
+          "offset": 322
+        },
+        "filePath": "src/Headings.tsx",
+        "start": {
+          "column": 4,
+          "line": 18,
+          "offset": 310
+        }
+      },
+      "message": "Controlled low finding from seo/multiple-h1: <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "recommendation": "Apply the documented seo/multiple-h1 remediation and review the result.",
+      "reference": {
+        "label": "Structured headings <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀",
+        "url": null
+      },
+      "ruleId": "seo/multiple-h1",
+      "ruleTitle": "Multiple H1 headings",
+      "severity": "low"
+    },
+    {
+      "category": "ux",
+      "confidence": "medium",
+      "explanation": "Controlled explanation for ux/small-inline-text; hostile text is <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "limitations": [
+        "Static evidence for ux/small-inline-text does not claim rendered browser behavior."
+      ],
+      "location": {
+        "end": {
+          "column": 16,
+          "line": 23,
+          "offset": 432
+        },
+        "filePath": "src/Text.tsx",
+        "start": {
+          "column": 4,
+          "line": 23,
+          "offset": 420
+        }
+      },
+      "message": "Controlled info finding from ux/small-inline-text: <script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀.",
+      "recommendation": "Apply the documented ux/small-inline-text remediation and review the result.",
+      "reference": null,
+      "ruleId": "ux/small-inline-text",
+      "ruleTitle": "Small inline text",
+      "severity": "info"
+    }
+  ],
+  "projectRoot": "/controlled-project/security-project",
+  "reportPaths": {
+    "html": "reports/m05/audit-report.html",
+    "json": "reports/m05/audit-report.json"
+  },
+  "schemaVersion": "1.0.0",
+  "summary": {
+    "errors": {
+      "byStage": {
+        "discovery": 1,
+        "extract": 1,
+        "parse": 1,
+        "read": 1,
+        "rule": 1
+      },
+      "total": 5
+    },
+    "files": {
+      "discovered": 7,
+      "failed": 3,
+      "parsed": 2,
+      "selected": 5
+    },
+    "findings": {
+      "byCategory": {
+        "accessibility": 2,
+        "performance": 1,
+        "seo": 1,
+        "ux": 1
+      },
+      "bySeverity": {
+        "critical": 1,
+        "high": 1,
+        "info": 1,
+        "low": 1,
+        "medium": 1
+      },
+      "total": 5
+    },
+    "rules": {
+      "availableRuleCount": 8,
+      "enabledRuleCount": 6,
+      "executedRuleCount": 6,
+      "failedRuleCount": 1,
+      "findingCount": 5,
+      "succeededRuleCount": 5
+    }
+  },
+  "timing": {
+    "completedAt": "2026-07-29T18:30:00.250Z",
+    "durationMs": 250,
+    "startedAt": "2026-07-29T18:30:00.000Z"
+  },
+  "tool": {
+    "name": "UXAudit",
+    "version": "0.1.0-m05-<script>alert(\"m05-report\")</script> & \"double\" 'single' \u0000\u001b\n\ud800 valid-emoji-😀"
+  }
+}
