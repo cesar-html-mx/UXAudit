@@ -43,22 +43,76 @@ data. Project-controlled strings are escaped in HTML.
 Define defaults, overrides, validation errors, audit counters, findings, processing errors, summary,
 and version metadata.
 
+Objective: establish report-independent, immutable configuration and `AuditResult` contracts before
+adding filesystem or presentation behavior. The result must defensively retain the complete M04
+finding/error data, M02/M03 file counters, rule counters, category/severity totals, tool/schema
+versions, timing metadata, and configured report paths. The initial permissive planning schema must
+be replaced by the exact versioned result shape.
+
+Planned verification: focused contract/schema tests, strict typecheck, lint, formatting, and a
+reporting-to-domain dependency review.
+
+Status: completed. Configuration schema/default/error/override contracts, the exact `AuditResult`
+schema and invariant builder, normalized processing-error union, pure reporter interface, and
+shared prepared-result fixture are implemented. Review found and corrected a non-local schema
+reference plus a missing failed-file/parser-error invariant. The final Node.js 24 task gate passed
+372 tests across 41 files, build/type/lint/format, exact local schema validation, and 95.88%
+statement / 90.76% branch / 99.19% function / 95.84% line coverage.
+
 ### M05-T02 — Implement configuration
 
 Load local JSON, validate unknown/invalid fields, merge CLI precedence, and document defaults.
+
+Objective: read only bounded UTF-8 JSON, use `uxaudit.config.json` at the canonical project root by
+default, distinguish an absent default file from an explicitly missing file, reject unknown keys,
+invalid values, duplicate/conflicting selections, unsafe output directories, and malformed JSON
+through stable errors, then apply validated CLI overrides over documented immutable defaults.
+Configuration loading must not import or execute target modules.
+
+Planned verification: a configuration/default/file/override matrix covering absence, valid partial
+configuration, precedence, explicit empty filters, hostile objects/JSON, unsafe paths, read/size
+failures, and deterministic defensive output.
 
 ### M05-T03 — Implement terminal reporter
 
 Provide concise summary and readable findings with no-color support and stable order.
 
+Objective: render one supplied `AuditResult` without discovering, parsing, or evaluating anything.
+The reporter must preserve canonical finding order, group priority visibly, convert stored
+zero-based columns only at display time, sanitize every project-controlled terminal value, support
+color and no-color modes, apply the configured display-severity threshold, and optionally expose
+recoverable processing detail.
+
+Planned verification: exact color/no-color output, hostile-control rendering, empty/error/finding
+cases, threshold behavior, source display coordinates, deterministic reruns, and input immutability.
+
 ### M05-T04 — Implement JSON reporter
 
 Serialize complete stable data, document schema/version, and test repeated output.
+
+Objective: serialize the complete supplied result with canonical two-space/LF JSON and no lossy
+projection. Volatile timing metadata remains explicit data rather than being silently removed.
+Writing uses a validated in-root report target, refuses symlink/path escape and unintended
+overwrite, reports stable write errors, and never claims a failed output.
+
+Planned verification: exact schema-shaped data, two byte-identical serializations, hostile-string
+round trips, safe-path and existing-target rejection, controlled write success/failure, and input
+immutability.
 
 ### M05-T05 — Implement HTML reporter
 
 Create one standalone readable file, escape hostile strings, show summary and grouped findings, and
 test write failures.
+
+Objective: render the same complete result as one UTF-8 standalone document with inline styling,
+semantic summary tables, grouped findings/errors, source locations, recommendations, limitations,
+and references. Every untrusted text/attribute value must be escaped, unsafe reference URLs must
+remain inert, output must be deterministic, and the JSON writer's path/write guarantees must be
+shared rather than reimplemented inconsistently.
+
+Planned verification: cross-reporter identity assertions, deterministic HTML, no external assets,
+hostile filename/message/reference payloads, XSS non-execution shape, empty/error/finding cases,
+safe write and write-failure behavior, plus the complete M05 scenario/evidence gate.
 
 ## Validation and acceptance
 
@@ -72,8 +126,8 @@ write-failure test, tests and coverage.
 
 ## Progress
 
-- [ ] Milestone started.
-- [ ] Repository inspected and plan reconciled with reality.
+- [x] Milestone started.
+- [x] Repository inspected and plan reconciled with reality.
 - [ ] Tasks completed.
 - [ ] Quality gate passed.
 - [ ] Evidence collected.
@@ -84,13 +138,71 @@ write-failure test, tests and coverage.
 
 Record implementation facts, library behavior, and assumptions discovered during work.
 
+- The verified `main` tree is clean at merge commit `1bc3e07`, contains the completed M04
+  rule/catalog layer, and contains no configuration, reporting, or `AuditResult` implementation.
+  `state.currentBranch` still names the closed M04 branch, while milestone metadata correctly
+  requires `milestone/m05-configuration-reporting`; the M05 branch must be created from this tested
+  merge.
+- The current 344-test product gate passes, but the invoking shell resolves Node.js `22.14.0` and
+  npm `11.2.0`. These are inspection-only results; task completion and retained evidence must use
+  the repository-pinned Node.js `24.18.0` and npm `11.16.0` contract.
+- M04 already supplies self-contained, deterministic findings, recoverable rule errors, and exact
+  evaluation counters. M05 can compose and defensively copy those records without changing or
+  rerunning the completed engine.
+- M02/M03 application results already expose discovered, selected, parsed, and failed-file facts,
+  but no normalized processing-error union exists. M05 needs one reporter-facing error contract
+  that retains only stable portable parser/rule details.
+- `.github/harness/schemas/audit-result.schema.json` is an intentionally permissive planning
+  placeholder. It allows unspecified summary/error content and extra properties, so T01 must make
+  it exact and versioned before JSON output can claim conformance.
+- `src/cli/run-cli.ts` intentionally stops after analysis-model construction. M06 owns the final
+  path-to-rules-to-reporters orchestration; M05 will expose independently testable configuration
+  and reporter boundaries without prematurely changing CLI audit claims.
+- No new production dependency is required. Node filesystem/path APIs, standard JSON encoding, and
+  explicit HTML/terminal escaping cover the documented M05 behavior.
+- The existing terminal sanitizer is a reusable output boundary for reporter text, while HTML needs
+  context-appropriate escaping and local-file writing needs canonical containment, symlink, and
+  overwrite controls separate from project discovery.
+- Independent T01 review found that an absolute `$id` changed the base of the local
+  `finding.schema.json` reference and that failed-file counters could diverge from parser errors.
+  Removing the remote base, resolving/validating both local schemas in tests, and requiring exact
+  `files.failed === parserErrors.length` closed both gaps without changing M02-M04 contracts.
+- Product requirements define the normalized file counters as discovered, selected, parsed, and
+  failed. Inventory/exclusion counts remain stage-level discovery data; recoverable discovery
+  issues are preserved individually in `AuditResult.errors` rather than duplicated as another file
+  counter.
+
 ## Decision log
 
 Record decisions made within the authority allowed by `AGENTS.md`.
 
+- Contract, configuration, terminal, JSON/output, HTML, and evidence decisions will be recorded in
+  `.github/harness/DECISIONS.md` as the corresponding tasks are completed.
+- The stored source contract remains one-based lines with zero-based UTF-16 columns/offsets. Only
+  human-facing terminal/HTML location labels convert columns to one-based display values; JSON
+  preserves the domain coordinates exactly.
+- Reporter rendering functions will remain pure and consume exactly one `AuditResult`. Optional
+  file writers are boundary adapters over the rendered representation and never discover, parse, or
+  reevaluate rules.
+- D-029 fixes the schema/version vocabulary, null-versus-empty filter semantics, immutable defaults,
+  complete frozen result shape, derived summaries, normalized error union, controlled report names,
+  pre-resolved relative report paths, pure reporter boundary, and M06 integration boundary.
+
 ## Risks and recovery
 
 Maintain task-specific risks, rollback steps, and any remaining debt.
+
+- Configuration JSON and every finding field are untrusted. Boundary validation, bounded reads,
+  terminal sanitization, standard JSON encoding, HTML escaping, safe URL handling, and hostile
+  fixtures are mandatory.
+- Output-path containment checked only lexically can be bypassed with symlinks or races. The shared
+  writer must authorize the canonical root/directory, reject link targets, create only controlled
+  directories, and use exclusive file creation so an unrelated existing file is never overwritten.
+- Absolute timing values make otherwise identical full results vary. Determinism tests will use one
+  prepared result; documentation and evidence will distinguish volatile metadata from canonical
+  rendering/order.
+- Each task remains recoverable through its conventional task commit. No production dependency,
+  completed public-contract change, source modification, or history rewrite is planned.
 
 ## Outcomes and retrospective
 

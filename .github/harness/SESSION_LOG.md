@@ -327,3 +327,28 @@
 - Closed M04 against verified task commit `3afa4bb3eaab415a7792aa0c4f3862464bc89efb`,
   moved its ExecPlan to `exec-plans/completed/`, and activated M05-T01. No M05 implementation work
   was started.
+
+## M05 configuration and reporting — 2026-07-29
+
+- Validated the active M05 harness, reconciled the clean `main` merge `1bc3e07` with the stale M04
+  branch field, created `milestone/m05-configuration-reporting`, updated the state/ExecPlan before
+  product work, and activated the installed Node.js `24.18.0`/npm `11.16.0` toolchain.
+- Completed M05-T01 with schema-versioned immutable configuration defaults, fixed controlled report
+  names, stable configuration errors/typed CLI overrides, a pure reporter contract, and one exact
+  recursively frozen `AuditResult`.
+- The result boundary copies and validates configuration, project/tool/timing metadata, exact
+  discovered/selected/parsed/failed and M04 rule counters, canonical findings, discovery/source/rule
+  errors, explicit category/severity/stage buckets, and pre-resolved project-relative report paths.
+  Contradictory counters, malformed records, unsafe paths/references, and invalid timestamps collapse
+  to one detail-free invariant error without mutating caller data.
+- Contract tests include empty and populated results, null-versus-empty filters, error conversion,
+  hostile/invalid boundaries, schema resolution against the local finding schema, recursive
+  freezing, deterministic rebuilds, and exact one-result reporter delegation.
+- Independent review found an absolute schema base that would redirect the local finding reference
+  and a missing equality between failed-file count and parser errors. Both were corrected and
+  regression-tested; the request for inventory/exclusion counters was rejected because the
+  higher-precedence product contract specifies discovered/selected/parsed/failed while individual
+  discovery issues already remain in the normalized error list.
+- The final T01 Node.js `24.18.0` run passed formatting, strict lint, typecheck, build, all 372 tests
+  across 41 files, and coverage at 95.88% statements, 90.76% branches, 99.19% functions, and 95.84%
+  lines.

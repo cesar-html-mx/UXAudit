@@ -37,6 +37,21 @@ The CLI remains intentionally unchanged during M04: `scan` still stops after mod
 does not yet claim an audit result. Application integration, configuration, finding policy, and
 terminal/JSON/HTML reporting remain M05/M06 responsibilities.
 
+### Implemented in the active M05 contract slice
+
+- Configuration schema version `1` with explicit category/rule filters, report formats, output
+  directory, minimum display severity, color, and verbosity.
+- Immutable defaults: stable catalog (`null` filters), terminal output, `info` threshold, color,
+  non-verbose detail, and the portable relative `uxaudit-reports` directory.
+- Fixed local report names `audit-report.json` and `audit-report.html`.
+- `AuditResult` schema `1.0.0` with configuration/tool/timing metadata, discovered/selected/parsed/
+  failed counters, complete rule counters/findings, normalized discovery/source/rule errors,
+  zero-filled category/severity/stage summaries, and nullable project-relative report paths.
+- One pure reporter contract that consumes exactly one completed result.
+
+The boundary defensively copies, validates, canonically orders, and freezes result data. It does not
+yet load a configuration file, render a report, write a file, or change the scan-only CLI behavior.
+
 ### Planned options
 
 - `--config <path>`: configuration file; default search is `uxaudit.config.json` at project root.
@@ -141,7 +156,9 @@ own any conversion to display coordinates.
 ## Configuration
 
 Configuration is local JSON. Unknown keys, invalid values, and conflicting options must produce a
-clear error. Defaults must be documented and versioned.
+clear error. Defaults are versioned as described above. `null` category/rule filters select the
+stable catalog; explicit empty arrays select no rules. M05-T02 owns JSON loading and
+defaults/file/CLI precedence; full Commander integration remains M06.
 
 ## Reports
 

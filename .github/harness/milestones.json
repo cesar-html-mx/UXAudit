@@ -192,7 +192,9 @@
         {
           "id": "M05-T01",
           "title": "Define configuration and AuditResult contracts",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck, build, 28 focused contract/schema tests, 372 total tests across 41 files, exact local schema resolution, and coverage 95.88% statements / 90.76% branches / 99.19% functions / 95.84% lines PASS",
+          "completedAt": "2026-07-30T02:01:34.586Z"
         },
         {
           "id": "M05-T02",

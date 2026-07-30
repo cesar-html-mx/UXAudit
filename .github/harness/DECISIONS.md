@@ -553,3 +553,40 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Evidence: `tests/rules/initial-catalog.integration.test.ts`,
   `scripts/run-m04-scenario.mjs`, the expected fixture, two collector executions, and
   `evidence/m04-rules/`.
+
+## D-029 — Versioned immutable configuration and AuditResult boundary
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M04 returns deterministic findings, recoverable rule errors, and evaluation counters, but
+  every M05 reporter needs the same complete result and configuration vocabulary. The planning
+  schema did not define counters, processing-error variants, timing, output paths, or summary
+  buckets, and allowing reporters to reconstruct those facts independently would introduce drift.
+- Decision: Normalize configuration as schema version `1` with explicit category/rule filters,
+  report formats, relative output directory, minimum display severity, color, and verbosity.
+  `null` filters select the stable default catalog while empty arrays intentionally select no
+  rules. Defaults are terminal output, color enabled, `info` threshold, non-verbose detail, and the
+  controlled `uxaudit-reports` directory with fixed `audit-report.json`/`.html` names. Define
+  `AuditResult` schema `1.0.0` as one recursively frozen defensive value containing that
+  configuration, canonical project/timing/tool metadata, discovered/selected/parsed/failed file
+  counters, the complete M04 rule counters/findings, normalized discovery/source/rule errors,
+  explicit zero-filled category/severity/stage summaries, and pre-resolved project-relative report
+  paths. The builder rejects inconsistent counters, unsafe configured paths, malformed references,
+  noncanonical timestamps, or invalid upstream records through one detail-free invariant error and
+  orders findings/errors deterministically. A pure reporter receives exactly one such result;
+  filesystem writers remain separate boundary adapters. Commander and full audit orchestration
+  remain M06 work.
+- Alternatives considered: Reporter-specific projections; optional/missing summary buckets; treating
+  an empty filter as absent; retaining the permissive schema; storing absolute report paths;
+  mutating the result after each reporter writes; or connecting the current scan-only CLI before
+  M06.
+- Consequences: Terminal, JSON, HTML, and future reporters share one typed and schema-versioned
+  source of truth. Stored source columns remain zero-based; only human presentation may convert
+  them. Timestamps/duration are intentionally volatile between audit sessions but deterministic
+  rendering is required for the same prepared result. Paths identify configured output targets;
+  later writers must still verify successful exclusive in-root creation before an application
+  claims generation.
+- Requirements/contracts affected: RF-13 through RF-15, RNF-02 through RNF-06, RNF-09, RNF-10,
+  M05 acceptance, R-005, R-009, R-014, R-017, R-018, and R-019.
+- Evidence: exact audit-result schema, configuration/audit/reporter contract tests, the 369-test
+  Node.js 24 product gate, and M05 reporter/evidence work as it is completed.

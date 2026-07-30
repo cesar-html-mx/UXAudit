@@ -3,13 +3,16 @@
 UXAudit is a local, static-analysis CLI for React and TypeScript projects. The current Node.js 24
 implementation safely discovers and classifies `.js`, `.jsx`, `.ts`, and `.tsx` source candidates,
 parses them through an internal Babel boundary, and builds a deterministic parser-independent
-analysis model. The active M04 domain layer now adds a deterministic isolated rule engine and eight
-stable rules across accessibility, performance, SEO, and UX.
+analysis model. The completed M04 domain layer adds a deterministic isolated rule engine and eight
+stable rules across accessibility, performance, SEO, and UX. The active M05 slice defines
+versioned configuration defaults, one immutable normalized `AuditResult`, complete
+file/rule/finding/error summaries, and a pure reporter boundary.
 
 The `scan` command validates and canonicalizes the selected root, discovers files, analyzes safe
 source candidates without executing target code, and prints discovery and parsing counts. The CLI
-does not invoke the new rule layer yet, and terminal/JSON/HTML finding reports remain later
-milestones, so a successful scan must not be interpreted as a completed audit.
+does not invoke the rule/result/reporting layers yet, and terminal/JSON/HTML renderer
+implementations remain the rest of M05/M06, so a successful scan must not be interpreted as a
+completed audit.
 
 ## Requirements
 
@@ -127,8 +130,10 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
   normalized `AnalysisModel`.
 - Component recognition is intentionally syntactic and conservative; it does not resolve runtime
   aliases, higher-order abstractions, imports, or rendered behavior.
-- The domain engine can produce normalized findings and isolated rule errors, but the CLI does not
-  expose them yet. Finding-failure policy and terminal/JSON/HTML audit reports remain M05/M06 work.
+- The domain engine can produce normalized findings and isolated rule errors, and M05 can assemble
+  them into an exact recursively frozen `AuditResult`; the CLI does not expose either layer yet.
+  Configuration-file loading, finding-failure policy, and rendered audit reports remain M05/M06
+  work.
 
 ## Repository map
 
@@ -139,7 +144,11 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
   candidate batch.
 - `src/domain/models/`: parser-independent normalized analysis contracts and builder.
 - `src/domain/rules/`, `findings/`, and `errors/`: report-independent rule result contracts.
+- `src/domain/audit/`: versioned audit result, normalized processing errors, derived summaries, and
+  invariant boundary.
 - `src/rules/`: validated engine plus category-organized static rules.
+- `src/configuration/`: normalized defaults, overrides, formats, filenames, and stable errors.
+- `src/reporting/`: pure one-result reporter contract; concrete adapters follow in M05.
 - `tests/`: focused domain, parser, rule, application, CLI, and project tests.
 - `.github/harness/`: milestone state, plans, decisions, risks, and lifecycle scripts.
 - `.github/workflows/`: quality, harness, CodeQL, and dependency-review automation.

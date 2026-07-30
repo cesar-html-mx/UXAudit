@@ -287,7 +287,39 @@ configuration to `RuleContext`.
 
 ### Reporter
 
-Transforms one `AuditResult` into a representation. It never discovers, parses, or reevaluates rules.
+M05-T01 defines a pure reporter as a format identity plus `render(result): string`. It transforms
+exactly one completed `AuditResult` into a representation and never discovers, parses, reevaluates
+rules, mutates the result, or writes through the domain contract. Terminal/JSON/HTML adapters and
+their optional filesystem writer remain presentation boundaries.
+
+### Configuration
+
+The normalized M05 configuration is a complete schema-versioned value with category/rule filters,
+selected terminal/JSON/HTML formats, a portable project-relative output directory, minimum display
+severity, color, and verbosity. `null` filters mean the stable default catalog; empty arrays
+intentionally enable no rules. Defaults select terminal output, `info`, color, non-verbose detail,
+and `uxaudit-reports`. Configuration-file and CLI values remain untrusted until T02 validates and
+merges them; no project configuration module is imported or executed.
+
+### AuditResult
+
+M05-T01 defines `AuditResult` schema `1.0.0` as the single recursively frozen value consumed by
+every reporter. It contains:
+
+- the normalized configuration plus tool/schema versions;
+- the canonical project root and canonical UTC start/completion timestamps with duration;
+- discovered, selected, parsed, and failed-file counters;
+- the complete M04 available/enabled/executed/succeeded/failed/finding counters and findings;
+- normalized recoverable discovery, source read/parse/extract, and rule errors;
+- explicit totals for every category, severity, and processing stage, including zero buckets; and
+- nullable project-relative JSON/HTML paths resolved from the controlled output directory and fixed
+  `audit-report.json`/`audit-report.html` names.
+
+The builder defensively copies upstream data, derives summaries, restores canonical finding/error
+order, rejects contradictory counters or malformed boundary data through one detail-free invariant
+error, and freezes the result without freezing caller-owned input. Stored source coordinates keep
+M03's one-based lines and zero-based UTF-16 columns/offsets. Human reporters may convert columns for
+display; JSON must preserve the domain coordinates.
 
 ## Persistence
 

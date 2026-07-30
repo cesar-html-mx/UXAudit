@@ -225,3 +225,18 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   V8 coverage measured 97.14% statements, 92.79% branches, 99.70% functions, and 97.14% lines.
 - The package was collected twice. The second execution matched the source digest and stable
   measurements/scenario projections and preserved the initially published 20 artifacts.
+
+## M05-T01 executed contract baseline
+
+- Configuration tests verify the schema/version vocabulary, immutable defaults, fixed report names,
+  stable errors, and the semantic difference between absent and explicit empty rule filters.
+- Audit-result tests cover defensive recursive freezing, canonical finding/error order, complete
+  zero-filled summaries, discovery/source/rule error normalization, terminal-only empty results,
+  safe relative report targets, canonical timing, URL/path controls, and counter invariants.
+- The exact closed JSON Schema is resolved with the local finding schema and validated against a
+  complete prepared result; unexpected properties are rejected.
+- A pure reporter-contract test proves that presentation receives exactly the supplied
+  `AuditResult` without adding output state to the domain.
+- The final task run under Node.js `24.18.0` passed all 372 tests across 41 files plus format, lint,
+  typecheck, and build. Global V8 coverage passed at 95.88% statements, 90.76% branches, 99.19%
+  functions, and 95.84% lines; final milestone metrics will be recollected with all M05 tasks.
