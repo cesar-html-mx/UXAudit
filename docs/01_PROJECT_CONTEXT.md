@@ -1,53 +1,40 @@
 [Español](es/01_PROJECT_CONTEXT.md) | **English**
 
-# Project Context
+# Project context
 
 ## Problem
 
-Frontend quality depends on several related areas: UX, accessibility, technical SEO, and performance.
-Standards and specialized tools exist, but knowledge and checks are distributed. Review quality can
-depend too heavily on each developer's experience and memory.
+React teams can introduce reviewable usability, accessibility, SEO, and performance risks directly
+in JSX and TSX. General linters cover syntax and coding conventions well, but they do not always
+present these cross-cutting concerns as one local, understandable audit.
 
-## Contribution
+## Product purpose
 
-UXAudit will provide a repeatable static-analysis process for React and TypeScript source code. It
-will not replace expert review. It will help developers identify selected issues early, understand why
-they matter, locate the relevant code, and receive a recommendation.
+UXAudit gives developers an early, repeatable static review before browser and human validation. It
+discovers `.js`, `.jsx`, `.ts`, and `.tsx` sources, builds a normalized model, evaluates independent
+rules, and produces terminal, JSON, and HTML reports.
 
-## Primary user
+The product helps prioritize review. It does not certify compliance or replace testing with
+browsers, assistive technologies, performance tooling, or participants.
 
-A frontend developer working on a React project from a terminal.
+## Intended users
 
-## Primary flow
+- React and TypeScript developers who want feedback while coding.
+- Maintainers who want a reproducible audit command in continuous integration.
+- UX, accessibility, SEO, and performance specialists who need a portable report for review.
+- Contributors extending the scanner, model, rules, or reporters.
 
-1. The developer provides a project path.
-2. UXAudit validates access to the project.
-3. It discovers and classifies relevant files.
-4. It parses source code and creates a normalized model.
-5. Enabled rules evaluate the model.
-6. Findings are normalized and sorted.
-7. Terminal, JSON, and HTML reporters present the same result.
+## Product boundaries
 
-## Scope
+- Local command-line tool; no hosted service, database, or telemetry.
+- Static analysis only; target code is not imported, executed, or modified.
+- Supported source extensions are `.js`, `.jsx`, `.ts`, and `.tsx`.
+- Findings are deterministic observations with recommendations and explicit limitations.
+- Runtime layout, behavior, styles, network activity, and real user experience remain outside scope.
+- Reports stay on the local filesystem unless the user deliberately shares them.
 
-- Local command-line execution.
-- Static analysis.
-- React and TypeScript projects, including mixed `.js`/`.jsx`.
-- Initial rules in UX, accessibility, SEO, and performance.
-- Explainable findings with source location and recommendation.
-- Controlled and near-real validation projects.
+## Product principles
 
-## Exclusions
-
-- Running the analyzed application.
-- Browser automation or runtime performance measurement in the MVP.
-- Automatic modification of analyzed code.
-- A hosted service, user accounts, database, or telemetry.
-- A claim of complete conformance with WCAG, SEO, UX, or Core Web Vitals.
-- Support for every framework or programming language.
-
-## Success
-
-The first version is successful when it can reproducibly analyze controlled projects, produce the
-expected findings with acceptable false-positive and false-negative behavior for the implemented
-rules, and generate consistent terminal, JSON, and HTML outputs.
+Safety, determinism, honest limitations, actionable output, and a low-friction command are more
+important than maximizing the number of speculative findings. Unsupported dynamic cases should
+remain unknown instead of being presented as proven defects.

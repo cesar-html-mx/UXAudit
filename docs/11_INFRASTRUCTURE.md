@@ -1,124 +1,146 @@
 [Español](es/11_INFRASTRUCTURE.md) | **English**
 
-# Infrastructure and Tooling
+# Infrastructure and distribution
 
-## Runtime
+## User runtime
 
-UXAudit runs on the Node.js 24 LTS line (`>=24.18.0 <25`) with npm 11 (`>=11.16.0 <12`); M01 pins
-Node.js `24.18.0` and npm `11.16.0` for development and CI. It reads project files and writes
-selected JSON/HTML reports locally. No backend, container, database, cloud service, or network
-connection is required by the product.
+UXAudit is a local Node.js CLI. The supported runtime is Node.js `>=24.18.0 <25`; npm
+`>=11.16.0 <12` is supported for installation and project scripts. The target React project does not
+need a server, database, container, browser, or UXAudit-specific build integration.
 
-## Development
+```bash
+npm install --save-dev @cesar-html-mx/uxaudit
+npm exec --offline -- ux-audit scan .
+```
 
-- Visual Studio Code and Codex
-- Git and GitHub
-- Node.js and npm
-- TypeScript
-- Commander.js
-- Babel parser and traversal
-- Vitest
-- ESLint and Prettier
-- Husky
+The scan runs in the caller's process environment and uses the local filesystem. Product execution
+does not require network access.
+
+## Public npm artifact
+
+The npm package is `@cesar-html-mx/uxaudit`; the binary is `ux-audit`. The published tarball contains
+only:
+
+- compiled runtime files below `dist/`;
+- public JSON schemas below `schemas/`;
+- `LICENSE`;
+- `README.md`, `README.en.md`, and `README.es.md`;
+- npm-generated package metadata.
+
+Repository source, tests, fixtures, local reports, internal records, development scripts, and GitHub
+automation are not part of the consumer artifact. UXAudit is distributed as a CLI, not as a public
+importable JavaScript library API.
+
+The package build emits ESM JavaScript, declarations, and source maps. The executable entry is
+`dist/cli/index.js`, and package installation links it as `ux-audit`.
+
+## Source development environment
+
+Contributors use the pinned runtime and lockfile:
+
+```bash
+nvm install
+nvm use
+npm ci
+npm run verify
+```
+
+`npm ci` installs development tooling only in a repository checkout. Package consumers do not run the
+repository verification workflow or Git hooks. Contributors can opt into local hooks with
+`npm run setup:hooks`.
 
 ## Continuous integration
 
-The M01 GitHub Actions configuration verifies:
+The quality workflow should run on supported Linux, Windows, and macOS environments. It checks
+formatting, bilingual documentation, lint, strict types, tests, build, compiled CLI behavior, and
+installation from the packed npm artifact. Linux additionally runs coverage, dependency audit, and
+the full controlled system validations.
 
-- harness integrity on Node.js 24;
-- dependency installation from the lockfile on Ubuntu 24.04, Windows 2025, and macOS 15;
-- format check;
-- lint;
-- typecheck;
-- focused tests;
-- coverage generation and thresholds on Linux;
-- build;
-- the compiled-CLI smoke suite on every matrix platform;
-- npm audit with a moderate-severity failure threshold on Linux;
-- CodeQL on pushes/pull requests to `main`, weekly schedule, and manual dispatch where GitHub Code
-  Security is available;
-- Dependency Review for public repositories or private repositories explicitly marked as having
-  GitHub Code Security, failing on moderate-or-higher dependency changes.
+Dependency Review and CodeQL protect repository changes when the GitHub plan and repository settings
+make them available. Third-party actions remain pinned to reviewed immutable commit hashes, and
+Dependabot proposes controlled dependency and workflow updates.
 
-Workflows use minimum permissions, concurrency cancellation, bounded timeouts, no persisted checkout
-credentials, and immutable action SHAs. Dependabot monitors npm and GitHub Actions releases.
-Public repositories enable CodeQL and Dependency Review automatically; eligible private
-repositories opt in with `CODEQL_ENABLED=true` and `DEPENDENCY_REVIEW_ENABLED=true`.
+Hosted CI status is separate from local claims. A check is reported as executed only when its actual
+run result is available.
 
-## Artifacts
+## Release gate
 
-Product build:
+Before publishing:
 
-- `dist/` executable JavaScript and type declarations if published.
+```bash
+npm ci
+npm run release:check
+npm pack --dry-run
+```
 
-Audit outputs:
+`npm run release:check` composes the complete local quality, controlled-system, robustness,
+accuracy, and package-installation checks. `prepack` rebuilds `dist/`. `prepublishOnly` is a local
+safety net when a maintainer publishes without `--ignore-scripts`; the automated workflow runs the
+gate explicitly and then uses `npm publish --ignore-scripts` to avoid running it twice.
 
-- terminal summary;
-- `audit-report.json`;
-- `audit-report.html`;
+The package test creates a temporary tarball and consumer project, verifies the allowlisted contents,
+installs without relying on repository state, resolves the binary, and runs representative help,
+version, and scan commands.
 
-The product does not currently generate an execution-log format. Raw command logs belong only to
-engineering evidence.
+## Publication
 
-Engineering evidence:
+Publishing requires the authorized `cesar-html-mx` npm account, current registry authentication,
+two-factor or trusted-publisher policy as configured, and an unused semantic version. The package is
+configured for public access and npm provenance.
 
-- test result summaries;
-- coverage summary;
-- controlled-project expected/actual comparison;
-- security and usability records.
+The initial public version is `0.1.0`. Versions below `1.0.0` may still evolve, so compare the
+documented contract and repository changes before upgrading. Publish every version deliberately;
+never reuse or overwrite a version that already reached the registry.
 
-M02 adds a shell-free controlled discovery scenario and an isolated evidence collector:
+### Automated release workflow
 
-- `npm run test:scenario:m02` builds UXAudit, creates a temporary mixed project, compares normalized
-  expected/actual discovery results, verifies two byte-identical runs, and proves target scripts are
-  not executed.
-- `npm run evidence:m02` copies the source snapshot without dependencies, retained evidence, Git
-  metadata, credential files, or private keys; performs a clean locked install under Node.js 24;
-  rejects included symbolic links; asserts the pinned runtime and active M02 state; executes the
-  complete M02 gate with an explicit zero-skip/todo record; and atomically retains only sanitized,
-  checksummed records under `evidence/m02-discovery/`.
-- `npm run evidence:m02:finalize` runs after the milestone report is written and regenerates the
-  manifest atomically so the report is covered by the same integrity contract.
+The repository publishes only from `.github/workflows/release.yml` after a tag named `vX.Y.Z` is
+pushed. The workflow rejects a tag whose version differs from `package.json` or whose commit is not
+contained in `main`. It then runs the complete release gate and publishes with npm provenance.
 
-M06-T01 expands the shell-free compiled smoke suite to eleven scenarios. It now covers hostile
-terminal diagnostics, the integrated
-default audit, all three reporters, recoverable syntax, configuration/CLI precedence, an explicit
-empty rule selection, stable input/fatal exit boundaries, and exclusive existing-target refusal.
-Each scenario uses Node process APIs rather than a shell, and target source remains inert.
+For the first publication:
 
-M06-T02 adds `npm run test:scenario:m06`. The script builds the real CLI, copies or generates five
-controlled projects in temporary roots, executes each twice with terminal/JSON/HTML output, and
-compares stable projections after omitting only canonical-root and timing volatility. It never
-reuses an output tree because report persistence is intentionally exclusive. Runtime symbolic-link
-creation is capability-aware, and every created link must be reported as excluded by the default
-policy.
+1. enable two-factor authentication on the npm account that owns the package scope;
+2. make the GitHub repository public and protect the `main` branch;
+3. create a GitHub environment named `npm` and restrict it to release tags or approved deployments;
+4. create a granular npm token with the shortest practical expiration, `Packages and scopes` set to
+   `Read and write`, `Select packages` set to `All Packages`, and `Bypass 2FA` enabled; a package that
+   does not exist cannot yet be selected individually;
+5. add the token only as the `NPM_TOKEN` secret of the `npm` environment; never store its value in
+   the repository;
+6. after the first package version exists, configure npm Trusted Publishing for repository
+   `cesar-html-mx/UXAudit`, workflow `release.yml`, and environment `npm`;
+7. delete the `NPM_TOKEN` secret, revoke the temporary token, and set package publishing access to
+   `Require two-factor authentication and disallow tokens`.
 
-M06-T04 adds `npm run test:robustness:m06`. It builds the real CLI and executes 15 shell-free Linux
-cases covering input/configuration failures, output authorization and overwrite, malformed
-isolation, 32-directory-deep traversal, non-execution, hostile HTML, deterministic reruns, symbolic
-links, real permission denials, dependency audit, and a five-run 240-file performance baseline. The
-maximum observed Linux child `VmRSS` is sampled every 5 ms through `/proc` and is not represented as
-an exact lifetime peak; other platforms must record memory measurement as unavailable rather than
-substitute a different process. The runner imposes no machine-dependent timing threshold and
-records hosted CodeQL as unexecuted unless an actual hosted result is retrieved.
+For every version, update `package.json`, `package-lock.json`, and `PRODUCT_VERSION` in
+`src/index.ts` to the same unused semantic version. Merge that change through the normal pull request
+and CI path. From a clean, up-to-date `main`, validate and create the release tag:
 
-M06-T05 adds `npm run test:usability:m06`, an expert-review runner over six controlled developer
-tasks. Its per-task wall-clock values measure the scripted review procedure, not participant task
-time. Participant testing remains unexecuted and SUS remains not applicable because no real
-responses exist.
+```bash
+npm ci
+npm run release:check
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
+git push origin vX.Y.Z
+```
 
-`npm run evidence:m06` copies an allowlisted source tree into a credential-free temporary workspace,
-performs a locked install, executes the complete product/coverage/no-skip/smoke/system/accuracy/
-robustness/usability/harness/audit gate without a shell, and publishes exactly 42 sanitized base
-artifacts with SHA-256 integrity. A second execution must match the source and stable projections
-while treating only recorded performance and expert-procedure timing as volatile; it preserves the
-first package. `npm run evidence:m06:finalize` validates that base manifest and adds only the
-milestone report. The collector never treats hosted CodeQL, participant testing, SUS, browser
-execution, or unavailable publication as executed work.
+Do not run `npm publish` locally. Confirm the GitHub Actions run and the registry entry before
+announcing the version.
+
+## Artifacts and persistence
+
+UXAudit does not deploy a service. Its only product artifacts are terminal output and optional local
+JSON/HTML files under the analyzed project. The default file directory is `uxaudit-reports`.
+Reports are created exclusively and are not overwritten.
+
+The repository's build output `dist/`, coverage output, temporary tarballs, and test reports are
+reproducible development artifacts and are not source-controlled as product data.
 
 ## Portability
 
-Avoid operating-system-specific shell behavior in product code. CI should include more than one
-operating system for the supported Node.js 24 contract. Add another Node.js line only after it
-becomes a supported LTS contract; do not use an unsupported Current release as a quality signal.
-Platform-specific differences must be documented and tested when discovered.
+- Product paths use Node.js path APIs and portable project-relative configuration.
+- Output directory validation rejects absolute paths, backslashes, parent segments, control
+  characters, unsafe Windows names, and platform-invalid components.
+- Tests distinguish portable guarantees from permissions, links, or process measurements that vary
+  by operating system.
+- The CLI requires no graphical environment and reports text as UTF-8.

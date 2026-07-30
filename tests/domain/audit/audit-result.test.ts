@@ -22,14 +22,8 @@ import {
 } from '../../reporting/audit-result-fixture.js';
 import { assertMatchesJsonSchema } from '../../reporting/assert-json-schema.js';
 
-const schemaUrl = new URL(
-  '../../../.github/harness/schemas/audit-result.schema.json',
-  import.meta.url,
-);
-const findingSchemaUrl = new URL(
-  '../../../.github/harness/schemas/finding.schema.json',
-  import.meta.url,
-);
+const schemaUrl = new URL('../../../schemas/audit-result.schema.json', import.meta.url);
+const findingSchemaUrl = new URL('../../../schemas/finding.schema.json', import.meta.url);
 
 type InvalidRequestFactory = (request: CreateAuditResultRequest) => unknown;
 

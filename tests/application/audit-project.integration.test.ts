@@ -18,7 +18,7 @@ const createControlledProject = async (): Promise<string> => {
   const projectRoot = await realpath(temporaryDirectory);
   const sourceDirectory = join(projectRoot, 'src');
   const catalogSource = await readFile(
-    new URL('../fixtures/m04-rules/catalog-cases.tsx.fixture', import.meta.url),
+    new URL('../fixtures/rule-catalog/catalog-cases.tsx.fixture', import.meta.url),
     'utf8',
   );
 

@@ -1,9 +1,0 @@
-rule_id,true_positives,false_positives,true_negatives,false_negatives,precision,recall,unsupported,unsupported_detected,unmatched_findings,notes,corrective_action
-accessibility/button-name,1,0,1,0,1.000000,1.000000,1,0,0,Controlled instance-level static cases; unsupported cases are excluded from denominators.,None; observed findings matched the reviewed ground truth.
-accessibility/img-alt,1,0,1,0,1.000000,1.000000,1,0,0,Controlled instance-level static cases; unsupported cases are excluded from denominators.,None; observed findings matched the reviewed ground truth.
-accessibility/input-label,2,0,1,0,1.000000,1.000000,1,0,0,Controlled instance-level static cases; unsupported cases are excluded from denominators.,None; observed findings matched the reviewed ground truth.
-performance/img-dimensions,1,0,1,0,1.000000,1.000000,1,0,0,Controlled instance-level static cases; unsupported cases are excluded from denominators.,None; observed findings matched the reviewed ground truth.
-performance/img-lazy-loading,2,0,1,0,1.000000,1.000000,1,0,0,Controlled instance-level static cases; unsupported cases are excluded from denominators.,None; observed findings matched the reviewed ground truth.
-seo/ambiguous-link-text,2,0,1,0,1.000000,1.000000,1,0,0,Controlled instance-level static cases; unsupported cases are excluded from denominators.,None; observed findings matched the reviewed ground truth.
-seo/multiple-h1,1,0,1,0,1.000000,1.000000,1,0,0,Controlled instance-level static cases; unsupported cases are excluded from denominators.,None; observed findings matched the reviewed ground truth.
-ux/small-inline-text,1,0,1,0,1.000000,1.000000,1,0,0,Controlled instance-level static cases; unsupported cases are excluded from denominators.,None; observed findings matched the reviewed ground truth.

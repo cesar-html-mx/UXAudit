@@ -5,13 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const scriptPath = fileURLToPath(import.meta.url);
 const defaultRepositoryRoot = path.resolve(path.dirname(scriptPath), '..');
-const explicitBilingualPairs = [
-  ['README.en.md', 'README.es.md'],
-  ['evidence/README.md', 'evidence/README.es.md'],
-  ['evidence/security/SECURITY_CHECKLIST.md', 'evidence/security/SECURITY_CHECKLIST.es.md'],
-  ['evidence/usability/USABILITY_PROTOCOL.md', 'evidence/usability/USABILITY_PROTOCOL.es.md'],
-  ['evidence/usability/SUS_EN.md', 'evidence/usability/SUS_ES.md'],
-];
+const explicitBilingualPairs = [['README.en.md', 'README.es.md']];
 const inlineBilingualDocuments = [
   {
     exactVisibleLines: ['[Español](#español) | [English](#english)'],
@@ -30,10 +24,10 @@ const inlineBilingualDocuments = [
     fileName: '.github/pull_request_template.md',
     sectionHeadings: [],
     visibleMarkers: [
-      'Hito o tarea',
-      'Milestone or task',
-      'Resultado observable',
-      'Observable outcome',
+      'Cambio',
+      'Change',
+      'Comportamiento observable',
+      'Observable behavior',
       'Riesgos y limitaciones',
       'Risks and limitations',
     ],
@@ -1013,7 +1007,7 @@ export const checkBilingualDocumentation = async (options = {}) => {
   };
 };
 
-if (process.argv[1] !== undefined && path.resolve(process.argv[1]) === scriptPath) {
+if (import.meta.main) {
   try {
     const result = await checkBilingualDocumentation();
 

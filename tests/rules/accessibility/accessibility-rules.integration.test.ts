@@ -9,7 +9,7 @@ import { createRuleRegistry } from '../../../src/rules/rule-registry.js';
 import { modelFromSource } from '../model-from-source.js';
 
 const fixtureUrl = new URL(
-  '../../fixtures/m04-rules/accessibility-cases.tsx.fixture',
+  '../../fixtures/rule-catalog/accessibility-cases.tsx.fixture',
   import.meta.url,
 );
 

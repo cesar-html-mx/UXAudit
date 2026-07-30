@@ -1,11 +1,50 @@
 {
-  "name": "ux-audit",
+  "name": "@cesar-html-mx/uxaudit",
   "version": "0.1.0",
-  "description": "Local static-analysis CLI for React and TypeScript projects.",
-  "private": true,
+  "description": "Local static-analysis CLI for React, JavaScript, and TypeScript projects.",
+  "keywords": [
+    "accessibility",
+    "cli",
+    "javascript",
+    "performance",
+    "react",
+    "seo",
+    "static-analysis",
+    "typescript",
+    "ux"
+  ],
+  "homepage": "https://github.com/cesar-html-mx/UXAudit#readme",
+  "bugs": {
+    "url": "https://github.com/cesar-html-mx/UXAudit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cesar-html-mx/UXAudit.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "cesar-html-mx",
+    "url": "https://github.com/cesar-html-mx"
+  },
   "type": "module",
+  "exports": {
+    "./schemas/audit-result.schema.json": "./schemas/audit-result.schema.json",
+    "./schemas/finding.schema.json": "./schemas/finding.schema.json"
+  },
   "bin": {
     "ux-audit": "dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "LICENSE",
+    "README.md",
+    "README.en.md",
+    "README.es.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "engines": {
     "node": ">=24.18.0 <25",
@@ -17,34 +56,27 @@
     "build": "npm run clean && tsc -p tsconfig.build.json",
     "dev": "tsx src/cli/index.ts",
     "docs:check": "node scripts/check-bilingual-docs.mjs",
-    "evidence:m01": "node scripts/collect-m01-evidence.mjs",
-    "evidence:m02": "node scripts/collect-m02-evidence.mjs",
-    "evidence:m02:finalize": "node scripts/finalize-m02-evidence.mjs",
-    "evidence:m03": "node scripts/collect-m03-evidence.mjs",
-    "evidence:m03:finalize": "node scripts/finalize-m03-evidence.mjs",
-    "evidence:m04": "node scripts/collect-m04-evidence.mjs",
-    "evidence:m04:finalize": "node scripts/finalize-m04-evidence.mjs",
-    "evidence:m05": "node scripts/collect-m05-evidence.mjs",
-    "evidence:m05:finalize": "node scripts/finalize-m05-evidence.mjs",
-    "evidence:m06": "node scripts/collect-m06-evidence.mjs",
-    "evidence:m06:finalize": "node scripts/finalize-m06-evidence.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --max-warnings 0",
-    "prepare": "husky",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run release:check",
+    "release:check": "npm run verify && npm run test:coverage && npm run test:smoke && npm run test:scenario:discovery && npm run test:scenario:parser && npm run test:scenario:rules && npm run test:scenario:reporting && npm run test:scenario:system && npm run test:accuracy && npm run test:robustness && npm run test:usability && npm run test:package && npm audit --audit-level=moderate",
+    "setup:hooks": "husky",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:accuracy:m06": "npm run build && node scripts/run-m06-accuracy.mjs",
-    "test:robustness:m06": "npm run build && node scripts/run-m06-robustness.mjs",
-    "test:usability:m06": "npm run build && node scripts/run-m06-usability.mjs",
-    "test:scenario:m02": "npm run build && node scripts/run-m02-scenario.mjs",
-    "test:scenario:m03": "npm run build && node scripts/run-m03-scenario.mjs",
-    "test:scenario:m04": "npm run build && node scripts/run-m04-scenario.mjs",
-    "test:scenario:m05": "npm run build && node scripts/run-m05-scenario.mjs",
-    "test:scenario:m06": "npm run build && node scripts/run-m06-scenario.mjs",
+    "test:accuracy": "npm run build && node scripts/run-accuracy-validation.mjs",
+    "test:robustness": "npm run build && node scripts/run-robustness-validation.mjs",
+    "test:scenario:discovery": "npm run build && node scripts/run-discovery-scenario.mjs",
+    "test:scenario:parser": "npm run build && node scripts/run-parsing-scenario.mjs",
+    "test:scenario:reporting": "npm run build && node scripts/run-reporting-scenario.mjs",
+    "test:scenario:rules": "npm run build && node scripts/run-rule-engine-scenario.mjs",
+    "test:scenario:system": "npm run build && node scripts/run-system-scenario.mjs",
+    "test:package": "npm run build && node scripts/check-package.mjs",
     "test:smoke": "npm run build && node scripts/smoke-cli.mjs",
+    "test:usability": "npm run build && node scripts/run-usability-review.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "verify": "node .github/harness/scripts/check-quality.mjs"
+    "verify": "node scripts/check-quality.mjs"
   },
   "dependencies": {
     "@babel/parser": "8.0.4",

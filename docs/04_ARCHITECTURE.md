@@ -2,425 +2,154 @@
 
 # Architecture
 
-## Style
+## System overview
 
-UXAudit uses a staged processing pipeline with application orchestration and domain contracts. The
-main flow is intentionally directed:
-
-```text
-CLI
-  -> AuditOrchestrator
-  -> ProjectDiscovery
-  -> FileInventory
-  -> FileClassifier
-  -> SourceParser
-  -> AnalysisModelBuilder
-  -> RuleLoader / RuleEvaluator
-  -> AuditResult
-  -> Terminal / JSON / HTML Reporters
-```
-
-## Packages
+UXAudit is a layered local CLI. Filesystem and parser adapters turn an authorized project into a
+normalized domain model. Rules operate only on that model. Reporters operate only on one normalized
+audit result.
 
 ```text
-src/
-├── cli/
-├── application/
-├── project/
-│   ├── discovery/
-│   ├── inventory/
-│   └── classification/
-├── parsing/
-├── domain/
-│   ├── models/
-│   ├── rules/
-│   ├── findings/
-│   └── errors/
-├── rules/
-│   ├── ux/
-│   ├── accessibility/
-│   ├── seo/
-│   └── performance/
-├── reporting/
-│   ├── terminal/
-│   ├── json/
-│   └── html/
-├── configuration/
-└── shared/
+project path
+  -> path validation
+  -> discovery and inventory
+  -> source classification and bounded reading
+  -> parsing and normalized analysis model
+  -> rule loading and isolated evaluation
+  -> normalized audit result
+  -> terminal / JSON / HTML reporters
 ```
 
-The exact filenames may evolve, but the dependency direction and responsibility boundaries may not
-be collapsed without an architecture decision.
+This direction prevents rules from depending on Babel syntax nodes and prevents reporters from
+rerunning analysis.
 
-## Implemented production composition
+## Module boundaries
 
-```text
-src/cli/index.ts
-  -> src/cli/run-cli.ts
-       -> src/application/audit-project.ts
-            -> src/project/validate-project-path.ts
-            -> src/configuration/load-configuration.ts
-            -> src/application/analyze-project.ts
-            -> src/rules/load-rules.ts / evaluate-rules.ts
-            -> src/domain/audit/audit-result.ts
-            -> src/reporting/json/ and html/
-            -> src/reporting/files/write-report-file.ts
-       -> src/reporting/terminal/terminal-reporter.ts
-       -> src/cli/sanitize-terminal.ts (compatibility re-export)
-            -> src/shared/sanitize-terminal.ts
-src/application/analyze-project.ts
-  -> src/application/scan-project.ts
-       -> validation / discovery / inventory / classification
-  -> src/parsing/analyze-source-candidates.ts
-       -> verified source read / Babel parse / AST-free extraction
-  -> src/domain/models/build-analysis-model.ts
-```
+| Area                  | Location             | Responsibility                                                                         |
+| --------------------- | -------------------- | -------------------------------------------------------------------------------------- |
+| Executable and CLI    | `src/cli/`           | Commander commands, safe output, option sources, and exit-code mapping.                |
+| Application           | `src/application/`   | Orchestrate scan, analysis, audit, timing, and report persistence.                     |
+| Project processing    | `src/project/`       | Validate roots, discover entries, build inventory, and classify source candidates.     |
+| Parsing               | `src/parsing/`       | Bounded source reads, Babel adapter, extraction, and per-file failure isolation.       |
+| Analysis domain       | `src/domain/models/` | Parser-independent files, components, JSX nodes, values, relationships, and locations. |
+| Audit domain          | `src/domain/audit/`  | Normalized processing errors, counters, timing, findings, and result invariants.       |
+| Rule domain           | `src/domain/rules/`  | Rule metadata, evaluation contracts, categories, severity, confidence, and status.     |
+| Rules                 | `src/rules/`         | Registry, selection, isolated evaluator, and category-organized checks.                |
+| Configuration         | `src/configuration/` | Inert JSON reading, strict validation, defaults, and explicit CLI override merging.    |
+| Reporting             | `src/reporting/`     | Pure terminal, JSON, and HTML rendering plus exclusive safe file writes.               |
+| Shared safety helpers | `src/shared/`        | Context-neutral normalization used across public output boundaries.                    |
 
-- `cli/index.ts` is the only process boundary. It supplies arguments and streams and assigns
-  `process.exitCode`.
-- `run-cli.ts` owns the complete Commander grammar and stable exit mapping. Existing injected
-  scan-only and analysis callers retain their completed behavior; production supplies the additive
-  audit facade. Command/path/configuration input errors use `2`, fatal pipeline/report errors use
-  `3`, and a completed audit uses `0` even with findings or recoverable errors. Progress,
-  diagnostics, and generated-path claims convert untrusted controls/bidirectional characters to
-  visible escapes. The already safe terminal report is written directly so fixed trusted ANSI is not
-  neutralized by a second whole-output sanitizer.
-- `audit-project.ts` authorizes the root, loads inert configuration before traversal/parsing, invokes
-  `analyzeProject` exactly once, loads and evaluates the selected stable rules over its one model,
-  constructs one immutable result, and then writes selected JSON/HTML reports in canonical order.
-  It returns the preserved analysis progress, completed result, and only the `WrittenReport` values
-  actually returned by the writer.
-- `scan-project.ts` composes `validation → discovery → inventory → classification`, retains each
-  normalized stage result, computes the discovery summary, and maps fatal stage failures into stable
-  application errors. M03 does not change this completed M02 public contract.
-- `analyze-project.ts` composes `scanProject → source-candidate analysis → model construction`.
-  Recoverable parser errors remain separate from the model and discovery counters; fatal
-  source-analysis and model failures map to distinct stable application errors without causes.
-- `validate-project-path.ts` uses an injectable filesystem adapter to execute
-  `resolve → realpath → stat → access(R_OK | X_OK)`.
-- The focused project modules traverse with Node APIs, build an invariant-checked inventory, and
-  classify parser candidates without reading or executing source code.
+Dependencies point inward toward explicit contracts. Domain modules do not import CLI or reporter
+adapters.
 
-## Core contracts
+## Processing flow
 
-### AuditApplication
+The complete application facade validates the project before configuration lookup. Configuration is
+loaded before traversal so selected rules and report formats are known for the audit. Source analysis
+then scans, classifies, reads, parses, and builds one model. Rule loading and evaluation happen once.
+The result is frozen before any report file is persisted.
 
-Input: project path, optional explicit configuration path, and validated CLI override values.
-Output: preserved `AnalyzeProjectResult`, one `AuditResult`, and ordered successful
-`WrittenReport` claims.
+Audit timing covers validation through normalized result construction. It intentionally excludes
+subsequent JSON and HTML persistence. The returned application value separates the audit result from
+the list of files whose writes were confirmed.
 
-M06 implements this contract additively in `audit-project.ts`. It performs an initial canonical path
-authorization so configuration can fail before traversal/parsing, then passes that canonical root to
-the completed analysis facade. The analysis facade revalidates the root but performs discovery,
-source reading, parsing, and model construction only once.
+## Key contracts
 
-`null` category/rule selections are omitted when constructing M04 rule filters; explicit empty
-arrays remain present and enable zero rules. File counters map discovered files, source candidates,
-parsed files, and parser failures exactly. An injected clock closes timing immediately before the
-result builder, so persistence time is not represented as analysis time.
+### Discovery and inventory
 
-Configured JSON/HTML paths are part of the result before rendering and do not prove filesystem
-success. File formats are rendered from that same frozen value and persisted sequentially through
-the M05 writer. Only its exact returned format/path pairs enter `writtenReports`. A JSON success
-followed by an HTML failure is propagated without an unsafe deletion or a completed-result claim.
+The canonical project root is the authorization boundary. Discovery uses deterministic ordinal
+ordering, skips links by default, prevents cycles when internal link-following is enabled, and records
+recoverable descendant failures. Inventory identity is based on canonical paths while public ordering
+uses portable project-relative paths.
 
-### ProjectDiscovery
+An inventory entry is only a candidate. Later source reads must revalidate the root, pathname,
+regular-file identity, descriptor snapshot, size, and final authorization.
 
-Input: validated project root and discovery configuration.
-Output: discovered file records and recoverable discovery errors.
+### Parsing and analysis model
 
-M02 implements this contract with an iterative, ordinally sorted traversal. The selected canonical
-root remains the authorization boundary. Every candidate target is resolved canonically and checked
-with path-relative containment; configured names are checked on both the observed entry and the
-canonical target. Symbolic links are skipped by default, while the internal opt-in follows only
-targets within the root and tracks visited canonical directories. Descendant operation failures are
-normalized and isolated; losing the root is fatal.
+The parser boundary accepts bounded source text plus an explicit source kind and returns either a
+normalized success or a typed safe failure. Babel syntax trees and source text remain internal.
 
-### FileInventory
+`AnalysisModel` is a flat, serializable representation of files, recognized component ownership, JSX
+nodes, effective attributes, retained static values, and half-open source locations. Lines are
+one-based; stored columns and UTF-16 offsets are zero-based. IDs and arrays use deterministic
+ordering, and the completed model is recursively immutable.
 
-Normalizes canonical and project-relative paths, deduplicates entries, and returns deterministic
-ordering.
+Component recognition is syntactic and conservative. It recognizes supported function, arrow, and
+class patterns but does not resolve imports, runtime aliases, higher-order components, routing, or
+rendered composition.
 
-M02 defines identity as the canonical absolute file path. Inventory entries retain that native
-absolute path, derive a portable `/`-separated project-relative path, normalize the final extension
-to lowercase, and carry only the justified `file` kind. Canonical aliases deduplicate and entries
-sort ordinally by relative path. A non-descendant record is an internal invariant failure.
+### Rules and findings
 
-### FileClassifier
+A `Rule` combines immutable metadata with an evaluation function that receives the normalized model.
+It cannot read source files or consume Babel nodes through the public contract.
 
-Selects supported source candidates. Classification may use extension and conservative source
-signals. It must not falsely claim that every supported extension is a React component.
+The registry validates unique rule IDs and immutable definitions. Rule loading applies category and
+ID filters in canonical order. The evaluator runs each enabled rule once, validates its observations,
+normalizes them into self-contained findings, and records a safe processing error when one rule
+fails. Other rules continue when isolation is safe.
 
-M02 derives the actual suffix from the inventory's portable relative path and maps supported files
-only to JavaScript/TypeScript plus JSX/non-JSX parser kinds. It excludes declaration and
-conventionally named configuration sources, reads no file content, and exposes no React component
-field. Semantic detection remains exclusively in M03's parser and model stages.
+A normalized finding carries rule identity, category, severity, confidence, explanation,
+recommendation, limitations, message, reference, and a defensive location copy when available.
 
-### SourceParser
+### Audit result and reporters
 
-Parses one source file and returns either a parser result or a typed per-file error. Parser internals
-must not leak to rules.
+`AuditResult` schema `1.0.0` is the single immutable value consumed by every reporter. It contains:
 
-M03 defines this boundary as a discriminated `SourceParserResult`. A successful result contains one
-AST-free `AnalyzedSourceFile`; an expected read, syntax, or extraction problem contains a stable
-recoverable error with the portable file path, stage, code, and optional source position. Native
-filesystem/Babel causes, code frames, absolute paths, source text, and AST values are not part of
-the contract.
+- product and schema versions;
+- canonical project root and timing;
+- effective configuration and configured report paths;
+- file, rule, finding, severity, category, and processing-error summaries;
+- normalized findings and recoverable processing errors.
 
-The Babel 8 adapter is isolated under `src/parsing/babel/`. It parses exactly one supplied string,
-does not load project or host Babel configuration, and selects plugins from the classified source
-kind: JavaScript, JavaScript with JSX, TypeScript, or TypeScript with JSX. It uses unambiguous
-script/module detection, retains locations and the relative filename, disables partial error
-recovery, and normalizes thrown parser failures before they leave the adapter boundary.
-
-M03-T05 adds the source-opening and batch halves of the boundary:
-
-- `read-source-candidate.ts` treats the M02 inventory as candidates, not authorization. It validates
-  that the supplied root is its stable absolute canonical directory, checks declared and canonical
-  candidate containment, and compares device/inode plus size, modification time, and change time
-  across path and handle snapshots. A structurally non-portable candidate declaration is a generic
-  fatal invariant, so it cannot be reflected into a recoverable path field.
-- POSIX opens use read-only, no-follow, and non-blocking flags; Windows uses the portable read-only
-  flag and the same post-open identity checks. The verified descriptor is the only source-content
-  read path and is closed exactly once.
-- Source size is limited to 1,048,576 bytes. Reads request at most 65,536 bytes and one bounded
-  extra byte detects growth beyond the limit. Strict UTF-8 decoding rejects malformed bytes;
-  `ignoreBOM: true` preserves an initial U+FEFF in the string supplied to Babel.
-- `parse-source-candidate.ts` composes reader, Babel parser, and extractor in that order. A
-  recoverable result stops only the remaining stages for that candidate; the transient source string
-  and Babel AST never cross the composite boundary.
-- `analyze-source-candidates.ts` clones and ordinally sorts candidates, rejects duplicate/mismatched
-  paths as fatal invariants, and processes one candidate at a time. Expected read, parse, and
-  extraction failures are collected in deterministic order while safe siblings continue.
-
-M03-T03 adds the internal Babel-to-domain extraction adapter. It visits the AST once, up to 100,000
-nodes, and then orders extracted records by source offset with ordinal tie-breakers. The adapter
-recognizes syntactically justified PascalCase function declarations, arrow/function expressions,
-supported `Component`/`PureComponent` class forms, and anonymous default exports. A class owns JSX
-only through its instance `render` method; nested functions and class members form ownership
-boundaries. JSX inside an attribute is retained as a separate relationship root rather than as a
-rendered child of the receiving element.
-
-Intrinsic, custom, member/namespaced, shorthand-fragment, and `React.Fragment` syntax is projected
-to UXAudit names and node kinds. Named and spread attributes preserve source order. Finite primitive
-and static-template values are exact; bounded object properties are retained as ordered data;
-computed, spread, non-finite, deep, or otherwise unresolved values remain partial or dynamic.
-Descendant text is whitespace-normalized with exact, partial, or dynamic confidence and retains at
-most 256 UTF-16 code units per JSX node. Custom descendants and dynamic expressions cannot be
-promoted to exact text.
-
-Expected missing-location or resource-limit cases become stable recoverable extraction errors.
-Broken internal traversal or relationship invariants are fatal and expose only the stable
-`BabelAnalysisInvariantError`, not parser-native details. Babel nodes, source strings, native causes,
-and absolute paths remain inside the adapter boundary.
-
-### AnalysisModelBuilder
-
-Converts parser output into UXAudit domain models containing only justified information needed by
-rules. It preserves source locations and can be extended deliberately.
-
-The M03 contracts use a flat serializable model of files, syntactically justified components, and
-JSX nodes connected by deterministic IDs. Elements distinguish intrinsic from custom names;
-fragments remain explicit; attributes distinguish named from spread values; and values/text carry
-exact, partial, or dynamic confidence. Literal objects retain bounded named properties so the
-initial catalog can inspect `style.fontSize` without retaining an expression tree.
-
-Every location contains a portable project-relative file path and a half-open range. Lines are
-one-based; columns and offsets are zero-based UTF-16 code-unit indexes. The model contains neither
-the absolute project root nor complete source content.
-
-M03-T03 implements the per-file extraction half of this boundary: file, component, JSX, attribute,
-object-property, relationship, confidence, and location records are AST-free and deterministic.
-
-M03-T04 implements the project half through `buildAnalysisModel`. The builder treats every
-`AnalyzedSourceFile` as boundary input and recursively projects only documented fields into fresh
-objects and arrays. It never retains input references or parser/source extras. Files are ordered
-ordinally by canonical portable relative path; components and JSX nodes are rebuilt in file/source
-order, and each supplied ID must equal the canonical value derived from that path and UTF-16 start
-offset. Attribute and object-property order remains source-significant. The flat normalized arrays
-already meet the documented rule needs, so no speculative query API is exposed.
-
-Construction validates safe integer coordinates, cross-location consistency and containment;
-canonical and unique IDs; exact file/component membership and ownership; non-empty component root
-sets; reciprocal, same-owner parent/child links; and acyclic JSX graphs. It also validates supported
-discriminants, finite literal values, exact/dynamic/partial confidence combinations, static-text
-length, bounded object depth, and cyclic object input. `usesJsx` must match the JSX inventory.
-Control and bidirectional characters in an otherwise portable file path remain untrusted data rather
-than being normalized away; later presentation boundaries own escaping.
-
-Any malformed builder input is an internal integrity failure. The boundary catches its details and
-throws only the fatal `AnalysisModelInvariantError`, whose stable code and message contain no input,
-native cause, absolute path, or source text.
-
-### Rule
-
-M04-T01 defines one immutable `Rule` as:
-
-- `RuleMetadata`: stable ID, title, category, default severity, catalog status, explanation,
-  actionable recommendation, nullable structured reference, and explicit limitations;
-- `RuleContext`: the normalized `AnalysisModel` and no parser or reporter state;
-- a synchronous `evaluate` operation that returns zero, one, or multiple rule-local observations
-  containing a message, confidence, and nullable `SourceLocation`.
-
-Categories are `accessibility`, `performance`, `seo`, and `ux`. Severities are `info`, `low`,
-`medium`, `high`, and `critical`; finding confidence is independently `low`, `medium`, or `high`.
-A rule is independent of report format, does not import Babel, and does not depend on another
-rule's execution.
-
-### Finding
-
-M04-T01 normalizes a rule observation and its metadata into one self-contained `Finding`. It
-retains rule ID/title, category, severity, message, explanation, recommendation, reference,
-limitations, confidence, and a nullable defensive copy of the complete M03 half-open source
-location.
-Coordinates remain one-based for lines and zero-based for columns/offsets. Presentation-specific
-line/column conversion belongs to reporters in M05.
-
-Rule failures are not findings. A recoverable `RuleExecutionError` contains only the rule ID,
-category, stable code/message, and recoverability flag; native causes and target-project content do
-not cross this boundary. `RuleEvaluationResult` keeps findings, execution errors, and explicit
-available/enabled/succeeded/failed/finding counters without any presentation state.
-The executed counter records every attempted enabled rule and equals succeeded plus failed.
-
-### RuleEvaluator
-
-M04-T02 separates registry, loading, and evaluation:
-
-- `createRuleRegistry` validates and defensively copies an explicit rule list, rejects malformed
-  metadata, unsafe/non-HTTP(S) references, deferred executable rules, or duplicate IDs through
-  stable fatal errors; it freezes the registered contracts and orders them ordinally by rule ID.
-- `loadRules` validates optional category and rule-ID allowlists. When both exist they intersect;
-  an empty allowlist selects no rules, an unknown rule ID is an error, and absent filters select the
-  stable/required portion of the explicit registry. Experimental rules require exact rule-ID
-  opt-in. Invalid containers, unknown keys, and throwing accessors fail closed.
-- `evaluateRules` calls every loaded rule exactly once over the same trusted `AnalysisModel`.
-  Thrown evaluation failures and malformed results become stable recoverable per-rule errors. A
-  malformed rule's entire candidate batch is discarded before safe sibling results are accepted.
-
-Every non-null finding location must exactly match a file, component, JSX node, attribute, or
-retained object-property location in the model. This prevents a rule result from introducing an
-absolute or otherwise untraceable path. Accepted findings sort by rule ID, portable file path,
-start/end offset, and message; execution errors sort by rule ID. The result records
-available, enabled, executed, succeeded, failed, and finding counts.
-
-Isolation assumes the M03 model remains valid and rules respect the readonly contract. The engine
-deep-freezes that model once before evaluation so an unsafe runtime cast cannot mutate it and
-contaminate a later rule. It does not clone or reparse the project per rule.
-
-`initialRuleRegistry` explicitly assembles the eight stable M04 rules: three accessibility, two
-performance, two SEO, and one UX rule. Category modules remain independently testable; the registry
-is the canonical default catalog and sorts their IDs before loading. Rule-specific factories
-capture validated ambiguous-link phrases and the inline-text pixel threshold without adding mutable
-configuration to `RuleContext`.
-
-### Reporter
-
-M05-T01 defines a pure reporter as a format identity plus `render(result): string`. It transforms
-exactly one completed `AuditResult` into a representation and never discovers, parses, reevaluates
-rules, mutates the result, or writes through the domain contract. Terminal/JSON/HTML adapters and
-their optional filesystem writer remain presentation boundaries.
-
-M05-T03 implements the terminal adapter as deterministic LF text. It preserves canonical finding
-and error order, uses complete summary buckets, filters only displayed finding records through the
-inclusive configured severity, converts stored start columns to one-based labels, and includes
-individual normalized processing errors only when verbose. A neutral shared sanitizer turns
-untrusted controls, bidirectional markers, BOM, and unpaired surrogates into visible escapes before
-the reporter adds fixed ANSI around badges. It does not inspect process, TTY, environment, or
-filesystem state.
-
-M05-T04 implements the JSON adapter as the exact supplied `AuditResult` encoded with two-space
-`JSON.stringify` and one LF. It does not omit timing, convert domain coordinates, sort, project, or
-mutate data. A separate writer is shared by JSON and HTML: rendering remains pure, while persistence
-validates the exact fixed format target and returns a relative path only after completion.
-
-M05-T05 implements HTML as another pure adapter. It builds one fixed semantic HTML5 structure with
-constant inline CSS and a restrictive CSP, includes complete metadata/configuration/summaries and
-every normalized finding/error, and groups records through fixed enum orders without sorting the
-input. Terminal-only severity and verbosity settings are reported but do not suppress HTML data.
-The renderer converts columns to one-based human labels, preserves both offsets and the
-end-exclusive contract, neutralizes hostile Unicode before context-specific HTML escaping, and
-reparses potential links into credential-free HTTP(S) URLs or inert text. `writeHtmlReport`
-delegates the exact rendered bytes and fixed configured path to the shared writer.
+The terminal reporter may filter visible detail but not underlying totals. The JSON reporter preserves
+the complete value. The HTML reporter presents the complete value with fixed grouping and safe
+escaping. Reporters are pure renderers; filesystem persistence is a separate adapter.
 
 ### Configuration
 
-The normalized M05 configuration is a complete schema-versioned value with category/rule filters,
-selected terminal/JSON/HTML formats, a portable project-relative output directory, minimum display
-severity, color, and verbosity. `null` filters mean the stable default catalog; empty arrays
-intentionally enable no rules. Defaults select terminal output, `info`, color, non-verbose detail,
-and `uxaudit-reports`.
+`AuditConfiguration` is a complete validated value. The loader reads optional
+`uxaudit.config.json` or an explicit file as inert UTF-8 JSON, validates a closed schema, and merges
+only explicitly supplied CLI values over file values and defaults.
 
-M05-T02 separates filesystem authorization from data normalization. The reader authorizes the
-canonical root and conventional filename, or treats an explicit configuration path as separate
-user authority; it rejects links/nonregular files and observed root/path/descriptor changes, reads
-at most 64 KiB, and decodes strict UTF-8. The loader parses JSON, validates closed version-1 own-data
-records and bounded dense arrays, resolves rule IDs against the stable registry, canonicalizes
-selection order, and merges `defaults < file < CLI`. The returned configuration is a defensive
-frozen copy. No project configuration module is imported or executed. The M06 Commander adapter
-constructs the CLI layer only from options whose value source is explicitly `cli`; framework defaults
-therefore cannot shadow file settings.
+`null` category or rule filters mean no filter. An empty array is an intentional zero-selection.
+Output directories are portable project-relative paths; reporter filenames are fixed by format.
 
-### AuditResult
+## Error model
 
-M05-T01 defines `AuditResult` schema `1.0.0` as the single recursively frozen value consumed by
-every reporter. It contains:
+Public errors are stable and typed at the boundary that can make a recovery decision:
 
-- the normalized configuration plus tool/schema versions;
-- the canonical project root and canonical UTC start/completion timestamps with duration;
-- discovered, selected, parsed, and failed-file counters;
-- the complete M04 available/enabled/executed/succeeded/failed/finding counters and findings;
-- normalized recoverable discovery, source read/parse/extract, and rule errors;
-- explicit totals for every category, severity, and processing stage, including zero buckets; and
-- nullable project-relative JSON/HTML paths resolved from the controlled output directory and fixed
-  `audit-report.json`/`audit-report.html` names.
+- invalid commands, paths, or configuration map to input failure;
+- inaccessible descendants, malformed individual sources, and isolated rule failures may be
+  recorded and allow safe siblings to continue;
+- broken stage invariants, root authorization failures, and report persistence failures stop the
+  audit;
+- native filesystem and parser causes are not exposed directly.
 
-The nullable paths are selected/configured targets, not persistence receipts. The separate M06
-`writtenReports` list contains only writer-confirmed paths that the CLI may announce.
+The CLI sanitizes dynamic values before terminal output. A recoverable error is never silently
+discarded: it contributes to normalized counters and is available in complete reports.
 
-The builder defensively copies upstream data, derives summaries, restores canonical finding/error
-order, rejects contradictory counters or malformed boundary data through one detail-free invariant
-error, and freezes the result without freezing caller-owned input. Stored source coordinates keep
-M03's one-based lines and zero-based UTF-16 columns/offsets. Human reporters may convert columns for
-display; JSON must preserve the domain coordinates.
+## Determinism
 
-## Persistence
+Files, model entities, selected rules, findings, errors, and report groups have explicit stable
+ordering. Duplicate values are rejected or deduplicated at defined boundaries. A fixed source tree,
+configuration, UXAudit version, platform filesystem semantics, and injected clock produce the same
+stable result projection. Project root, timestamps, and duration are expected volatile fields.
 
-The initial version has no database. Configuration, JSON, and HTML are local files. Transient
-inventory, AST adapter output, model, and findings remain in memory during an audit. The product does
-not currently generate an execution-log format.
+## Filesystem and output authorization
 
-The shared report writer creates an approved output directory one segment at a time, reauthorizes
-the canonical root and directory device/inode identities, rejects links and path escape, and opens
-the fixed target with exclusive creation (`O_NOFOLLOW` on POSIX). It writes UTF-8 in bounded
-positional chunks, syncs, verifies path/handle snapshots, closes exactly once, and repeats final
-authorization before exposing a frozen project-relative success record. Portable Node APIs do not
-offer a cross-platform directory-handle-relative `openat` guarantee, so observable races fail
-closed but a residual pathname race remains. Post-creation failures may retain a partial target
-rather than risking deletion of a replaced pathname.
+Source readers and report writers use canonical roots, descriptor-based checks, bounded chunks, and
+post-operation reauthorization. The report writer creates missing directories with restrictive
+permissions, refuses links and existing targets, and never announces a file before synchronization,
+close, and final authorization succeed.
 
-## Error boundaries
+An automatic rollback is deliberately avoided after an ambiguous partial write because a pathname
+identity race could cause deletion of a file no longer owned by the operation.
 
-- Invalid CLI/path/configuration: stop after the minimum root authorization needed for configuration
-  and before traversal/parsing.
-- Fatal discovery, inventory, or classification failure: stop with a stable application error.
-- Descendant discovery or expected read/parse/extraction error: record it and continue other files
-  when safe.
-- Non-portable candidate declaration, canonical-root authorization loss, candidate-batch invariant,
-  unexpected extraction invariant, or invalid normalized model: stop with a stable fatal error.
-- Individual rule error: record it and continue other rules when model integrity remains valid.
-- Report write failure: return exit `3`, report the stable failure clearly, and do not claim a
-  completed report set. An earlier sibling or partial target may remain without rollback.
-- Internal invariant failure: stop with an unrecoverable error.
+## Extension rules
 
-## Security boundaries
-
-Analyzed projects are untrusted input. Never execute their code, import their modules, interpolate
-their text into HTML without escaping, or traverse outside the approved root.
-
-The user may explicitly select any root, including one reached through `..` or a symlink. UXAudit
-uses that root's canonical `realpath` as the approved boundary. M02 checks each traversed canonical
-descendant against that root before reading metadata outside the boundary and handles actual
-operation failures. M03 reauthorizes the root and each source around a bounded descriptor read and
-fails closed on observed changes. Portable filesystem APIs still cannot eliminate a replacement in
-the interval between the final path check and later use; downstream behavior therefore consumes
-only the already-read handle bytes and retains this residual TOCTOU limit explicitly.
+- Add a source syntax only through the parser boundary and normalized model.
+- Add a rule through the validated registry; do not couple it to CLI or reporter modules.
+- Add a report format as a pure `AuditResult` renderer plus an authorized persistence path.
+- Preserve one-way dependencies and deterministic ordering.
+- Treat any change to configuration, finding, result, exit-code, or report schemas as a public
+  contract change requiring tests and bilingual documentation.

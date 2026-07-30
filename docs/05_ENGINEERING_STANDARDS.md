@@ -1,74 +1,92 @@
 [Español](es/05_ENGINEERING_STANDARDS.md) | **English**
 
-# Engineering Standards
+# Engineering standards
 
-## Runtime and language
+## Runtime and package management
 
-- Node.js-compatible local CLI using the Node.js 24 LTS line (`>=24.18.0 <25`). M01 adopted this
-  owner-approved baseline because Node.js 20 is end-of-life and Node.js 24 is the current LTS line.
-- TypeScript strict mode.
-- ESM modules.
-- `npm` and a committed lockfile.
-- Public contracts exported deliberately; avoid broad barrel exports that create cycles.
+- Develop and release on Node.js `>=24.18.0 <25` with npm `>=11.16.0 <12`.
+- Use `npm ci` for reproducible repository installs and commit `package-lock.json` changes.
+- Keep direct dependency versions exact and review transitive and install-script changes.
+- Production dependencies require a clear runtime need, security review, and documented rationale.
+- The public package is a CLI distribution. Do not expose an importable library API accidentally.
 
-## Approved initial dependencies
+## TypeScript and modules
 
-Production:
+- Use strict TypeScript and ESM.
+- Avoid `any`; validate `unknown` values at boundaries before narrowing.
+- Prefer arrow functions and `async`/`await`.
+- Keep modules focused and contracts explicit.
+- Use readonly input contracts and immutable domain results where practical.
+- Parser-specific types remain inside the parsing adapter.
+- Rules depend on the normalized analysis model; reporters depend on `AuditResult`.
 
-- `commander`
-- aligned, exact `@babel/parser`, `@babel/traverse`, and `@babel/types` `8.0.4` packages, isolated
-  inside the M03 parsing boundary
+## Determinism and errors
 
-Development:
+- Define canonical ordering for files, entities, rules, findings, errors, and report groups.
+- Avoid locale-sensitive ordering in product behavior.
+- Reject malformed, duplicate, sparse, proxied, or accessor-backed external values at closed
+  boundaries.
+- Use typed errors with stable public messages.
+- Preserve recoverable failures in normalized results; never hide them to make a scan appear clean.
+- Do not expose raw source, native parser objects, credentials, or uncontrolled absolute paths in
+  terminal messages.
 
-- `typescript`
-- `tsx`
-- `vitest`
-- `@vitest/coverage-v8`
-- `eslint` and TypeScript ESLint packages
-- `prettier`
-- `husky`
+## Filesystem and process safety
 
-A new production dependency requires a decision record before installation.
+- Do not invoke a shell for core product behavior.
+- Treat discovered paths as candidates and reauthorize them at the point of use.
+- Bound reads and writes, validate UTF-8 strictly, and verify file identity around descriptor I/O.
+- Prevent symlink loops and path escape.
+- Never execute, import, or automatically modify analyzed source.
+- Escape untrusted content for its output context; terminal, JSON, and HTML have different needs.
+- Refuse unsafe report paths and existing report targets.
 
-## TypeScript and code style
+## Public behavior
 
-- Prefer arrow functions.
-- Prefer `async`/`await`.
-- Do not use `any` without a written local justification; prefer `unknown` and validation.
-- Keep side effects at boundaries.
-- Use immutable or readonly domain data where practical.
-- Avoid inheritance unless it materially improves a contract; prefer composition.
-- Use typed error classes or discriminated results for expected failures.
-- Do not hide failures with empty catches.
-- Keep deterministic sorting explicit.
-- Comments explain reasons, constraints, or non-obvious behavior, not syntax.
+Any observable command, option, exit code, configuration field, schema, rule, finding, report, or
+error behavior requires:
 
-## Files and paths
+1. an explicit contract;
+2. positive, negative, boundary, and failure-isolation tests as applicable;
+3. English and Latin American Spanish documentation;
+4. a compatibility review when the behavior already exists publicly.
 
-- Use Node path APIs.
-- Store project-relative report paths with `/` normalization when needed for stable output.
-- Resolve and verify canonical roots.
-- Track visited real paths when following symlinks.
-- Never use shell commands for project traversal or parsing.
+Limitations must be stated next to the feature or rule they qualify.
 
-## Tests
+## Quality commands
 
-- Every public behavior and bug fix requires tests.
-- Positive, negative, and boundary cases are required for rules.
-- Do not overuse snapshots; assert domain behavior explicitly.
-- Fixtures must be minimal and state why they exist.
-- Tests must be deterministic and isolated from the developer's real filesystem except controlled
-  temporary directories.
+| Command                 | Purpose                                                                |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `npm run format:check`  | Check repository formatting.                                           |
+| `npm run docs:check`    | Check bilingual pairs, technical literals, structure, and local links. |
+| `npm run lint`          | Run warning-free ESLint rules.                                         |
+| `npm run typecheck`     | Run strict TypeScript checks without emission.                         |
+| `npm test`              | Run focused Vitest tests once.                                         |
+| `npm run test:coverage` | Run the suite with global V8 coverage thresholds.                      |
+| `npm run build`         | Emit ESM JavaScript, declarations, and source maps to `dist/`.         |
+| `npm run test:smoke`    | Exercise the built CLI.                                                |
+| `npm run test:package`  | Inspect and install-test the npm tarball boundary.                     |
+| `npm run verify`        | Run the main formatting, docs, lint, type, test, and build gate.       |
+| `npm run release:check` | Run the complete local public-release gate.                            |
 
-## Git
+Coverage supports review but does not replace meaningful assertions. Required tests must not be
+skipped or marked as future work.
 
-- Conventional commits.
-- Include the task ID in the scope: `feat(parser-0302): parse TSX source files`.
-- One coherent commit per completed task; repair commits are allowed before milestone closure.
-- Do not rewrite shared history or force-push.
-- Milestone branches follow `.github/harness/HARNESS_CONFIG.yml`.
+## Git and contribution workflow
 
-## Definition of done
+- Create a focused branch for each coherent change.
+- Use conventional commits such as `feat(rules): add heading-order check` or
+  `docs(cli): clarify JSON output`.
+- Keep generated package output out of source commits unless the release process explicitly requires
+  it.
+- Do not mix unrelated formatting or refactoring into a functional change.
+- Review the final diff, run checks proportional to risk, and document any unexecuted validation.
+- Use `npm run setup:hooks` when local Git hooks are desired; package consumers are not enrolled in
+  repository hooks.
 
-Code, tests, documentation, traceability, evidence, and successful verification are one deliverable.
+## Documentation standard
+
+Code, identifiers, paths, commands, configuration keys, and machine-readable formats remain in
+English. Durable informational documentation is paired in English and natural Latin American
+Spanish. The two versions must describe the same behavior; translation must not create a stronger
+claim than the implementation supports.

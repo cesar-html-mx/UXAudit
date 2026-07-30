@@ -1,0 +1,8 @@
+{
+  "name": "uxaudit-system-invalid-fixture",
+  "private": true,
+  "scripts": {
+    "uxaudit:sentinel": "node -e \"require('node:fs').writeFileSync('TARGET_PACKAGE_SCRIPT_EXECUTED', 'executed')\""
+  },
+  "version": "1.0.0"
+}

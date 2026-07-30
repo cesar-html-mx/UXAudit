@@ -18,26 +18,40 @@
 | RF-10 | Execute rules over the normalized model rather than rereading files independently.                                     |
 | RF-11 | Allow each rule to return zero, one, or multiple normalized findings.                                                  |
 | RF-12 | Preserve file and source location for each finding whenever available.                                                 |
-| RF-13 | Include an explanation and actionable recommendation.                                                                  |
-| RF-14 | Classify findings by rule, category, and severity.                                                                     |
-| RF-15 | Generate terminal, JSON, and HTML reports from one audit result.                                                       |
+| RF-13 | Include an explanation, recommendation, and known limitations.                                                         |
+| RF-14 | Classify findings by rule, category, severity, and confidence.                                                         |
+| RF-15 | Generate terminal, JSON, and HTML reports from one normalized audit result.                                            |
 
 ## Non-functional requirements
 
 | ID     | Requirement                                                                                               |
 | ------ | --------------------------------------------------------------------------------------------------------- |
 | RNF-01 | Modular responsibilities for CLI, application, project processing, parsing, domain, rules, and reporting. |
-| RNF-02 | Extensible rule and reporter contracts.                                                                   |
+| RNF-02 | Extensible, validated rule and reporter contracts.                                                        |
 | RNF-03 | Maintainable, typed, documented, and independently testable modules.                                      |
-| RNF-04 | Repeatable results for the same source, configuration, and version.                                       |
-| RNF-05 | Trace every finding to its rule and source location.                                                      |
-| RNF-06 | Present results in language useful to a frontend developer.                                               |
-| RNF-07 | Avoid redundant traversal, parsing, and processing.                                                       |
+| RNF-04 | Repeatable ordering and results for the same source, configuration, platform, and version.                |
+| RNF-05 | Trace every finding to its rule and source location whenever available.                                   |
+| RNF-06 | Present actionable results to frontend developers in safe local reports.                                  |
+| RNF-07 | Avoid redundant traversal, parsing, rule evaluation, and report-specific analysis.                        |
 | RNF-08 | Support `.ts`, `.tsx`, `.js`, and `.jsx` in React projects.                                               |
 | RNF-09 | Run on major Node.js-compatible operating systems without a graphical environment.                        |
 | RNF-10 | Keep analysis independent from output presentation.                                                       |
 
-## Requirement change policy
+## Product constraints
 
-A requirement may be clarified autonomously when its observable behavior does not change. Adding,
-removing, or weakening behavior requires a documented decision and owner approval.
+- Local static analysis is the only execution model.
+- Analyzed modules are never imported, executed, or changed.
+- No production database, telemetry, hosted service, or network dependency is introduced.
+- Rules consume the normalized analysis model rather than parser-specific syntax trees.
+- Reporters consume one normalized audit result and do not rerun analysis.
+- Filesystem traversal and report writing remain inside explicitly authorized roots.
+- Dynamic or unsupported cases are described as unknown or limited, not asserted as defects.
+
+## Requirement interpretation
+
+The [product specification](02_PRODUCT_SPEC.md) defines observable CLI behavior. The
+[architecture](04_ARCHITECTURE.md) defines implementation boundaries, and the
+[traceability matrix](12_TRACEABILITY_MATRIX.md) maps each requirement to code and verification.
+
+A clarification may improve wording without changing observable behavior. Adding, removing, or
+weakening a public behavior requires an explicit design decision, tests, and bilingual documentation.

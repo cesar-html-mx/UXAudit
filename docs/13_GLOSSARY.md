@@ -2,27 +2,28 @@
 
 # Glossary
 
-- **Audit session**: one complete execution over one project and configuration.
-- **Project root**: validated directory selected for analysis.
-- **Discovered file**: filesystem entry found after exclusions.
-- **Inventory**: normalized deterministic records for discovered files.
-- **Source candidate**: supported file selected for parsing.
-- **AST adapter output**: parser-boundary representation that may use Babel types internally.
-- **Analyzed source file**: AST-free normalized result for one successfully processed source
-  candidate; it is the input to the project analysis-model builder.
-- **Analysis model**: parser-independent UXAudit domain representation used by rules.
-- **Source location**: portable relative file path plus a half-open source range using one-based
-  lines and zero-based UTF-16 columns/offsets.
-- **Value confidence**: `exact`, `partial`, or `dynamic` statement of how much JSX value/text
-  information can be justified without evaluating target code.
-- **Rule**: one independently executable validation criterion.
-- **Finding**: normalized evidence that a rule identified a reviewable situation.
-- **Execution error**: recoverable or unrecoverable processing problem, distinct from a finding.
-- **AuditResult**: complete normalized result used by every reporter.
-- **Reporter**: terminal, JSON, HTML, or future output adapter.
-- **Stable rule**: implemented, tested, documented, and validated within its stated scope.
-- **Experimental rule**: implemented or prototyped without sufficient evidence for stable claims.
-- **Deferred rule**: specified but intentionally outside the current implementation.
-- **Controlled project**: fixture application with versioned expected findings.
-- **ExecPlan**: self-contained living milestone plan.
-- **Quality gate**: mandatory checks required to close a task or milestone.
+| Term                  | Meaning                                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Analysis model        | Parser-independent, immutable representation of files, components, JSX, values, relationships, and locations. |
+| `AnalysisModel`       | Type name for the normalized analysis model consumed by rules.                                                |
+| Audit                 | One complete local scan from authorized project path through normalized result and selected reports.          |
+| `AuditResult`         | Versioned immutable result consumed by terminal, JSON, and HTML reporters.                                    |
+| Canonical root        | Real filesystem identity of the selected project and authorization boundary for traversal and reports.        |
+| Category              | Rule grouping: accessibility, performance, SEO, or UX.                                                        |
+| Confidence            | Metadata describing the strength of static evidence behind a finding.                                         |
+| Finding               | Normalized review observation produced by one rule.                                                           |
+| Half-open location    | Source range whose start is included and end is excluded.                                                     |
+| Inventory             | Deterministically ordered record of discovered filesystem entries.                                            |
+| Processing error      | Normalized recoverable discovery, source, parser, or rule failure retained in the result.                     |
+| Reporter              | Pure adapter that renders one `AuditResult` as terminal, JSON, or HTML text.                                  |
+| Rule                  | Independent static check with validated metadata and an evaluator over `AnalysisModel`.                       |
+| Rule registry         | Validated immutable collection from which enabled rules are selected.                                         |
+| Severity              | Default review priority: info, low, medium, high, or critical.                                                |
+| Source candidate      | Supported inventory entry eligible for reauthorization, bounded reading, and parsing.                         |
+| Stable projection     | Result view excluding documented volatile values such as root, timestamps, or duration.                       |
+| Static analysis       | Inspection of source structure without executing the analyzed program.                                        |
+| Terminal sanitization | Conversion of untrusted dynamic values into visible well-formed terminal-safe text.                           |
+| Unknown               | Dynamic or unsupported state for which static evidence does not justify a conclusion.                         |
+
+These terms describe current product contracts. Rule-specific terms and limitations appear in the
+[rule catalog](08_RULE_CATALOG.md).

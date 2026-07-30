@@ -2,118 +2,121 @@
 
 **Español** | [English](README.en.md)
 
-UXAudit es una CLI local de análisis estático para proyectos React y TypeScript. La implementación
-actual con Node.js 24 descubre y clasifica de forma segura candidatos de código fuente `.js`, `.jsx`,
-`.ts` y `.tsx`, los analiza sintácticamente mediante un límite interno de Babel y construye un modelo
-de análisis determinista e independiente del analizador sintáctico. La capa de dominio completada en
-M04 incorpora un motor determinista de reglas aisladas y ocho reglas estables de accesibilidad,
-rendimiento, SEO y UX. La capa de generación de informes completada en M05 incorpora valores
-predeterminados y carga de configuración versionada, un `AuditResult` normalizado e inmutable,
-resúmenes completos de archivos, reglas, hallazgos y errores, generadores puros y deterministas para
-terminal, JSON sin pérdida y HTML independiente, además de un escritor local exclusivo y compartido.
+UXAudit es una herramienta de línea de comandos para análisis estático local de proyectos React,
+JavaScript y TypeScript. Convierte la estructura del código fuente en hallazgos revisables de
+accesibilidad, SEO, rendimiento y UX sin ejecutar ni modificar el código analizado.
 
-El comando `scan` valida y convierte en canónica la raíz seleccionada, carga una configuración JSON
-inerte antes de recorrer y analizar sintácticamente los archivos fuente, analiza candidatos seguros
-sin ejecutar el código objetivo, evalúa las reglas estables seleccionadas sobre un único modelo
-normalizado y construye un `AuditResult` inmutable. Cuando se selecciona, presenta la salida de
-terminal y guarda localmente los informes JSON y HTML elegidos mediante el escritor exclusivo. Los
-hallazgos y los errores recuperables de descubrimiento, relacionados con las fuentes o de reglas no
-hacen que una auditoría completada falle por sí solos.
+## Qué hace
+
+Un comando `scan`:
+
+1. valida y convierte en canónico el directorio seleccionado del proyecto;
+2. descubre archivos `.js`, `.jsx`, `.ts` y `.tsx` compatibles en orden determinista;
+3. analiza candidatos seguros y construye un modelo de análisis independiente del parser;
+4. evalúa las reglas seleccionadas y aísla los fallos recuperables de archivos y reglas;
+5. crea un resultado normalizado y genera informes en terminal, JSON o HTML.
+
+De forma predeterminada se omiten dependencias, salidas generadas, cachés, directorios de cobertura,
+archivos comunes de configuración, declaraciones y enlaces simbólicos. Los módulos objetivo nunca
+se importan.
 
 ## Requisitos
 
-- Node.js `24.18.0` LTS (el repositorio fija la versión en `.nvmrc`)
-- npm `11.16.0` o una versión posterior de la línea npm 11
-- Git
+- Node.js `>=24.18.0 <25`
+- npm `>=11.16.0 <12` al instalar o desarrollar con npm
 
-Con nvm:
+## Instalación
 
-```bash
-nvm install
-nvm use
-npm ci
-```
+### Dependencia del proyecto recomendada
 
-El paquete exige Node.js 24, versiones directas exactas de las dependencias, resolución estricta de
-dependencias pares y una lista de permitidos revisada para los scripts de instalación de
-dependencias.
-
-## Uso de la CLI
-
-Primero compila y después ejecuta el archivo generado:
+Instala UXAudit en el proyecto que quieres analizar:
 
 ```bash
-npm run build
-node dist/cli/index.js --help
-node dist/cli/index.js --version
-node dist/cli/index.js scan .
-node dist/cli/index.js scan ./project --format all --output reports --no-color --verbose
+npm install --save-dev @cesar-html-mx/uxaudit
+npm exec --offline -- ux-audit scan .
 ```
 
-Para un directorio válido se conservan las líneas de avance de ruta canónica, descubrimiento y
-análisis sintáctico antes del informe de terminal seleccionado y de las rutas confirmadas de
-informes:
+El paquete de npm se llama `@cesar-html-mx/uxaudit`; su ejecutable se llama `ux-audit`. Los ejemplos
+usan `npm exec --offline` para que solo la dependencia local ya instalada proporcione el comando;
+esto evita resolver otro paquete con un nombre parecido. Una dependencia local de desarrollo
+mantiene una versión reproducible para el equipo y la integración continua. Puedes exponerla en los
+scripts del proyecto:
+
+```json
+{
+  "scripts": {
+    "audit:ux": "ux-audit scan ."
+  }
+}
+```
+
+Ejecútala con `npm run audit:ux`.
+
+### Instalación global opcional
+
+Para uso interactivo en varios proyectos locales:
+
+```bash
+npm install --global @cesar-html-mx/uxaudit
+ux-audit scan /path/to/project
+```
+
+En flujos automatizados, prefiere una dependencia del proyecto para registrar la versión elegida.
+
+## Inicio rápido
+
+La auditoría predeterminada imprime un informe en la terminal:
+
+```bash
+npm exec --offline -- ux-audit scan .
+```
+
+Genera a la vez las salidas de terminal, JSON y HTML:
+
+```bash
+npm exec --offline -- ux-audit scan . --format all --output uxaudit-reports
+```
+
+Los informes de archivo son:
+
+- `uxaudit-reports/audit-report.json`
+- `uxaudit-reports/audit-report.html`
+
+UXAudit crea los archivos de informe de forma exclusiva y no sobrescribe un destino existente. Elige
+otro directorio de salida o elimina deliberadamente el informe anterior antes de volver a generar
+archivos.
+
+## Referencia del comando
 
 ```text
-Project path validated: <canonical-project-path>
-Discovery summary: discovered=<n> inventory=<n> candidates=<n> exclusions=<n> issues=<n>
-Parsing summary: parsed=<n> failed=<n> components=<n> jsx=<n>
-UXAudit <version>
-...
+ux-audit scan <project-path> [options]
 ```
 
-Las opciones de `scan` son:
+Opciones:
 
-- `--config <path>` para indicar una configuración JSON inerte;
-- `--format <terminal|json|html|all>`, `--category <category>` y `--rule <rule-id>`, que pueden
-  repetirse;
-- `--output <directory>` para indicar un directorio de informes portable y relativo al proyecto;
-- `--severity <info|low|medium|high|critical>` únicamente para el detalle de terminal;
-- `--no-color` y `--verbose`.
+- `--config <path>`: usa un archivo explícito de configuración JSON.
+- `--format <format>`: selecciona `terminal`, `json`, `html` o `all`; repite la opción para combinar
+  formatos.
+- `--output <directory>`: selecciona un directorio relativo al proyecto y compatible entre plataformas.
+- `--category <category>`: selecciona `accessibility`, `performance`, `seo` o `ux`; se puede repetir.
+- `--rule <rule-id>`: selecciona el ID exacto de una regla incluida; se puede repetir.
+- `--severity <severity>`: define el umbral de detalle en terminal como `info`, `low`, `medium`,
+  `high` o `critical`.
+- `--no-color`: desactiva los colores de las etiquetas en terminal.
+- `--verbose`: incluye errores recuperables normalizados del procesamiento en la salida de terminal.
 
-El recorrido predeterminado omite enlaces simbólicos y nombres relacionados con dependencias,
-salidas generadas, caché, cobertura y configuración. El inventario conserva rutas canónicas dentro
-de la raíz en un orden estable relativo al proyecto; la clasificación excluye declaraciones y
-archivos fuente con nombres convencionales de configuración sin leer su contenido ni afirmar que
-contengan componentes React.
+Usa `npm exec --offline -- ux-audit --help`, `npm exec --offline -- ux-audit scan --help` o
+`npm exec --offline -- ux-audit --version` para consultar la ayuda del comando local.
 
-Las raíces vacías, inexistentes, inaccesibles o que sean archivos regulares se rechazan antes del
-recorrido. Los errores fatales de descubrimiento, inventario, clasificación, autorización de la
-raíz o invariantes del lote y del modelo utilizan mensajes estables de la aplicación. Los errores
-recuperables al descubrir descendientes se cuentan como `issues`; los errores recuperables de
-lectura, sintaxis y extracción se cuentan como `failed`, mientras los archivos fuente seguros
-continúan hacia el modelo.
+## Configuración
 
-La apertura de archivos fuente vuelve a autorizar la raíz canónica del proyecto y el candidato
-alrededor de una lectura verificada mediante un descriptor de archivo. Un archivo fuente puede
-contener como máximo 1 MiB y se lee en fragmentos de hasta 64 KiB. Los candidatos que no sean
-archivos regulares, hayan cambiado, estén fuera de la raíz, no puedan leerse, superen el límite o
-contengan UTF-8 inválido se rechazan de forma segura. UTF-8 se decodifica estrictamente y se conserva
-un BOM inicial para Babel. Las causas nativas del sistema de archivos o Babel, el texto fuente, las
-rutas absolutas y los valores del AST no salen de sus límites internos. Los caracteres de control y
-bidireccionales, incluidos los saltos de línea inyectados, se presentan como escapes Unicode
-visibles antes de llegar a la terminal.
-
-Códigos de salida actuales de la CLI:
-
-| Código | Significado                                                                                                      |
-| -----: | ---------------------------------------------------------------------------------------------------------------- |
-|    `0` | Ayuda, versión o auditoría completada, incluso con hallazgos y errores recuperables de procesamiento.            |
-|    `1` | Reservado para una futura política configurable de fallo por hallazgos; `minimumSeverity` no activa este código. |
-|    `2` | Comando, argumento, raíz del proyecto o configuración inválidos.                                                 |
-|    `3` | Fallo fatal de la canalización o invariantes, error inesperado de la aplicación o fallo al escribir un informe.  |
-
-## Configurar una auditoría
-
-El límite de configuración carga un archivo opcional `uxaudit.config.json` desde una raíz de proyecto
-ya convertida en canónica, o un archivo JSON elegido por la persona usuaria, sin importarlo ni
-ejecutarlo. Este ejemplo solicita los tres generadores de informes y restringe las reglas por
-categoría:
+Coloca `uxaudit.config.json` en la raíz del proyecto o indica un archivo con `--config`:
 
 ```json
 {
   "schemaVersion": 1,
   "categories": ["accessibility", "seo"],
+  "ruleIds": null,
   "formats": ["terminal", "json", "html"],
   "minimumSeverity": "medium",
   "outputDirectory": "uxaudit-reports",
@@ -122,205 +125,124 @@ categoría:
 }
 ```
 
-Los valores predeterminados son salida de terminal, severidad `info`, color, detalle no verboso,
-directorio `uxaudit-reports` y el catálogo estable de reglas. Los filtros de categorías o reglas con
-valor `null` seleccionan ese catálogo; un arreglo `[]` selecciona intencionalmente cero reglas. Las
-opciones validadas de la CLI tienen prioridad sobre el archivo, y el archivo tiene prioridad sobre los
-valores predeterminados. Los archivos de configuración deben ser JSON UTF-8 estricto, están
-limitados a 64 KiB y rechazan claves o valores desconocidos. Los directorios de salida deben ser
-rutas portables relativas al proyecto. Únicamente las opciones proporcionadas expresamente en la
-línea de comandos se convierten en valores de reemplazo, por lo que el valor predeterminado de Commander
-para la ausencia de `--no-color` no puede sustituir una configuración de archivo.
+Valores predeterminados:
 
-El generador de informes de terminal consume un `AuditResult` completado. Conserva el orden canónico de los
-hallazgos, filtra el detalle mostrado mediante el umbral inclusivo de severidad, mantiene los totales
-completos, usa columnas humanas basadas en uno y muestra detalles normalizados de procesamiento solo
-en modo verboso. La salida sin color no contiene bytes de escape; el color se limita a etiquetas
-fijas después de convertir cada valor dinámico en texto visible seguro para terminal. La CLI escribe
-directamente esta salida ya segura para que un segundo saneamiento del informe completo no neutralice
-los códigos ANSI fijos y confiables.
+- todas las reglas estables mediante `categories: null` y `ruleIds: null`;
+- `formats: ["terminal"]`;
+- `minimumSeverity: "info"`;
+- `outputDirectory: "uxaudit-reports"`;
+- `color: true`;
+- `verbose: false`.
 
-El generador de informes JSON serializa el resultado completo con indentación de dos espacios y un LF
-final; conserva la duración y las columnas almacenadas basadas en cero. La persistencia JSON y HTML
-acepta únicamente el destino relativo configurado, rechaza enlaces, escapes de ruta y archivos
-existentes, y devuelve una ruta solo después de escribir, sincronizar, cerrar y realizar la
-autorización final. El escritor no elimina automáticamente un destino parcial después de un fallo,
-porque una condición de carrera en la identidad de la ruta podría volver insegura la eliminación.
-Las rutas dentro de `AuditResult` son destinos configurados; únicamente un resultado devuelto por el
-escritor se anuncia como generado.
+### Prioridad y filtros
 
-El generador de informes HTML muestra el resultado completo en grupos fijos de severidad y etapa de procesamiento;
-los umbrales y el modo verboso de terminal no ocultan registros. Utiliza una CSP restrictiva, CSS
-integrado constante, ningún script ni recurso externo, neutralización visible de Unicode hostil
-seguida de escape HTML y una alternativa inerte para cualquier referencia que no pueda volver a
-analizarse como HTTP(S) sin credenciales. Las ubicaciones para lectura humana usan columnas basadas
-en uno, desplazamientos UTF-16 y una etiqueta explícita de final exclusivo.
+Las opciones explícitas de la línea de comandos reemplazan los valores del archivo; los valores del
+archivo reemplazan los predeterminados. `null` en `categories` o `ruleIds` significa sin filtro,
+mientras que `[]` habilita intencionalmente cero reglas para ese filtro. Cuando ambas listas están
+presentes, una regla debe coincidir con las dos. Se rechazan claves desconocidas, entradas
+duplicadas, IDs de reglas desconocidos, valores inválidos y rutas de salida inseguras.
 
-## Desarrollo y verificación
+El archivo de configuración es JSON inerte: UXAudit lo lee como datos y nunca lo importa ni lo
+ejecuta. Debe ser UTF-8 válido, no superar 64 KiB y usar `schemaVersion: 1`.
 
-```bash
-npm run dev -- scan .
-npm run verify
-npm run test:coverage
-npm run test:smoke
-npm run test:accuracy:m06
-npm run test:robustness:m06
-npm run test:usability:m06
-npm run test:scenario:m02
-npm run test:scenario:m03
-npm run test:scenario:m04
-npm run test:scenario:m05
-npm run test:scenario:m06
-```
+## Informes
 
-Comandos individuales útiles:
+- Terminal es el resumen interactivo predeterminado. `minimumSeverity` filtra el detalle visible de
+  los hallazgos, no los totales ni el resultado de la auditoría. `verbose` muestra detalles seguros y
+  normalizados del procesamiento.
+- JSON contiene el resultado normalizado completo, incluida la configuración, tiempos, contadores de
+  archivos y reglas, hallazgos, errores recuperables y rutas configuradas de informes.
+- HTML es un informe independiente con CSS integrado, sin scripts ni recursos externos, contenido
+  del proyecto escapado y una política de seguridad de contenido restrictiva.
 
-| Comando                         | Propósito                                                                                                            |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `npm run format`                | Aplicar la configuración base de Prettier del repositorio.                                                           |
-| `npm run format:check`          | Rechazar diferencias de formato.                                                                                     |
-| `npm run docs:check`            | Validar pares de documentos bilingües, literales técnicos y enlaces locales.                                         |
-| `npm run lint`                  | Ejecutar las reglas tipadas de ESLint 10 sin advertencias.                                                           |
-| `npm run typecheck`             | Ejecutar las verificaciones estrictas de TypeScript sin emitir archivos.                                             |
-| `npm test`                      | Ejecutar una vez las pruebas focalizadas de Vitest.                                                                  |
-| `npm run test:coverage`         | Ejecutar cobertura V8 con umbrales globales de 90 %.                                                                 |
-| `npm run build`                 | Emitir JavaScript ESM, declaraciones y mapas de fuente en `dist/`.                                                   |
-| `npm run test:smoke`            | Compilar y ejecutar once escenarios de la CLI sin usar un shell.                                                     |
-| `npm run test:accuracy:m06`     | Comparar hallazgos de la CLI por regla con la verdad base revisada a nivel de instancia.                             |
-| `npm run test:robustness:m06`   | Ejecutar casos de robustez, seguridad y rendimiento de la CLI compilada sin usar un shell.                           |
-| `npm run test:usability:m06`    | Ejecutar la revisión heurística experta de seis tareas sin atribuir datos a personas usuarias.                       |
-| `npm run test:scenario:m02`     | Verificar inventario, exclusiones, enlaces, determinismo y no ejecución revisados.                                   |
-| `npm run test:scenario:m03`     | Ejecutar el escenario controlado del analizador sintáctico y modelo con cuatro tipos de archivo sin ejecutar código. |
-| `npm run test:scenario:m04`     | Validar el catálogo determinista de ocho reglas sin ejecutar el código fuente.                                       |
-| `npm run test:scenario:m05`     | Verificar configuración y todos los informes sobre un resultado controlado.                                          |
-| `npm run test:scenario:m06`     | Auditar dos veces cinco proyectos controlados mediante la CLI compilada completa.                                    |
-| `npm run evidence:m02`          | Recopilar el paquete aislado, saneado y verificado de evidencia M02.                                                 |
-| `npm run evidence:m02:finalize` | Añadir el informe del hito al manifiesto SHA-256 conservado.                                                         |
-| `npm run evidence:m03`          | Recopilar el paquete aislado, saneado y verificado de evidencia M03.                                                 |
-| `npm run evidence:m03:finalize` | Añadir el informe del hito al manifiesto SHA-256 conservado de M03.                                                  |
-| `npm run evidence:m04`          | Recopilar el paquete aislado, saneado y verificado de evidencia M04.                                                 |
-| `npm run evidence:m04:finalize` | Añadir el informe del hito al manifiesto SHA-256 conservado de M04.                                                  |
-| `npm run evidence:m05`          | Recopilar o verificar el paquete aislado y saneado de evidencia M05.                                                 |
-| `npm run evidence:m05:finalize` | Añadir el informe del hito al manifiesto SHA-256 conservado de M05.                                                  |
-| `npm run evidence:m06`          | Recopilar o verificar el paquete aislado de 42 artefactos de evidencia de la Actividad 3.                            |
-| `npm run evidence:m06:finalize` | Añadir el informe del hito M06 al manifiesto SHA-256 conservado.                                                     |
-| `npm run verify`                | Ejecutar formato, documentación bilingüe, lint, tipos, pruebas y compilación.                                        |
+Quien consuma JSON puede validarlo con el esquema incluido
+`node_modules/@cesar-html-mx/uxaudit/schemas/audit-result.schema.json`; el esquema complementario es
+`node_modules/@cesar-html-mx/uxaudit/schemas/finding.schema.json`. Estos archivos definen contratos de
+validación y no convierten la CLI en una API de biblioteca que se pueda importar.
 
-Husky ejecuta `npm run verify` antes de los commits locales. CI está configurado para Node.js 24 en
-Ubuntu 24.04, Windows 2025 y macOS 15; la cobertura y la auditoría de dependencias se ejecutan en
-Linux. Las acciones de GitHub están fijadas a hashes inmutables de versiones publicadas y Dependabot
-monitorea actualizaciones. Dependency Review y CodeQL se ejecutan en repositorios públicos; los
-repositorios privados pueden habilitarlos con `DEPENDENCY_REVIEW_ENABLED=true` y
-`CODEQL_ENABLED=true` después de confirmar la disponibilidad de GitHub Code Security.
+JSON y HTML solo se escriben debajo de la raíz canónica del proyecto. Las rutas de salida no pueden
+ser absolutas, salir de la raíz, atravesar enlaces simbólicos ni reemplazar archivos existentes.
 
-## Límites actuales
+## Reglas incluidas
 
-- Solo una CLI local; no hay servicio, base de datos, telemetría ni dependencia de red del
-  producto.
-- Análisis estático únicamente; el código analizado nunca se ejecuta ni se importa.
-- La raíz canónica es el límite de autorización del recorrido. Los enlaces se omiten de forma
-  predeterminada; la opción interna para seguirlos solo acepta destinos canónicos dentro de la raíz
-  y previene ciclos.
-- El descubrimiento y el inventario siguen siendo etapas que producen candidatos, no una
-  autorización permanente de archivos. La apertura de fuentes vuelve a validar raíz, ruta, identidad
-  de archivo regular y contenido acotado del descriptor.
-- El AST de Babel y el texto fuente permanecen dentro del paquete de procesamiento. Las reglas solo
-  consumen el `AnalysisModel` normalizado.
-- El reconocimiento de componentes es intencionalmente sintáctico y conservador; no resuelve alias
-  en tiempo de ejecución, abstracciones de orden superior, importaciones ni comportamiento
-  renderizado.
-- La CLI completa integra el motor de dominio, un único `AuditResult` congelado recursivamente y los
-  tres generadores de informes de M05. No define una política de fallo por hallazgos;
-  `minimumSeverity` solo afecta la presentación de terminal.
-- La duración de la auditoría termina cuando se construye el resultado inmutable y excluye la
-  persistencia posterior de archivos. Un fallo posterior de escritura usa el código de salida `3`,
-  puede dejar un archivo hermano o destino parcial ya escrito y nunca genera una afirmación falsa de
-  creación ni una reversión automática insegura.
+| ID de regla                    | Categoría     | Severidad predeterminada | Enfoque de revisión                     |
+| ------------------------------ | ------------- | ------------------------ | --------------------------------------- |
+| `accessibility/button-name`    | accessibility | high                     | Nombre accesible de botones nativos     |
+| `accessibility/img-alt`        | accessibility | high                     | Texto alternativo de imágenes nativas   |
+| `accessibility/input-label`    | accessibility | high                     | Etiqueta o nombre de controles          |
+| `performance/img-dimensions`   | performance   | medium                   | Dimensiones intrínsecas de imágenes     |
+| `performance/img-lazy-loading` | performance   | low                      | Oportunidad revisable de carga diferida |
+| `seo/ambiguous-link-text`      | seo           | medium                   | Texto estático ambiguo de enlaces       |
+| `seo/multiple-h1`              | seo           | medium                   | Varios encabezados en un componente     |
+| `ux/small-inline-text`         | ux            | medium                   | Texto literal en línea muy pequeño      |
 
-## Mapa del repositorio
+Consulta el
+[catálogo de reglas](https://github.com/cesar-html-mx/UXAudit/blob/main/docs/es/08_RULE_CATALOG.md)
+para conocer activadores, recomendaciones y limitaciones.
 
-- `src/cli/`: límite ejecutable y adaptador de Commander.
-- `src/application/`: fachadas conservadas de escaneo y análisis de fuentes, además del orquestador
-  agregado de la auditoría completa.
-- `src/project/`: validación de la raíz y módulos focalizados de descubrimiento, inventario y
-  clasificación.
-- `src/parsing/`: lector de fuentes acotado, adaptador AST exclusivo para Babel, extracción y lote
-  de candidatos con errores aislados.
-- `src/domain/models/`: contratos normalizados de análisis independientes del analizador sintáctico
-  y constructor.
-- `src/domain/rules/`, `findings/` y `errors/`: contratos de resultados de reglas independientes de
-  los informes.
-- `src/domain/audit/`: resultado de auditoría versionado, errores normalizados de procesamiento,
-  resúmenes derivados y límite de invariantes.
-- `src/rules/`: motor validado y reglas estáticas organizadas por categoría.
-- `src/configuration/`: lectura JSON acotada, validación cerrada, precedencia, valores
-  predeterminados inmutables, valores de reemplazo, formatos, nombres de archivo y errores estables.
-- `src/reporting/`: adaptadores puros para un único resultado en terminal, JSON sin pérdida y HTML
-  independiente con escape, además de escritura exclusiva y compartida de archivos JSON y HTML.
-- `src/shared/`: saneamiento neutral de valores para terminal reutilizado por la CLI y los informes.
-- `tests/`: pruebas específicas de dominio, analizador sintáctico, reglas, aplicación, CLI y
-  proyecto.
-- `fixtures/m06-validation/`: contratos revisados para proyectos válidos, inválidos, mixtos,
-  hostiles o de seguridad y grandes generados.
-- `.github/harness/`: estado de hitos, planes, decisiones, riesgos y scripts del ciclo de vida.
-- `.github/workflows/`: automatización de calidad, harness, CodeQL y revisión de dependencias.
-- `docs/`: sistema de registro del producto y la ingeniería.
-- `evidence/`: evidencia reproducible de los hitos.
+## Códigos de salida
 
-Valida el harness en cualquier momento:
+| Código | Significado                                                                                              |
+| -----: | -------------------------------------------------------------------------------------------------------- |
+|    `0` | Ayuda, versión o auditoría completada, incluso con hallazgos o errores recuperables.                     |
+|    `1` | Reservado para una política futura de fallo por hallazgos; ninguna opción actual lo emite por hallazgos. |
+|    `2` | Comando, argumento, ruta de proyecto o configuración inválidos.                                          |
+|    `3` | Fallo fatal del análisis, invariantes, proceso interno o escritura de informes.                          |
+
+No uses el código de salida actual como umbral de hallazgos en CI. Consume el resultado JSON si un
+flujo necesita una política específica del proyecto.
+
+## Privacidad y seguridad
+
+UXAudit se ejecuta localmente y no tiene telemetría del producto, base de datos, servicio alojado ni
+dependencia de red. No sube el código fuente, los hallazgos ni los informes. Las reglas de análisis
+estático consumen un modelo normalizado, no módulos ejecutables del proyecto ni nodos sin procesar
+del parser.
+
+El escáner vuelve a validar las rutas alrededor de cada lectura, limita cada archivo fuente a 1 MiB,
+decodifica UTF-8 de forma estricta, omite enlaces de manera predeterminada, impide recorridos fuera de
+la raíz canónica y escapa valores no confiables en terminal y HTML. Los informes incluyen la raíz
+canónica absoluta del proyecto y pueden exponer nombres de directorios locales al compartirlos;
+revísalos o elimina esos datos primero. Consulta
+[Seguridad](https://github.com/cesar-html-mx/UXAudit/blob/main/docs/es/07_SECURITY.md) para conocer el
+modelo de amenazas y cómo informar problemas.
+
+## Limitaciones actuales
+
+- El análisis estático no puede observar el diseño renderizado, rutas, estado, cascada CSS,
+  comportamiento de red ni interacción de las personas.
+- El reconocimiento de componentes es conservador y sintáctico. Los componentes personalizados,
+  alias, abstracciones de orden superior y comportamientos entre módulos pueden permanecer
+  desconocidos.
+- Las reglas no implementan un algoritmo completo de nombre accesible ni afirman cumplimiento total
+  de WCAG, SEO, UX o rendimiento.
+- Los valores JSX dinámicos y spreads sin resolver suelen clasificarse como desconocidos para evitar
+  conclusiones sin sustento.
+- Los hallazgos son puntos de revisión y pueden incluir falsos positivos o negativos. Combina
+  UXAudit con las pruebas de navegador, tecnologías de asistencia, rendimiento y participación que
+  correspondan al proyecto.
+
+## Desarrollo desde el código fuente
+
+Las personas usuarias no necesitan clonar ni compilar UXAudit. Quienes contribuyan desde una copia
+del repositorio pueden usar:
 
 ```bash
-node .github/harness/scripts/validate-harness.mjs
-node .github/harness/scripts/show-status.mjs
+nvm install
+nvm use
+npm ci
+npm run build
+node dist/cli/index.js scan /path/to/project
 ```
 
-El escenario M05 sigue disponible para validar de forma independiente los límites de configuración
-y generación de informes:
+Las comprobaciones comunes para contribuir son `npm run verify`, `npm test`,
+`npm run test:coverage`, `npm run docs:check` y `npm run build`.
 
-```bash
-npm run test:scenario:m05
-```
+## Documentación y contribuciones
 
-Ese escenario controlado valida cinco casos de configuración y presenta dos veces un resultado
-inmutable con todos los grupos de severidad y etapas de procesamiento mediante terminal, JSON y
-HTML. Verifica proyecciones exactas entre formatos, salida determinista, escape visible de valores
-hostiles, CSP restrictiva en HTML y escrituras seguras en rutas fijas sin ejecutar el código
-objetivo. `npm run evidence:m05` reproduce la puerta de calidad histórica de M05 en una instantánea
-aislada de la fuente y sin credenciales. Las pruebas de humo de la CLI compilada también ejecutan la auditoría
-integrada predeterminada, todos los formatos, precedencia entre configuración y CLI, filtros vacíos
-de reglas, sintaxis recuperable y rechazo de destinos existentes.
-
-El escenario de sistema M06 compila la CLI y audita dos veces cinco proyectos controlados en raíces
-temporales nuevas:
-
-```bash
-npm run test:scenario:m06
-```
-
-El proyecto válido versionado no produce hallazgos; el proyecto inválido produce un hallazgo por
-cada una de las ocho reglas estables; y el proyecto mixto ejercita JavaScript y TypeScript anidados,
-salidas excluidas, tres hallazgos controlados y un error de sintaxis recuperable. El ejecutor también
-construye un proyecto hostil o de seguridad con enlaces omitidos de forma predeterminada y un
-proyecto seguro de 240 archivos a partir de parámetros versionados. Verifica códigos de salida,
-consistencia exacta entre terminal, JSON y HTML, cantidades esperadas de hallazgos y errores,
-proyecciones estables idénticas byte por byte y ausencia de indicadores de ejecución del código
-objetivo.
-
-`npm run test:accuracy:m06` ejecuta el flujo compilado de informe JSON sobre los proyectos válidos,
-inválidos y mixtos versionados. Relaciona los hallazgos con 27 instancias fuente revisadas según
-regla y ubicación semiabierta del modelo; después registra TP, FP, TN, FN, precisión, exhaustividad,
-hallazgos sin correspondencia y observaciones no compatibles para cada regla estable. Los valores
-actuales de 1.0 para precisión y exhaustividad describen únicamente este pequeño corpus controlado;
-no afirman nada sobre proyectos React arbitrarios ni sobre comportamiento en tiempo de ejecución.
-
-`npm run test:robustness:m06` ejecuta 15 casos de la CLI compilada sin usar un shell. La ejecución en
-Linux aprobó raíces canónicas o inexistentes, un argumento scan ausente, configuración malformada,
-autorización de salida para rutas y enlaces simbólicos, protección exclusiva contra sobrescritura,
-aislamiento de fuentes malformadas, una fuente a 32 directorios de profundidad, tres enlaces creados
-y excluidos, denegaciones reales de permisos del proyecto e informes, aserciones de estructura HTML
-hostil y CSP, no ejecución del código objetivo y repeticiones deterministas en raíces nuevas. También
-realiza cinco escaneos completos del proyecto generado con 240 archivos y registra distribuciones de
-duración y observaciones muestreadas del RSS de procesos secundarios desde `/proc`, sin un umbral
-dependiente de la máquina. La auditoría de dependencias con umbral moderado reportó cero
-vulnerabilidades; CodeQL alojado se registra como no ejecutado porque no se recuperó un resultado
-alojado.
+Comienza con el
+[índice de documentación](https://github.com/cesar-html-mx/UXAudit/blob/main/docs/es/00_INDEX.md). Ahí
+se agrupan por audiencia los contratos de arquitectura, ingeniería, pruebas, seguridad y
+documentación. Las contribuciones deben conservar el comportamiento determinista, las pruebas y
+documentación públicas, TypeScript estricto, los límites seguros del sistema de archivos y la
+documentación emparejada en inglés y español latinoamericano.

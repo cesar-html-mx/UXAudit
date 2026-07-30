@@ -234,7 +234,7 @@ export const createProgram = ({
   const scanCommand = program
     .command('scan')
     .description('Run the complete static audit and generate configured reports.')
-    .argument('<project-path>', 'React or TypeScript project directory')
+    .argument('<project-path>', 'React, JavaScript, or TypeScript project directory')
     .option('--config <path>', 'explicit JSON configuration file')
     .option(
       '--format <format>',

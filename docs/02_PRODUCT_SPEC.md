@@ -1,218 +1,146 @@
 [Español](es/02_PRODUCT_SPEC.md) | **English**
 
-# Product Specification
+# Product and CLI specification
 
-## Command
+## Distribution and invocation
 
-The primary interface is:
+The npm package name is `@cesar-html-mx/uxaudit` and the executable name is `ux-audit`. Consumers
+install the package as a development dependency and run the binary from their project:
 
 ```bash
-ux-audit scan <project-path> [options]
+npm install --save-dev @cesar-html-mx/uxaudit
+npm exec --offline -- ux-audit scan .
 ```
 
-### Implemented discovery and analysis foundation
+The offline invocation requires the installed local dependency and prevents npm from resolving
+another similarly named package. An installed consumer does not build UXAudit and does not inherit
+this repository's npm scripts. Only contributors working from source use the repository build
+workflow.
 
-- `--help` and command help.
-- `--version`.
-- `scan <project-path>` with one required path argument.
-- Canonical project-root validation for existence, directory type, and read/search access.
-- Safe recursive discovery with exact default exclusions and secure symbolic-link skipping.
-- Deterministic canonical inventory and conservative `.js`/`.jsx`/`.ts`/`.tsx` classification.
-- Bounded source reads, Babel parsing, AST-free JSX/component extraction, and deterministic normalized
-  model construction.
-- Recoverable read, parse, and extraction errors isolated by source file.
-- Stable path, discovery-summary, and parsing-summary messages without rule, finding, or audit
-  claims.
+## Observable scan flow
 
-### Implemented rule domain
+`ux-audit scan <project-path>` performs these stages in order:
 
-- Immutable rule metadata, normalized self-contained findings, stable rule-execution errors, and
-  report-independent evaluation counters.
-- Explicit validated registry plus fail-closed category/rule-ID filtering.
-- Exact-once deterministic evaluation with per-rule isolation, transactional output validation,
-  canonical source-location provenance, and runtime model immutability.
-- Eight stable rules within documented static scopes: three accessibility checks, image
-  lazy-loading/dimension advisories, component-local multiple-H1 review, exact ambiguous-link text,
-  and literal inline small-text review.
+1. validates that the selected path is a readable, non-empty directory and resolves its canonical
+   root;
+2. loads optional inert JSON configuration;
+3. discovers filesystem entries in deterministic project-relative order;
+4. selects safe `.js`, `.jsx`, `.ts`, and `.tsx` candidates;
+5. reads and parses bounded UTF-8 source files without executing them;
+6. builds one parser-independent analysis model;
+7. loads and evaluates the selected stable rules with failure isolation;
+8. builds one normalized immutable audit result;
+9. renders terminal output and writes selected JSON or HTML files.
 
-### Implemented configuration and reporting contracts
+The command prints path validation, discovery, and parsing summaries before the terminal report. A
+file report is announced only after its write completes successfully.
 
-- Configuration schema version `1` with explicit category/rule filters, report formats, output
-  directory, minimum display severity, color, and verbosity.
-- Immutable defaults: stable catalog (`null` filters), terminal output, `info` threshold, color,
-  non-verbose detail, and the portable relative `uxaudit-reports` directory.
-- Fixed local report names `audit-report.json` and `audit-report.html`.
-- `AuditResult` schema `1.0.0` with configuration/tool/timing metadata, discovered/selected/parsed/
-  failed counters, complete rule counters/findings, normalized discovery/source/rule errors,
-  zero-filled category/severity/stage summaries, and nullable project-relative report paths.
-- One pure reporter contract that consumes exactly one completed result.
-- A lossless deterministic JSON reporter that preserves the complete result and stored coordinates
-  as canonical two-space JSON with one final LF.
-- One shared JSON/HTML file writer that accepts only fixed configured relative targets, creates them
-  exclusively inside the authorized canonical root, and returns a path only after successful
-  write, sync, close, and final authorization.
+## Command options
 
-The boundary defensively copies, validates, canonically orders, and freezes result data.
+| Option                  | Contract                                                                     |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `--config <path>`       | Select an explicit JSON configuration file.                                  |
+| `--format <format>`     | Select `terminal`, `json`, `html`, or `all`; repeatable and deduplicated.    |
+| `--output <directory>`  | Select a portable project-relative output directory.                         |
+| `--category <category>` | Filter by `accessibility`, `performance`, `seo`, or `ux`; repeatable.        |
+| `--rule <rule-id>`      | Filter by exact built-in rule ID; repeatable.                                |
+| `--severity <severity>` | Filter terminal details with `info`, `low`, `medium`, `high`, or `critical`. |
+| `--no-color`            | Disable fixed ANSI severity badge colors.                                    |
+| `--verbose`             | Show normalized recoverable processing errors in terminal output.            |
 
-### Implemented M06 CLI integration
+`--help` and `--version` are available at the root command; `scan --help` describes the subcommand.
 
-The production `scan` command composes canonical root validation, configuration loading, the
-existing analysis facade, rule loading/evaluation, one immutable `AuditResult`, terminal rendering,
-and selected JSON/HTML persistence. Configuration is loaded after the root is authorized but before
-source traversal/parsing. The analysis facade runs once; rules consume that one normalized model and
-reporters consume that one completed result.
+## Discovery and source selection
 
-Configuration `null` filters become omitted rule-engine filters, while `[]` remains an intentional
-zero-rule selection. Only values whose Commander source is the command line form the override layer,
-so absent option defaults do not replace file settings.
+Default traversal skips symbolic links and common dependency, version-control, cache, generated,
+coverage, and build directories. It also skips conventional tool configuration names,
+`uxaudit.config.json`, TypeScript declaration files ending in `.d.ts`, and supported files whose
+portable name matches the conventional `config` pattern.
 
-Implemented options:
+Discovery produces candidates rather than permanent authorization. Before reading, UXAudit
+reauthorizes the canonical root and file identity, requires a regular in-root file, limits content to
+1 MiB, reads in chunks no larger than 64 KiB, and decodes UTF-8 strictly.
 
-- `--config <path>`: configuration file; default search is `uxaudit.config.json` at project root.
-- `--format <terminal|json|html|all>`: selected reporters; repeatable and deduplicated. `all` is a
-  CLI convenience and is not a configuration-file value.
-- `--output <directory>`: report output directory.
-- `--category <ux|accessibility|seo|performance>`: repeatable category filter.
-- `--rule <rule-id>`: repeatable explicit rule filter.
-- `--severity <info|low|medium|high|critical>`: minimum displayed severity where supported.
-- `--no-color`: terminal output without ANSI color.
-- `--verbose`: processing detail and recoverable errors.
+## Configuration contract
 
-## Integrated scan result
+Without `--config`, UXAudit looks for `uxaudit.config.json` at the canonical project root. An
+explicit configuration path is treated as a user-selected local file. Both forms are parsed as data,
+never imported as code.
 
-The completed `scanProject` contract continues to return the canonical project root, full discovery
-result, normalized inventory, classified source candidates, and discovery counts. The separate
-`analyzeProject` facade adds:
-
-- one normalized `AnalysisModel`;
-- one ordered list of recoverable per-file parser errors;
-- parsed-file, failed-file, component, and JSX-node counts.
-
-The production CLI preserves these progress lines before the selected terminal report and confirmed
-file-report claims:
-
-```text
-Project path validated: <canonical-project-path>
-Discovery summary: discovered=<n> inventory=<n> candidates=<n> exclusions=<n> issues=<n>
-Parsing summary: parsed=<n> failed=<n> components=<n> jsx=<n>
+```json
+{
+  "schemaVersion": 1,
+  "categories": null,
+  "ruleIds": null,
+  "formats": ["terminal"],
+  "minimumSeverity": "info",
+  "outputDirectory": "uxaudit-reports",
+  "color": true,
+  "verbose": false
+}
 ```
 
-The default traversal skips symbolic links. An internal `follow-within-root` policy exists for
-controlled callers but is not yet exposed as a CLI option. Descendant operation failures can be
-retained as recoverable issues; a root or pipeline invariant failure stops processing with a stable
-message.
+The object is closed: unknown keys and invalid types are errors. Arrays are bounded, dense, unique,
+and normalized. `categories: null` and `ruleIds: null` leave those filters open; `[]` intentionally
+selects no rules for that filter. When both filters are arrays, their intersection is used.
 
-Classified candidates are processed sequentially in ordinal project-relative path order. The reader
-reauthorizes the canonical project root and candidate before and after opening and reading a file
-handle. It accepts only regular in-root files up to 1 MiB, requests at most 64 KiB per read, rejects
-invalid UTF-8, and preserves an initial UTF-8 BOM. Read, syntax, and expected extraction failures are
-retained separately from the model so later siblings can continue. Non-portable internal candidate
-declarations, root authorization, candidate-batch invariants, unexpected extraction invariants, and
-model invariants remain fatal and detail-free.
+Only command options explicitly supplied by the user override the file. File values override
+defaults. The configuration file is limited to 64 KiB and must be valid UTF-8 JSON with
+`schemaVersion: 1`.
 
-The Babel adapter owns the transient AST and composes strict text decoding, source-kind-specific
-parsing, and AST-free extraction. No target module, package script, or project configuration is
-imported or executed. The normalized model retains files, syntactically justified components, JSX
-elements/fragments, attributes, values, relationships, and half-open UTF-16 locations. It does not
-claim runtime React semantics.
+## Report contract
 
-The terminal report is already sanitized per dynamic value and may add fixed trusted ANSI badges.
-The CLI writes it directly rather than applying the earlier whole-output sanitizer a second time.
-Progress, Commander diagnostics, typed errors, and generated-path claims remain sanitized.
+All reporters consume the same normalized result:
 
-## Successful execution
+- Terminal is interactive, may use fixed color badges, and applies `minimumSeverity` only to visible
+  finding details. Complete totals remain visible.
+- JSON is the lossless machine-readable representation, formatted with two-space indentation and one
+  final line feed.
+- HTML is standalone, uses embedded constant CSS, has no scripts or external assets, escapes
+  untrusted project values, and sets a restrictive Content Security Policy.
 
-A successful audit returns an `AuditResult` containing:
+The package exposes JSON validation contracts at `schemas/audit-result.schema.json` and
+`schemas/finding.schema.json`. In a local installation the first path is
+`node_modules/@cesar-html-mx/uxaudit/schemas/audit-result.schema.json`. Schemas support report
+consumers; UXAudit remains a CLI and does not expose a public importable API.
 
-- project root;
-- start/end or duration metadata;
-- files discovered, selected, parsed, and failed;
-- enabled and executed rule counts;
-- normalized findings;
-- recoverable execution errors;
-- summary by category and severity;
-- configured JSON/HTML target paths.
+JSON and HTML use fixed filenames:
 
-Those target paths describe selected output, not successful persistence. Only returned
-`WrittenReport` records are announced by the CLI as generated.
+- `audit-report.json`
+- `audit-report.html`
+
+The output directory must be a portable relative path below the project root. Report writing refuses
+absolute paths, parent traversal, links, path escape, and existing targets. If more than one file
+format is selected, an earlier file may already exist when a later write fails; UXAudit does not
+perform an unsafe automatic rollback.
 
 ## Exit codes
 
-Implemented M06 policy:
+| Code | Contract                                                                                              |
+| ---: | ----------------------------------------------------------------------------------------------------- |
+|  `0` | Help, version, or completed audit, including findings and recoverable processing errors.              |
+|  `1` | Reserved for a future finding-failure policy and not currently emitted because of findings.           |
+|  `2` | Invalid command, argument, project path, or configuration input.                                      |
+|  `3` | Fatal pipeline failure, invariant violation, unexpected application failure, or report-write failure. |
 
-- `0`: help/version or a completed audit, including when findings or recoverable
-  discovery/source/rule errors were retained.
-- `1`: reserved for a future configured finding-failure policy. The current configuration has no
-  such field, and `minimumSeverity` controls terminal presentation only.
-- `2`: command, argument, project-path/access, or configuration input error.
-- `3`: fatal validation, discovery, inventory, classification, root authorization, source-batch,
-  model, rule/result orchestration, report-write, or unexpected application failure.
+`minimumSeverity` is a presentation filter and does not change the exit code.
 
-## Determinism
+## Recoverable and fatal failures
 
-Given the same project content, configuration, and UXAudit version, the ordering and content of
-results must be stable. Absolute timestamps and durations may vary and must not affect snapshot
-comparisons.
+Unreadable descendants, malformed source files, safe extraction failures, and isolated rule failures
+are recorded when possible while unaffected files and rules continue. Invalid root input,
+configuration errors, broken global invariants, and report-write failures stop the command with the
+appropriate nonzero code.
 
-## Finding
+Native parser and filesystem details, raw source text, absolute source paths, and internal syntax
+trees do not leak through public errors. Dynamic terminal values are normalized so control and
+bidirectional characters cannot create deceptive records.
 
-Each finding contains at least:
+## Compatibility and non-goals
 
-- rule ID and title;
-- category;
-- severity;
-- message and explanation;
-- recommendation;
-- limitations and confidence;
-- a complete project-relative half-open source location when available;
-- optional evidence snippet or metadata;
-- nullable structured standard/reference.
+The supported runtime is Node.js `>=24.18.0 <25`. UXAudit analyzes React-ecosystem JavaScript and
+TypeScript source but does not require the target project to use a particular bundler.
 
-The M04 domain contract retains one-based lines and zero-based UTF-16 columns/offsets. M05 reporters
-own any conversion to display coordinates.
-
-## Configuration
-
-Configuration is local JSON. Unknown keys, invalid values, and conflicting options must produce a
-clear stable error. `uxaudit.config.json` at the canonical project root is optional; an explicitly
-selected path must exist. Files are regular, no larger than 64 KiB, strict UTF-8 JSON and never
-imported or executed. The version-1 file accepts only `schemaVersion`, `categories`, `ruleIds`,
-`formats`, `outputDirectory`, `minimumSeverity`, `color`, and `verbose`; duplicate top-level keys
-are rejected rather than resolved with last-value-wins behavior.
-
-Defaults are terminal-only output, `info` minimum display severity, color enabled, non-verbose
-detail, `uxaudit-reports`, and `null` category/rule filters. A file may override any default;
-validated CLI values override the file. `null` category/rule filters select the stable catalog,
-whereas explicit empty arrays select no rules. Selection arrays are deduplicated and normalized to
-stable order. Output directories must be portable relative paths without dot segments, backslashes,
-control/bidirectional characters, or Windows-reserved components. An explicitly selected
-configuration is separate user authority and may be outside the project root.
-
-## Reports
-
-- Terminal: concise immediate summary, complete category/severity/error-stage buckets, canonically
-  ordered readable findings at or above the inclusive display threshold, one-based display
-  columns, optional normalized error detail, and explicit color/no-color modes. Summary totals
-  always describe the complete result even when finding detail is filtered.
-- JSON: the complete stable machine-readable result, including timing metadata and stored zero-based
-  UTF-16 columns, serialized with two-space indentation and one final LF.
-- HTML: a complete standalone escaped report requiring no external service. It shows all findings
-  and normalized errors regardless of terminal severity/verbosity settings, groups them in fixed
-  severity/stage order, displays one-based columns plus UTF-16 offsets and end-exclusive ranges, and
-  keeps unsafe references inert.
-
-JSON and HTML targets use only the configured portable output directory and fixed filenames. The
-shared writer refuses existing targets and observed links, escapes, or identity changes, and reports
-stable failures without claiming a generated path. A failure after exclusive creation can leave a
-partial target for manual review/removal; automatically unlinking after a pathname race would be
-unsafe.
-
-Audit timing ends when the immutable `AuditResult` is built and excludes subsequent persistence.
-When multiple file formats are selected, JSON is written before HTML. A later failure can therefore
-leave a completed sibling or partial target; the CLI returns `3`, announces no completed report set,
-and performs no unsafe rollback.
-
-The HTML document contains constant inline CSS, no script or external asset, and an early
-no-script/no-object/no-base/no-form CSP. Every dynamic value is neutralized for hostile controls,
-directional formatting, BOM, and malformed UTF-16 before HTML escaping. Only a separately reparsed,
-control-free, credential-free HTTP(S) reference becomes an anchor.
+Browser execution, runtime instrumentation, automatic code changes, network crawling, telemetry,
+compliance certification, and hosted dashboards are not product features. Rules are conservative
+static checks and must publish their own limitations.

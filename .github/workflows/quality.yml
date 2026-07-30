@@ -20,7 +20,7 @@ jobs:
   quality:
     name: Node 24 / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -42,6 +42,9 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
+      - name: Pin npm
+        run: npm install --global --ignore-scripts npm@11.16.0
+
       - name: Install locked dependencies
         run: npm ci
 
@@ -50,6 +53,13 @@ jobs:
 
       - name: Run CLI smoke tests
         run: npm run test:smoke
+
+      - name: Validate the installable npm package
+        run: npm run test:package
+
+      - name: Run the complete system scenario
+        if: runner.os == 'Linux'
+        run: npm run test:scenario:system
 
       - name: Enforce coverage thresholds
         if: runner.os == 'Linux'

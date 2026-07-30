@@ -2,78 +2,90 @@
 
 # Estándares de ingeniería
 
-## Entorno de ejecución y lenguaje
+## Entorno y gestión de paquetes
 
-- CLI local compatible con Node.js que utiliza la línea LTS de Node.js 24 (`>=24.18.0 <25`). M01
-  adoptó esta línea base aprobada por el responsable porque Node.js 20 llegó al fin de su vida útil
-  y Node.js 24 es la línea LTS actual.
-- Modo estricto de TypeScript.
-- Módulos ESM.
-- `npm` y un archivo de bloqueo versionado.
-- Exportar deliberadamente los contratos públicos; evitar exportaciones de barril amplias que
-  generen ciclos.
+- Desarrolla y publica con Node.js `>=24.18.0 <25` y npm `>=11.16.0 <12`.
+- Usa `npm ci` para instalaciones reproducibles y confirma los cambios de `package-lock.json`.
+- Mantén exactas las versiones de dependencias directas y revisa cambios transitivos y de instalación.
+- Las dependencias de producción requieren una necesidad clara, revisión de seguridad y justificación.
+- El paquete público distribuye una CLI. No expongas por accidente una API de biblioteca que se pueda
+  importar.
 
-## Dependencias iniciales aprobadas
+## TypeScript y módulos
 
-Producción:
+- Usa TypeScript estricto y ESM.
+- Evita `any`; valida valores `unknown` en los límites antes de estrechar el tipo.
+- Prefiere funciones flecha y `async`/`await`.
+- Mantén módulos enfocados y contratos explícitos.
+- Usa contratos de entrada de solo lectura y resultados inmutables cuando sea práctico.
+- Los tipos específicos del parser permanecen dentro del adaptador de parsing.
+- Las reglas dependen del modelo normalizado; los generadores dependen de `AuditResult`.
 
-- `commander`
-- paquetes `@babel/parser`, `@babel/traverse` y `@babel/types` `8.0.4` alineados y con versiones
-  exactas, aislados dentro del límite de análisis sintáctico de M03
+## Determinismo y errores
 
-Desarrollo:
+- Define un orden canónico para archivos, entidades, reglas, hallazgos, errores y grupos de informes.
+- Evita ordenamientos sensibles a la configuración regional en el comportamiento del producto.
+- Rechaza valores externos malformados, duplicados, dispersos, envueltos en proxies o respaldados por
+  propiedades de acceso en límites cerrados.
+- Usa errores tipados con mensajes públicos estables.
+- Conserva los fallos recuperables en los resultados; nunca los ocultes para aparentar un análisis limpio.
+- No expongas fuentes, objetos nativos del parser, credenciales ni rutas absolutas sin control en terminal.
 
-- `typescript`
-- `tsx`
-- `vitest`
-- `@vitest/coverage-v8`
-- `eslint` y paquetes de TypeScript ESLint
-- `prettier`
-- `husky`
+## Seguridad del sistema de archivos y procesos
 
-Una nueva dependencia de producción requiere un registro de decisión antes de instalarla.
+- No invoques un shell para el comportamiento principal del producto.
+- Trata las rutas descubiertas como candidatas y vuelve a autorizarlas al usarlas.
+- Acota lecturas y escrituras, valida UTF-8 estrictamente y verifica identidad alrededor del descriptor.
+- Evita ciclos de enlaces simbólicos y salidas de ruta.
+- Nunca ejecutes, importes ni modifiques automáticamente las fuentes analizadas.
+- Escapa contenido no confiable según su contexto; terminal, JSON y HTML tienen necesidades distintas.
+- Rechaza rutas inseguras y destinos de informe existentes.
 
-## TypeScript y estilo de código
+## Comportamiento público
 
-- Preferir funciones flecha.
-- Preferir `async`/`await`.
-- No usar `any` sin una justificación local por escrito; preferir `unknown` y la validación.
-- Mantener los efectos secundarios en los límites.
-- Usar datos de dominio inmutables o de solo lectura cuando sea práctico.
-- Evitar la herencia salvo que mejore sustancialmente un contrato; preferir la composición.
-- Usar clases de error tipadas o resultados discriminados para los fallos esperados.
-- No ocultar fallos con bloques de captura vacíos.
-- Mantener explícito el ordenamiento determinista.
-- Los comentarios explican razones, restricciones o comportamientos no evidentes, no la sintaxis.
+Cualquier comando, opción, código de salida, campo de configuración, esquema, regla, hallazgo, informe
+o error observable requiere:
 
-## Archivos y rutas
+1. un contrato explícito;
+2. pruebas positivas, negativas, de límite y aislamiento de fallos según corresponda;
+3. documentación en inglés y español latinoamericano;
+4. revisión de compatibilidad cuando el comportamiento ya sea público.
 
-- Usar las API de rutas de Node.
-- Almacenar las rutas de informes relativas al proyecto con normalización `/` cuando sea necesario
-  para obtener una salida estable.
-- Resolver y verificar las raíces canónicas.
-- Registrar las rutas reales visitadas cuando se sigan enlaces simbólicos.
-- Nunca usar comandos de shell para recorrer proyectos ni realizar análisis sintáctico.
+Las limitaciones deben aparecer junto a la función o regla que califican.
 
-## Pruebas
+## Comandos de calidad
 
-- Todo comportamiento público y toda corrección de errores requieren pruebas.
-- Las reglas requieren casos positivos, negativos y de límite.
-- No abusar de las instantáneas; comprobar explícitamente el comportamiento del dominio.
-- Los fixtures deben ser mínimos y explicar por qué existen.
-- Las pruebas deben ser deterministas y estar aisladas del sistema de archivos real del
-  desarrollador, salvo por directorios temporales controlados.
+| Comando                 | Propósito                                                                          |
+| ----------------------- | ---------------------------------------------------------------------------------- |
+| `npm run format:check`  | Comprobar el formato del repositorio.                                              |
+| `npm run docs:check`    | Comprobar pares bilingües, literales técnicos, estructura y enlaces locales.       |
+| `npm run lint`          | Ejecutar las reglas de ESLint sin advertencias.                                    |
+| `npm run typecheck`     | Ejecutar TypeScript estricto sin emitir archivos.                                  |
+| `npm test`              | Ejecutar una vez las pruebas focalizadas de Vitest.                                |
+| `npm run test:coverage` | Ejecutar la suite con umbrales globales de cobertura V8.                           |
+| `npm run build`         | Emitir JavaScript ESM, declaraciones y mapas de fuente en `dist/`.                 |
+| `npm run test:smoke`    | Ejercitar la CLI compilada.                                                        |
+| `npm run test:package`  | Inspeccionar y probar la instalación del tarball npm.                              |
+| `npm run verify`        | Ejecutar la puerta principal de formato, docs, lint, tipos, pruebas y compilación. |
+| `npm run release:check` | Ejecutar la puerta local completa para una versión pública.                        |
 
-## Git
+La cobertura apoya la revisión, pero no sustituye aserciones significativas. Las pruebas requeridas
+no deben omitirse ni marcarse como trabajo futuro.
 
-- Commits convencionales.
-- Incluir el ID de la tarea en el ámbito: `feat(parser-0302): parse TSX source files`.
-- Un commit coherente por cada tarea completada; se permiten commits de reparación antes de cerrar
-  el hito.
-- No reescribir el historial compartido ni realizar un envío forzado.
-- Las ramas de hito siguen `.github/harness/HARNESS_CONFIG.yml`.
+## Flujo de Git y contribución
 
-## Definición de terminado
+- Crea una rama enfocada para cada cambio coherente.
+- Usa commits convencionales como `feat(rules): add heading-order check` o
+  `docs(cli): clarify JSON output`.
+- Mantén fuera de los commits los archivos generados del paquete salvo que el proceso lo exija.
+- No mezcles cambios funcionales con formato o refactorización no relacionados.
+- Revisa el diff final, ejecuta comprobaciones proporcionales al riesgo y documenta lo no ejecutado.
+- Usa `npm run setup:hooks` si quieres hooks locales; quienes instalan el paquete no se inscriben en
+  los hooks del repositorio.
 
-El código, las pruebas, la documentación, la trazabilidad, la evidencia y una verificación exitosa
-constituyen una sola entrega.
+## Estándar de documentación
+
+El código, identificadores, rutas, comandos, claves de configuración y formatos legibles por máquinas
+permanecen en inglés. La documentación informativa duradera se empareja en inglés y español
+latinoamericano natural. Ambas versiones deben describir el mismo comportamiento; una traducción no
+debe afirmar más de lo que admite la implementación.

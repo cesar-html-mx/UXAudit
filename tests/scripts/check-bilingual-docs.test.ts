@@ -59,22 +59,6 @@ const requiredPairs: readonly RelativePair[] = [
     englishPath: path.join('docs', 'architecture', 'diagrams', 'README.md'),
     spanishPath: path.join('docs', 'es', 'architecture', 'diagrams', 'README.md'),
   },
-  {
-    englishPath: path.join('evidence', 'README.md'),
-    spanishPath: path.join('evidence', 'README.es.md'),
-  },
-  {
-    englishPath: path.join('evidence', 'security', 'SECURITY_CHECKLIST.md'),
-    spanishPath: path.join('evidence', 'security', 'SECURITY_CHECKLIST.es.md'),
-  },
-  {
-    englishPath: path.join('evidence', 'usability', 'USABILITY_PROTOCOL.md'),
-    spanishPath: path.join('evidence', 'usability', 'USABILITY_PROTOCOL.es.md'),
-  },
-  {
-    englishPath: path.join('evidence', 'usability', 'SUS_EN.md'),
-    spanishPath: path.join('evidence', 'usability', 'SUS_ES.md'),
-  },
 ];
 const fencedBlock = ['```bash', 'npm run test', '```'].join('\n');
 const temporaryRoots: string[] = [];
@@ -204,11 +188,11 @@ Read the [security documentation](../docs/07_SECURITY.md) for the threat model.
     ),
     writeFile(
       path.join(rootDirectory, '.github', 'pull_request_template.md'),
-      `## Hito o tarea / Milestone or task
+      `## Cambio / Change
 
-## Resultado observable / Observable outcome
+## Motivo / Why
 
-## Requisitos / Requirements
+## Comportamiento observable / Observable behavior
 
 [Requirements](../docs/03_REQUIREMENTS.md)
 
@@ -235,7 +219,24 @@ describe('bilingual documentation checker', () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe('');
     expect(result.stdout).toBe(
-      'UXAudit bilingual documentation check: PASS (22 pairs, 47 link sources)\n',
+      'UXAudit bilingual documentation check: PASS (18 pairs, 39 link sources)\n',
+    );
+  });
+
+  it('executes when invoked through a symlinked repository path', async () => {
+    const rootDirectory = await createFixture();
+    const linkContainer = await mkdtemp(path.join(tmpdir(), 'uxaudit-bilingual-link-'));
+    const linkedRoot = path.join(linkContainer, 'repository');
+
+    temporaryRoots.push(linkContainer);
+    await symlink(rootDirectory, linkedRoot, 'junction');
+
+    const result = await executeChecker(linkedRoot);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe('');
+    expect(result.stdout).toBe(
+      'UXAudit bilingual documentation check: PASS (18 pairs, 39 link sources)\n',
     );
   });
 
@@ -301,17 +302,15 @@ describe('bilingual documentation checker', () => {
     );
   });
 
-  it('requires all explicit evidence pairs', async () => {
+  it('requires the explicit language-specific README pair', async () => {
     const rootDirectory = await createFixture();
 
-    await unlink(path.join(rootDirectory, 'evidence', 'usability', 'SUS_ES.md'));
+    await unlink(path.join(rootDirectory, 'README.es.md'));
 
     const result = await executeChecker(rootDirectory);
 
     expect(result.exitCode).toBe(1);
-    expect(result.stderr).toContain(
-      'Missing required Spanish bilingual document: evidence/usability/SUS_ES.md',
-    );
+    expect(result.stderr).toContain('Missing required Spanish bilingual document: README.es.md');
   });
 
   it('rejects monolingual content in every inline bilingual entry document', async () => {
@@ -330,7 +329,7 @@ describe('bilingual documentation checker', () => {
       ),
       writeFile(
         path.join(rootDirectory, '.github', 'pull_request_template.md'),
-        '## Milestone or task\n\n## Observable outcome\n\n## Risks and limitations\n',
+        '## Change\n\n## Observable behavior\n\n## Risks and limitations\n',
         'utf8',
       ),
     ]);
@@ -345,7 +344,7 @@ describe('bilingual documentation checker', () => {
       '.github/SECURITY.md must contain exactly one visible `Español` language section.',
     );
     expect(result.stderr).toContain(
-      '.github/pull_request_template.md is missing visible bilingual marker: Hito o tarea',
+      '.github/pull_request_template.md is missing visible bilingual marker: Cambio',
     );
   });
 
