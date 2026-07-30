@@ -32,6 +32,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:accuracy:m06": "npm run build && node scripts/run-m06-accuracy.mjs",
+    "test:robustness:m06": "npm run build && node scripts/run-m06-robustness.mjs",
     "test:scenario:m02": "npm run build && node scripts/run-m02-scenario.mjs",
     "test:scenario:m03": "npm run build && node scripts/run-m03-scenario.mjs",
     "test:scenario:m04": "npm run build && node scripts/run-m04-scenario.mjs",

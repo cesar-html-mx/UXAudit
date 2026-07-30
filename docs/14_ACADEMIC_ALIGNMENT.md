@@ -53,3 +53,18 @@ finding locations to explicit ground-truth instances, and retains JSON/CSV per-r
 matrices. The current corpus contains 11 positive, eight negative, and eight unsupported instances.
 Observed supported outcomes were 11 TP, zero FP, eight TN, and zero FN; unsupported detections were
 zero. Precision and recall are reported per rule and explicitly bounded to this synthetic corpus.
+
+## M06-T04 executed system, robustness, performance, and security evidence
+
+The shell-free robustness runner exercised 15 built-CLI cases on Linux and all passed. The executed
+set includes normal and invalid roots/configuration, a missing scan argument, real project/output
+permission denial, output escape and overwrite protection, malformed-source isolation, a source
+below 32 nested directories, three created-and-excluded symbolic links, non-execution sentinels,
+structural HTML escaping/CSP inspection, and deterministic fresh-root reruns.
+
+Performance evidence consists of five complete scans over the generated 240-file project. It records
+each elapsed sample, minimum/median/maximum summaries, and the maximum child `VmRSS` observed by
+5 ms Linux `/proc` sampling without defining a machine-dependent acceptance threshold. The sampled
+memory value is not claimed as an exact lifetime peak. The moderate-threshold npm audit reported zero
+vulnerabilities. Hosted CodeQL remains explicitly unexecuted because no hosted result was retrieved;
+inspection of its workflow is not represented as an executed analysis.

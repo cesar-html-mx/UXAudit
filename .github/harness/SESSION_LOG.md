@@ -536,3 +536,29 @@
 - The final T03 Node.js 24 gate passed formatting, strict lint, typecheck, build, 577 tests across
   53 files, the complete system and accuracy scenarios, harness validation, and coverage at 95.84%
   statements, 91.39% branches, 99.81% functions, and 95.80% lines.
+- The T03 non-interactive HTTPS push failed because no GitHub username/credential is available. The
+  remote remained unchanged; the local conventional commit is `e7ea7b5`.
+- Completed M06-T04 with a defensive performance-summary boundary and a shell-free compiled-CLI
+  runner covering 15 system, invalid-input, path, write, malformed-source, deep-tree, permission,
+  symlink, hostile-report, determinism, dependency, and performance cases.
+- The Linux run created and excluded all three requested symbolic links and reproduced real
+  project-root/report-output permission denials. It preserved external and existing report bytes,
+  kept all execution sentinels absent, matched hostile JSON/HTML to the pure renderers, and confirmed
+  structural escaping/CSP constraints without claiming browser execution.
+- Five fresh all-format scans each selected and parsed 240 safe files with zero failures/findings.
+  Individual duration distributions and the maximum child `VmRSS` observed through 5 ms `/proc`
+  sampling are recorded without a pass threshold or exact-lifetime-peak claim.
+- `npm audit --audit-level=moderate --json` returned zero vulnerabilities. The exact lock and strict
+  install policy passed; hosted CodeQL is unexecuted because no hosted result was retrieved.
+- Independent reviews identified a pre-normalized canonical-path input, missing explicit sentinel
+  and reporter-exactness assertions, an unqualified architecture PASS, a weak external-output
+  preservation check, and RSS/link portability details. The runner now passes the raw `src/..`
+  spelling, waits for in-flight sampling, documents the method, expands capability codes, executes
+  the missing-argument/deep cases, strengthens report/sentinel checks, and labels architecture as
+  reviewed.
+- The T04 Node.js 24 product gate passed formatting, strict lint, typecheck, build, and all 602 tests
+  across 54 files. The focused robustness gate passed all 15 cases, five performance runs, and the
+  dependency audit.
+- Global V8 coverage measured 95.84% statements, 91.50% branches, 99.82% functions, and 95.79%
+  lines. All 11 compiled smokes, the five-project deterministic scenario, the 27-case accuracy
+  scenario, and harness validation also passed.

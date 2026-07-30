@@ -263,5 +263,35 @@ writer and inherits its residual portable-filesystem limits.
 - Findings and normalized recoverable errors use exit `0`; configuration/path input uses `2`. Exit
   `1` remains unused because no finding-failure policy exists.
 
-These focused integration controls and compiled smokes do not replace M06-T04's complete hostile
-project, symlink, dependency, performance, and security-checklist execution.
+Those focused integration controls and compiled smokes were subsequently complemented by M06-T04's
+complete hostile-project, symlink, dependency, permission, performance, and security-checklist
+execution.
+
+## M06-T04 executed system security controls and limits
+
+- A shell-free runner exercised 15 complete built-CLI cases on Linux, and every executable
+  assertion passed. Real project-root and report-output permission denials produced the stable
+  documented failures; capability-aware fallbacks remain available for platforms where `chmod`
+  cannot reproduce denial.
+- The hostile project created all three requested symbolic links. Internal, external, and cyclic
+  links were excluded under the default policy, the scan terminated, and no linked source escaped
+  into findings. Project/package-script sentinels remained absent throughout hostile, malformed,
+  overwrite, and large-project execution.
+- Project-relative output escape was rejected before writing. An output-directory symlink targeting
+  an external directory was rejected without creating an external report. Repeating a successful
+  JSON write returned the exclusive-target error, emitted no generated-report claim, and preserved
+  the original report bytes.
+- The hostile JSON report remained parseable with the original filename as data. Structural HTML
+  validation confirmed escaped hostile path text, the exact restrictive CSP, no executable or
+  resource-bearing tags, no event-handler attributes, no CSS resource loading, and no raw control
+  or bidirectional characters. This establishes renderer structure and escaping, not runtime browser
+  exploit resistance.
+- A 32-directory-deep controlled source and two fresh hostile roots completed; the hostile outputs
+  produced equal stable JSON and normalized HTML. Five complete scans of the generated 240-file
+  project recorded elapsed-time distributions and the maximum child `VmRSS` observed by 5 ms
+  `/proc` sampling; this is not claimed as an exact lifetime peak, and no environment-specific
+  performance threshold was imposed.
+- The locked, exact dependency set and strict install policy passed inspection, and
+  `npm audit --audit-level=moderate --json` reported zero vulnerabilities. No hosted CodeQL result
+  was retrieved, so CodeQL is truthfully recorded as unexecuted rather than inferred from the local
+  workflow file.

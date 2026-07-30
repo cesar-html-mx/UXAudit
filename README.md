@@ -146,6 +146,7 @@ npm run verify
 npm run test:coverage
 npm run test:smoke
 npm run test:accuracy:m06
+npm run test:robustness:m06
 npm run test:scenario:m02
 npm run test:scenario:m03
 npm run test:scenario:m04
@@ -166,6 +167,7 @@ Useful individual commands:
 | `npm run build`                 | Emit ESM JavaScript, declarations, and source maps to `dist/`.           |
 | `npm run test:smoke`            | Build and execute eleven compiled CLI scenarios without a shell.         |
 | `npm run test:accuracy:m06`     | Compare per-rule CLI findings with reviewed instance-level ground truth. |
+| `npm run test:robustness:m06`   | Run built-CLI robustness, security, and performance cases without shell. |
 | `npm run test:scenario:m02`     | Verify reviewed inventory, exclusions, links, determinism, and no exec.  |
 | `npm run test:scenario:m03`     | Exercise the controlled four-kind parser/model scenario without exec.    |
 | `npm run test:scenario:m04`     | Validate the deterministic eight-rule catalog without executing source.  |
@@ -272,3 +274,13 @@ mixed projects. It matches findings to 27 reviewed source instances by rule and 
 location, then records TP, FP, TN, FN, precision, recall, unmatched findings, and unsupported
 observations for each stable rule. The current 1.0 precision/recall values describe only this small
 controlled corpus; they are not a claim about arbitrary React projects or runtime behavior.
+
+`npm run test:robustness:m06` executes 15 shell-free built-CLI cases. The Linux execution passed
+canonical/missing roots, a missing scan argument, malformed configuration, path and symlink output
+authorization, exclusive overwrite protection, malformed-source isolation, a 32-directory-deep
+source, three created-and-excluded links, real project/report permission denials, hostile HTML
+structure and CSP assertions, target-code non-execution, and deterministic fresh-root reruns. It
+also performs five complete scans of the generated 240-file project, recording elapsed
+distributions and sampled child RSS observations from `/proc` without a machine-dependent
+threshold. The moderate-threshold dependency audit reported zero vulnerabilities; hosted CodeQL is
+recorded as unexecuted because no hosted result was retrieved.

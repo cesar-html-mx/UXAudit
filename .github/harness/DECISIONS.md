@@ -850,3 +850,32 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   R-001, R-002, R-011, R-021, R-022.
 - Evidence: `fixtures/m06-validation/ground-truth.json`, focused ground-truth/metrics tests, and
   `scripts/run-m06-accuracy.mjs`.
+
+## D-038 — Executed robustness matrix and descriptive performance observations
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: M06 needs system, security, dependency, and performance evidence from the complete built
+  CLI. Filesystem permissions and symlink creation are platform-dependent, hosted CodeQL cannot be
+  inferred from a workflow file, and elapsed time or memory observations from one machine are not
+  portable acceptance thresholds.
+- Decision: Execute a closed shell-free runner over fresh temporary projects. Cover canonical,
+  missing, argument, configuration, path, symlink, exclusive-write, malformed-source, deep-tree,
+  hostile-report, permission, determinism, and generated-scale cases. Execute the moderate npm audit
+  in the same focused scenario. Generate all links at runtime and label unsupported capabilities
+  rather than simulating success; use injected unit evidence only when a real permission denial is
+  unavailable. Validate hostile JSON/HTML against the actual renderers and structural CSP/escaping
+  constraints. Measure five complete all-format runs over 240 files, summarize individual duration
+  samples and Linux child `VmRSS` observations, and apply no machine-dependent threshold. Record
+  hosted CodeQL as unexecuted unless a real hosted result is retrieved.
+- Alternatives considered: timing pass/fail limits; parent-process RSS; treating a workflow as a
+  CodeQL result; claiming browser exploit execution; silently skipping permissions/links; or using
+  only injected adapters instead of the real compiled CLI.
+- Consequences: The Linux baseline is reproducible in method and exact in retained inputs/results,
+  but durations remain environment-specific. `/proc/<pid>/status` is sampled every 5 ms, so its
+  maximum observed `VmRSS` is not an exact lifetime peak. Other platforms record memory as
+  unavailable. Structural HTML checks establish inert serialized output, not browser behavior.
+- Requirements/contracts affected: RF-01, RF-03, RF-09, RF-15, RNF-03, RNF-04, RNF-07, RNF-09,
+  RNF-10, M06-T04, R-004 through R-006, R-009, R-010, R-012, R-015, R-018, R-021, and R-023.
+- Evidence: `scripts/run-m06-robustness.mjs`, `src/validation/performance-summary.ts`, its focused
+  tests, the security checklist, and the final M06 evidence package.

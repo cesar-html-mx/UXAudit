@@ -379,3 +379,33 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   synthetic corpus only; no aggregate or real-world generalization is claimed.
 - The final Node.js 24 gate passed 577 tests across 53 files. Global V8 coverage measured 95.84%
   statements, 91.39% branches, 99.81% functions, and 95.80% lines.
+
+## M06-T04 executed robustness, performance, and security baseline
+
+- The shell-free robustness runner executed 15 built-CLI cases on Linux. All cases passed, including
+  canonical and missing roots, a missing scan argument, malformed configuration, output path
+  escape, symlinked output rejection, exclusive-write preservation, malformed-source isolation, a
+  source below 32 nested directories, hostile reporting, deterministic reruns, real permission
+  denial, and the generated large project.
+- The real filesystem denied both the selected project root and report destination as intended.
+  UXAudit returned the documented input and report-write failures without leaking native details;
+  the runner retains portable fallback references for environments where permission denial cannot
+  be reproduced.
+- All three runtime links in the hostile project—internal, external, and cyclic—were created and
+  excluded by the default policy. JSON remained valid, while structural HTML assertions confirmed
+  hostile-path escaping, the restrictive CSP, and the absence of executable/resource-bearing
+  markup, event handlers, raw controls, and CSS resource loading. This was not a browser exploit
+  execution.
+- Fresh hostile roots produced identical stable JSON and normalized HTML. Five complete built-CLI
+  runs processed the generated 240-file project, retained exact expected results and absent
+  execution sentinels, and recorded elapsed samples plus the maximum child `VmRSS` observed through
+  5 ms `/proc` sampling. The performance record is a descriptive baseline with minimum, median, and
+  maximum values and no machine-dependent pass threshold; the memory value is not claimed as an
+  exact lifetime peak.
+- The moderate-threshold dependency audit reported zero vulnerabilities. Lockfile and strict
+  installation policy checks passed. Hosted CodeQL was not executed because no hosted result was
+  retrieved; the local workflow inspection is recorded separately and is not presented as an
+  analysis result.
+- The Node.js 24 gate passed all 602 tests across 54 files, all 11 compiled CLI smokes, the
+  controlled-project, accuracy, and 15-case robustness scenarios, and harness validation. Global V8
+  coverage measured 95.84% statements, 91.50% branches, 99.82% functions, and 95.79% lines.

@@ -204,6 +204,8 @@ The final package under `evidence/m06-validation/` must include:
 - [x] M06-T01 complete audit pipeline implemented and verified.
 - [x] M06-T02 controlled project corpus and built-CLI scenario implemented and verified.
 - [x] M06-T03 per-rule ground truth, matching, and accuracy evidence implemented and verified.
+- [x] M06-T04 system, robustness, performance, dependency, and security checks implemented and
+      verified.
 - [ ] Tasks completed.
 - [ ] Quality gate passed.
 - [ ] Evidence collected.
@@ -248,6 +250,12 @@ The final package under `evidence/m06-validation/` must include:
 - Accuracy matching uses the built CLI for observed findings and a separate model pass only to
   resolve source case ranges. Same project/rule/file containment is required; duplicate findings
   become unmatched FP rather than satisfying one instance twice.
+- M06-T04 executed 15 complete built-CLI cases on Linux. Real permission denials and all three
+  requested runtime links were available; malformed/configuration/path/write failures remained
+  isolated, hostile reports matched their pure renderers, and stable hostile reruns matched.
+- The generated performance baseline ran five times over 240 files. Durations are descriptive and
+  the maximum observed child `VmRSS` comes from 5 ms `/proc` sampling rather than an exact lifetime
+  peak. The moderate npm audit returned zero vulnerabilities; hosted CodeQL remained unexecuted.
 
 ## Decision log
 
@@ -261,6 +269,9 @@ The final package under `evidence/m06-validation/` must include:
   files.
 - Use expert heuristic review because no real participant responses are available; do not populate
   SUS.
+- Treat performance as an environment-labelled observation with no pass threshold, and distinguish
+  sampled child memory, structural HTML validation, reviewed architecture, and hosted analysis from
+  stronger claims that were not executed.
 
 ## Risks and recovery
 

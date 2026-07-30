@@ -91,6 +91,15 @@ reuses an output tree because report persistence is intentionally exclusive. Run
 creation is capability-aware, and every created link must be reported as excluded by the default
 policy.
 
+M06-T04 adds `npm run test:robustness:m06`. It builds the real CLI and executes 15 shell-free Linux
+cases covering input/configuration failures, output authorization and overwrite, malformed
+isolation, 32-directory-deep traversal, non-execution, hostile HTML, deterministic reruns, symbolic
+links, real permission denials, dependency audit, and a five-run 240-file performance baseline. The
+maximum observed Linux child `VmRSS` is sampled every 5 ms through `/proc` and is not represented as
+an exact lifetime peak; other platforms must record memory measurement as unavailable rather than
+substitute a different process. The runner imposes no machine-dependent timing threshold and
+records hosted CodeQL as unexecuted unless an actual hosted result is retrieved.
+
 ## Portability
 
 Avoid operating-system-specific shell behavior in product code. CI should include more than one
