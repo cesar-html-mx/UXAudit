@@ -156,9 +156,19 @@ own any conversion to display coordinates.
 ## Configuration
 
 Configuration is local JSON. Unknown keys, invalid values, and conflicting options must produce a
-clear error. Defaults are versioned as described above. `null` category/rule filters select the
-stable catalog; explicit empty arrays select no rules. M05-T02 owns JSON loading and
-defaults/file/CLI precedence; full Commander integration remains M06.
+clear stable error. `uxaudit.config.json` at the canonical project root is optional; an explicitly
+selected path must exist. Files are regular, no larger than 64 KiB, strict UTF-8 JSON and never
+imported or executed. The version-1 file accepts only `schemaVersion`, `categories`, `ruleIds`,
+`formats`, `outputDirectory`, `minimumSeverity`, `color`, and `verbose`; duplicate top-level keys
+are rejected rather than resolved with last-value-wins behavior.
+
+Defaults are terminal-only output, `info` minimum display severity, color enabled, non-verbose
+detail, `uxaudit-reports`, and `null` category/rule filters. A file may override any default;
+validated CLI values override the file. `null` category/rule filters select the stable catalog,
+whereas explicit empty arrays select no rules. Selection arrays are deduplicated and normalized to
+stable order. Output directories must be portable relative paths without dot segments, backslashes,
+control/bidirectional characters, or Windows-reserved components. M05-T02 exposes this loader;
+full Commander integration remains M06.
 
 ## Reports
 

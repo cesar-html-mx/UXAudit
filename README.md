@@ -5,7 +5,7 @@ implementation safely discovers and classifies `.js`, `.jsx`, `.ts`, and `.tsx` 
 parses them through an internal Babel boundary, and builds a deterministic parser-independent
 analysis model. The completed M04 domain layer adds a deterministic isolated rule engine and eight
 stable rules across accessibility, performance, SEO, and UX. The active M05 slice defines
-versioned configuration defaults, one immutable normalized `AuditResult`, complete
+versioned configuration defaults and loading, one immutable normalized `AuditResult`, complete
 file/rule/finding/error summaries, and a pure reporter boundary.
 
 The `scan` command validates and canonicalizes the selected root, discovers files, analyzes safe
@@ -78,6 +78,31 @@ Current CLI exit codes:
 |  `2` | Invalid command, missing argument, or invalid/inaccessible project root.              |
 |  `3` | Fatal processing failure or unexpected application failure.                           |
 
+## Configure an audit
+
+The configuration boundary loads optional `uxaudit.config.json` from an already canonical project
+root, or a user-selected JSON file, without importing or executing it. This example requests all
+three future reporters and restricts rules by category:
+
+```json
+{
+  "schemaVersion": 1,
+  "categories": ["accessibility", "seo"],
+  "formats": ["terminal", "json", "html"],
+  "minimumSeverity": "medium",
+  "outputDirectory": "uxaudit-reports",
+  "color": true,
+  "verbose": false
+}
+```
+
+Defaults are terminal output, `info`, color, non-verbose detail, `uxaudit-reports`, and the stable
+rule catalog. `null` category/rule filters select that catalog; `[]` intentionally selects none.
+Validated CLI overrides take precedence over file values, which take precedence over defaults.
+Configuration files are strict UTF-8 JSON limited to 64 KiB, unknown keys and values are rejected,
+and output directories must be portable project-relative paths. The loader is available internally
+in M05; the current `scan` command does not expose `--config` or reporting options until M06.
+
 ## Develop and verify
 
 ```bash
@@ -132,8 +157,8 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
   aliases, higher-order abstractions, imports, or rendered behavior.
 - The domain engine can produce normalized findings and isolated rule errors, and M05 can assemble
   them into an exact recursively frozen `AuditResult`; the CLI does not expose either layer yet.
-  Configuration-file loading, finding-failure policy, and rendered audit reports remain M05/M06
-  work.
+  Configuration-file loading is implemented as an independent inert JSON boundary; finding-failure
+  policy, CLI wiring, and rendered audit reports remain M05/M06 work.
 
 ## Repository map
 
@@ -147,7 +172,8 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
 - `src/domain/audit/`: versioned audit result, normalized processing errors, derived summaries, and
   invariant boundary.
 - `src/rules/`: validated engine plus category-organized static rules.
-- `src/configuration/`: normalized defaults, overrides, formats, filenames, and stable errors.
+- `src/configuration/`: bounded JSON reading, closed validation, precedence, immutable defaults,
+  overrides, formats, filenames, and stable errors.
 - `src/reporting/`: pure one-result reporter contract; concrete adapters follow in M05.
 - `tests/`: focused domain, parser, rule, application, CLI, and project tests.
 - `.github/harness/`: milestone state, plans, decisions, risks, and lifecycle scripts.

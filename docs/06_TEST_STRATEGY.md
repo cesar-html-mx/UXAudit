@@ -240,3 +240,20 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
 - The final task run under Node.js `24.18.0` passed all 372 tests across 41 files plus format, lint,
   typecheck, and build. Global V8 coverage passed at 95.88% statements, 90.76% branches, 99.19%
   functions, and 95.84% lines; final milestone metrics will be recollected with all M05 tasks.
+
+## M05-T02 executed configuration baseline
+
+- Real-filesystem cases distinguish an absent conventional file from a missing explicit path,
+  accept one initial UTF-8 BOM and an explicitly authorized external regular file, and never execute
+  configuration as code.
+- Injected-filesystem cases cover nonregular and escaping paths, canonical-root identity change,
+  exact 64 KiB acceptance, initial/observed oversize, bounded descriptor reads, malformed UTF-8,
+  descriptor snapshot drift, invalid native byte counts, POSIX/Windows open flags, stable
+  non-reflective failures, and exact close behavior.
+- Loader cases cover defaults, partial file values, `defaults < file < CLI` precedence,
+  null/empty filters, canonical ordering, malformed JSON, schema/key/value/rule rejection,
+  duplicates, unsafe portable paths, accessors, sparse arrays, defensive copies, freezing, and
+  byte-stable normalized results.
+- The final task run under Node.js `24.18.0` passed all 435 tests across 43 files plus format, lint,
+  typecheck, and build. Global V8 coverage passed at 95.77% statements, 91.08% branches, 99.29%
+  functions, and 95.72% lines; final milestone metrics will be recollected with all M05 tasks.

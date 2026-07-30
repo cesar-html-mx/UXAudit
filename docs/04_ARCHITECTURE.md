@@ -298,8 +298,16 @@ The normalized M05 configuration is a complete schema-versioned value with categ
 selected terminal/JSON/HTML formats, a portable project-relative output directory, minimum display
 severity, color, and verbosity. `null` filters mean the stable default catalog; empty arrays
 intentionally enable no rules. Defaults select terminal output, `info`, color, non-verbose detail,
-and `uxaudit-reports`. Configuration-file and CLI values remain untrusted until T02 validates and
-merges them; no project configuration module is imported or executed.
+and `uxaudit-reports`.
+
+M05-T02 separates filesystem authorization from data normalization. The reader authorizes the
+canonical root and conventional filename, or treats an explicit configuration path as separate
+user authority; it rejects links/nonregular files and observed root/path/descriptor changes, reads
+at most 64 KiB, and decodes strict UTF-8. The loader parses JSON, validates closed version-1 own-data
+records and bounded dense arrays, resolves rule IDs against the stable registry, canonicalizes
+selection order, and merges `defaults < file < CLI`. The returned configuration is a defensive
+frozen copy. No project configuration module is imported or executed, and Commander remains outside
+this boundary until M06.
 
 ### AuditResult
 

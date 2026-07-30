@@ -1,4 +1,4 @@
-import path from 'node:path';
+import { isAbsolute as isAbsolutePath } from 'node:path';
 
 import {
   CONFIGURATION_SCHEMA_VERSION,
@@ -7,6 +7,7 @@ import {
   type AuditConfiguration,
   type ReportFormat,
 } from '../../configuration/configuration.js';
+import { isSafeOutputDirectory } from '../../configuration/configuration-validation.js';
 import {
   SOURCE_PARSER_ERROR_CODES,
   type SourceParserError,
@@ -138,7 +139,6 @@ const discoveryOperations = Object.values(DISCOVERY_OPERATIONS);
 const sourceParserErrorCodes = Object.values(SOURCE_PARSER_ERROR_CODES);
 const ruleExecutionErrorCodes = Object.values(RULE_EXECUTION_ERROR_CODES);
 const ruleIdPattern = /^[a-z]+\/[a-z0-9-]+$/u;
-const windowsDrivePattern = /^[a-zA-Z]:/u;
 
 const isRecord = (value: unknown): value is Readonly<Record<string, unknown>> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -147,18 +147,6 @@ const isUnknownArray = (value: unknown): value is readonly unknown[] => Array.is
 
 const isNonNegativeSafeInteger = (value: unknown): value is number =>
   typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
-
-const containsControlCharacter = (value: string): boolean => {
-  for (let index = 0; index < value.length; index += 1) {
-    const codeUnit = value.charCodeAt(index);
-
-    if ((codeUnit >= 0 && codeUnit <= 31) || (codeUnit >= 127 && codeUnit <= 159)) {
-      return true;
-    }
-  }
-
-  return false;
-};
 
 const requireNonEmptyString = (value: unknown): string => {
   if (typeof value !== 'string' || value.length === 0) {
@@ -333,22 +321,6 @@ const compareFindings = (left: Finding, right: Finding): number => {
   return endDifference === 0 ? compareOrdinal(left.message, right.message) : endDifference;
 };
 
-const isPortableRelativePath = (value: string): boolean => {
-  if (
-    value.length === 0 ||
-    path.posix.isAbsolute(value) ||
-    path.win32.isAbsolute(value) ||
-    windowsDrivePattern.test(value) ||
-    value.includes('\\') ||
-    containsControlCharacter(value)
-  ) {
-    return false;
-  }
-
-  const segments = value.split('/');
-  return segments.every((segment) => segment.length > 0 && segment !== '.' && segment !== '..');
-};
-
 const requireUniqueArray = <T extends string>(
   value: unknown,
   isAllowed: (candidate: string) => candidate is T,
@@ -397,7 +369,7 @@ const requireConfiguration = (value: unknown): AuditConfiguration => {
     typeof minimumSeverity !== 'string' ||
     !severities.includes(minimumSeverity as RuleSeverity) ||
     typeof outputDirectory !== 'string' ||
-    !isPortableRelativePath(outputDirectory)
+    !isSafeOutputDirectory(outputDirectory)
   ) {
     throw new AuditResultInvariantError();
   }
@@ -692,7 +664,7 @@ export const createAuditResult = (request: CreateAuditResultRequest): AuditResul
   try {
     const projectRoot = requireNonEmptyString(request.projectRoot);
 
-    if (!path.isAbsolute(projectRoot)) {
+    if (!isAbsolutePath(projectRoot)) {
       throw new AuditResultInvariantError();
     }
 

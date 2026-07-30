@@ -352,3 +352,21 @@
 - The final T01 Node.js `24.18.0` run passed formatting, strict lint, typecheck, build, all 372 tests
   across 41 files, and coverage at 95.88% statements, 90.76% branches, 99.19% functions, and 95.84%
   lines.
+- Completed M05-T02 with bounded strict-UTF-8 JSON reading, conventional canonical-root discovery,
+  explicit-file authority, regular-file/path/descriptor identity checks, closed version-1
+  validation, stable errors, canonical selection order, portable output paths, and immutable
+  `defaults < file < CLI` merging.
+- The reader distinguishes an absent conventional file from a missing explicit file, accepts
+  exactly 64 KiB and one initial UTF-8 BOM, rejects links/nonregular/changed/oversized inputs, uses
+  no-follow/non-blocking POSIX flags where available, closes exactly once, and never retains native
+  error details. The loader rejects unknown keys/rules, accessors, sparse/exotic arrays, duplicates,
+  invalid primitives, and unsafe cross-platform paths without importing target code.
+- Independent review exposed and regression-tested missing-root reauthorization on absent defaults,
+  proxy trap execution, hostile native-error shapes, incomplete Windows reserved names, UTF-8 path
+  limits, and duplicate top-level JSON-key ambiguity. The fixes fail closed without changing the
+  public configuration vocabulary.
+- T02 verification under Node.js `24.18.0` passed formatting, strict lint, typecheck, build, all 435
+  tests across 43 files, and coverage at 95.77% statements, 91.08% branches, 99.29% functions, and
+  95.72% lines. Final independent re-review found no remaining defect. The earlier non-interactive
+  task push remained unavailable because the HTTPS remote
+  has no supplied GitHub credentials; local task commits remain the system of record.

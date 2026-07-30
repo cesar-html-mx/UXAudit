@@ -155,3 +155,27 @@ failing closed whenever an observable change occurs.
 The M04 engine is not yet connected to the CLI and does not write reports. M05 must preserve these
 validated boundaries when loading user configuration and must treat every normalized finding field
 as untrusted when rendering terminal, JSON, or HTML output.
+
+## M05-T02 implemented configuration controls and limits
+
+- Configuration is inert JSON rather than an imported JavaScript/TypeScript module. Strict UTF-8
+  decoding is bounded to 64 KiB, and malformed/oversized content fails through stable errors without
+  retaining native causes or private paths.
+- The conventional file is authorized as an exact canonical child of an unchanged canonical
+  project root. Both conventional and explicitly selected files must remain regular with stable
+  device/inode, size, modification-time, and change-time snapshots around a descriptor-only read.
+  POSIX requests read-only, no-follow, and non-blocking flags; Windows uses read-only with the same
+  portable identity checks.
+- File and future CLI layers are closed plain-data records. Accessors, proxies, sparse/exotic or
+  oversized arrays, unknown keys/rules, duplicates, and invalid primitive values fail closed
+  without invoking supplied getters.
+- Output directories are bounded portable relative paths. Absolute paths, drive prefixes,
+  backslashes, empty/dot components, controls/bidirectional overrides, invalid Windows characters,
+  reserved device names, and ambiguous trailing dots/spaces are rejected before an
+  `AuditResult` or writer target can be constructed.
+
+An explicit configuration file is separate user authority and may be outside the analyzed project;
+it is still subject to the regular-file and identity policy. Portable user-space checks cannot
+eliminate every pathname race, so observed changes fail closed and only bytes from the verified
+descriptor are parsed. T04 still owns canonical output-directory authorization, symlink-resistant
+creation, and exclusive report writes.

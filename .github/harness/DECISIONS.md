@@ -588,5 +588,38 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   claims generation.
 - Requirements/contracts affected: RF-13 through RF-15, RNF-02 through RNF-06, RNF-09, RNF-10,
   M05 acceptance, R-005, R-009, R-014, R-017, R-018, and R-019.
-- Evidence: exact audit-result schema, configuration/audit/reporter contract tests, the 369-test
+- Evidence: exact audit-result schema, configuration/audit/reporter contract tests, the 372-test
   Node.js 24 product gate, and M05 reporter/evidence work as it is completed.
+
+## D-030 — Bounded JSON configuration boundary and explicit precedence
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M05 must accept one conventional project configuration and future CLI values without
+  importing target modules, following symlinks, leaking native filesystem detail, accepting
+  ambiguous selections, or allowing host-dependent report paths. An explicitly selected
+  configuration is independently user-authorized and therefore does not have the same containment
+  semantics as the conventional project-root file.
+- Decision: Read at most 64 KiB of strict UTF-8 JSON from a verified regular-file descriptor. The
+  conventional `uxaudit.config.json` must be an exact canonical child of an unchanged canonical
+  project root; its absence means defaults. An explicit path may resolve outside the project root,
+  but absence is an error and symlink/nonregular/changed paths still fail closed. Validate file and
+  programmatic override layers as closed own-data records without invoking accessors, bound arrays
+  to 128 entries, reject duplicate top-level keys and duplicate/unknown selections, and accept only
+  portable relative output directories. Canonicalize categories, formats, and rule IDs, merge
+  `defaults < file < CLI`, defensively copy arrays, and recursively freeze the complete result.
+  File-level `null` filters mean the stable catalog, explicit empty filters mean no selection, and
+  CLI filters use omission rather than `null` for “no override.” All failures use stable
+  non-reflective `ConfigurationError` codes without retaining native causes.
+- Alternatives considered: Executable JavaScript/TypeScript configuration; unbounded
+  `readFile`; treating a missing explicit path as defaults; requiring every explicit file to be
+  inside the analyzed project; shallow object spreading without validation; locale ordering; or
+  allowing output paths whose meaning changes across POSIX and Windows.
+- Consequences: Configuration is inert, deterministic, independently testable, and portable.
+  Commander wiring remains M06 work, so T02 exposes a loader boundary rather than changing the
+  current scan-only CLI. User-space identity checks reduce observable path races but cannot provide
+  an atomic pathname guarantee on every platform.
+- Requirements/contracts affected: RF-09, RNF-01, RNF-03, RNF-04, RNF-09, M05 acceptance, R-009,
+  R-015, and R-017.
+- Evidence: configuration reader/loader tests and the 435-test Node.js 24 task gate with 95.77%
+  statements, 91.08% branches, 99.29% functions, and 95.72% lines.

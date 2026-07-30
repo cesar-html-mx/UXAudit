@@ -73,6 +73,14 @@ Planned verification: a configuration/default/file/override matrix covering abse
 configuration, precedence, explicit empty filters, hostile objects/JSON, unsafe paths, read/size
 failures, and deterministic defensive output.
 
+Status: completed. The default canonical-root file and an explicitly selected regular file are read
+through a bounded descriptor, validated as strict UTF-8 JSON, and normalized without importing
+project code. Closed schema-versioned values and plain CLI data merge in
+`defaults < file < CLI` order, with canonical filter/format order, stable errors, portable output
+paths, copied/frozen results, and explicit absent/null/empty semantics. The final Node.js 24 task
+gate passed 435 tests across 43 files plus build/type/lint/format, with 95.77% statement / 91.08%
+branch / 99.29% function / 95.72% line coverage.
+
 ### M05-T03 — Implement terminal reporter
 
 Provide concise summary and readable findings with no-color support and stable order.
@@ -171,6 +179,19 @@ Record implementation facts, library behavior, and assumptions discovered during
   failed. Inventory/exclusion counts remain stage-level discovery data; recoverable discovery
   issues are preserved individually in `AuditResult.errors` rather than duplicated as another file
   counter.
+- Configuration loading can reuse the bounded descriptor-authorization pattern established for
+  source reads, but its authorization semantics differ deliberately: the conventional file must be
+  an exact canonical child of the already canonical project root, while an explicit path is a
+  separate user-authorized regular file and may be outside that root.
+- JSON parsing alone does not make programmatic CLI overrides trustworthy. T02 therefore validates
+  both layers as closed own-data records, rejects accessors, proxies, sparse/exotic arrays,
+  duplicates, unknown rules, nonportable output paths, and oversized collections, then copies and
+  freezes the canonical merged value.
+- Independent T02 review found that the missing-default branch did not reauthorize the root,
+  transparent proxies could reach reflection traps, hostile native-error shapes could escape
+  normalization, and the portable path policy omitted Windows superscript device names and UTF-8
+  byte/well-formedness limits. The fixes add fail-closed regression matrices plus explicit
+  duplicate top-level JSON-key rejection; final independent re-review found no remaining defect.
 
 ## Decision log
 
@@ -187,6 +208,9 @@ Record decisions made within the authority allowed by `AGENTS.md`.
 - D-029 fixes the schema/version vocabulary, null-versus-empty filter semantics, immutable defaults,
   complete frozen result shape, derived summaries, normalized error union, controlled report names,
   pre-resolved relative report paths, pure reporter boundary, and M06 integration boundary.
+- D-030 fixes JSON-only bounded loading, default-versus-explicit path authorization, closed
+  schema-versioned validation, stable errors, canonical ordering, and
+  `defaults < file < CLI` precedence for the configuration boundary.
 
 ## Risks and recovery
 
