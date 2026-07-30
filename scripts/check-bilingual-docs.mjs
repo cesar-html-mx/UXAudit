@@ -1007,7 +1007,7 @@ export const checkBilingualDocumentation = async (options = {}) => {
   };
 };
 
-if (process.argv[1] !== undefined && path.resolve(process.argv[1]) === scriptPath) {
+if (import.meta.main) {
   try {
     const result = await checkBilingualDocumentation();
 

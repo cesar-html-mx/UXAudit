@@ -223,6 +223,23 @@ describe('bilingual documentation checker', () => {
     );
   });
 
+  it('executes when invoked through a symlinked repository path', async () => {
+    const rootDirectory = await createFixture();
+    const linkContainer = await mkdtemp(path.join(tmpdir(), 'uxaudit-bilingual-link-'));
+    const linkedRoot = path.join(linkContainer, 'repository');
+
+    temporaryRoots.push(linkContainer);
+    await symlink(rootDirectory, linkedRoot, 'junction');
+
+    const result = await executeChecker(linkedRoot);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe('');
+    expect(result.stdout).toBe(
+      'UXAudit bilingual documentation check: PASS (18 pairs, 39 link sources)\n',
+    );
+  });
+
   it('reports missing pair members and broken relative links with their source paths', async () => {
     const rootDirectory = await createFixture();
     const missingSpanishPath = path.join(rootDirectory, 'docs', 'es', '15_SOURCE_MAP.md');

@@ -729,6 +729,6 @@ describe('controlled-project manifest', () => {
       }
     }
 
-    expect(dirname(manifestPath)).toBe(fixtureRoot.replace(/\/$/u, ''));
+    expect(dirname(manifestPath)).toBe(fixtureRoot.replace(/[\\/]$/u, ''));
   });
 });
