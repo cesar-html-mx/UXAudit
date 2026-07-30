@@ -169,7 +169,7 @@ write-failure test, tests and coverage.
 - [x] Quality gate passed.
 - [x] Evidence collected.
 - [x] Documentation and traceability updated.
-- [ ] Milestone closed and state advanced.
+- [x] Milestone closed and state advanced.
 
 ## Discoveries
 
@@ -315,5 +315,16 @@ Maintain task-specific risks, rollback steps, and any remaining debt.
 
 ## Outcomes and retrospective
 
-At closure, describe what now works, what was actually verified, remaining limitations, commits, and
-the next milestone.
+M05 delivered inert versioned configuration, one exact immutable normalized result, pure terminal,
+JSON, and HTML reporters, and one shared fixed-path persistence boundary. The final Node.js 24 gate
+passed 512 tests in 47 files and 95.81% statement / 91.39% branch / 99.39% function / 95.77% line
+coverage. A controlled all-bucket scenario, two isolated evidence runs, manifest validation, zero
+known dependency vulnerabilities, and independent reporter/evidence/security re-reviews passed.
+
+The implementation commits are `cab9598`, `80f846f`, `0db6b5f`, `44195f4`, and `c4c9959`.
+Configuration-to-engine-to-reporters CLI orchestration, finding-failure exit policy, browser-level
+security execution, controlled-project accuracy measurements, hosted multi-platform results, and
+usability validation remain explicitly assigned to M06. Portable Node pathname operations retain
+the documented narrow race windows; failure paths prefer leaving controlled partial/staging
+artifacts over unsafe deletion. The required push could not authenticate, so no remote branch,
+pull request, or hosted CI result is claimed.

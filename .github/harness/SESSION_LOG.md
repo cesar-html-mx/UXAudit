@@ -450,3 +450,15 @@
   evidence passes were regenerated after the correction, and the security re-review approved the
   result with no remaining blocking or medium defect. Only the already documented portable
   pathname-to-rename interval remains.
+- Completed M05-T05 in commit `c4c9959bb0c279cd368f50acee47eefb4ac75923`; its pre-commit
+  Node.js 24 gate passed all 512 tests, formatting, strict lint, typecheck, and build.
+- Attempted the required HTTPS push immediately after the T05 commit. GitHub requested credentials
+  unavailable to this process, so the attempt was stopped without changing the remote; no hosted
+  branch, pull request, or CI result is claimed.
+- Created the factual M05 milestone report with commits, capability, exact measurements, evidence
+  digests, review corrections, limitations, and publication status. Closed M05 with verified task
+  commit `c4c9959bb0c279cd368f50acee47eefb4ac75923`, moved its ExecPlan to `completed/`, activated
+  M06-T01, synchronized the generated state document, and restored harness validation to PASS.
+- Finalized the retained evidence manifest with 23 valid SHA-256 entries, including the formatted
+  milestone report. The final package passed its exact file contract, integrity, sanitization, and
+  canonical-JSON checks.

@@ -185,8 +185,8 @@
       "id": "M05",
       "slug": "configuration-reporting",
       "title": "Configuration and terminal, JSON, and HTML reporting",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M05-configuration-reporting.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M05-configuration-reporting.md",
       "branch": "milestone/m05-configuration-reporting",
       "tasks": [
         {
@@ -230,8 +230,8 @@
       "id": "M06",
       "slug": "integration-validation",
       "title": "End-to-end integration, validation, usability, and security evidence",
-      "status": "queued",
-      "plan": ".github/harness/exec-plans/queued/M06-integration-validation.md",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M06-integration-validation.md",
       "branch": "milestone/m06-integration-validation",
       "tasks": [
         {
