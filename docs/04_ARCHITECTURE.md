@@ -301,6 +301,11 @@ untrusted controls, bidirectional markers, BOM, and unpaired surrogates into vis
 the reporter adds fixed ANSI around badges. It does not inspect process, TTY, environment, or
 filesystem state.
 
+M05-T04 implements the JSON adapter as the exact supplied `AuditResult` encoded with two-space
+`JSON.stringify` and one LF. It does not omit timing, convert domain coordinates, sort, project, or
+mutate data. A separate writer is shared by JSON and HTML: rendering remains pure, while persistence
+validates the exact fixed format target and returns a relative path only after completion.
+
 ### Configuration
 
 The normalized M05 configuration is a complete schema-versioned value with category/rule filters,
@@ -342,6 +347,15 @@ display; JSON must preserve the domain coordinates.
 
 The initial version has no database. Configuration, JSON, HTML, and optional logs are local files.
 Transient inventory, AST adapter output, model, and findings remain in memory during an audit.
+
+The shared report writer creates an approved output directory one segment at a time, reauthorizes
+the canonical root and directory device/inode identities, rejects links and path escape, and opens
+the fixed target with exclusive creation (`O_NOFOLLOW` on POSIX). It writes UTF-8 in bounded
+positional chunks, syncs, verifies path/handle snapshots, closes exactly once, and repeats final
+authorization before exposing a frozen project-relative success record. Portable Node APIs do not
+offer a cross-platform directory-handle-relative `openat` guarantee, so observable races fail
+closed but a residual pathname race remains. Post-creation failures may retain a partial target
+rather than risking deletion of a replaced pathname.
 
 ## Error boundaries
 

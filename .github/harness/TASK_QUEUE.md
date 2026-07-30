@@ -37,7 +37,7 @@
 - [x] M05-T01 Define configuration and `AuditResult`.
 - [x] M05-T02 Load `uxaudit.config.json`, merge defaults, and validate values.
 - [x] M05-T03 Implement terminal summary and finding output.
-- [ ] M05-T04 Implement deterministic JSON reporting.
+- [x] M05-T04 Implement deterministic JSON reporting.
 - [ ] M05-T05 Implement a standalone, escaped HTML report.
 
 ## M06 — Integration, validation, usability, and security evidence

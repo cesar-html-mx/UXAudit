@@ -653,3 +653,36 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   R-014, and R-019.
 - Evidence: terminal/CLI focused tests and the 449-test Node.js 24 task gate with 95.94% statements,
   91.42% branches, 99.31% functions, and 95.90% lines.
+
+## D-032 — Lossless JSON and one exclusive report-file boundary
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: JSON must remain the exact machine-readable `AuditResult`, while JSON and HTML need the
+  same local persistence guarantees. A lexical join or ordinary overwrite-capable write could
+  escape through a link/race, replace unrelated data, or claim a report that was not durably
+  completed.
+- Decision: Render JSON as the complete supplied result using two-space `JSON.stringify` followed by
+  exactly one LF. Preserve timing and zero-based source coordinates and perform no reporter-specific
+  projection. Keep persistence outside the pure reporter. The shared format-aware writer accepts a
+  closed plain request only when its relative path is exactly the validated configured output
+  directory plus fixed `audit-report.json` or `audit-report.html`. It reauthorizes the canonical
+  root and every directory identity around segment-by-segment creation, rejects links/escapes,
+  opens the target exclusively with POSIX no-follow where available and mode `0600`, writes UTF-8
+  through bounded positional chunks, syncs, verifies path/handle snapshots, closes exactly once,
+  and performs a final authorization before returning only a frozen relative success record.
+  Invalid, unsafe, existing-target, and operational failures use stable detail-free error codes.
+- Alternatives considered: A reduced JSON projection; removing volatile timing; converting JSON
+  coordinates for display; recursive directory creation; ordinary `writeFile` overwrite behavior;
+  returning an output path before close; format-specific writers; or automatically unlinking a
+  partial target after a failed post-open authorization.
+- Consequences: Both file reporters share deterministic content-independent persistence, existing
+  files are never intentionally overwritten, and callers can claim only returned paths. Portable
+  Node APIs do not expose `openat`/`openat2`, so user-space checks cannot eliminate every ancestor
+  swap or network-filesystem `O_EXCL` limitation. A failure after exclusive creation may leave a
+  partial target; it is not automatically unlinked because an observed identity race could make
+  pathname deletion unsafe, and a retry will report that target as existing.
+- Requirements/contracts affected: RF-15, RNF-03, RNF-04, RNF-09, RNF-10, M05 acceptance, R-009,
+  R-018, and R-019.
+- Evidence: exact JSON and shared-writer tests plus the 490-test Node.js 24 task gate with 95.66%
+  statements, 91.19% branches, 99.36% functions, and 95.62% lines.

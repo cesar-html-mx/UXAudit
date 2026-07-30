@@ -115,6 +115,16 @@ Planned verification: exact schema-shaped data, two byte-identical serialization
 round trips, safe-path and existing-target rejection, controlled write success/failure, and input
 immutability.
 
+Status: completed. The frozen JSON reporter emits the supplied result through canonical two-space
+`JSON.stringify` plus one LF, preserving schema, timing, zero-based columns, hostile text, and every
+empty bucket without projection or mutation. The shared JSON/HTML writer accepts only the configured
+portable directory plus its fixed report filename, authorizes the canonical root and each directory
+segment, creates with `O_EXCL` and POSIX `O_NOFOLLOW`, writes bounded positional chunks, syncs,
+closes, and performs final path/handle identity checks before returning a frozen relative path.
+Stable detail-free errors cover invalid input, unsafe paths, existing targets, and write failures.
+The final Node.js 24 task gate passed 490 tests across 46 files plus build/type/lint/format, with
+95.66% statement / 91.19% branch / 99.36% function / 95.62% line coverage.
+
 ### M05-T05 — Implement HTML reporter
 
 Create one standalone readable file, escape hostile strings, show summary and grouped findings, and
@@ -211,6 +221,19 @@ Record implementation facts, library behavior, and assumptions discovered during
 - Independent T03 review exercised the shared sanitizer, ANSI/no-color equivalence, threshold/order,
   summary/detail semantics, coordinates, empty/null/error cases, determinism, and immutability and
   found no remaining defect.
+- T04 can keep serialization and persistence independent: JSON is exactly
+  `JSON.stringify(result, null, 2)` plus LF, while one format-aware writer accepts only the fixed
+  JSON/HTML report name under a validated configured directory and returns a path only after
+  successful exclusive creation, write, sync, close, and reauthorization.
+- Node's portable API has no `openat`/`openat2` relative-to-directory-handle primitive. The shared
+  writer will create directories segment by segment, reject static links/escapes and observable
+  identity changes, use `O_EXCL`/POSIX `O_NOFOLLOW`, and document the residual ancestor-swap and
+  network-filesystem limitations rather than claiming atomic pathname authorization.
+- T04 tests exercise exact JSON round trips and schema shape plus real and injected filesystem
+  success, partial writes, existing targets, symlinks/escapes, root/ancestor/target replacement,
+  invalid byte counts, sync/close failures, proxy/accessor inputs, and hostile native errors. A
+  failed operation after exclusive creation can deliberately leave a partial target: automatically
+  unlinking a pathname after an identity race could delete an attacker replacement.
 
 ## Decision log
 
@@ -233,6 +256,8 @@ Record decisions made within the authority allowed by `AGENTS.md`.
 - D-031 fixes the terminal structure, inclusive display threshold, canonical ordering, one-based
   display columns, optional error detail, shared per-value sanitization, and trusted badge-only ANSI
   behavior without consulting process/TTY state.
+- D-032 fixes lossless canonical JSON plus the shared exclusive, reauthorized file-writer boundary,
+  stable write errors, success-path claims, and explicit portable-filesystem residual limits.
 
 ## Risks and recovery
 

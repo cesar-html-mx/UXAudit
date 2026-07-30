@@ -48,9 +48,14 @@ terminal/JSON/HTML reporting remain M05/M06 responsibilities.
   failed counters, complete rule counters/findings, normalized discovery/source/rule errors,
   zero-filled category/severity/stage summaries, and nullable project-relative report paths.
 - One pure reporter contract that consumes exactly one completed result.
+- A lossless deterministic JSON reporter that preserves the complete result and stored coordinates
+  as canonical two-space JSON with one final LF.
+- One shared JSON/HTML file writer that accepts only fixed configured relative targets, creates them
+  exclusively inside the authorized canonical root, and returns a path only after successful
+  write, sync, close, and final authorization.
 
 The boundary defensively copies, validates, canonically orders, and freezes result data. It does not
-yet load a configuration file, render a report, write a file, or change the scan-only CLI behavior.
+change the scan-only CLI behavior; M06 owns reporter orchestration and user-visible output claims.
 
 ### Planned options
 
@@ -176,5 +181,12 @@ full Commander integration remains M06.
   ordered readable findings at or above the inclusive display threshold, one-based display
   columns, optional normalized error detail, and explicit color/no-color modes. Summary totals
   always describe the complete result even when finding detail is filtered.
-- JSON: complete stable machine-readable result.
+- JSON: the complete stable machine-readable result, including timing metadata and stored zero-based
+  UTF-16 columns, serialized with two-space indentation and one final LF.
 - HTML: standalone, escaped, readable report requiring no external service.
+
+JSON and HTML targets use only the configured portable output directory and fixed filenames. The
+shared writer refuses existing targets and observed links, escapes, or identity changes, and reports
+stable failures without claiming a generated path. A failure after exclusive creation can leave a
+partial target for manual review/removal; automatically unlinking after a pathname race would be
+unsafe.

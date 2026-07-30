@@ -274,3 +274,19 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
 - The final task run under Node.js `24.18.0` passed all 449 tests across 44 files plus format, lint,
   typecheck, and build. Global V8 coverage passed at 95.94% statements, 91.42% branches, 99.31%
   functions, and 95.90% lines; final milestone metrics will be recollected with all M05 tasks.
+
+## M05-T04 executed JSON and persistence baseline
+
+- JSON tests assert exact two-space/LF bytes, complete local-schema equality, retained timing and
+  zero-based coordinates, hostile-string round trips, explicit empty buckets, deterministic repeat
+  rendering, and input immutability.
+- Shared-writer tests cover closed request validation, fixed JSON/HTML target selection, portable
+  directory creation, exclusive/no-follow flags and modes, real-filesystem exact output and
+  no-overwrite preservation, bounded partial writes, sync/close behavior, and stable native-error
+  normalization.
+- Injected races replace roots, ancestors, or targets before and after open/write/close. Symlink,
+  escape, snapshot mismatch, invalid byte-count, proxy/accessor, and failed-operation paths never
+  return success. The final successful observable filesystem operation is target authorization.
+- The final task run under Node.js `24.18.0` passed all 490 tests across 46 files plus format, lint,
+  typecheck, and build. Global V8 coverage passed at 95.66% statements, 91.19% branches, 99.36%
+  functions, and 95.62% lines; final milestone metrics will be recollected with all M05 tasks.

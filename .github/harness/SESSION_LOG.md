@@ -382,3 +382,20 @@
   lint, typecheck, build, all 449 tests across 44 files, and coverage at 95.94% statements, 91.42%
   branches, 99.31% functions, and 95.90% lines. Independent adversarial re-review found no
   remaining defect.
+- Committed M05-T03 as `0db6b5f`. Its non-interactive HTTPS push was attempted immediately and
+  failed because this process has no GitHub username/credential; the remote was unchanged and no
+  hosted result is claimed.
+- Completed M05-T04 with a frozen lossless JSON reporter and one shared format-aware report writer.
+  JSON retains the exact supplied schema, timing, zero-based coordinates, hostile strings, and empty
+  buckets as two-space JSON with one final LF.
+- The writer accepts only fixed JSON/HTML targets under a validated portable output directory,
+  authorizes root and directory identities around segment creation, uses exclusive creation plus
+  POSIX no-follow, performs bounded positional UTF-8 writes, sync/close and target/path snapshot
+  checks, and returns a relative path only after final authorization. Failures are stable and never
+  claim success; partial files are not unsafely unlinked after an identity race.
+- T04 verification under Node.js `24.18.0` passed 41 focused JSON/writer tests, formatting, strict
+  lint, typecheck, build, all 490 tests across 46 files, and coverage at 95.66% statements, 91.19%
+  branches, 99.36% functions, and 95.62% lines.
+- Independent final review confirmed the post-close target snapshot is the last asynchronous
+  filesystem observation before success, the replacement race fails closed, and no blocking T04
+  defect remains. Residual portable-filesystem and partial-target limits are recorded in D-032.

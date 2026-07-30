@@ -198,3 +198,26 @@ The terminal renderer is pure and not yet connected to the CLI. M06 must not pas
 color output through an assembled-output sanitizer that would neutralize trusted ANSI; it must
 preserve the rule that only the reporter introduces those fixed sequences. M05-T04 still owns
 canonical output-directory authorization, symlink-resistant creation, and exclusive report writes.
+
+## M05-T04 implemented JSON and report-write controls
+
+- JSON uses the standard encoder over the already validated complete result, so hostile strings
+  remain data and no manually concatenated JSON syntax is trusted.
+- The writer accepts only a closed plain request whose relative target exactly matches the validated
+  configured directory and fixed format filename. Malformed objects, proxies, accessors, ill-formed
+  UTF-16, absolute/ambiguous paths, and filename substitutions fail before filesystem mutation.
+- Root and each directory segment must remain canonical in-root directories with stable
+  device/inode identity. Segments are created individually with mode `0700`; the report is opened
+  with `O_EXCL`, `O_CREAT`, `O_WRONLY`, POSIX `O_NOFOLLOW`, and mode `0600`.
+- UTF-8 bytes are written positionally in chunks no larger than 64 KiB. Zero/oversized/invalid
+  native write counts, write/sync/stat/close failures, link/identity/snapshot changes, and unsafe
+  native error shapes become stable detail-free errors and never return a generated path.
+- Path/handle identity and final size are checked around writing and again after close. Tests include
+  real no-overwrite behavior plus injected root, ancestor, and target replacement windows.
+
+Portable Node filesystem APIs do not provide a cross-platform `openat`/`openat2` transaction, and
+some network filesystems may not honor local `O_EXCL` semantics identically. The controls detect
+observable changes but cannot eliminate every pathname race. If a failure occurs after exclusive
+creation, UXAudit deliberately leaves the possibly partial target: blindly unlinking that pathname
+after an identity race could remove an attacker replacement. Only a returned `WrittenReport` may be
+claimed by M06 as generated.
