@@ -270,3 +270,48 @@
   CSS-whitespace probes without finding a remaining blocker.
 - Fifty-four focused T04 rule/registry tests passed. The full 340-test coverage run passed with
   97.14% statements, 92.79% branches, 99.70% functions, and 97.14% lines.
+- Integrated M04-T05 through the production analysis-model and rule-engine boundaries with one
+  inert controlled TSX project. The reviewed expected result contains exactly one finding for each
+  of the eight stable rules; two evaluations serialize byte-identically and the target-code
+  sentinel is never executed.
+- Added complete catalog integration assertions for deterministic ordering/counters, category and
+  ID filter intersections, metadata and limitations, safe and unsupported cases, canonical
+  locations, and one injected throwing ninth rule that preserves all eight stable sibling findings.
+  The pre-evidence gate passed all 343 tests across 38 files with no skips or todos.
+- Defined an exact M04 evidence contract and finalizer with whole-header credential sanitization,
+  source-path redaction, strict file/directory allowlisting, fail-before-mutation validation, and a
+  SHA-256 manifest. Independent adversarial review confirmed that extra files, empty directories,
+  Basic/Bearer authorization headers, and manifest mutation on rejection are all prevented.
+- Collected the isolated `M04-RULES` evidence package twice under the pinned Node.js `24.18.0` and
+  npm `11.16.0` runtimes. Locked install, the 343-test product gate, coverage, zero-skip/todo tests,
+  six CLI smokes, the full-catalog scenario, harness validation, and moderate-threshold audit all
+  passed; npm reported zero known vulnerabilities.
+- The initial shell resolved Node.js 22 and the collector rejected it before running product checks
+  or publishing evidence. The official pinned-runtime execution wrote 20 artifacts, and the second
+  execution preserved the package after matching its source digest and stable scenario/measurement
+  results. Every retained SHA-256 manifest entry verifies.
+- Final self-review found that two auxiliary scenario JSON files were semantically valid and
+  manifested but did not satisfy repository formatting. The initial package was moved intact out of
+  the repository, the runner was corrected to canonicalize every retained JSON with the repository
+  Prettier options, and a temporary eight-file reproduction passed formatting while retaining the
+  reviewed expected/actual digest.
+- The same review hardened the collector to reject noncanonical scenario JSON, source-snapshot
+  mutation during gates, unsafe/symlinked evidence destinations, and destination changes before
+  publication. The finalizer now verifies the exact preexisting 20-artifact manifest before adding
+  the milestone report, so it cannot legitimize prior drift.
+- Recollected an interim corrected package twice under Node.js `24.18.0`. The first execution passed
+  the complete isolated gate and published 20 canonically formatted artifacts; the second matched
+  its source digest and preserved the package. The repository-wide format check, evidence contract,
+  sanitization, and all 20 manifest hashes passed before the later product-review correction.
+- Final product review then found one accessibility false negative: surrounding whitespace was
+  incorrectly stripped before matching excluded input types. HTML treats values such as
+  `type=" hidden "` as invalid and therefore defaults them to a label-required text state. Removed
+  that trimming and added two regression cases while preserving exact case-insensitive matches.
+- Final evidence review also extended destination reauthorization to the finalizer, preventing a
+  symlinked `evidence/` or `m04-rules/` directory, manifest, or report from redirecting manifest
+  publication outside the repository.
+- After both review findings were resolved, the final isolated package was collected twice. It
+  records all 344 tests across 38 files with zero skips/todos, the unchanged coverage thresholds,
+  zero known vulnerabilities, and source digest
+  `sha256:2db86840585dfc1622c0abcad7ff00fea1bccdcd895b291b5d3c6b482f9edfb2`; the second execution
+  preserved all 20 base artifacts.

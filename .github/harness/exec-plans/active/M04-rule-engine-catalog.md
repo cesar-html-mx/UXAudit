@@ -111,6 +111,15 @@ Objective: exercise the complete eight-rule registry twice over a controlled mix
 byte-stable normalized results, retain expected/actual findings and an isolated-failure scenario,
 and close documentation, traceability, security review, coverage, and evidence.
 
+Status: completed and independently reviewed without remaining blockers. The compiled runner
+retains reviewed expected/actual eight-rule results, a positive/safe/unsupported matrix,
+metadata/limitations, two-run byte comparison, category/ID filter projections, and one injected
+thrown-rule isolation result. Its complete expected JSON matches twice, with eight rules, eight
+findings, and no target-code execution. Three integration tests make those criteria part of the
+344-test product gate. The Node.js 24.18.0 collector reproduced that gate inside an allowlisted
+credential-free source snapshot, published the initial 20-artifact package, and preserved it on a
+second execution after matching the source digest and stable results.
+
 ## Validation and acceptance
 
 Each stable rule must pass positive, negative, and boundary/unsupported cases. Execute the full
@@ -125,10 +134,10 @@ scenario, limitations, tests, and coverage.
 
 - [x] Milestone started.
 - [x] Repository inspected and plan reconciled with reality.
-- [ ] Tasks completed.
-- [ ] Quality gate passed.
-- [ ] Evidence collected.
-- [ ] Documentation and traceability updated.
+- [x] Tasks completed.
+- [x] Quality gate passed.
+- [x] Evidence collected.
+- [x] Documentation and traceability updated.
 - [ ] Milestone closed and state advanced.
 
 ## Discoveries
@@ -169,6 +178,23 @@ Record implementation facts, library behavior, and assumptions discovered during
 - Literal object properties retain their own canonical source locations, so UX-001 can point to the
   effective `fontSize` declaration instead of inventing a range; unknown object properties and
   non-pixel units remain outside its static scope.
+- M03's isolated evidence collector/finalizer already provides the required source-copy allowlist,
+  credential-free child environment, path/token sanitization, atomic initial publication,
+  reproducibility comparison, and SHA-256 lifecycle. M04 can retain those controls while replacing
+  parser-specific artifacts with the complete rule matrix, findings, filters, limitations, and
+  failure-isolation scenario.
+- The invoking shell may resolve a different installed Node.js version even when npm 11 is
+  available. The evidence collector rejects that mismatch before product commands or publication;
+  the official package was therefore executed explicitly with the repository-pinned Node.js
+  24.18.0 and npm 11.16.0 runtimes.
+- A valid JSON artifact can still violate the repository formatting gate. Final self-review caught
+  that gap before closure; the runner and collector now share explicit canonical JSON formatting,
+  while publication additionally reauthorizes the destination and verifies the copied source
+  snapshot remains unchanged across the isolated gates.
+- Enumerated input-type matching is ASCII case-insensitive but does not strip surrounding
+  whitespace. Final product review caught the distinction: invalid padded values default to the
+  label-required text state, while exact `hidden`, `button`, `submit`, `reset`, and `image` values
+  remain excluded.
 
 ## Decision log
 
@@ -184,6 +210,8 @@ Record decisions made within the authority allowed by `AGENTS.md`.
   associations/input types, conservative unknown suppression, and planning-status distinction.
 - D-027 fixes conservative performance/SEO/UX scopes, advisory confidence, component-local H1
   ownership, validated rule factories, the 12px default, and the explicit eight-rule registry.
+- D-028 fixes the reviewed full-catalog expected result, deterministic/filter/failure projections,
+  and isolated, sanitized, reproducible evidence lifecycle.
 
 ## Risks and recovery
 
@@ -200,5 +228,22 @@ Maintain task-specific risks, rollback steps, and any remaining debt.
 
 ## Outcomes and retrospective
 
-At closure, describe what now works, what was actually verified, remaining limitations, commits, and
-the next milestone.
+M04 now provides parser-independent rule and finding contracts, an explicit validated registry,
+deterministic filtering/evaluation, recoverable per-rule isolation, and eight documented stable
+rules across accessibility, performance, SEO, and UX. The controlled TSX scenario exercises every
+rule through the production analysis-model boundary and retains exactly one canonical finding per
+rule, complete metadata/limitations, filter projections, and a throwing-rule result that preserves
+all safe siblings.
+
+Node.js 24.18.0/npm 11.16.0 verification passed formatting, strict lint, typecheck, build, all 344
+tests in 38 files with zero skips/todos, six CLI smokes, the compiled catalog scenario, harness
+validation, and a moderate-threshold audit with zero known vulnerabilities. Coverage measured
+97.14% statements, 92.79% branches, 99.70% functions, and 97.14% lines. The isolated evidence
+package was collected twice; the second execution preserved the original package after matching its
+source digest and stable results.
+
+The remaining limitations are deliberate static-analysis boundaries: dynamic JSX, custom component
+abstractions, external CSS, routes, viewport priority, and complete accessible-name context are not
+inferred. Hosted Windows/macOS execution and remote publication remain unclaimed without repository
+credentials. M05 will define configuration and one normalized `AuditResult`, then add consistent
+terminal, JSON, and escaped standalone HTML reporting without changing the completed M04 contracts.

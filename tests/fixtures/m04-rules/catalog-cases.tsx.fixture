@@ -1,0 +1,89 @@
+import { writeFileSync } from 'node:fs';
+
+writeFileSync(new URL('./TARGET_CODE_EXECUTED', import.meta.url), 'executed');
+
+interface CatalogCasesProps {
+  readonly controlProps: Record<string, unknown>;
+  readonly dynamicName: string;
+  readonly dynamicSize: number;
+  readonly imageProps: Record<string, unknown>;
+}
+
+export const CatalogCases = ({
+  controlProps,
+  dynamicName,
+  dynamicSize,
+  imageProps,
+}: CatalogCasesProps) => (
+  <>
+    <img
+      data-case="img-missing-alt"
+      height={180}
+      loading="lazy"
+      src="missing-alt.png"
+      width={320}
+    />
+    <input data-case="input-missing-label" />
+    <button data-case="button-missing-name" />
+    <img
+      alt="Reserved-space example"
+      data-case="img-invalid-dimensions"
+      height={100}
+      loading="lazy"
+      src="dimensions.png"
+      width={0}
+    />
+    <img
+      alt="Lazy-loading example"
+      data-case="img-not-lazy"
+      height={180}
+      loading="eager"
+      src="loading.png"
+      width={320}
+    />
+    <a data-case="link-ambiguous-text" href="/details">
+      Read more
+    </a>
+    <section>
+      <h1 data-case="h1-primary">Catalog heading</h1>
+      <h1 data-case="h1-secondary">Duplicate heading</h1>
+    </section>
+    <span data-case="text-too-small" style={{ fontSize: 10 }}>
+      Supporting details
+    </span>
+
+    <img
+      alt="Complete product preview"
+      data-case="img-complete"
+      height={180}
+      loading="lazy"
+      src="complete.png"
+      width={320}
+    />
+    <label>
+      Email
+      <input data-case="input-nested-label" type="email" />
+    </label>
+    <button data-case="button-static-name">Save changes</button>
+    <a data-case="link-specific-text" href="/account">
+      Account settings
+    </a>
+    <span data-case="text-threshold" style={{ fontSize: 12 }}>
+      Readable details
+    </span>
+
+    <img {...imageProps} data-case="img-spread-unsupported" />
+    <input {...controlProps} data-case="input-spread-unsupported" />
+    <button data-case="button-dynamic-unsupported">{dynamicName}</button>
+    <a data-case="link-dynamic-unsupported" href="/dynamic">
+      {dynamicName}
+    </a>
+    <span data-case="text-dynamic-size-unsupported" style={{ fontSize: dynamicSize }}>
+      Dynamic details
+    </span>
+    <Image data-case="custom-image-unsupported" />
+    <H1 data-case="custom-heading-unsupported">Custom heading</H1>
+  </>
+);
+
+export const SafeHeading = () => <h1 data-case="h1-single-safe">Single heading</h1>;

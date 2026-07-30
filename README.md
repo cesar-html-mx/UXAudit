@@ -100,10 +100,13 @@ Useful individual commands:
 | `npm run test:smoke`            | Build and execute six CLI scenarios without a shell.                     |
 | `npm run test:scenario:m02`     | Verify reviewed inventory, exclusions, links, determinism, and no exec.  |
 | `npm run test:scenario:m03`     | Exercise the controlled four-kind parser/model scenario without exec.    |
+| `npm run test:scenario:m04`     | Validate the deterministic eight-rule catalog without executing source.  |
 | `npm run evidence:m02`          | Collect the isolated, sanitized, integrity-checked M02 evidence package. |
 | `npm run evidence:m02:finalize` | Add the milestone report to the retained SHA-256 manifest.               |
 | `npm run evidence:m03`          | Collect the isolated, sanitized, integrity-checked M03 evidence package. |
 | `npm run evidence:m03:finalize` | Add the milestone report to the retained M03 SHA-256 manifest.           |
+| `npm run evidence:m04`          | Collect the isolated, sanitized, integrity-checked M04 evidence package. |
+| `npm run evidence:m04:finalize` | Add the milestone report to the retained M04 SHA-256 manifest.           |
 | `npm run verify`                | Run format, lint, typecheck, unit tests, and build in one gate.          |
 
 Husky invokes `npm run verify` before local commits. CI is configured for Node.js 24 on Ubuntu
@@ -149,6 +152,17 @@ Validate the harness at any time:
 node .github/harness/scripts/validate-harness.mjs
 node .github/harness/scripts/show-status.mjs
 ```
+
+Validate the compiled M04 domain catalog independently of the not-yet-integrated CLI:
+
+```bash
+npm run test:scenario:m04
+```
+
+The controlled scenario analyzes one inert TSX project, matches the reviewed eight-finding
+expectation twice, exercises filtering and one isolated rule failure, and proves that target code is
+not executed. `npm run evidence:m04` additionally reproduces the gate in an isolated,
+credential-free source snapshot while M04-T05 is active.
 
 This implementation slice evaluates M04 rules over parser-independent input without changing the
 current CLI contract.

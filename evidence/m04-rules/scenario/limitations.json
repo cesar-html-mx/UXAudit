@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "M04-RULE-CATALOG",
+  "ruleCount": 8,
+  "rules": [
+    {
+      "ruleId": "accessibility/button-name",
+      "limitations": [
+        "The static text model does not implement the complete accessible-name computation.",
+        "Dynamic-only content, JSX spreads, and custom icon components are treated as unknown.",
+        "Referenced aria-labelledby targets and CSS-hidden content are not resolved."
+      ]
+    },
+    {
+      "ruleId": "accessibility/img-alt",
+      "limitations": [
+        "Custom image components and aliases are not inferred.",
+        "A later JSX spread can provide alt at runtime and is therefore treated as unknown.",
+        "The rule checks explicit attribute presence, not the descriptive quality of alt text."
+      ]
+    },
+    {
+      "ruleId": "accessibility/input-label",
+      "limitations": [
+        "Dynamic IDs, labels, and JSX spreads are treated as unknown rather than violations.",
+        "Custom label or form-control abstractions are not resolved across component boundaries.",
+        "aria-labelledby target existence and the complete accessible-name computation are not validated.",
+        "Input types hidden, button, submit, reset, and image are outside this label rule.",
+        "A nested label is not checked for the one-labelable-descendant content constraint."
+      ]
+    },
+    {
+      "ruleId": "performance/img-dimensions",
+      "limitations": [
+        "External CSS, aspect-ratio, and component-level layout can reserve equivalent space, so the finding describes reviewable risk rather than observed layout shift.",
+        "Dynamic dimension values and unresolved JSX spreads are unknown and do not independently produce a finding; a proved sibling violation remains reviewable.",
+        "A literal zero-by-zero image is treated as content not intended for the user; zero paired with a positive dimension remains reviewable.",
+        "Only intrinsic img attributes are checked; custom image components and runtime image metadata are not inferred."
+      ]
+    },
+    {
+      "ruleId": "performance/img-lazy-loading",
+      "limitations": [
+        "Static analysis cannot determine whether an image is above the fold or otherwise visually critical, so every finding is advisory.",
+        "Missing, eager, and invalid literal loading values are reviewable; dynamic values and unresolved JSX spreads are treated as unknown.",
+        "Custom image components, aliases, preload behavior, and runtime loading priorities are not inferred."
+      ]
+    },
+    {
+      "ruleId": "seo/ambiguous-link-text",
+      "limitations": [
+        "Only exact retained text on intrinsic links is compared; partial and dynamic text are not reported.",
+        "Custom link components and their rendered output are not inferred.",
+        "Surrounding content, ARIA naming, destination URLs, and visual context are not evaluated."
+      ]
+    },
+    {
+      "ruleId": "seo/multiple-h1",
+      "limitations": [
+        "The initial scope counts intrinsic h1 elements only within each syntactically recognized component.",
+        "Conditional rendering, routes, and whether owned headings appear together at runtime are not evaluated.",
+        "Custom heading components, component composition, and heading roles are not inferred."
+      ]
+    },
+    {
+      "ruleId": "ux/small-inline-text",
+      "limitations": [
+        "External stylesheets, class names, inherited styles, and the rendered cascade are not evaluated.",
+        "Dynamic styles, unresolved JSX spreads, and object styles with unknown properties are treated as unknown.",
+        "Relative units, percentages, calculations, browser zoom, and user display settings are not resolved.",
+        "Only intrinsic elements with retained non-empty static text are evaluated.",
+        "Metadata, inert, void, and other intrinsically non-rendered text containers are excluded."
+      ]
+    }
+  ]
+}

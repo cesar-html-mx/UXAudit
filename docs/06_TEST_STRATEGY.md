@@ -203,3 +203,25 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
 - The executed Node.js `24.18.0` gate passed all 208 repository tests across 21 files. Format, lint,
   typecheck, and build passed; global V8 coverage measured 97.63% statements, 91.86% branches, 100%
   functions, and 97.59% lines.
+
+## M04 executed rule/catalog baseline
+
+- Every stable rule has focused positive, negative, multiple, boundary, unsupported, metadata, and
+  location assertions. Dynamic/spread values, custom abstractions, component ownership, literal
+  syntax, configuration accessors/proxies, and advisory limitations have explicit cases.
+- Registry/loader/evaluator tests cover malformed contracts, exact-once execution, category/ID
+  intersection, experimental opt-in, deep model immutability, transactional output validation,
+  canonical location provenance, deterministic sorting/counters, and recoverable sibling
+  continuation.
+- The controlled compiled scenario analyzes an inert TSX project without executing its sentinel and
+  produces exactly one normalized finding per each of the eight stable rules. The complete result
+  matches a reviewed expected JSON byte-for-byte on two runs.
+- Retained scenario projections include a positive/safe/unsupported matrix, complete finding
+  samples, metadata and limitations, default/category/intersection/ID/empty filters, unknown-ID
+  rejection, and a thrown ninth rule whose stable error preserves all eight sibling findings.
+- The isolated Node.js `24.18.0`/npm `11.16.0` evidence gate passed all 344 repository tests across
+  38 files with zero known skips/todos. Clean locked install, format, lint, typecheck, build, six CLI
+  smokes, harness validation, the compiled scenario, and a moderate-threshold audit passed; global
+  V8 coverage measured 97.14% statements, 92.79% branches, 99.70% functions, and 97.14% lines.
+- The package was collected twice. The second execution matched the source digest and stable
+  measurements/scenario projections and preserved the initially published 20 artifacts.

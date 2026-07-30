@@ -146,6 +146,11 @@ failing closed whenever an observable change occurs.
 - Stable catalog rules suppress dynamic/spread uncertainty or use explicit advisory wording and
   confidence. Custom components, rendered CSS, routing, viewport priority, and complete accessible
   context remain documented limitations instead of security or runtime claims.
+- M04 evidence runs in an allowlisted credential-free source copy, rejects snapshot mutation and
+  noncanonical scenario JSON, and reauthorizes a regular in-repository destination immediately
+  before atomic publication. Exact file allowlists, secret/path scans, a stable second-run
+  comparison, and a SHA-256 manifest fail closed; finalization verifies the existing 20-artifact
+  manifest before adding the milestone report.
 
 The M04 engine is not yet connected to the CLI and does not write reports. M05 must preserve these
 validated boundaries when loading user configuration and must treat every normalized finding field

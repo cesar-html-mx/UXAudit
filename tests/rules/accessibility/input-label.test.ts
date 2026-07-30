@@ -56,6 +56,17 @@ describe('accessibility/input-label', () => {
     expect(inputLabelRule.evaluate({ model })).toEqual([]);
   });
 
+  it('requires labels for invalid input types with surrounding whitespace', () => {
+    const model = modelFromJsx(`
+      <>
+        <input type=" hidden " />
+        <input type="SUBMIT " />
+      </>
+    `);
+
+    expect(inputLabelRule.evaluate({ model })).toHaveLength(2);
+  });
+
   it('treats dynamic types, IDs, ARIA values, and spreads as unsupported', () => {
     const model = modelFromJsx(`
       <>

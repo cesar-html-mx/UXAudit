@@ -55,7 +55,7 @@ const classifyInputScope = (element: JsxElement): InputScope => {
     return 'unknown';
   }
 
-  return excludedInputTypes.has(value.value.trim().toLowerCase()) ? 'excluded' : 'label-required';
+  return excludedInputTypes.has(value.value.toLowerCase()) ? 'excluded' : 'label-required';
 };
 
 const getExactNonEmptyId = (element: JsxElement): null | string | undefined => {

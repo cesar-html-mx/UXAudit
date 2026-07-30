@@ -36,3 +36,9 @@ Do not commit secrets, private absolute paths, or modified raw output.
   target-code non-execution proof, dependency audit, exact Babel dependency tree, source snapshot
   digest, zero-skip/todo record, bounded performance observations, and a per-artifact SHA-256
   manifest covering the finalized milestone report. Start with `m03-parsing/SUMMARY.md`.
+- `m04-rules/`: completed Node.js 24 rule-engine and initial-catalog evidence, including an isolated
+  `npm ci`, the 344-test product gate, coverage, compiled CLI smokes, reviewed expected/actual
+  eight-rule findings, byte-identical reruns, category/ID filters, metadata and limitations,
+  thrown-rule sibling isolation, target-code non-execution, dependency audit, source snapshot
+  digest, zero-skip/todo record, and a finalizable per-artifact SHA-256 manifest. Start with
+  `m04-rules/SUMMARY.md`.

@@ -175,7 +175,9 @@
         {
           "id": "M04-T05",
           "title": "Validate rule isolation and deterministic findings",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node 24.18.0/npm 11.16.0: 344 tests across 38 files with zero skips/todos; coverage 97.14% statements, 92.79% branches, 99.70% functions, 97.14% lines; format, lint, typecheck, build, six CLI smokes, deterministic eight-rule scenario, harness, audit, two isolated evidence collections, and final independent reviews PASS",
+          "completedAt": "2026-07-30T00:01:07.416Z"
         }
       ]
     },
