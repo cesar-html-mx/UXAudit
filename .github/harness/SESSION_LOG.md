@@ -315,3 +315,15 @@
   zero known vulnerabilities, and source digest
   `sha256:2db86840585dfc1622c0abcad7ff00fea1bccdcd895b291b5d3c6b482f9edfb2`; the second execution
   preserved all 20 base artifacts.
+- Three independent closure reviews collectively covered product semantics, evidence security and
+  integrity, documentation, traceability, and harness transition readiness. The discovered
+  canonical-JSON, padded-input-type, finalizer-symlink, and RNF-06/RNF-07 traceability gaps were
+  corrected and revalidated; no blocking, high, or medium defect remains.
+- Committed completed M04-T05 as `3afa4bb3eaab415a7792aa0c4f3862464bc89efb`.
+  A non-interactive HTTPS push then failed because this process has no GitHub username/credential;
+  the remote was unchanged and no pull request or hosted CI result is claimed.
+- Finalized the 21-entry M04 SHA-256 manifest with `MILESTONE_REPORT.md`, marked the evidence index
+  complete, and verified every retained hash after finalization.
+- Closed M04 against verified task commit `3afa4bb3eaab415a7792aa0c4f3862464bc89efb`,
+  moved its ExecPlan to `exec-plans/completed/`, and activated M05-T01. No M05 implementation work
+  was started.

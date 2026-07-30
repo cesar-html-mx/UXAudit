@@ -138,7 +138,7 @@ scenario, limitations, tests, and coverage.
 - [x] Quality gate passed.
 - [x] Evidence collected.
 - [x] Documentation and traceability updated.
-- [ ] Milestone closed and state advanced.
+- [x] Milestone closed and state advanced.
 
 ## Discoveries
 

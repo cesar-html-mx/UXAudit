@@ -40,5 +40,6 @@ Do not commit secrets, private absolute paths, or modified raw output.
   `npm ci`, the 344-test product gate, coverage, compiled CLI smokes, reviewed expected/actual
   eight-rule findings, byte-identical reruns, category/ID filters, metadata and limitations,
   thrown-rule sibling isolation, target-code non-execution, dependency audit, source snapshot
-  digest, zero-skip/todo record, and a finalizable per-artifact SHA-256 manifest. Start with
+  digest, zero-skip/todo record, and a per-artifact SHA-256 manifest covering the milestone report.
+  Start with
   `m04-rules/SUMMARY.md`.
