@@ -55,7 +55,8 @@ be collapsed without an architecture decision.
 ```text
 src/cli/index.ts
   -> src/cli/run-cli.ts
-       -> src/cli/sanitize-terminal.ts
+       -> src/cli/sanitize-terminal.ts (compatibility re-export)
+            -> src/shared/sanitize-terminal.ts
   -> src/application/analyze-project.ts
   -> src/application/scan-project.ts
        -> src/project/validate-project-path.ts
@@ -287,12 +288,83 @@ configuration to `RuleContext`.
 
 ### Reporter
 
-Transforms one `AuditResult` into a representation. It never discovers, parses, or reevaluates rules.
+M05-T01 defines a pure reporter as a format identity plus `render(result): string`. It transforms
+exactly one completed `AuditResult` into a representation and never discovers, parses, reevaluates
+rules, mutates the result, or writes through the domain contract. Terminal/JSON/HTML adapters and
+their optional filesystem writer remain presentation boundaries.
+
+M05-T03 implements the terminal adapter as deterministic LF text. It preserves canonical finding
+and error order, uses complete summary buckets, filters only displayed finding records through the
+inclusive configured severity, converts stored start columns to one-based labels, and includes
+individual normalized processing errors only when verbose. A neutral shared sanitizer turns
+untrusted controls, bidirectional markers, BOM, and unpaired surrogates into visible escapes before
+the reporter adds fixed ANSI around badges. It does not inspect process, TTY, environment, or
+filesystem state.
+
+M05-T04 implements the JSON adapter as the exact supplied `AuditResult` encoded with two-space
+`JSON.stringify` and one LF. It does not omit timing, convert domain coordinates, sort, project, or
+mutate data. A separate writer is shared by JSON and HTML: rendering remains pure, while persistence
+validates the exact fixed format target and returns a relative path only after completion.
+
+M05-T05 implements HTML as another pure adapter. It builds one fixed semantic HTML5 structure with
+constant inline CSS and a restrictive CSP, includes complete metadata/configuration/summaries and
+every normalized finding/error, and groups records through fixed enum orders without sorting the
+input. Terminal-only severity and verbosity settings are reported but do not suppress HTML data.
+The renderer converts columns to one-based human labels, preserves both offsets and the
+end-exclusive contract, neutralizes hostile Unicode before context-specific HTML escaping, and
+reparses potential links into credential-free HTTP(S) URLs or inert text. `writeHtmlReport`
+delegates the exact rendered bytes and fixed configured path to the shared writer.
+
+### Configuration
+
+The normalized M05 configuration is a complete schema-versioned value with category/rule filters,
+selected terminal/JSON/HTML formats, a portable project-relative output directory, minimum display
+severity, color, and verbosity. `null` filters mean the stable default catalog; empty arrays
+intentionally enable no rules. Defaults select terminal output, `info`, color, non-verbose detail,
+and `uxaudit-reports`.
+
+M05-T02 separates filesystem authorization from data normalization. The reader authorizes the
+canonical root and conventional filename, or treats an explicit configuration path as separate
+user authority; it rejects links/nonregular files and observed root/path/descriptor changes, reads
+at most 64 KiB, and decodes strict UTF-8. The loader parses JSON, validates closed version-1 own-data
+records and bounded dense arrays, resolves rule IDs against the stable registry, canonicalizes
+selection order, and merges `defaults < file < CLI`. The returned configuration is a defensive
+frozen copy. No project configuration module is imported or executed, and Commander remains outside
+this boundary until M06.
+
+### AuditResult
+
+M05-T01 defines `AuditResult` schema `1.0.0` as the single recursively frozen value consumed by
+every reporter. It contains:
+
+- the normalized configuration plus tool/schema versions;
+- the canonical project root and canonical UTC start/completion timestamps with duration;
+- discovered, selected, parsed, and failed-file counters;
+- the complete M04 available/enabled/executed/succeeded/failed/finding counters and findings;
+- normalized recoverable discovery, source read/parse/extract, and rule errors;
+- explicit totals for every category, severity, and processing stage, including zero buckets; and
+- nullable project-relative JSON/HTML paths resolved from the controlled output directory and fixed
+  `audit-report.json`/`audit-report.html` names.
+
+The builder defensively copies upstream data, derives summaries, restores canonical finding/error
+order, rejects contradictory counters or malformed boundary data through one detail-free invariant
+error, and freezes the result without freezing caller-owned input. Stored source coordinates keep
+M03's one-based lines and zero-based UTF-16 columns/offsets. Human reporters may convert columns for
+display; JSON must preserve the domain coordinates.
 
 ## Persistence
 
 The initial version has no database. Configuration, JSON, HTML, and optional logs are local files.
 Transient inventory, AST adapter output, model, and findings remain in memory during an audit.
+
+The shared report writer creates an approved output directory one segment at a time, reauthorizes
+the canonical root and directory device/inode identities, rejects links and path escape, and opens
+the fixed target with exclusive creation (`O_NOFOLLOW` on POSIX). It writes UTF-8 in bounded
+positional chunks, syncs, verifies path/handle snapshots, closes exactly once, and repeats final
+authorization before exposing a frozen project-relative success record. Portable Node APIs do not
+offer a cross-platform directory-handle-relative `openat` guarantee, so observable races fail
+closed but a residual pathname race remains. Post-creation failures may retain a partial target
+rather than risking deletion of a replaced pathname.
 
 ## Error boundaries
 

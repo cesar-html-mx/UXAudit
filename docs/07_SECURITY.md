@@ -155,3 +155,91 @@ failing closed whenever an observable change occurs.
 The M04 engine is not yet connected to the CLI and does not write reports. M05 must preserve these
 validated boundaries when loading user configuration and must treat every normalized finding field
 as untrusted when rendering terminal, JSON, or HTML output.
+
+## M05-T02 implemented configuration controls and limits
+
+- Configuration is inert JSON rather than an imported JavaScript/TypeScript module. Strict UTF-8
+  decoding is bounded to 64 KiB, and malformed/oversized content fails through stable errors without
+  retaining native causes or private paths.
+- The conventional file is authorized as an exact canonical child of an unchanged canonical
+  project root. Both conventional and explicitly selected files must remain regular with stable
+  device/inode, size, modification-time, and change-time snapshots around a descriptor-only read.
+  POSIX requests read-only, no-follow, and non-blocking flags; Windows uses read-only with the same
+  portable identity checks.
+- File and future CLI layers are closed plain-data records. Accessors, proxies, sparse/exotic or
+  oversized arrays, unknown keys/rules, duplicates, and invalid primitive values fail closed
+  without invoking supplied getters.
+- Output directories are bounded portable relative paths. Absolute paths, drive prefixes,
+  backslashes, empty/dot components, controls/bidirectional overrides, invalid Windows characters,
+  reserved device names, and ambiguous trailing dots/spaces are rejected before an
+  `AuditResult` or writer target can be constructed.
+
+An explicit configuration file is separate user authority and may be outside the analyzed project;
+it is still subject to the regular-file and identity policy. Portable user-space checks cannot
+eliminate every pathname race, so observed changes fail closed and only bytes from the verified
+descriptor are parsed. M05-T04 still owns canonical output-directory authorization,
+symlink-resistant creation, and exclusive report writes.
+
+## M05-T03 implemented terminal controls
+
+- The terminal reporter interpolates no raw project/result string. Each value is sanitized before
+  structural separators or trusted ANSI are added, so injected newlines cannot forge report records
+  and source-provided escapes cannot change terminal state.
+- The shared sanitizer renders C0/C1 controls, ANSI/OSC bytes, bidirectional marks and isolates,
+  Unicode line separators, BOM, and unpaired UTF-16 surrogates as visible lowercase `\uXXXX`
+  sequences while preserving well-formed Unicode.
+- Color is a normalized configuration value rather than TTY/environment behavior. Only fixed
+  severity/stage badges receive ANSI; no-color output contains no escape character, and stripping
+  reporter-owned ANSI produces the exact no-color bytes.
+- Verbose mode exposes only already normalized recoverable error records. Native causes, stacks,
+  source text, and additional absolute paths are not available to the reporter.
+
+The terminal renderer is pure and not yet connected to the CLI. M06 must not pass its already-safe
+color output through an assembled-output sanitizer that would neutralize trusted ANSI; it must
+preserve the rule that only the reporter introduces those fixed sequences. M05-T04 still owns
+canonical output-directory authorization, symlink-resistant creation, and exclusive report writes.
+
+## M05-T04 implemented JSON and report-write controls
+
+- JSON uses the standard encoder over the already validated complete result, so hostile strings
+  remain data and no manually concatenated JSON syntax is trusted.
+- The writer accepts only a closed plain request whose relative target exactly matches the validated
+  configured directory and fixed format filename. Malformed objects, proxies, accessors, ill-formed
+  UTF-16, absolute/ambiguous paths, and filename substitutions fail before filesystem mutation.
+- Root and each directory segment must remain canonical in-root directories with stable
+  device/inode identity. Segments are created individually with mode `0700`; the report is opened
+  with `O_EXCL`, `O_CREAT`, `O_WRONLY`, POSIX `O_NOFOLLOW`, and mode `0600`.
+- UTF-8 bytes are written positionally in chunks no larger than 64 KiB. Zero/oversized/invalid
+  native write counts, write/sync/stat/close failures, link/identity/snapshot changes, and unsafe
+  native error shapes become stable detail-free errors and never return a generated path.
+- Path/handle identity and final size are checked around writing and again after close. Tests include
+  real no-overwrite behavior plus injected root, ancestor, and target replacement windows.
+
+Portable Node filesystem APIs do not provide a cross-platform `openat`/`openat2` transaction, and
+some network filesystems may not honor local `O_EXCL` semantics identically. The controls detect
+observable changes but cannot eliminate every pathname race. If a failure occurs after exclusive
+creation, UXAudit deliberately leaves the possibly partial target: blindly unlinking that pathname
+after an identity race could remove an attacker replacement. Only a returned `WrittenReport` may be
+claimed by M06 as generated.
+
+## M05-T05 implemented HTML controls
+
+- The document has fixed trusted tags, IDs, classes, and CSS; no result value selects markup or
+  style. It contains no script, event-handler attribute, form, frame, object, embedded resource,
+  image, stylesheet link, `@import`, or CSS `url()`.
+- An early CSP allows only the inline constant style and denies other default, script, object, base,
+  and form sources/actions. The report is one local UTF-8 HTML5 file with no runtime service.
+- Every dynamic value first uses the shared visible neutralization for C0/C1, ESC/terminal
+  sequences, bidirectional marks/isolates, Unicode line separators, BOM, and lone surrogates, then
+  escapes `&`, `<`, `>`, `"`, and `'` for HTML. Well-formed Unicode such as emoji remains intact.
+- Reference URLs are distrusted again at presentation time, even if the object is forged as an
+  `AuditResult`. Raw controls or directional formatting, malformed UTF-16, non-HTTP(S) schemes, and
+  credentials make the reference inert. Accepted links use the parsed URL in the escaped attribute,
+  while the original value remains escaped text.
+- HTML never hides errors through `verbose` or findings through `minimumSeverity`, so security and
+  processing records remain reviewable. Null/empty values and every zero bucket are explicit.
+
+XSS validation consists of hostile fixtures, start-tag/attribute inspection, escaping assertions,
+CSP inspection, and absence of executable/resource-bearing markup. It does not execute a browser
+and must not be described as a runtime exploit test. File persistence continues to use the T04
+writer and inherits its residual portable-filesystem limits.

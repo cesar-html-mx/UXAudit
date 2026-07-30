@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "M05-CONFIGURATION-REPORTING",
+  "browserExecutionPerformed": false,
+  "contentSecurityPolicy": "default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'",
+  "escapedHostilePayloadPresent": true,
+  "eventHandlerAttributesAbsent": true,
+  "externalAssetsAbsent": true,
+  "inlineScriptElementsAbsent": true,
+  "safeReferenceLinkCount": 1,
+  "secondaryUnicodeHtmlDigest": "sha256:c039f2cd505671dad921c74e1b8241edb03f658e47319b48759a1a9bf36ffb62",
+  "secondaryUnicodeTerminalDigest": "sha256:162b7058f7ae2658b6cbc5328a65f44c82861cef428574b35070c14814a32e1e",
+  "secondaryUnicodeValueCount": 6,
+  "secondaryUnicodeValuesRenderedAsVisibleEscapes": true,
+  "secondaryUnicodeValuesRetained": false,
+  "unsafeMarkupAbsent": true,
+  "validationMethod": "Structural string assertions and CSP inspection only; no browser execution was performed."
+}

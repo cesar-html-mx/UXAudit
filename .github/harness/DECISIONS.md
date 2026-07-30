@@ -553,3 +553,215 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Evidence: `tests/rules/initial-catalog.integration.test.ts`,
   `scripts/run-m04-scenario.mjs`, the expected fixture, two collector executions, and
   `evidence/m04-rules/`.
+
+## D-029 — Versioned immutable configuration and AuditResult boundary
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M04 returns deterministic findings, recoverable rule errors, and evaluation counters, but
+  every M05 reporter needs the same complete result and configuration vocabulary. The planning
+  schema did not define counters, processing-error variants, timing, output paths, or summary
+  buckets, and allowing reporters to reconstruct those facts independently would introduce drift.
+- Decision: Normalize configuration as schema version `1` with explicit category/rule filters,
+  report formats, relative output directory, minimum display severity, color, and verbosity.
+  `null` filters select the stable default catalog while empty arrays intentionally select no
+  rules. Defaults are terminal output, color enabled, `info` threshold, non-verbose detail, and the
+  controlled `uxaudit-reports` directory with fixed `audit-report.json`/`.html` names. Define
+  `AuditResult` schema `1.0.0` as one recursively frozen defensive value containing that
+  configuration, canonical project/timing/tool metadata, discovered/selected/parsed/failed file
+  counters, the complete M04 rule counters/findings, normalized discovery/source/rule errors,
+  explicit zero-filled category/severity/stage summaries, and pre-resolved project-relative report
+  paths. The builder rejects inconsistent counters, unsafe configured paths, malformed references,
+  noncanonical timestamps, or invalid upstream records through one detail-free invariant error and
+  orders findings/errors deterministically. A pure reporter receives exactly one such result;
+  filesystem writers remain separate boundary adapters. Commander and full audit orchestration
+  remain M06 work.
+- Alternatives considered: Reporter-specific projections; optional/missing summary buckets; treating
+  an empty filter as absent; retaining the permissive schema; storing absolute report paths;
+  mutating the result after each reporter writes; or connecting the current scan-only CLI before
+  M06.
+- Consequences: Terminal, JSON, HTML, and future reporters share one typed and schema-versioned
+  source of truth. Stored source columns remain zero-based; only human presentation may convert
+  them. Timestamps/duration are intentionally volatile between audit sessions but deterministic
+  rendering is required for the same prepared result. Paths identify configured output targets;
+  later writers must still verify successful exclusive in-root creation before an application
+  claims generation.
+- Requirements/contracts affected: RF-13 through RF-15, RNF-02 through RNF-06, RNF-09, RNF-10,
+  M05 acceptance, R-005, R-009, R-014, R-017, R-018, and R-019.
+- Evidence: exact audit-result schema, configuration/audit/reporter contract tests, the 372-test
+  Node.js 24 product gate, and M05 reporter/evidence work as it is completed.
+
+## D-030 — Bounded JSON configuration boundary and explicit precedence
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M05 must accept one conventional project configuration and future CLI values without
+  importing target modules, following symlinks, leaking native filesystem detail, accepting
+  ambiguous selections, or allowing host-dependent report paths. An explicitly selected
+  configuration is independently user-authorized and therefore does not have the same containment
+  semantics as the conventional project-root file.
+- Decision: Read at most 64 KiB of strict UTF-8 JSON from a verified regular-file descriptor. The
+  conventional `uxaudit.config.json` must be an exact canonical child of an unchanged canonical
+  project root; its absence means defaults. An explicit path may resolve outside the project root,
+  but absence is an error and symlink/nonregular/changed paths still fail closed. Validate file and
+  programmatic override layers as closed own-data records without invoking accessors, bound arrays
+  to 128 entries, reject duplicate top-level keys and duplicate/unknown selections, and accept only
+  portable relative output directories. Canonicalize categories, formats, and rule IDs, merge
+  `defaults < file < CLI`, defensively copy arrays, and recursively freeze the complete result.
+  File-level `null` filters mean the stable catalog, explicit empty filters mean no selection, and
+  CLI filters use omission rather than `null` for “no override.” All failures use stable
+  non-reflective `ConfigurationError` codes without retaining native causes.
+- Alternatives considered: Executable JavaScript/TypeScript configuration; unbounded
+  `readFile`; treating a missing explicit path as defaults; requiring every explicit file to be
+  inside the analyzed project; shallow object spreading without validation; locale ordering; or
+  allowing output paths whose meaning changes across POSIX and Windows.
+- Consequences: Configuration is inert, deterministic, independently testable, and portable.
+  Commander wiring remains M06 work, so T02 exposes a loader boundary rather than changing the
+  current scan-only CLI. User-space identity checks reduce observable path races but cannot provide
+  an atomic pathname guarantee on every platform.
+- Requirements/contracts affected: RF-09, RNF-01, RNF-03, RNF-04, RNF-09, M05 acceptance, R-009,
+  R-015, and R-017.
+- Evidence: configuration reader/loader tests and the 435-test Node.js 24 task gate with 95.77%
+  statements, 91.08% branches, 99.29% functions, and 95.72% lines.
+
+## D-031 — Pure terminal report with per-value sanitization
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: The terminal is an immediate human presentation of the same frozen result used by JSON
+  and HTML. Reordering by severity would contradict the canonical result, sanitizing a completed
+  report would preserve attacker-supplied line structure or neutralize trusted color, and deriving
+  options from TTY/environment state would make rendering nondeterministic.
+- Decision: Define one frozen terminal `Reporter` that renders LF text synchronously from exactly
+  one `AuditResult`. Present complete file/rule/finding/error summaries with fixed category,
+  severity, and stage bucket order. Apply the configured minimum severity inclusively to finding
+  detail only, preserving the result's canonical order and retaining total counts. Display source
+  start columns as stored column plus one, render null locations/references explicitly, and include
+  normalized error records only when `verbose` is true. Move terminal sanitization to a neutral
+  shared module with the original CLI module as a compatibility re-export. Sanitize every dynamic
+  value—including controls, bidirectional markers, BOM, and unpaired surrogates—before adding fixed
+  ANSI only around severity/stage badges. `color: false` emits no escape character; stripping the
+  trusted ANSI from color output reproduces no-color output byte-for-byte.
+- Alternatives considered: Sorting/grouping findings by severity; filtering summary totals;
+  converting stored result coordinates; sanitizing the assembled report; coloring whole
+  attacker-controlled lines; reading `NO_COLOR`/TTY state; or printing native error causes.
+- Consequences: Terminal output is deterministic, injection-resistant, readable, and independent
+  of discovery/rules/filesystem I/O. M06 must pass external color/verbosity choices into normalized
+  configuration and write the already-sanitized reporter output through a boundary that preserves
+  its trusted ANSI rather than sanitizing the assembled report again.
+- Requirements/contracts affected: RF-15, RNF-01, RNF-04, RNF-06, RNF-09, RNF-10, M05 acceptance,
+  R-014, and R-019.
+- Evidence: terminal/CLI focused tests and the 449-test Node.js 24 task gate with 95.94% statements,
+  91.42% branches, 99.31% functions, and 95.90% lines.
+
+## D-032 — Lossless JSON and one exclusive report-file boundary
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: JSON must remain the exact machine-readable `AuditResult`, while JSON and HTML need the
+  same local persistence guarantees. A lexical join or ordinary overwrite-capable write could
+  escape through a link/race, replace unrelated data, or claim a report that was not durably
+  completed.
+- Decision: Render JSON as the complete supplied result using two-space `JSON.stringify` followed by
+  exactly one LF. Preserve timing and zero-based source coordinates and perform no reporter-specific
+  projection. Keep persistence outside the pure reporter. The shared format-aware writer accepts a
+  closed plain request only when its relative path is exactly the validated configured output
+  directory plus fixed `audit-report.json` or `audit-report.html`. It reauthorizes the canonical
+  root and every directory identity around segment-by-segment creation, rejects links/escapes,
+  opens the target exclusively with POSIX no-follow where available and mode `0600`, writes UTF-8
+  through bounded positional chunks, syncs, verifies path/handle snapshots, closes exactly once,
+  and performs a final authorization before returning only a frozen relative success record.
+  Invalid, unsafe, existing-target, and operational failures use stable detail-free error codes.
+- Alternatives considered: A reduced JSON projection; removing volatile timing; converting JSON
+  coordinates for display; recursive directory creation; ordinary `writeFile` overwrite behavior;
+  returning an output path before close; format-specific writers; or automatically unlinking a
+  partial target after a failed post-open authorization.
+- Consequences: Both file reporters share deterministic content-independent persistence, existing
+  files are never intentionally overwritten, and callers can claim only returned paths. Portable
+  Node APIs do not expose `openat`/`openat2`, so user-space checks cannot eliminate every ancestor
+  swap or network-filesystem `O_EXCL` limitation. A failure after exclusive creation may leave a
+  partial target; it is not automatically unlinked because an observed identity race could make
+  pathname deletion unsafe, and a retry will report that target as existing.
+- Requirements/contracts affected: RF-15, RNF-03, RNF-04, RNF-09, RNF-10, M05 acceptance, R-009,
+  R-018, and R-019.
+- Evidence: exact JSON and shared-writer tests plus the 490-test Node.js 24 task gate with 95.66%
+  statements, 91.19% branches, 99.36% functions, and 95.62% lines.
+
+## D-033 — Complete standalone HTML with context-specific escaping
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: HTML must present the same normalized result as terminal and JSON without treating source,
+  configuration, path, error, or reference text as markup. Terminal thresholds and verbosity would
+  make HTML incomplete, and trusting an already typed URL would leave forged or normalized control
+  sequences able to become active navigation.
+- Decision: Render one deterministic UTF-8 HTML5 document with constant inline CSS, one early
+  restrictive CSP (`default-src 'none'`, no scripts, inline style only, and no objects, base, or
+  forms), and no external assets or executable content. Show complete result metadata,
+  configuration, report paths, timing, all summary buckets, all findings, and all processing errors.
+  Group findings in fixed critical/high/medium/low/info order and errors in fixed
+  discovery/read/parse/extract/rule order while retaining canonical order inside each group. Do not
+  apply the terminal severity or verbosity presentation filters. Display one-based lines/columns,
+  both UTF-16 offsets, and the end-exclusive range contract. Neutralize controls, C1, bidi/isolates,
+  BOM, Unicode line separators, and lone surrogates before escaping HTML metacharacters for every
+  dynamic value. Reparse even typed reference URLs, accept only well-formed control-free
+  credential-free HTTP(S), use the parsed URL for the escaped `href`, and otherwise render the
+  escaped label/value inert. Keep writing in a small adapter over the shared T04 writer.
+- Alternatives considered: JavaScript filtering; external CSS/fonts; terminal-threshold filtering;
+  verbose-only error detail; interpolating typed values directly; linking every non-null URL;
+  omitting null/empty buckets or UTF-16 offsets; sorting input arrays; or implementing a separate
+  HTML filesystem path.
+- Consequences: The report is portable, complete, readable offline, deterministic for one prepared
+  result, and resilient to markup/script/URL injection without mutating the result. CSP/escaping
+  tests are structural and do not claim browser execution. Absolute timestamps remain explicit
+  volatile audit data, and the shared writer retains D-032's portable-filesystem limits.
+- Requirements/contracts affected: RF-15, RNF-02 through RNF-04, RNF-06, RNF-09, RNF-10, M05
+  acceptance, R-005, R-018, and R-019.
+- Evidence: focused HTML, cross-reporter, hostile-value, URL, null/empty, determinism, and writer
+  tests plus the controlled M05 reporting scenario.
+
+## D-034 — Isolated, exact, and finalizable M05 evidence package
+
+- Date: 2026-07-29
+- Status: accepted
+- Context: M05 acceptance needs reproducible configuration and reporter facts rather than edited
+  console excerpts or claims that the scan-only CLI already orchestrates audits. Retained hostile
+  output also must not preserve terminal controls, misleading directional text, credentials, or
+  personal paths.
+- Decision: Copy an allowlisted, symlink-free source snapshot into a credential-free temporary
+  environment pinned to Node.js `24.18.0` and npm `11.16.0`. Run clean locked installation, the
+  product gate, coverage, a machine-readable no-skip/todo test run, compiled CLI smokes, the
+  controlled M05 reporter scenario, harness validation, and a moderate-threshold dependency audit.
+  Retain exactly 22 base artifacts: summary/environment, two measurements, eight raw command
+  records, and ten scenario records covering exact JSON/expected result, standalone HTML,
+  no-color terminal, transient color validation, configuration, cross-reporter fields,
+  determinism, structural XSS/CSP validation, and safe writes. Reject source mutation, unexpected
+  files, symlinks, noncanonical JSON, secrets/personal paths, ill-formed Unicode, raw terminal/C1/
+  bidi/BOM characters, and manifest drift. A second execution must match the source/stable results
+  and preserve the first package. The collector rejects the milestone report and enforces exactly
+  those 22 artifacts before creating the manifest, then exactly 23 package files including that
+  manifest at every staging/publication boundary. Finalization alone accepts the report, verifies
+  the unchanged 22-entry base manifest, and adds the report as entry 23.
+- Alternatives considered: Retaining raw colored output; browser-execution or CLI-integration
+  claims; keeping unfiltered environment variables; allowing arbitrary evidence files; overwriting
+  the first package on rerun; omitting a reviewed expected result; or adding the milestone report
+  without first verifying the base manifest.
+- Consequences: The package is reviewable, sanitized, reproducible, and explicit that XSS validation
+  is structural and reporter APIs remain outside the CLI until M06. Standard JSON fidelity is
+  preserved: the retained result uses control/lone-surrogate payloads that `JSON.stringify` escapes;
+  a separate non-retained render validates C1/bidi/BOM visible escaping without storing those raw
+  characters. Portable Node lacks a no-replace directory rename. Initial publication reauthorizes
+  the dedicated empty/absent destination immediately before a same-filesystem staging rename and
+  fails if a concurrent destination is non-empty, but POSIX may replace a concurrently created
+  empty directory in that final interval. The target is the milestone-owned placeholder rather than
+  user data; this narrow residual is documented instead of claiming atomic no-clobber semantics.
+  Failed publication deliberately retains its staging directory instead of recursively deleting a
+  path after an ancestor race. Finalization writes a `0600` temporary manifest exclusively through
+  a file handle, syncs it, compares handle/path identity, repeatedly reauthorizes the evidence
+  parent/directory/manifest/report and temporary file immediately before rename, and never performs
+  pathname cleanup after failure or success. The final pathname-to-rename interval remains subject
+  to the same portable Node limitation.
+- Requirements/contracts affected: RF-09, RF-15, RNF-03, RNF-04, RNF-06, RNF-09, RNF-10, M05
+  acceptance, R-005, R-009, R-010, R-012, R-018, and R-019.
+- Evidence: `scripts/run-m05-scenario.mjs`, the M05 evidence contract/collector/finalizer, two
+  successful collections, and `evidence/m05-reporting/`.

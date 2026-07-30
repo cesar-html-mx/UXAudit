@@ -1,0 +1,83 @@
+UXAudit 0.1.0-m05-<script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀
+Project: /controlled-project/security-project
+
+Summary
+  Files: discovered=7 selected=5 parsed=2 failed=3
+  Rules: available=8 enabled=6 executed=6 succeeded=5 failed=1
+  Findings: total=5 displayed=5 minimum=info
+  Severities (all): critical=1 high=1 medium=1 low=1 info=1
+  Categories (all): accessibility=2 performance=1 seo=1 ux=1
+  Processing errors: total=5 discovery=1 read=1 parse=1 extract=1 rule=1
+
+Findings (5 displayed / 5 total)
+1. [CRITICAL] Button accessible name <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀 (accessibility/button-name)
+   Category: accessibility | Confidence: high
+   Location: src/<script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.tsx:4:5
+   Message: Controlled critical finding from accessibility/button-name: <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Explanation: Controlled explanation for accessibility/button-name; hostile text is <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Recommendation: Apply the documented accessibility/button-name remediation and review the result.
+   Limitations:
+     - Static evidence for accessibility/button-name does not claim rendered browser behavior.
+   Reference: none
+
+2. [HIGH] Image alternative text (accessibility/img-alt)
+   Category: accessibility | Confidence: high
+   Location: src/Images.tsx:9:5
+   Message: Controlled high finding from accessibility/img-alt: <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Explanation: Controlled explanation for accessibility/img-alt; hostile text is <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Recommendation: Apply the documented accessibility/img-alt remediation and review the result.
+   Limitations:
+     - Static evidence for accessibility/img-alt does not claim rendered browser behavior.
+   Reference: WCAG image alternatives <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀 (https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html?source=m05&mode=evidence)
+
+3. [MEDIUM] Image lazy loading (performance/img-lazy-loading)
+   Category: performance | Confidence: medium
+   Location: src/Gallery.tsx:14:5
+   Message: Controlled medium finding from performance/img-lazy-loading: <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Explanation: Controlled explanation for performance/img-lazy-loading; hostile text is <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Recommendation: Apply the documented performance/img-lazy-loading remediation and review the result.
+   Limitations:
+     - Static evidence for performance/img-lazy-loading does not claim rendered browser behavior.
+   Reference: none
+
+4. [LOW] Multiple H1 headings (seo/multiple-h1)
+   Category: seo | Confidence: high
+   Location: src/Headings.tsx:18:5
+   Message: Controlled low finding from seo/multiple-h1: <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Explanation: Controlled explanation for seo/multiple-h1; hostile text is <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Recommendation: Apply the documented seo/multiple-h1 remediation and review the result.
+   Limitations:
+     - Static evidence for seo/multiple-h1 does not claim rendered browser behavior.
+   Reference: Structured headings <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀
+
+5. [INFO] Small inline text (ux/small-inline-text)
+   Category: ux | Confidence: medium
+   Location: src/Text.tsx:23:5
+   Message: Controlled info finding from ux/small-inline-text: <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Explanation: Controlled explanation for ux/small-inline-text; hostile text is <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+   Recommendation: Apply the documented ux/small-inline-text remediation and review the result.
+   Limitations:
+     - Static evidence for ux/small-inline-text does not claim rendered browser behavior.
+   Reference: none
+
+Processing errors (5)
+1. [DISCOVERY] DISCOVERY_NOT_ACCESSIBLE
+   Target: private/<script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀
+   Operation: read-directory
+   Message: Project entry was not accessible during discovery.
+
+2. [EXTRACT] SOURCE_EXTRACTION_FAILED
+   Location: src/Unsupported.tsx:7:2
+   Message: Source extraction failed: <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+
+3. [PARSE] SOURCE_PARSE_FAILED
+   Location: src/Broken.tsx:3:3
+   Message: Source file contains invalid syntax: <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+
+4. [READ] SOURCE_FILE_READ_FAILED
+   Location: src/Unreadable.tsx
+   Message: Source file could not be read: <script>alert("m05-report")</script> & "double" 'single' \u0000\u001b\u000a\ud800 valid-emoji-😀.
+
+5. [RULE] RULE_EVALUATION_FAILED
+   Rule: seo/scenario-failed-rule (seo)
+   Message: Rule evaluation failed.

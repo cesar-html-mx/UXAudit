@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "M05-CONFIGURATION-REPORTING",
+  "ansiSequenceCount": 20,
+  "colorReportDigest": "sha256:b0acaffcf4e9e7947052202d31b5f4d417934697bb91c7bc53e12c64ecb5b991",
+  "noColorReportDigest": "sha256:20ff05aa2aef41d949d06539269169e11e25a46cade491426a312fab1cd8a714",
+  "onlyReporterOwnedAnsi": true,
+  "rawAnsiRetained": false,
+  "strippedMatchesNoColor": true,
+  "strippedReportDigest": "sha256:20ff05aa2aef41d949d06539269169e11e25a46cade491426a312fab1cd8a714"
+}

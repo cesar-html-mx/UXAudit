@@ -185,34 +185,44 @@
       "id": "M05",
       "slug": "configuration-reporting",
       "title": "Configuration and terminal, JSON, and HTML reporting",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M05-configuration-reporting.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M05-configuration-reporting.md",
       "branch": "milestone/m05-configuration-reporting",
       "tasks": [
         {
           "id": "M05-T01",
           "title": "Define configuration and AuditResult contracts",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck, build, 28 focused contract/schema tests, 372 total tests across 41 files, exact local schema resolution, and coverage 95.88% statements / 90.76% branches / 99.19% functions / 95.84% lines PASS",
+          "completedAt": "2026-07-30T02:01:34.586Z"
         },
         {
           "id": "M05-T02",
           "title": "Implement configuration loading and defaults",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck, build, 79 focused configuration/audit tests, 435 total tests across 43 files, coverage 95.77% statements / 91.08% branches / 99.29% functions / 95.72% lines, harness validation, and independent adversarial re-review PASS",
+          "completedAt": "2026-07-30T02:31:39.774Z"
         },
         {
           "id": "M05-T03",
           "title": "Implement terminal reporter",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: exact terminal color/no-color/threshold/hostile/empty/error tests, 33 focused terminal and CLI tests, 449 total tests across 44 files, coverage 95.94% statements / 91.42% branches / 99.31% functions / 95.90% lines, format, strict lint, typecheck, build, harness, and independent review PASS",
+          "completedAt": "2026-07-30T02:51:52.632Z"
         },
         {
           "id": "M05-T04",
           "title": "Implement deterministic JSON reporter",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: 41 focused JSON/writer tests, 490 total tests across 46 files, coverage 95.66% statements / 91.19% branches / 99.36% functions / 95.62% lines, format, strict lint, typecheck, build, harness, and independent security review PASS",
+          "completedAt": "2026-07-30T03:06:51.394Z"
         },
         {
           "id": "M05-T05",
           "title": "Implement escaped standalone HTML reporter",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: 77 focused reporter/writer tests, 512 total tests across 47 files, coverage 95.81% statements / 91.39% branches / 99.39% functions / 95.77% lines, format, strict lint, typecheck, build, M05 scenario, exact 22-artifact base evidence collected twice, harness, dependency audit, and independent reporter/evidence/security reviews PASS",
+          "completedAt": "2026-07-30T03:51:49.414Z"
         }
       ]
     },
@@ -220,8 +230,8 @@
       "id": "M06",
       "slug": "integration-validation",
       "title": "End-to-end integration, validation, usability, and security evidence",
-      "status": "queued",
-      "plan": ".github/harness/exec-plans/queued/M06-integration-validation.md",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M06-integration-validation.md",
       "branch": "milestone/m06-integration-validation",
       "tasks": [
         {

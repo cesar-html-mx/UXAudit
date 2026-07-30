@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "M05-CONFIGURATION-REPORTING",
+  "cases": [
+    {
+      "configuration": {
+        "categories": null,
+        "color": true,
+        "formats": ["terminal"],
+        "minimumSeverity": "info",
+        "outputDirectory": "uxaudit-reports",
+        "ruleIds": null,
+        "schemaVersion": 1,
+        "verbose": false
+      },
+      "name": "defaults-without-file",
+      "passed": true
+    },
+    {
+      "configuration": {
+        "categories": null,
+        "color": false,
+        "formats": ["json", "html"],
+        "minimumSeverity": "medium",
+        "outputDirectory": "file-reports",
+        "ruleIds": ["seo/multiple-h1"],
+        "schemaVersion": 1,
+        "verbose": true
+      },
+      "name": "valid-partial-file",
+      "passed": true
+    },
+    {
+      "configuration": {
+        "categories": ["accessibility"],
+        "color": true,
+        "formats": ["terminal", "html"],
+        "minimumSeverity": "low",
+        "outputDirectory": "cli-reports",
+        "ruleIds": ["accessibility/img-alt"],
+        "schemaVersion": 1,
+        "verbose": true
+      },
+      "name": "cli-over-file-precedence",
+      "passed": true
+    },
+    {
+      "configuration": {
+        "categories": [],
+        "color": true,
+        "formats": ["terminal"],
+        "minimumSeverity": "info",
+        "outputDirectory": "uxaudit-reports",
+        "ruleIds": [],
+        "schemaVersion": 1,
+        "verbose": false
+      },
+      "name": "explicit-empty-filters",
+      "passed": true
+    },
+    {
+      "error": {
+        "code": "CONFIGURATION_INVALID",
+        "message": "Configuration contains unknown or invalid values.",
+        "name": "ConfigurationError"
+      },
+      "name": "unknown-key-rejected",
+      "passed": true
+    }
+  ],
+  "precedence": "defaults < file < CLI"
+}

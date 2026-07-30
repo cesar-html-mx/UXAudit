@@ -327,3 +327,138 @@
 - Closed M04 against verified task commit `3afa4bb3eaab415a7792aa0c4f3862464bc89efb`,
   moved its ExecPlan to `exec-plans/completed/`, and activated M05-T01. No M05 implementation work
   was started.
+
+## M05 configuration and reporting — 2026-07-29
+
+- Validated the active M05 harness, reconciled the clean `main` merge `1bc3e07` with the stale M04
+  branch field, created `milestone/m05-configuration-reporting`, updated the state/ExecPlan before
+  product work, and activated the installed Node.js `24.18.0`/npm `11.16.0` toolchain.
+- Completed M05-T01 with schema-versioned immutable configuration defaults, fixed controlled report
+  names, stable configuration errors/typed CLI overrides, a pure reporter contract, and one exact
+  recursively frozen `AuditResult`.
+- The result boundary copies and validates configuration, project/tool/timing metadata, exact
+  discovered/selected/parsed/failed and M04 rule counters, canonical findings, discovery/source/rule
+  errors, explicit category/severity/stage buckets, and pre-resolved project-relative report paths.
+  Contradictory counters, malformed records, unsafe paths/references, and invalid timestamps collapse
+  to one detail-free invariant error without mutating caller data.
+- Contract tests include empty and populated results, null-versus-empty filters, error conversion,
+  hostile/invalid boundaries, schema resolution against the local finding schema, recursive
+  freezing, deterministic rebuilds, and exact one-result reporter delegation.
+- Independent review found an absolute schema base that would redirect the local finding reference
+  and a missing equality between failed-file count and parser errors. Both were corrected and
+  regression-tested; the request for inventory/exclusion counters was rejected because the
+  higher-precedence product contract specifies discovered/selected/parsed/failed while individual
+  discovery issues already remain in the normalized error list.
+- The final T01 Node.js `24.18.0` run passed formatting, strict lint, typecheck, build, all 372 tests
+  across 41 files, and coverage at 95.88% statements, 90.76% branches, 99.19% functions, and 95.84%
+  lines.
+- Completed M05-T02 with bounded strict-UTF-8 JSON reading, conventional canonical-root discovery,
+  explicit-file authority, regular-file/path/descriptor identity checks, closed version-1
+  validation, stable errors, canonical selection order, portable output paths, and immutable
+  `defaults < file < CLI` merging.
+- The reader distinguishes an absent conventional file from a missing explicit file, accepts
+  exactly 64 KiB and one initial UTF-8 BOM, rejects links/nonregular/changed/oversized inputs, uses
+  no-follow/non-blocking POSIX flags where available, closes exactly once, and never retains native
+  error details. The loader rejects unknown keys/rules, accessors, sparse/exotic arrays, duplicates,
+  invalid primitives, and unsafe cross-platform paths without importing target code.
+- Independent review exposed and regression-tested missing-root reauthorization on absent defaults,
+  proxy trap execution, hostile native-error shapes, incomplete Windows reserved names, UTF-8 path
+  limits, and duplicate top-level JSON-key ambiguity. The fixes fail closed without changing the
+  public configuration vocabulary.
+- T02 verification under Node.js `24.18.0` passed formatting, strict lint, typecheck, build, all 435
+  tests across 43 files, and coverage at 95.77% statements, 91.08% branches, 99.29% functions, and
+  95.72% lines. Final independent re-review found no remaining defect.
+- Committed M05-T02 as `80f846f`. Its non-interactive HTTPS push was attempted immediately and
+  failed because this process has no GitHub username/credential; the remote was unchanged and no
+  hosted result is claimed.
+- Completed M05-T03 with a pure frozen terminal reporter, complete deterministic summaries,
+  inclusive minimum-severity detail filtering, canonical record order, one-based display columns,
+  explicit empty/null states, and verbose normalized processing errors.
+- Moved terminal sanitization to a neutral shared boundary while preserving the CLI re-export.
+  Every dynamic value is escaped before fixed badge-only ANSI; C0/C1, terminal controls, bidi,
+  isolates, BOM, injected lines, and unpaired surrogates become visible escapes while valid Unicode
+  remains intact. Color output strips exactly to the no-color report.
+- T03 verification under Node.js `24.18.0` passed 33 focused terminal/CLI tests, formatting, strict
+  lint, typecheck, build, all 449 tests across 44 files, and coverage at 95.94% statements, 91.42%
+  branches, 99.31% functions, and 95.90% lines. Independent adversarial re-review found no
+  remaining defect.
+- Committed M05-T03 as `0db6b5f`. Its non-interactive HTTPS push was attempted immediately and
+  failed because this process has no GitHub username/credential; the remote was unchanged and no
+  hosted result is claimed.
+- Completed M05-T04 with a frozen lossless JSON reporter and one shared format-aware report writer.
+  JSON retains the exact supplied schema, timing, zero-based coordinates, hostile strings, and empty
+  buckets as two-space JSON with one final LF.
+- The writer accepts only fixed JSON/HTML targets under a validated portable output directory,
+  authorizes root and directory identities around segment creation, uses exclusive creation plus
+  POSIX no-follow, performs bounded positional UTF-8 writes, sync/close and target/path snapshot
+  checks, and returns a relative path only after final authorization. Failures are stable and never
+  claim success; partial files are not unsafely unlinked after an identity race.
+- T04 verification under Node.js `24.18.0` passed 41 focused JSON/writer tests, formatting, strict
+  lint, typecheck, build, all 490 tests across 46 files, and coverage at 95.66% statements, 91.19%
+  branches, 99.36% functions, and 95.62% lines.
+- Independent final review confirmed the post-close target snapshot is the last asynchronous
+  filesystem observation before success, the replacement race fails closed, and no blocking T04
+  defect remains. Residual portable-filesystem and partial-target limits are recorded in D-032.
+- Committed M05-T04 as `44195f4`. Its non-interactive HTTPS push was attempted immediately and
+  failed because this process has no GitHub username/credential; the remote was unchanged and no
+  hosted result is claimed.
+- Reconciled M05-T05 before implementation: HTML will be a pure standalone no-script document over
+  the same result, with visible hostile-Unicode neutralization, context-specific escaping, fixed
+  summary groups, one-based display columns, safe-link revalidation, and reuse of the T04 writer.
+  Retained evidence will distinguish structural CSP/escaping validation from browser execution and
+  will not imply M06 CLI reporter integration.
+- Implemented the pure HTML reporter and its shared-writer adapter. The standalone document exposes
+  complete metadata, configuration, timing, report paths, counters, findings, and normalized errors
+  in fixed severity/stage groups without applying terminal filters. It displays one-based columns,
+  both UTF-16 offsets, and end-exclusive ranges.
+- Every dynamic value is neutralized for controls/C1/bidi/BOM/lone surrogates before HTML escaping.
+  Constant inline CSS plus a restrictive CSP require no script or external asset; forged references
+  become links only after control-free credential-free HTTP(S) reparsing and otherwise remain inert.
+- Independent review found the initial cross-reporter test and scenario overclaimed complete
+  identity after comparing only a subset of fields. The tests now compare every finding field and
+  error discriminator contextually and prove order within a shared bucket; the scenario records the
+  exact format-specific coordinate projections and fields it verifies.
+- Final HTML verification under Node.js `24.18.0` passed 77 focused reporter/writer tests and 512
+  total tests across 47 files. Coverage measured 95.81% statements, 91.39% branches, 99.39%
+  functions, and 95.77% lines globally, with 100% statements/functions/lines and 97.82% branches
+  for the HTML module. Independent final review found no remaining reporter defect.
+- Independent pre-collection review found that portable Node directory rename has no no-replace
+  mode: on POSIX, a destination created empty after the final absence check can be replaced. M05
+  limits publication to its dedicated absent/`.gitkeep` evidence target, rechecks immediately before
+  same-filesystem rename, fails for non-empty concurrent data, and records the narrow residual in
+  D-034 rather than claiming atomic no-clobber behavior.
+- Collected the M05 package twice from an isolated, credential-free, symlink-free allowlisted
+  snapshot. The first run published 22 base artifacts with a complete SHA-256 manifest; the second
+  reproduced the same source/result and preserved the existing package after validating every
+  artifact. The source-tree digest was
+  `sha256:1755405d825a726b7eecf8ccbbb492131cd29f353a09340292a746e53df2b0a0`.
+- Retained evidence records 512 passing tests across 47 files with zero skipped/todo tests, 95.81%
+  statement / 91.39% branch / 99.39% function / 95.77% line coverage, zero known dependency
+  vulnerabilities, five configuration cases, all five severities and processing stages, exact
+  cross-reporter projections, deterministic rerenders, terminal ANSI equivalence, structural
+  HTML/CSP/XSS checks, and safe-write failure cases.
+- Independent evidence review verified the package contract, sanitization, source isolation,
+  canonicity, manifest hashes, finalizer prevalidation, honest browser/CLI claims, and the bounded
+  rename residual. It found no remaining blocking or medium defect.
+- A separate adversarial security review then found that the base collector still permitted the
+  optional milestone report and that finalizer/staging failure cleanup could follow a replaced
+  ancestor. The collector now rejects the report and enforces the exact 22-artifact/23-file base
+  contract at every boundary. The finalizer uses exclusive handle write/sync, handle/path identity,
+  repeated parent/directory/file authorization immediately before rename, and no pathname cleanup;
+  failed publication staging is also retained rather than recursively removed.
+- The corrected tooling passed Node syntax, Prettier, and focused ESLint checks. Both isolated
+  evidence passes were regenerated after the correction, and the security re-review approved the
+  result with no remaining blocking or medium defect. Only the already documented portable
+  pathname-to-rename interval remains.
+- Completed M05-T05 in commit `c4c9959bb0c279cd368f50acee47eefb4ac75923`; its pre-commit
+  Node.js 24 gate passed all 512 tests, formatting, strict lint, typecheck, and build.
+- Attempted the required HTTPS push immediately after the T05 commit. GitHub requested credentials
+  unavailable to this process, so the attempt was stopped without changing the remote; no hosted
+  branch, pull request, or CI result is claimed.
+- Created the factual M05 milestone report with commits, capability, exact measurements, evidence
+  digests, review corrections, limitations, and publication status. Closed M05 with verified task
+  commit `c4c9959bb0c279cd368f50acee47eefb4ac75923`, moved its ExecPlan to `completed/`, activated
+  M06-T01, synchronized the generated state document, and restored harness validation to PASS.
+- Finalized the retained evidence manifest with 23 valid SHA-256 entries, including the formatted
+  milestone report. The final package passed its exact file contract, integrity, sanitization, and
+  canonical-JSON checks.

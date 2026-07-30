@@ -37,6 +37,26 @@ The CLI remains intentionally unchanged during M04: `scan` still stops after mod
 does not yet claim an audit result. Application integration, configuration, finding policy, and
 terminal/JSON/HTML reporting remain M05/M06 responsibilities.
 
+### Implemented in the active M05 contract slice
+
+- Configuration schema version `1` with explicit category/rule filters, report formats, output
+  directory, minimum display severity, color, and verbosity.
+- Immutable defaults: stable catalog (`null` filters), terminal output, `info` threshold, color,
+  non-verbose detail, and the portable relative `uxaudit-reports` directory.
+- Fixed local report names `audit-report.json` and `audit-report.html`.
+- `AuditResult` schema `1.0.0` with configuration/tool/timing metadata, discovered/selected/parsed/
+  failed counters, complete rule counters/findings, normalized discovery/source/rule errors,
+  zero-filled category/severity/stage summaries, and nullable project-relative report paths.
+- One pure reporter contract that consumes exactly one completed result.
+- A lossless deterministic JSON reporter that preserves the complete result and stored coordinates
+  as canonical two-space JSON with one final LF.
+- One shared JSON/HTML file writer that accepts only fixed configured relative targets, creates them
+  exclusively inside the authorized canonical root, and returns a path only after successful
+  write, sync, close, and final authorization.
+
+The boundary defensively copies, validates, canonically orders, and freezes result data. It does not
+change the scan-only CLI behavior; M06 owns reporter orchestration and user-visible output claims.
+
 ### Planned options
 
 - `--config <path>`: configuration file; default search is `uxaudit.config.json` at project root.
@@ -141,10 +161,40 @@ own any conversion to display coordinates.
 ## Configuration
 
 Configuration is local JSON. Unknown keys, invalid values, and conflicting options must produce a
-clear error. Defaults must be documented and versioned.
+clear stable error. `uxaudit.config.json` at the canonical project root is optional; an explicitly
+selected path must exist. Files are regular, no larger than 64 KiB, strict UTF-8 JSON and never
+imported or executed. The version-1 file accepts only `schemaVersion`, `categories`, `ruleIds`,
+`formats`, `outputDirectory`, `minimumSeverity`, `color`, and `verbose`; duplicate top-level keys
+are rejected rather than resolved with last-value-wins behavior.
+
+Defaults are terminal-only output, `info` minimum display severity, color enabled, non-verbose
+detail, `uxaudit-reports`, and `null` category/rule filters. A file may override any default;
+validated CLI values override the file. `null` category/rule filters select the stable catalog,
+whereas explicit empty arrays select no rules. Selection arrays are deduplicated and normalized to
+stable order. Output directories must be portable relative paths without dot segments, backslashes,
+control/bidirectional characters, or Windows-reserved components. M05-T02 exposes this loader;
+full Commander integration remains M06.
 
 ## Reports
 
-- Terminal: concise immediate summary and readable findings.
-- JSON: complete stable machine-readable result.
-- HTML: standalone, escaped, readable report requiring no external service.
+- Terminal: concise immediate summary, complete category/severity/error-stage buckets, canonically
+  ordered readable findings at or above the inclusive display threshold, one-based display
+  columns, optional normalized error detail, and explicit color/no-color modes. Summary totals
+  always describe the complete result even when finding detail is filtered.
+- JSON: the complete stable machine-readable result, including timing metadata and stored zero-based
+  UTF-16 columns, serialized with two-space indentation and one final LF.
+- HTML: a complete standalone escaped report requiring no external service. It shows all findings
+  and normalized errors regardless of terminal severity/verbosity settings, groups them in fixed
+  severity/stage order, displays one-based columns plus UTF-16 offsets and end-exclusive ranges, and
+  keeps unsafe references inert.
+
+JSON and HTML targets use only the configured portable output directory and fixed filenames. The
+shared writer refuses existing targets and observed links, escapes, or identity changes, and reports
+stable failures without claiming a generated path. A failure after exclusive creation can leave a
+partial target for manual review/removal; automatically unlinking after a pathname race would be
+unsafe.
+
+The HTML document contains constant inline CSS, no script or external asset, and an early
+no-script/no-object/no-base/no-form CSP. Every dynamic value is neutralized for hostile controls,
+directional formatting, BOM, and malformed UTF-16 before HTML escaping. Only a separately reparsed,
+control-free, credential-free HTTP(S) reference becomes an anchor.

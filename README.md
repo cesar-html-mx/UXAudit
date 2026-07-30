@@ -3,13 +3,18 @@
 UXAudit is a local, static-analysis CLI for React and TypeScript projects. The current Node.js 24
 implementation safely discovers and classifies `.js`, `.jsx`, `.ts`, and `.tsx` source candidates,
 parses them through an internal Babel boundary, and builds a deterministic parser-independent
-analysis model. The active M04 domain layer now adds a deterministic isolated rule engine and eight
-stable rules across accessibility, performance, SEO, and UX.
+analysis model. The completed M04 domain layer adds a deterministic isolated rule engine and eight
+stable rules across accessibility, performance, SEO, and UX. The completed M05 reporting layer adds
+versioned configuration defaults and loading, one immutable normalized `AuditResult`, complete
+file/rule/finding/error summaries, pure deterministic terminal/lossless JSON/standalone HTML
+reporters, and a shared exclusive local report writer.
 
 The `scan` command validates and canonicalizes the selected root, discovers files, analyzes safe
 source candidates without executing target code, and prints discovery and parsing counts. The CLI
-does not invoke the new rule layer yet, and terminal/JSON/HTML finding reports remain later
-milestones, so a successful scan must not be interpreted as a completed audit.
+does not invoke the rule/result/reporting layers yet. The terminal reporter is independently
+implemented; JSON and standalone HTML rendering plus JSON/HTML persistence are also available
+internally, while CLI integration remains M06, so a successful scan must
+not be interpreted as a completed audit.
 
 ## Requirements
 
@@ -75,6 +80,49 @@ Current CLI exit codes:
 |  `2` | Invalid command, missing argument, or invalid/inaccessible project root.              |
 |  `3` | Fatal processing failure or unexpected application failure.                           |
 
+## Configure an audit
+
+The configuration boundary loads optional `uxaudit.config.json` from an already canonical project
+root, or a user-selected JSON file, without importing or executing it. This example requests all
+three future reporters and restricts rules by category:
+
+```json
+{
+  "schemaVersion": 1,
+  "categories": ["accessibility", "seo"],
+  "formats": ["terminal", "json", "html"],
+  "minimumSeverity": "medium",
+  "outputDirectory": "uxaudit-reports",
+  "color": true,
+  "verbose": false
+}
+```
+
+Defaults are terminal output, `info`, color, non-verbose detail, `uxaudit-reports`, and the stable
+rule catalog. `null` category/rule filters select that catalog; `[]` intentionally selects none.
+Validated CLI overrides take precedence over file values, which take precedence over defaults.
+Configuration files are strict UTF-8 JSON limited to 64 KiB, unknown keys and values are rejected,
+and output directories must be portable project-relative paths. The loader is available internally
+in M05; the current `scan` command does not expose `--config` or reporting options until M06.
+
+The internal terminal reporter consumes one completed `AuditResult`. It keeps canonical finding
+order, filters displayed details through the inclusive severity threshold, retains complete totals,
+uses one-based human column labels, and shows normalized processing details only in verbose mode.
+No-color output contains no escape bytes; color is limited to fixed badges after every dynamic value
+has been converted to terminal-safe visible text. The CLI will expose this behavior in M06.
+
+The internal JSON reporter serializes the complete result with two-space indentation and one final
+LF; it preserves timing and stored zero-based columns. JSON/HTML persistence accepts only the fixed
+configured relative target, refuses links, path escape, and existing files, and returns a path only
+after write, sync, close, and final authorization. The writer does not automatically remove a
+partial target after failure because a pathname identity race can make deletion unsafe.
+
+The internal HTML reporter shows the complete result in fixed severity and processing-stage groups;
+terminal thresholds and verbosity do not hide its records. It uses a restrictive CSP, constant
+inline CSS, no scripts or external assets, visible hostile-Unicode neutralization followed by HTML
+escaping, and inert fallback for any reference that is not reparsed as credential-free HTTP(S).
+Human locations include one-based columns, UTF-16 offsets, and an explicit end-exclusive label.
+
 ## Develop and verify
 
 ```bash
@@ -84,6 +132,8 @@ npm run test:coverage
 npm run test:smoke
 npm run test:scenario:m02
 npm run test:scenario:m03
+npm run test:scenario:m04
+npm run test:scenario:m05
 ```
 
 Useful individual commands:
@@ -101,12 +151,15 @@ Useful individual commands:
 | `npm run test:scenario:m02`     | Verify reviewed inventory, exclusions, links, determinism, and no exec.  |
 | `npm run test:scenario:m03`     | Exercise the controlled four-kind parser/model scenario without exec.    |
 | `npm run test:scenario:m04`     | Validate the deterministic eight-rule catalog without executing source.  |
+| `npm run test:scenario:m05`     | Verify configuration and all reporters over one controlled result.       |
 | `npm run evidence:m02`          | Collect the isolated, sanitized, integrity-checked M02 evidence package. |
 | `npm run evidence:m02:finalize` | Add the milestone report to the retained SHA-256 manifest.               |
 | `npm run evidence:m03`          | Collect the isolated, sanitized, integrity-checked M03 evidence package. |
 | `npm run evidence:m03:finalize` | Add the milestone report to the retained M03 SHA-256 manifest.           |
 | `npm run evidence:m04`          | Collect the isolated, sanitized, integrity-checked M04 evidence package. |
 | `npm run evidence:m04:finalize` | Add the milestone report to the retained M04 SHA-256 manifest.           |
+| `npm run evidence:m05`          | Collect or verify the isolated, sanitized M05 evidence package.          |
+| `npm run evidence:m05:finalize` | Add the milestone report to the retained M05 SHA-256 manifest.           |
 | `npm run verify`                | Run format, lint, typecheck, unit tests, and build in one gate.          |
 
 Husky invokes `npm run verify` before local commits. CI is configured for Node.js 24 on Ubuntu
@@ -127,8 +180,11 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
   normalized `AnalysisModel`.
 - Component recognition is intentionally syntactic and conservative; it does not resolve runtime
   aliases, higher-order abstractions, imports, or rendered behavior.
-- The domain engine can produce normalized findings and isolated rule errors, but the CLI does not
-  expose them yet. Finding-failure policy and terminal/JSON/HTML audit reports remain M05/M06 work.
+- The domain engine can produce normalized findings and isolated rule errors, and M05 can assemble
+  them into an exact recursively frozen `AuditResult`; the CLI does not expose either layer yet.
+  Configuration-file loading and terminal rendering are implemented as independent boundaries;
+  JSON/HTML rendering and shared file persistence are implemented too. Finding-failure policy and
+  CLI wiring remain M06 work.
 
 ## Repository map
 
@@ -139,7 +195,14 @@ and `CODEQL_ENABLED=true` after confirming GitHub Code Security availability.
   candidate batch.
 - `src/domain/models/`: parser-independent normalized analysis contracts and builder.
 - `src/domain/rules/`, `findings/`, and `errors/`: report-independent rule result contracts.
+- `src/domain/audit/`: versioned audit result, normalized processing errors, derived summaries, and
+  invariant boundary.
 - `src/rules/`: validated engine plus category-organized static rules.
+- `src/configuration/`: bounded JSON reading, closed validation, precedence, immutable defaults,
+  overrides, formats, filenames, and stable errors.
+- `src/reporting/`: pure one-result terminal, lossless JSON, and escaped standalone HTML adapters
+  plus shared exclusive JSON/HTML file writing.
+- `src/shared/`: neutral terminal-value sanitization reused by CLI and reporting.
 - `tests/`: focused domain, parser, rule, application, CLI, and project tests.
 - `.github/harness/`: milestone state, plans, decisions, risks, and lifecycle scripts.
 - `.github/workflows/`: quality, harness, CodeQL, and dependency-review automation.
@@ -153,16 +216,19 @@ node .github/harness/scripts/validate-harness.mjs
 node .github/harness/scripts/show-status.mjs
 ```
 
-Validate the compiled M04 domain catalog independently of the not-yet-integrated CLI:
+Validate the compiled M05 configuration and reporting boundaries independently of the
+not-yet-integrated CLI:
 
 ```bash
-npm run test:scenario:m04
+npm run test:scenario:m05
 ```
 
-The controlled scenario analyzes one inert TSX project, matches the reviewed eight-finding
-expectation twice, exercises filtering and one isolated rule failure, and proves that target code is
-not executed. `npm run evidence:m04` additionally reproduces the gate in an isolated,
-credential-free source snapshot while M04-T05 is active.
+The controlled scenario validates five configuration cases and renders one immutable result with
+all severity and processing-stage buckets through terminal, JSON, and HTML twice. It verifies exact
+cross-format projections, deterministic output, visible hostile-value escaping, restrictive HTML
+CSP, and safe fixed-path writes without executing target code. `npm run evidence:m05` reproduces the
+gate in an isolated, credential-free source snapshot while M05-T05 is active; a second unchanged run
+verifies the retained package instead of replacing it.
 
-This implementation slice evaluates M04 rules over parser-independent input without changing the
-current CLI contract.
+This implementation slice exposes configuration and reporter APIs without changing the current
+scan-only CLI contract.

@@ -225,3 +225,90 @@ human conclusions under `evidence/`. Never fabricate a result that was not execu
   V8 coverage measured 97.14% statements, 92.79% branches, 99.70% functions, and 97.14% lines.
 - The package was collected twice. The second execution matched the source digest and stable
   measurements/scenario projections and preserved the initially published 20 artifacts.
+
+## M05-T01 executed contract baseline
+
+- Configuration tests verify the schema/version vocabulary, immutable defaults, fixed report names,
+  stable errors, and the semantic difference between absent and explicit empty rule filters.
+- Audit-result tests cover defensive recursive freezing, canonical finding/error order, complete
+  zero-filled summaries, discovery/source/rule error normalization, terminal-only empty results,
+  safe relative report targets, canonical timing, URL/path controls, and counter invariants.
+- The exact closed JSON Schema is resolved with the local finding schema and validated against a
+  complete prepared result; unexpected properties are rejected.
+- A pure reporter-contract test proves that presentation receives exactly the supplied
+  `AuditResult` without adding output state to the domain.
+- The final task run under Node.js `24.18.0` passed all 372 tests across 41 files plus format, lint,
+  typecheck, and build. Global V8 coverage passed at 95.88% statements, 90.76% branches, 99.19%
+  functions, and 95.84% lines; final milestone metrics will be recollected with all M05 tasks.
+
+## M05-T02 executed configuration baseline
+
+- Real-filesystem cases distinguish an absent conventional file from a missing explicit path,
+  accept one initial UTF-8 BOM and an explicitly authorized external regular file, and never execute
+  configuration as code.
+- Injected-filesystem cases cover nonregular and escaping paths, canonical-root identity change,
+  exact 64 KiB acceptance, initial/observed oversize, bounded descriptor reads, malformed UTF-8,
+  descriptor snapshot drift, invalid native byte counts, POSIX/Windows open flags, stable
+  non-reflective failures, and exact close behavior.
+- Loader cases cover defaults, partial file values, `defaults < file < CLI` precedence,
+  null/empty filters, canonical ordering, malformed JSON, schema/key/value/rule rejection,
+  duplicates, unsafe portable paths, accessors, sparse arrays, defensive copies, freezing, and
+  byte-stable normalized results.
+- The final task run under Node.js `24.18.0` passed all 435 tests across 43 files plus format, lint,
+  typecheck, and build. Global V8 coverage passed at 95.77% statements, 91.08% branches, 99.29%
+  functions, and 95.72% lines; final milestone metrics will be recollected with all M05 tasks.
+
+## M05-T03 executed terminal baseline
+
+- Exact no-color output covers complete file/rule/category/severity/error summaries, canonical
+  findings, recommendations, limitations, references, display coordinates, and verbose discovery,
+  source, and rule errors.
+- Color tests prove that only fixed badges receive ANSI and stripping those sequences yields the
+  no-color report byte-for-byte. The five inclusive thresholds preserve full totals and input order.
+- Empty/hidden findings, null locations/references, non-verbose errors, every source stage, and
+  repeat rendering have explicit cases. Frozen input remains unchanged.
+- Hostile project, file, title, message, explanation, recommendation, limitation, reference, and
+  tool strings cover C0/C1 controls, injected lines, ANSI/OSC, bidi/isolates, unpaired surrogates,
+  and valid astral Unicode. Existing CLI hostile-output cases pass through the compatibility
+  re-export.
+- The final task run under Node.js `24.18.0` passed all 449 tests across 44 files plus format, lint,
+  typecheck, and build. Global V8 coverage passed at 95.94% statements, 91.42% branches, 99.31%
+  functions, and 95.90% lines; final milestone metrics will be recollected with all M05 tasks.
+
+## M05-T04 executed JSON and persistence baseline
+
+- JSON tests assert exact two-space/LF bytes, complete local-schema equality, retained timing and
+  zero-based coordinates, hostile-string round trips, explicit empty buckets, deterministic repeat
+  rendering, and input immutability.
+- Shared-writer tests cover closed request validation, fixed JSON/HTML target selection, portable
+  directory creation, exclusive/no-follow flags and modes, real-filesystem exact output and
+  no-overwrite preservation, bounded partial writes, sync/close behavior, and stable native-error
+  normalization.
+- Injected races replace roots, ancestors, or targets before and after open/write/close. Symlink,
+  escape, snapshot mismatch, invalid byte-count, proxy/accessor, and failed-operation paths never
+  return success. The final successful observable filesystem operation is target authorization.
+- The final task run under Node.js `24.18.0` passed all 490 tests across 46 files plus format, lint,
+  typecheck, and build. Global V8 coverage passed at 95.66% statements, 91.19% branches, 99.36%
+  functions, and 95.62% lines; final milestone metrics will be recollected with all M05 tasks.
+
+## M05-T05 executed HTML baseline
+
+- Standalone-document tests lock the exact deterministic digest, UTF-8/LF envelope, early CSP,
+  constant inline styling, and absence of script, event-handler attributes, resource-bearing tags,
+  external assets, `@import`, or CSS URLs.
+- Complete-result cases cover metadata, configuration null versus empty selections, report paths,
+  timing, all file/rule/category/severity/stage counters, every finding/error variant, null
+  locations/references/URLs, both UTF-16 offsets, one-based display columns, and end-exclusive
+  ranges. Terminal severity and verbosity settings do not suppress HTML records.
+- Hostile values exercise closing tags, script/image/event payloads, C0/C1 and terminal controls,
+  bidi/isolates, BOM, line separators, lone surrogates, metacharacters, and valid emoji. Forged URL
+  tests keep non-HTTP(S), credential-bearing, malformed, controlled, and object values inert while
+  canonical credential-free HTTP(S) becomes one escaped link.
+- Cross-reporter assertions compare every finding field and processing-error discriminator in
+  contextual records, account for JSON zero-based versus human one-based coordinates, and prove
+  canonical order inside a shared severity bucket. Exact writer delegation, null selection, stable
+  failure propagation, repeat rendering, and frozen-input immutability are covered.
+- The final focused reporter/writer run passed 77 tests. The complete Node.js `24.18.0` product run
+  passed 512 tests across 47 files. Global V8 coverage measured 95.81% statements, 91.39% branches,
+  99.39% functions, and 95.77% lines; the HTML module measured 100% statements/functions/lines and
+  97.82% branches. Final isolated M05 evidence recollects these metrics.
