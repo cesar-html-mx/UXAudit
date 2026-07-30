@@ -951,3 +951,32 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Evidence: the M06 evidence contract, collector, finalizer, two successful base collections, and
   the finalized package under `evidence/m06-validation/`. Its manifest covers all 42 base artifacts
   plus the milestone report.
+
+## D-042 — Paired English and Latin American Spanish public documentation
+
+- Date: 2026-07-30
+- Status: accepted
+- Context: UXAudit's public documentation was available almost entirely in English, which created an
+  unnecessary access barrier for Spanish-speaking users and contributors. The completed harness and
+  finalized evidence also contain stable operational paths and integrity manifests that should not
+  be rewritten merely for localization.
+- Decision: Use `README.md` as a bilingual landing page, retain the complete English manual in
+  `README.en.md`, and add its complete Latin American Spanish peer in `README.es.md`. Preserve the
+  existing English `docs/` paths as the automation-facing operational references and add paired
+  Spanish documents under `docs/es/`. Keep public security, pull-request, evidence-entry,
+  evidence-method, and usability guidance bilingual. Require both public languages to change in the
+  same pull request and validate document pairs, exact code blocks, and relative links
+  automatically. Keep code, identifiers, commands, exact output, internal harness records, and
+  generated or finalized milestone evidence in English.
+- Alternatives considered: placing two full manuals in one oversized README; moving the operational
+  English documents and breaking established links; translating only the landing page; translating
+  raw or finalized evidence and invalidating its integrity manifest; or localizing code contracts
+  and CLI output as part of the documentation change.
+- Consequences: Spanish-speaking and English-speaking readers receive equivalent public guidance
+  without a product-runtime or public-contract change. The repository gains paired-document
+  maintenance cost, and a language divergence is treated as a documentation defect. Historical
+  evidence remains immutable and factual.
+- Requirements/contracts affected: post-M06 documentation policy and `DOC-I18N` traceability only;
+  no product behavior or completed milestone contract changes.
+- Evidence: bilingual README files, `docs/es/`, bilingual public GitHub guidance, paired public
+  evidence guides, and the fail-closed `npm run docs:check` quality gate.

@@ -1,3 +1,5 @@
+[Español](es/06_TEST_STRATEGY.md) | **English**
+
 # Test Strategy
 
 Testing supports both verification—building the product correctly—and validation—confirming that it

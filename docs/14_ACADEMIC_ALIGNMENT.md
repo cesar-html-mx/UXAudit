@@ -1,3 +1,5 @@
+[Español](es/14_ACADEMIC_ALIGNMENT.md) | **English**
+
 # Academic Alignment for Activity 3
 
 The testing delivery must be based on executed evidence from the real UXAudit implementation.

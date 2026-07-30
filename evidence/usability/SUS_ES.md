@@ -1,7 +1,9 @@
-# System Usability Scale — UXAudit
+# Escala de Usabilidad del Sistema — UXAudit
 
-Use only with real participants after they use the tool. Responses range from 1 (totalmente en
-desacuerdo) to 5 (totalmente de acuerdo).
+**Español** | [English](SUS_EN.md)
+
+Úsala solo con participantes reales después de que utilicen la herramienta. Las respuestas van de 1
+(totalmente en desacuerdo) a 5 (totalmente de acuerdo).
 
 1. Creo que usaría UXAudit con frecuencia.
 2. Encontré UXAudit innecesariamente complejo.
@@ -14,10 +16,11 @@ desacuerdo) to 5 (totalmente de acuerdo).
 9. Me sentí seguro al utilizar UXAudit.
 10. Necesité aprender muchas cosas antes de poder utilizar UXAudit.
 
-Preserve raw answers separately and document the scoring method used.
+Conserva las respuestas originales por separado y documenta el método de puntuación utilizado.
 
-## M06 status
+## Estado de M06
 
-Participant testing was not executed and no SUS responses were collected. The M06 SUS status is
-therefore `not-applicable`, with a null score and zero responses. This questionnaire remains only as
-a future protocol template and is not evidence of an executed survey.
+No se ejecutaron pruebas con participantes ni se recopilaron respuestas de SUS. Por lo tanto, el
+estado de SUS de M06 es `not-applicable`, con una puntuación nula y cero respuestas. Este cuestionario
+permanece únicamente como plantilla de protocolo futuro y no constituye evidencia de una encuesta
+ejecutada.

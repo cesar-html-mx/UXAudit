@@ -641,3 +641,19 @@
   `EVIDENCE_INDEX.md`, an obsolete active-milestone note, and future-tense wording in the finalized
   report. The closure metadata was reconciled, the report finalizer passed again from the validated
   42-entry base manifest, and the resulting 43-entry manifest passed full SHA-256 verification.
+- After the merged terminal milestone, post-M06 maintenance on `docs/bilingual-documentation`
+  paired 22 public documents in English and neutral Latin American Spanish. Code, operational
+  harness records, and finalized milestone evidence remain unchanged in English. D-042 records the
+  stable file layout and same-PR synchronization policy.
+- Added a shell-free documentation gate with dynamic `docs/` discovery and 47 link sources. It
+  verifies visible reciprocal selectors and inline bilingual entry points, heading/table/fenced
+  structure, byte-identical code blocks, exact inline code spans, root-relative paths, anchors, and
+  canonical in-repository link targets. Fourteen focused checker tests cover success and adversarial
+  drift.
+- Kept future isolated evidence runs compatible with the documentation gate by allowlisting only
+  the bilingual root manuals and public evidence guides in M02-M06 source snapshots. Three focused
+  filter tests reject finalized evidence packages and other non-public evidence content. The
+  complete Node.js `24.18.0` gate passed 636 tests across 58 files.
+- Independent semantic reviews corrected omitted evidence details and ambiguous Spanish negations,
+  identity pairs, error categories, and technical terms before final acceptance. The M01-M06
+  evidence packages and their finalized manifests were not modified.

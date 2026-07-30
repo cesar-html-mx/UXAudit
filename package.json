@@ -16,6 +16,7 @@
     "clean": "node scripts/clean.mjs",
     "build": "npm run clean && tsc -p tsconfig.build.json",
     "dev": "tsx src/cli/index.ts",
+    "docs:check": "node scripts/check-bilingual-docs.mjs",
     "evidence:m01": "node scripts/collect-m01-evidence.mjs",
     "evidence:m02": "node scripts/collect-m02-evidence.mjs",
     "evidence:m02:finalize": "node scripts/finalize-m02-evidence.mjs",

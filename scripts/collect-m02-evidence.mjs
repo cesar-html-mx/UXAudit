@@ -25,6 +25,7 @@ import {
   findEvidenceFiles,
   renderEvidenceManifest,
 } from './m02-evidence-contract.mjs';
+import { getPublicDocumentationCopyDecision } from './public-documentation-source-filter.mjs';
 
 const rootDirectory = process.cwd();
 const finalEvidenceDirectory = path.join(rootDirectory, 'evidence', 'm02-discovery');
@@ -75,6 +76,11 @@ const shouldCopySource = (source) => {
   const segments = relativePath.split(path.sep);
   const topLevel = segments[0];
   const fileName = segments.at(-1) ?? '';
+  const publicDocumentationDecision = getPublicDocumentationCopyDecision(segments);
+
+  if (publicDocumentationDecision !== undefined) {
+    return publicDocumentationDecision;
+  }
 
   if (topLevel && excludedTopLevelEntries.has(topLevel)) {
     return false;

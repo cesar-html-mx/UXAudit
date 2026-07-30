@@ -1,5 +1,7 @@
 # UXAudit Usability Protocol
 
+[Español](USABILITY_PROTOCOL.es.md) | **English**
+
 ## Participant profile
 
 Frontend developers or students familiar with basic React/TypeScript and terminal use. Record actual

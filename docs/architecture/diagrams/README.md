@@ -1,3 +1,5 @@
+[Español](../../es/architecture/diagrams/README.md) | **English**
+
 # Architecture and UML Diagrams
 
 These visual references originated in the methodology and architecture work. They support agent
