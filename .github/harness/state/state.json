@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "project": "UXAudit",
+  "status": "ready",
+  "activeMilestone": "M07",
+  "activeTask": "M07-T01",
+  "completedMilestones": ["M01", "M02", "M03", "M04", "M05", "M06"],
+  "currentBranch": "milestone/m07-component-graph",
+  "lastVerifiedAt": "2026-07-31T15:36:47.000Z",
+  "lastVerificationCommand": "Node.js 24.18.0: npm run verify; 621/621 tests PASS before M07 changes",
+  "lastVerificationResult": "PASS",
+  "lastCommit": "de540f0ec3d3a7d198905eccd06eae46bc3ac3e7",
+  "blockers": [],
+  "notes": [
+    "Harness initialized from the approved TFM methodology and architecture.",
+    "M01-M06 and their historical evidence remain immutable.",
+    "M07 is a separately approved six-hour viability milestone based on public main commit de540f0.",
+    "Rollback anchors: safeguard/pre-v0.2-main-20260731 and safeguard/post-harness-evidence-20260731."
+  ]
+}

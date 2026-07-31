@@ -21,6 +21,12 @@ Read:
 
 Inspect the current implementation and tests before assuming work is missing.
 
+When `.github/harness/state/state.json` exists with `status: ready`, also read the harness
+configuration, state, generated current-state document, active ExecPlan, and every document linked
+by that plan. Follow `.github/harness/EXECUTION_PROTOCOL.md` for the active milestone. On the M07/M08
+continuation branches, M01-M06, `harness-complete-v1`, the public v0.1.0 baseline, and the existing
+external demo are immutable historical safeguards.
+
 ## Development workflow
 
 1. Make the smallest reversible change that satisfies the documented product contract.

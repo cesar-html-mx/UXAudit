@@ -1,0 +1,510 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UXAudit AuditResult 1.0.0",
+  "type": "object",
+  "required": [
+    "configuration",
+    "errors",
+    "findings",
+    "projectRoot",
+    "reportPaths",
+    "schemaVersion",
+    "summary",
+    "timing",
+    "tool"
+  ],
+  "properties": {
+    "configuration": {
+      "$ref": "#/$defs/configuration"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/processingError"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "finding.schema.json"
+      }
+    },
+    "projectRoot": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reportPaths": {
+      "$ref": "#/$defs/reportPaths"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "timing": {
+      "$ref": "#/$defs/timing"
+    },
+    "tool": {
+      "$ref": "#/$defs/tool"
+    }
+  },
+  "$defs": {
+    "configuration": {
+      "type": "object",
+      "required": [
+        "categories",
+        "color",
+        "formats",
+        "minimumSeverity",
+        "outputDirectory",
+        "ruleIds",
+        "schemaVersion",
+        "verbose"
+      ],
+      "properties": {
+        "categories": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/category"
+              },
+              "uniqueItems": true
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "color": {
+          "type": "boolean"
+        },
+        "formats": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["terminal", "json", "html"]
+          }
+        },
+        "minimumSeverity": {
+          "$ref": "#/$defs/severity"
+        },
+        "outputDirectory": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/|[A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001F\\u007F-\\u009F]+$"
+        },
+        "ruleIds": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z]+/[a-z0-9-]+$"
+              },
+              "uniqueItems": true
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "verbose": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "category": {
+      "enum": ["accessibility", "performance", "seo", "ux"]
+    },
+    "severity": {
+      "enum": ["critical", "high", "medium", "low", "info"]
+    },
+    "sourcePosition": {
+      "type": "object",
+      "required": ["column", "line", "offset"],
+      "properties": {
+        "column": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "discoveryError": {
+      "type": "object",
+      "required": ["code", "filePath", "message", "operation", "recoverable", "stage"],
+      "properties": {
+        "code": {
+          "enum": [
+            "DISCOVERY_ENTRY_DISAPPEARED",
+            "DISCOVERY_IO_FAILED",
+            "DISCOVERY_NOT_ACCESSIBLE",
+            "DISCOVERY_SYMLINK_LOOP"
+          ]
+        },
+        "filePath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operation": {
+          "enum": ["inspect", "read-directory", "resolve-path"]
+        },
+        "recoverable": {
+          "const": true
+        },
+        "stage": {
+          "const": "discovery"
+        }
+      },
+      "additionalProperties": false
+    },
+    "sourceError": {
+      "type": "object",
+      "required": ["code", "filePath", "message", "recoverable", "stage"],
+      "properties": {
+        "code": {
+          "enum": [
+            "SOURCE_EXTRACTION_LIMIT_EXCEEDED",
+            "SOURCE_EXTRACTION_FAILED",
+            "SOURCE_FILE_CHANGED",
+            "SOURCE_FILE_NOT_REGULAR",
+            "SOURCE_FILE_OUTSIDE_ROOT",
+            "SOURCE_FILE_READ_FAILED",
+            "SOURCE_FILE_TOO_LARGE",
+            "SOURCE_FILE_UNREADABLE",
+            "SOURCE_FILE_INVALID_ENCODING",
+            "SOURCE_PARSE_FAILED"
+          ]
+        },
+        "filePath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "position": {
+          "$ref": "#/$defs/sourcePosition"
+        },
+        "recoverable": {
+          "const": true
+        },
+        "stage": {
+          "enum": ["read", "parse", "extract"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "ruleError": {
+      "type": "object",
+      "required": ["category", "code", "message", "recoverable", "ruleId", "stage"],
+      "properties": {
+        "category": {
+          "$ref": "#/$defs/category"
+        },
+        "code": {
+          "enum": ["RULE_EVALUATION_FAILED", "RULE_RESULT_INVALID"]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recoverable": {
+          "const": true
+        },
+        "ruleId": {
+          "type": "string",
+          "pattern": "^[a-z]+/[a-z0-9-]+$"
+        },
+        "stage": {
+          "const": "rule"
+        }
+      },
+      "additionalProperties": false
+    },
+    "processingError": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/discoveryError"
+        },
+        {
+          "$ref": "#/$defs/sourceError"
+        },
+        {
+          "$ref": "#/$defs/ruleError"
+        }
+      ]
+    },
+    "reportPaths": {
+      "type": "object",
+      "required": ["html", "json"],
+      "properties": {
+        "html": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^(?!/|[A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001F\\u007F-\\u009F]+/audit-report\\.html$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "json": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^(?!/|[A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001F\\u007F-\\u009F]+/audit-report\\.json$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "fileSummary": {
+      "type": "object",
+      "required": ["discovered", "failed", "parsed", "selected"],
+      "properties": {
+        "discovered": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parsed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "selected": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "ruleSummary": {
+      "type": "object",
+      "required": [
+        "availableRuleCount",
+        "enabledRuleCount",
+        "executedRuleCount",
+        "failedRuleCount",
+        "findingCount",
+        "succeededRuleCount"
+      ],
+      "properties": {
+        "availableRuleCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "enabledRuleCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "executedRuleCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failedRuleCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "findingCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "succeededRuleCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "categorySummary": {
+      "type": "object",
+      "required": ["accessibility", "performance", "seo", "ux"],
+      "properties": {
+        "accessibility": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "performance": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ux": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "severitySummary": {
+      "type": "object",
+      "required": ["critical", "high", "info", "low", "medium"],
+      "properties": {
+        "critical": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "high": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "info": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "low": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "medium": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "findingSummary": {
+      "type": "object",
+      "required": ["byCategory", "bySeverity", "total"],
+      "properties": {
+        "byCategory": {
+          "$ref": "#/$defs/categorySummary"
+        },
+        "bySeverity": {
+          "$ref": "#/$defs/severitySummary"
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "errorStageSummary": {
+      "type": "object",
+      "required": ["discovery", "extract", "parse", "read", "rule"],
+      "properties": {
+        "discovery": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "extract": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parse": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "read": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rule": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "errorSummary": {
+      "type": "object",
+      "required": ["byStage", "total"],
+      "properties": {
+        "byStage": {
+          "$ref": "#/$defs/errorStageSummary"
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "required": ["errors", "files", "findings", "rules"],
+      "properties": {
+        "errors": {
+          "$ref": "#/$defs/errorSummary"
+        },
+        "files": {
+          "$ref": "#/$defs/fileSummary"
+        },
+        "findings": {
+          "$ref": "#/$defs/findingSummary"
+        },
+        "rules": {
+          "$ref": "#/$defs/ruleSummary"
+        }
+      },
+      "additionalProperties": false
+    },
+    "timing": {
+      "type": "object",
+      "required": ["completedAt", "durationMs", "startedAt"],
+      "properties": {
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "durationMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {
+          "const": "UXAudit"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

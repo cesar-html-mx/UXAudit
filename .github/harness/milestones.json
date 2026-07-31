@@ -1,0 +1,345 @@
+{
+  "schemaVersion": 1,
+  "milestones": [
+    {
+      "id": "M01",
+      "slug": "bootstrap-cli",
+      "title": "Repository bootstrap and CLI foundation",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M01-bootstrap-cli.md",
+      "branch": "milestone/m01-bootstrap-cli",
+      "tasks": [
+        {
+          "id": "M01-T01",
+          "title": "Initialize Node and TypeScript project",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run typecheck && npm run build",
+          "completedAt": "2026-07-29T14:27:17.101Z"
+        },
+        {
+          "id": "M01-T02",
+          "title": "Configure quality and test toolchain",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify && npm run test:coverage && npm ls --all --omit=optional",
+          "completedAt": "2026-07-29T14:35:31.713Z"
+        },
+        {
+          "id": "M01-T03",
+          "title": "Create CLI entry point and scan command",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify && npm run test:coverage && built CLI help/version/scan smoke",
+          "completedAt": "2026-07-29T14:41:25.508Z"
+        },
+        {
+          "id": "M01-T04",
+          "title": "Implement input and project-path validation",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify && npm run test:coverage; 23 tests; built valid/empty/missing/file CLI smokes",
+          "completedAt": "2026-07-29T14:48:39.701Z"
+        },
+        {
+          "id": "M01-T05",
+          "title": "Establish CI, documentation, and evidence baseline",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: isolated npm ci; npm run verify; 31 tests; 100% coverage; 6 CLI smokes; moderate npm audit 0; harness PASS; schema 3 evidence digest and manifest verified",
+          "completedAt": "2026-07-29T15:40:47.001Z"
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "slug": "discovery-inventory",
+      "title": "Project discovery, inventory, and classification",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M02-discovery-inventory.md",
+      "branch": "milestone/m02-discovery-inventory",
+      "tasks": [
+        {
+          "id": "M02-T01",
+          "title": "Define discovery contracts and defaults",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format check; strict lint; typecheck; 2 focused discovery-contract tests; harness PASS",
+          "completedAt": "2026-07-29T16:57:09.896Z"
+        },
+        {
+          "id": "M02-T02",
+          "title": "Implement safe recursive discovery",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck; 12 focused traversal/security tests; 45 total tests; coverage 100% statements/lines/functions and 94.07% branches",
+          "completedAt": "2026-07-29T17:08:17.759Z"
+        },
+        {
+          "id": "M02-T03",
+          "title": "Build deterministic file inventory",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck; 7 focused inventory tests; 52 total tests; coverage 100% statements/lines/functions and 94.36% branches",
+          "completedAt": "2026-07-29T17:12:04.378Z"
+        },
+        {
+          "id": "M02-T04",
+          "title": "Classify supported source candidates",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck; 4 focused classification tests; 56 total tests; coverage 100% statements/lines/functions and 94.59% branches",
+          "completedAt": "2026-07-29T17:15:38.921Z"
+        },
+        {
+          "id": "M02-T05",
+          "title": "Integrate discovery into CLI and collect evidence",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify; 66 tests in 9 files with zero skipped/todo; coverage 99.64% statements/lines, 100% functions, 94.15% branches; 6 CLI smokes; M02 scenario; harness; npm audit 0 vulnerabilities; evidence reproducibility PASS",
+          "completedAt": "2026-07-29T17:57:16.611Z"
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "slug": "parser-analysis-model",
+      "title": "Source parser and analysis model",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M03-parser-analysis-model.md",
+      "branch": "milestone/m03-parser-analysis-model",
+      "tasks": [
+        {
+          "id": "M03-T01",
+          "title": "Define parser and model contracts",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, lint, typecheck, 8 focused contract tests, 74 total tests, harness and AST-free boundary PASS",
+          "completedAt": "2026-07-29T19:20:56.285Z"
+        },
+        {
+          "id": "M03-T02",
+          "title": "Implement Babel parser adapter",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: 10 focused parser/dependency tests, 84 total tests, format, lint, typecheck, build, Babel 8 tree and npm audit PASS",
+          "completedAt": "2026-07-29T19:45:42.768Z"
+        },
+        {
+          "id": "M03-T03",
+          "title": "Extract JSX and component information",
+          "status": "completed",
+          "verification": "Node 24.18.0: 22 focused extraction tests and 106 total tests pass; coverage 97.17% statements, 90.71% branches, 100% functions, 97.13% lines; format, lint, typecheck, build, harness validation, and independent review pass",
+          "completedAt": "2026-07-29T20:22:51.938Z"
+        },
+        {
+          "id": "M03-T04",
+          "title": "Build normalized analysis model",
+          "status": "completed",
+          "verification": "Node 24.18.0: 26 focused model-builder tests and 132 total tests across 16 files pass; coverage 97.00% statements, 90.31% branches, 100% functions, 96.95% lines; format, lint, typecheck, build, parse-extract-build integration, harness validation, and independent review pass",
+          "completedAt": "2026-07-29T20:47:13.321Z"
+        },
+        {
+          "id": "M03-T05",
+          "title": "Integrate parsing and model with error isolation",
+          "status": "completed",
+          "verification": "Node 24.18.0: 208 tests across 21 files pass with zero skipped/todo; coverage 97.63% statements, 91.86% branches, 100% functions, 97.59% lines; format, lint, typecheck, build, six CLI smokes, four-kind deterministic M03 scenario, secure-reader review, harness validation, exact Babel 8.0.4 tree, zero-vulnerability audit, and twice-verified isolated evidence pass",
+          "completedAt": "2026-07-29T21:19:01.962Z"
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "slug": "rule-engine-catalog",
+      "title": "Rule engine and initial validation catalog",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M04-rule-engine-catalog.md",
+      "branch": "milestone/m04-rule-engine-catalog",
+      "tasks": [
+        {
+          "id": "M04-T01",
+          "title": "Define Rule, Finding, severity, and category contracts",
+          "status": "completed",
+          "verification": "Node 24.18.0: 7 focused rule-contract tests pass; strict typecheck, lint, schema parse, format, and diff checks pass",
+          "completedAt": "2026-07-29T22:02:30.398Z"
+        },
+        {
+          "id": "M04-T02",
+          "title": "Implement rule registry, loader, and evaluator",
+          "status": "completed",
+          "verification": "Node 24.18.0: 53 focused engine tests and 261 full tests pass; coverage 97.34% statements, 91.72% branches, 99.62% functions, 97.35% lines; strict typecheck, lint, format, schema, isolation review, and diff checks pass",
+          "completedAt": "2026-07-29T22:20:17.138Z"
+        },
+        {
+          "id": "M04-T03",
+          "title": "Implement accessibility rules",
+          "status": "completed",
+          "verification": "Node 24.18.0: 25 focused accessibility tests, 286-test full verify, and coverage 96.85% statements / 92.01% branches / 99.65% functions / 96.85% lines PASS; independent semantic re-review found no blockers.",
+          "completedAt": "2026-07-29T22:36:46.478Z"
+        },
+        {
+          "id": "M04-T04",
+          "title": "Implement SEO, performance, and UX rules",
+          "status": "completed",
+          "verification": "Node 24.18.0: 54 focused T04 tests, 340-test full verify, and coverage 97.14% statements / 92.79% branches / 99.70% functions / 97.14% lines PASS; independent performance, SEO, and UX re-reviews found no blockers.",
+          "completedAt": "2026-07-29T23:01:00.449Z"
+        },
+        {
+          "id": "M04-T05",
+          "title": "Validate rule isolation and deterministic findings",
+          "status": "completed",
+          "verification": "Node 24.18.0/npm 11.16.0: 344 tests across 38 files with zero skips/todos; coverage 97.14% statements, 92.79% branches, 99.70% functions, 97.14% lines; format, lint, typecheck, build, six CLI smokes, deterministic eight-rule scenario, harness, audit, two isolated evidence collections, and final independent reviews PASS",
+          "completedAt": "2026-07-30T00:01:07.416Z"
+        }
+      ]
+    },
+    {
+      "id": "M05",
+      "slug": "configuration-reporting",
+      "title": "Configuration and terminal, JSON, and HTML reporting",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M05-configuration-reporting.md",
+      "branch": "milestone/m05-configuration-reporting",
+      "tasks": [
+        {
+          "id": "M05-T01",
+          "title": "Define configuration and AuditResult contracts",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck, build, 28 focused contract/schema tests, 372 total tests across 41 files, exact local schema resolution, and coverage 95.88% statements / 90.76% branches / 99.19% functions / 95.84% lines PASS",
+          "completedAt": "2026-07-30T02:01:34.586Z"
+        },
+        {
+          "id": "M05-T02",
+          "title": "Implement configuration loading and defaults",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: format, strict lint, typecheck, build, 79 focused configuration/audit tests, 435 total tests across 43 files, coverage 95.77% statements / 91.08% branches / 99.29% functions / 95.72% lines, harness validation, and independent adversarial re-review PASS",
+          "completedAt": "2026-07-30T02:31:39.774Z"
+        },
+        {
+          "id": "M05-T03",
+          "title": "Implement terminal reporter",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: exact terminal color/no-color/threshold/hostile/empty/error tests, 33 focused terminal and CLI tests, 449 total tests across 44 files, coverage 95.94% statements / 91.42% branches / 99.31% functions / 95.90% lines, format, strict lint, typecheck, build, harness, and independent review PASS",
+          "completedAt": "2026-07-30T02:51:52.632Z"
+        },
+        {
+          "id": "M05-T04",
+          "title": "Implement deterministic JSON reporter",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: 41 focused JSON/writer tests, 490 total tests across 46 files, coverage 95.66% statements / 91.19% branches / 99.36% functions / 95.62% lines, format, strict lint, typecheck, build, harness, and independent security review PASS",
+          "completedAt": "2026-07-30T03:06:51.394Z"
+        },
+        {
+          "id": "M05-T05",
+          "title": "Implement escaped standalone HTML reporter",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: 77 focused reporter/writer tests, 512 total tests across 47 files, coverage 95.81% statements / 91.39% branches / 99.39% functions / 95.77% lines, format, strict lint, typecheck, build, M05 scenario, exact 22-artifact base evidence collected twice, harness, dependency audit, and independent reporter/evidence/security reviews PASS",
+          "completedAt": "2026-07-30T03:51:49.414Z"
+        }
+      ]
+    },
+    {
+      "id": "M06",
+      "slug": "integration-validation",
+      "title": "End-to-end integration, validation, usability, and security evidence",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M06-integration-validation.md",
+      "branch": "milestone/m06-integration-validation",
+      "tasks": [
+        {
+          "id": "M06-T01",
+          "title": "Complete end-to-end CLI pipeline",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (548 tests/50 files), coverage 95.88% statements / 91.46% branches / 99.80% functions / 95.84% lines, 11 compiled smoke scenarios, harness validation, and two independent reviews PASS",
+          "completedAt": "2026-07-30T06:04:52.636Z"
+        },
+        {
+          "id": "M06-T02",
+          "title": "Build controlled React and TypeScript fixture projects",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (554 tests/51 files), coverage 95.88% statements / 91.46% branches / 99.80% functions / 95.84% lines, five-project built-CLI scenario twice, harness, and independent review PASS",
+          "completedAt": "2026-07-30T06:23:43.989Z"
+        },
+        {
+          "id": "M06-T03",
+          "title": "Measure expected versus obtained findings",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (577 tests/53 files), coverage 95.84% statements / 91.39% branches / 99.81% functions / 95.80% lines, five-project scenario, 27-case per-rule accuracy scenario, harness, and two independent reviews PASS",
+          "completedAt": "2026-07-30T06:43:12.852Z"
+        },
+        {
+          "id": "M06-T04",
+          "title": "Execute system, robustness, performance, and security checks",
+          "status": "completed",
+          "verification": "Node.js 24.18.0: npm run verify (602 tests/54 files), coverage 95.84% statements / 91.50% branches / 99.82% functions / 95.79% lines, 11 smokes, five-project scenario, 27-case accuracy, 15-case robustness with five performance runs and npm audit, harness, and two independent reviews PASS",
+          "completedAt": "2026-07-30T07:17:34.695Z"
+        },
+        {
+          "id": "M06-T05",
+          "title": "Execute usability protocol and assemble TFM evidence",
+          "status": "completed",
+          "verification": "npm run verify; coverage 95.84/91.50/99.82/95.79; 619/619 zero skip/todo; smoke, scenario, accuracy, robustness, usability, audit, harness PASS; evidence:m06 twice PASS; self-review PASS",
+          "completedAt": "2026-07-30T08:12:28.739Z"
+        }
+      ]
+    },
+    {
+      "id": "M07",
+      "slug": "component-graph",
+      "title": "Bounded module and component graph",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M07-component-graph.md",
+      "branch": "milestone/m07-component-graph",
+      "tasks": [
+        {
+          "id": "M07-T01",
+          "title": "Define the bounded component-graph contract and acceptance corpus",
+          "status": "pending"
+        },
+        {
+          "id": "M07-T02",
+          "title": "Extract normalized component import, export, and use facts",
+          "status": "pending"
+        },
+        {
+          "id": "M07-T03",
+          "title": "Resolve direct relative component links deterministically",
+          "status": "pending"
+        },
+        {
+          "id": "M07-T04",
+          "title": "Evaluate multiple H1 headings across bounded component composition",
+          "status": "pending"
+        },
+        {
+          "id": "M07-T05",
+          "title": "Execute the six-hour viability gate and retain evidence",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "M08",
+      "slug": "contextual-component-analysis",
+      "title": "Bounded contextual component analysis and realistic validation",
+      "status": "pending",
+      "plan": ".github/harness/exec-plans/queued/M08-contextual-component-analysis.md",
+      "branch": "milestone/m08-contextual-component-analysis",
+      "tasks": [
+        {
+          "id": "M08-T01",
+          "title": "Define transparent-wrapper and source-versus-usage semantics",
+          "status": "pending"
+        },
+        {
+          "id": "M08-T02",
+          "title": "Project supported static props and children through wrappers",
+          "status": "pending"
+        },
+        {
+          "id": "M08-T03",
+          "title": "Adapt prioritized rules to bounded contextual projections",
+          "status": "pending"
+        },
+        {
+          "id": "M08-T04",
+          "title": "Validate a realistic multi-file React consumer",
+          "status": "pending"
+        },
+        {
+          "id": "M08-T05",
+          "title": "Complete release-quality regression, documentation, and evidence gates",
+          "status": "pending"
+        }
+      ]
+    }
+  ]
+}
