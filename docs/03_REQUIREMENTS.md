@@ -4,23 +4,23 @@
 
 ## Functional requirements
 
-| ID    | Requirement                                                                                                            |
-| ----- | ---------------------------------------------------------------------------------------------------------------------- |
-| RF-01 | Allow the user to select a project through the CLI.                                                                    |
-| RF-02 | Validate that the path exists, is a directory, and can be accessed.                                                    |
-| RF-03 | Recursively discover files within the project.                                                                         |
-| RF-04 | Exclude dependencies, generated output, configuration, and irrelevant content according to defined policy.             |
-| RF-05 | Create an inventory retaining normalized relative and absolute location information.                                   |
-| RF-06 | Classify source candidates that may contain relevant React/TypeScript code.                                            |
-| RF-07 | Parse JavaScript, TypeScript, JSX, and TSX source using a compatible parser.                                           |
-| RF-08 | Build a normalized model of files, components, JSX elements, properties, relationships, and locations needed by rules. |
-| RF-09 | Load available and enabled rules in UX, accessibility, SEO, and performance categories.                                |
-| RF-10 | Execute rules over the normalized model rather than rereading files independently.                                     |
-| RF-11 | Allow each rule to return zero, one, or multiple normalized findings.                                                  |
-| RF-12 | Preserve file and source location for each finding whenever available.                                                 |
-| RF-13 | Include an explanation, recommendation, and known limitations.                                                         |
-| RF-14 | Classify findings by rule, category, severity, and confidence.                                                         |
-| RF-15 | Generate terminal, JSON, and HTML reports from one normalized audit result.                                            |
+| ID    | Requirement                                                                                                                                    |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| RF-01 | Allow the user to select a project through the CLI.                                                                                            |
+| RF-02 | Validate that the path exists, is a directory, and can be accessed.                                                                            |
+| RF-03 | Recursively discover files within the project.                                                                                                 |
+| RF-04 | Exclude dependencies, generated output, configuration, and irrelevant content according to defined policy.                                     |
+| RF-05 | Create an inventory retaining normalized relative and absolute location information.                                                           |
+| RF-06 | Classify source candidates that may contain relevant React/TypeScript code.                                                                    |
+| RF-07 | Parse JavaScript, TypeScript, JSX, and TSX source using a compatible parser.                                                                   |
+| RF-08 | Build a normalized model of files, components, JSX elements, properties, direct component links, relationships, and locations needed by rules. |
+| RF-09 | Load available and enabled rules in UX, accessibility, SEO, and performance categories.                                                        |
+| RF-10 | Execute rules over the normalized model rather than rereading files independently.                                                             |
+| RF-11 | Allow each rule to return zero, one, or multiple normalized findings.                                                                          |
+| RF-12 | Preserve file and source location for each finding whenever available.                                                                         |
+| RF-13 | Include an explanation, recommendation, and known limitations.                                                                                 |
+| RF-14 | Classify findings by rule, category, severity, and confidence.                                                                                 |
+| RF-15 | Generate terminal, JSON, and HTML reports from one normalized audit result.                                                                    |
 
 ## Non-functional requirements
 
@@ -46,6 +46,22 @@
 - Reporters consume one normalized audit result and do not rerun analysis.
 - Filesystem traversal and report writing remain inside explicitly authorized roots.
 - Dynamic or unsupported cases are described as unknown or limited, not asserted as defects.
+
+## Bounded intercomponent scope
+
+The normalized model may link a custom JSX use to a recognized component definition only when
+static evidence identifies exactly one target. Supported evidence consists of direct exports of
+recognized components, lexically bound local component uses, and direct relative `default` or named
+imports, including a named import with a local alias. Relative resolution accepts an explicit
+supported `.ts`, `.tsx`, `.js`, or `.jsx` file, an extensionless supported file, or a supported
+`index` file only when exactly one candidate and exported binding match.
+
+Package imports, barrels and reexports, namespace imports or JSX member names, TypeScript path
+aliases, higher-order components, runtime aliases, and runtime composition are outside this bounded
+contract. Missing, ambiguous, shadowed, dynamic, or otherwise unresolved cases remain unknown and
+must not be linked by name coincidence. Component cycles may be represented as links, but every rule
+traversal must use deterministic cycle and depth controls. Resolution parses inert source facts; it
+never imports or executes a target module.
 
 ## Requirement interpretation
 

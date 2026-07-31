@@ -17,6 +17,11 @@ export const COMPONENT_KINDS = Object.freeze({
 
 export type ComponentKind = (typeof COMPONENT_KINDS)[keyof typeof COMPONENT_KINDS];
 
+export const COMPONENT_USE_KINDS = Object.freeze({
+  imported: 'imported',
+  local: 'local',
+} as const);
+
 export const JSX_ATTRIBUTE_KINDS = Object.freeze({
   named: 'named',
   spread: 'spread',
@@ -79,6 +84,31 @@ export interface AnalyzedComponent {
   readonly rootJsxNodeIds: readonly string[];
 }
 
+export interface AnalyzedComponentExport {
+  readonly componentId: string;
+  readonly exportedName: string;
+}
+
+export interface ImportedComponentUse {
+  readonly importedName: string;
+  readonly jsxNodeId: string;
+  readonly kind: typeof COMPONENT_USE_KINDS.imported;
+  readonly moduleSpecifier: string;
+}
+
+export interface LocalComponentUse {
+  readonly jsxNodeId: string;
+  readonly kind: typeof COMPONENT_USE_KINDS.local;
+  readonly targetComponentId: string;
+}
+
+export type AnalyzedComponentUse = ImportedComponentUse | LocalComponentUse;
+
+export interface ComponentLink {
+  readonly jsxNodeId: string;
+  readonly targetComponentId: string;
+}
+
 export interface AnalyzedFile {
   readonly componentIds: readonly string[];
   readonly filePath: string;
@@ -95,6 +125,8 @@ export interface AnalyzedFile {
  * builder. Arrays use source order and contain no parser-specific nodes.
  */
 export interface AnalyzedSourceFile {
+  readonly componentExports: readonly AnalyzedComponentExport[];
+  readonly componentUses: readonly AnalyzedComponentUse[];
   readonly components: readonly AnalyzedComponent[];
   readonly file: AnalyzedFile;
   readonly jsxNodes: readonly JsxNode[];
@@ -107,6 +139,7 @@ export interface AnalyzedSourceFile {
  * their start offset, using IDs only as a deterministic tie-breaker.
  */
 export interface AnalysisModel {
+  readonly componentLinks: readonly ComponentLink[];
   readonly components: readonly AnalyzedComponent[];
   readonly files: readonly AnalyzedFile[];
   readonly jsxNodes: readonly JsxNode[];

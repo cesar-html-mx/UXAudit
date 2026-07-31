@@ -1003,3 +1003,26 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Requirements/contracts affected: RF-08, RNF-03, RNF-04, R-002, R-008, R-009, R-028, and R-029.
 - Evidence: the two safeguard tags, clean branch ancestry, baseline `npm run verify`, active M07
   ExecPlan, and the eventual M07 viability package.
+
+## D-044 — Parser-independent bounded component graph and reviewed gate corpus
+
+- Date: 2026-07-31
+- Status: accepted
+- Context: v0.1.0 records custom JSX syntax and component ownership but cannot identify which local
+  definition an imported JSX element references. Rules must not receive Babel bindings or guess by
+  globally matching component names.
+- Decision: Add normalized per-file component export and component-use facts, then expose resolved
+  project relationships as a separate `ComponentLink` collection. An imported use retains the
+  original exported name (`default` or named) and relative module specifier while Babel binding
+  identity determines the local JSX use. Project resolution may link only one exact supported
+  relative candidate. Fix acceptance with a six-file corpus containing default, named alias,
+  repeated use, a cycle, a missing local module, a package import, and a non-execution sentinel.
+- Alternatives considered: storing Babel `Binding` or AST values in `AnalysisModel`; matching custom
+  element text globally; emulating all TypeScript/bundler resolution; or deriving expectations from
+  actual output after implementation.
+- Consequences: Rules remain parser-independent, unresolved cases remain conservative, and the gate
+  has a stable reviewed inventory of 7 components, 17 JSX nodes, 8 resolved uses, 2 unresolved uses,
+  and exactly 2 findings. All existing analyzed-file fixtures must explicitly provide empty facts.
+- Requirements/contracts affected: RF-07, RF-08, RF-10, RNF-03, RNF-04, R-002, R-026, and R-027.
+- Evidence: paired contract documentation, model invariant tests, and
+  `tests/fixtures/intercomponent/static-composition/expected.json`.

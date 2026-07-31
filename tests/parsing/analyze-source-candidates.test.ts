@@ -33,6 +33,8 @@ const createCandidate = (relativePath: string): SourceCandidate => ({
 });
 
 const createAnalyzedFile = (filePath: string): AnalyzedSourceFile => ({
+  componentExports: [],
+  componentUses: [],
   components: [],
   file: {
     componentIds: [],

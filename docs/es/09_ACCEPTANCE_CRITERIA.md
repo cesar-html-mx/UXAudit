@@ -7,6 +7,13 @@
 - `ux-audit scan <project-path>` completa la auditoría estática integral documentada.
 - Las fuentes `.js`, `.jsx`, `.ts` y `.tsx` compatibles se descubren y procesan de forma determinista.
 - El código objetivo nunca se importa, ejecuta ni modifica.
+- Los exports directos de componentes reconocidos y los usos locales de componentes se enlazan solo
+  mediante la identidad léxica del binding. Los imports relativos directos `default` y nombrados,
+  incluido un alias nombrado, se enlazan solo cuando coinciden exactamente un archivo objetivo
+  compatible y un binding exportado.
+- Los imports de paquetes, barrels y reexports, sintaxis de namespace, alias de rutas de TypeScript,
+  abstracciones de orden superior o en ejecución y referencias faltantes o ambiguas permanecen
+  desconocidos sin enlaces especulativos.
 - Todas las reglas estables publicadas evalúan el modelo normalizado y exponen límites documentados.
 - Los fallos recuperables de fuentes y reglas se aíslan e incluyen en el resultado normalizado.
 - Terminal, JSON y HTML informan los mismos hechos subyacentes.
@@ -50,6 +57,11 @@
 - La cobertura global de sentencias, ramas, funciones y líneas permanece al menos en 90 %.
 - Resultados e informes tienen orden determinista; solo los campos volátiles documentados se excluyen.
 - El comportamiento público tiene aserciones significativas positivas, negativas, de límite y fallo.
+- El corpus intercomponente controlado cubre imports directos `default` y nombrados con alias, uso
+  local y repetido, encabezados compuestos `Page -> Header + Hero`, un ciclo, un import local faltante,
+  un import de paquete, ambigüedad, orden de entrada invertido y no ejecución del código objetivo.
+- Cada caso intercomponente compatible anunciado contribuye a las expectativas de exactitud
+  compatibles y no se reclasifica como no compatible para aprobar la puerta de publicación.
 - El árbol de trabajo contiene únicamente cambios intencionales revisados.
 
 ## Documentación

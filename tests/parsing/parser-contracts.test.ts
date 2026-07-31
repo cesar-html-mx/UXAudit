@@ -23,6 +23,8 @@ describe('source parser contracts', () => {
     const parser: SourceParser = ({ candidate: sourceCandidate }) =>
       Promise.resolve({
         analyzedFile: {
+          componentExports: [],
+          componentUses: [],
           components: [],
           file: {
             componentIds: [],

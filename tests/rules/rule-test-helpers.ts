@@ -39,6 +39,7 @@ export const fontSizeLocation: SourceLocation = {
 };
 
 export const model: AnalysisModel = {
+  componentLinks: [],
   components: [],
   files: [
     {

@@ -4,23 +4,23 @@
 
 ## Requisitos funcionales
 
-| ID    | Requisito                                                                                                                                  |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| RF-01 | Permitir que la persona usuaria seleccione un proyecto mediante la CLI.                                                                    |
-| RF-02 | Validar que la ruta exista, sea un directorio y se pueda acceder a ella.                                                                   |
-| RF-03 | Descubrir de forma recursiva los archivos dentro del proyecto.                                                                             |
-| RF-04 | Excluir dependencias, salidas generadas, configuraciones y contenido irrelevante de acuerdo con la política definida.                      |
-| RF-05 | Crear un inventario que conserve información normalizada de ubicación relativa y absoluta.                                                 |
-| RF-06 | Clasificar los candidatos de código fuente que puedan contener código React/TypeScript pertinente.                                         |
-| RF-07 | Analizar código fuente JavaScript, TypeScript, JSX y TSX mediante un parser compatible.                                                    |
-| RF-08 | Construir un modelo normalizado de archivos, componentes, elementos JSX, propiedades, relaciones y ubicaciones necesarias para las reglas. |
-| RF-09 | Cargar las reglas disponibles y habilitadas en las categorías de UX, accesibilidad, SEO y rendimiento.                                     |
-| RF-10 | Ejecutar las reglas sobre el modelo normalizado en lugar de que cada una vuelva a leer archivos de forma independiente.                    |
-| RF-11 | Permitir que cada regla devuelva cero, uno o varios hallazgos normalizados.                                                                |
-| RF-12 | Conservar el archivo y la ubicación en el código fuente de cada hallazgo cuando estén disponibles.                                         |
-| RF-13 | Incluir una explicación, recomendación y limitaciones conocidas.                                                                           |
-| RF-14 | Clasificar los hallazgos por regla, categoría, severidad y confianza.                                                                      |
-| RF-15 | Generar informes de terminal, JSON y HTML a partir de un resultado normalizado de auditoría.                                               |
+| ID    | Requisito                                                                                                                                                                   |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| RF-01 | Permitir que la persona usuaria seleccione un proyecto mediante la CLI.                                                                                                     |
+| RF-02 | Validar que la ruta exista, sea un directorio y se pueda acceder a ella.                                                                                                    |
+| RF-03 | Descubrir de forma recursiva los archivos dentro del proyecto.                                                                                                              |
+| RF-04 | Excluir dependencias, salidas generadas, configuraciones y contenido irrelevante de acuerdo con la política definida.                                                       |
+| RF-05 | Crear un inventario que conserve información normalizada de ubicación relativa y absoluta.                                                                                  |
+| RF-06 | Clasificar los candidatos de código fuente que puedan contener código React/TypeScript pertinente.                                                                          |
+| RF-07 | Analizar código fuente JavaScript, TypeScript, JSX y TSX mediante un parser compatible.                                                                                     |
+| RF-08 | Construir un modelo normalizado de archivos, componentes, elementos JSX, propiedades, enlaces directos de componentes, relaciones y ubicaciones necesarias para las reglas. |
+| RF-09 | Cargar las reglas disponibles y habilitadas en las categorías de UX, accesibilidad, SEO y rendimiento.                                                                      |
+| RF-10 | Ejecutar las reglas sobre el modelo normalizado en lugar de que cada una vuelva a leer archivos de forma independiente.                                                     |
+| RF-11 | Permitir que cada regla devuelva cero, uno o varios hallazgos normalizados.                                                                                                 |
+| RF-12 | Conservar el archivo y la ubicación en el código fuente de cada hallazgo cuando estén disponibles.                                                                          |
+| RF-13 | Incluir una explicación, recomendación y limitaciones conocidas.                                                                                                            |
+| RF-14 | Clasificar los hallazgos por regla, categoría, severidad y confianza.                                                                                                       |
+| RF-15 | Generar informes de terminal, JSON y HTML a partir de un resultado normalizado de auditoría.                                                                                |
 
 ## Requisitos no funcionales
 
@@ -46,6 +46,24 @@
 - Los generadores de informes consumen un resultado normalizado y no repiten el análisis.
 - El recorrido y la escritura de informes permanecen dentro de raíces autorizadas expresamente.
 - Los casos dinámicos o no compatibles se describen como desconocidos o limitados, no como defectos.
+
+## Alcance intercomponente acotado
+
+El modelo normalizado puede enlazar un uso JSX personalizado con una definición de componente
+reconocida solo cuando la evidencia estática identifica exactamente un destino. La evidencia
+compatible consiste en exports directos de componentes reconocidos, usos locales de componentes
+vinculados léxicamente e imports relativos directos `default` o nombrados, incluido un import
+nombrado con alias local. La resolución relativa acepta un archivo compatible `.ts`, `.tsx`, `.js` o
+`.jsx` con extensión explícita, un archivo compatible sin extensión o un archivo `index` compatible
+solo cuando coinciden exactamente un candidato y un binding exportado.
+
+Los imports de paquetes, barrels y reexports, imports de namespace o nombres JSX con miembros, alias
+de rutas de TypeScript, componentes de orden superior, alias en ejecución y composición en ejecución
+quedan fuera de este contrato acotado. Los casos faltantes, ambiguos, sombreados, dinámicos o no
+resueltos por otro motivo permanecen desconocidos y no deben enlazarse por coincidencia de nombre. Los
+ciclos de componentes pueden representarse como enlaces, pero cada recorrido de reglas debe usar
+controles deterministas de ciclos y profundidad. La resolución analiza hechos inertes del código
+fuente; nunca importa ni ejecuta un módulo objetivo.
 
 ## Interpretación de requisitos
 

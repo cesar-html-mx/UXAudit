@@ -63,6 +63,27 @@ Los resultados esperados se versionan en el nivel semántico. Las comparaciones 
 campos volátiles documentados, como raíces temporales canónicas, marcas de tiempo, duración y
 observaciones de memoria dependientes de la máquina.
 
+## Corpus intercomponente acotado
+
+El corpus intercomponente controlado fija expectativas revisadas para imports relativos directos
+`default` y nombrados, un alias de import nombrado, un uso local de componente y el uso repetido de un
+componente importado. Su composición compatible contiene una `Page` que usa `Header` y `Hero`, con un
+`h1` intrínseco en cada componente hijo. Los enlaces esperados, propiedad del hallazgo, ubicaciones
+exactas y multiplicidad del uso repetido se versionan antes de la implementación.
+
+Los casos de límite incluyen un ciclo de componentes, un módulo relativo faltante, un import de
+paquete, sintaxis de namespace, un barrel o reexport, un alias de ruta de TypeScript, un candidato
+relativo ambiguo, un binding sombreado y un centinela de ejecución de código objetivo. Los ciclos
+deben terminar con resultados deterministas; los casos no compatibles o no resueltos deben permanecer
+desconocidos y no deben adquirir enlaces especulativos. Invertir el orden de entrada de los archivos
+analizados debe conservar los mismos enlaces y hallazgos ordenados.
+
+Cada comportamiento intercomponente descrito como compatible en requisitos, arquitectura, metadatos
+de reglas o documentación para personas usuarias debe aparecer como una instancia compatible
+positiva, negativa o de límite. No debe excluirse de precisión o exhaustividad como caso no
+compatible. Solo el comportamiento explícitamente fuera del contrato acotado puede contabilizarse
+por separado como no compatible.
+
 ## Pruebas de reglas
 
 Cada regla necesita:

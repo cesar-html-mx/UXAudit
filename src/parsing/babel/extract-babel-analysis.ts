@@ -955,6 +955,8 @@ export const extractBabelAnalysis = ({
 
     return {
       analyzedFile: {
+        componentExports: [],
+        componentUses: [],
         components,
         file: {
           componentIds: components.map((component) => component.id),

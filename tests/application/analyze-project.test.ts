@@ -69,6 +69,8 @@ const location = {
 } as const;
 
 const analyzedFile: AnalyzedSourceFile = {
+  componentExports: [],
+  componentUses: [],
   components: [],
   file: {
     componentIds: [],
@@ -82,6 +84,7 @@ const analyzedFile: AnalyzedSourceFile = {
 };
 
 const model: AnalysisModel = {
+  componentLinks: [],
   components: [
     {
       id: 'component:src/App.tsx:0',
@@ -208,7 +211,12 @@ describe('analyzeProject', () => {
 
   it('reports an empty parsing result without changing discovery counters', async () => {
     const scanResult = createScanResult();
-    const emptyModel: AnalysisModel = { components: [], files: [], jsxNodes: [] };
+    const emptyModel: AnalysisModel = {
+      componentLinks: [],
+      components: [],
+      files: [],
+      jsxNodes: [],
+    };
     const analyzeProject = createAnalyzeProject(
       createDependencies({
         analyzeCandidates: () =>

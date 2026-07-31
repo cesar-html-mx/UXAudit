@@ -86,6 +86,13 @@ describe('analysis model contracts', () => {
       },
     };
     const analyzedFile: AnalyzedSourceFile = {
+      componentExports: [
+        {
+          componentId: 'component:src/App.tsx:0',
+          exportedName: 'App',
+        },
+      ],
+      componentUses: [],
       components: [
         {
           id: 'component:src/App.tsx:0',
@@ -115,6 +122,7 @@ describe('analysis model contracts', () => {
       jsxNodes: [fragment, element],
     };
     const model: AnalysisModel = {
+      componentLinks: [],
       components: analyzedFile.components,
       files: [analyzedFile.file],
       jsxNodes: analyzedFile.jsxNodes,
@@ -126,6 +134,7 @@ describe('analysis model contracts', () => {
       usesJsx: true,
     });
     expect(model.components[0]?.rootJsxNodeIds).toEqual([fragment.id]);
+    expect(model.componentLinks).toEqual([]);
     expect(model.jsxNodes.map((node) => node.id)).toEqual([fragment.id, element.id]);
     expect(element.attributes.map((attribute) => attribute.kind)).toEqual(['named', 'spread']);
     expect(styleValue).toMatchObject({
@@ -134,6 +143,9 @@ describe('analysis model contracts', () => {
       kind: 'object',
     });
     expectTypeOf(model.files).toExtend<readonly AnalysisModel['files'][number][]>();
+    expectTypeOf(analyzedFile.componentExports).toExtend<
+      readonly AnalyzedSourceFile['componentExports'][number][]
+    >();
     expectTypeOf(analyzedFile).toExtend<AnalyzedSourceFile>();
   });
 

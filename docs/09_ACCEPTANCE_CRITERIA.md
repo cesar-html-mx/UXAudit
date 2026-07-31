@@ -7,6 +7,11 @@
 - `ux-audit scan <project-path>` completes the documented end-to-end static audit.
 - Supported `.js`, `.jsx`, `.ts`, and `.tsx` sources are discovered and processed deterministically.
 - Target code is never imported, executed, or modified.
+- Direct recognized component exports and local component uses link only through lexical binding
+  identity. Direct relative `default` and named imports, including a named alias, link only when one
+  supported target file and exported binding match exactly.
+- Package imports, barrels and reexports, namespace syntax, TypeScript path aliases, higher-order or
+  runtime abstractions, and missing or ambiguous references remain unknown without speculative links.
 - All published stable rules evaluate the normalized model and expose documented limitations.
 - Recoverable source and rule failures are isolated and included in the normalized result.
 - Terminal, JSON, and HTML report the same underlying facts.
@@ -54,6 +59,11 @@
 - Results and reports have deterministic ordering; documented volatile fields are the only normalized
   comparison exclusions.
 - Public behavior has meaningful positive, negative, boundary, and failure assertions.
+- The controlled intercomponent corpus covers direct `default` and named alias imports, local and
+  repeated use, composed `Page -> Header + Hero` headings, a cycle, a missing local import, a package
+  import, ambiguity, reversed input order, and target-code non-execution.
+- Every announced supported intercomponent case contributes to supported accuracy expectations and
+  is not reclassified as unsupported to make the release gate pass.
 - The working tree contains only intentional reviewed changes.
 
 ## Documentation

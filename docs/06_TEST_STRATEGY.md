@@ -63,6 +63,25 @@ Expected results are versioned at the semantic level. Comparisons normalize only
 fields such as canonical temporary roots, timestamps, duration, and machine-dependent memory
 observations.
 
+## Bounded intercomponent corpus
+
+The controlled intercomponent corpus fixes reviewed expectations for direct `default` and named
+relative imports, a named import alias, a local component use, and repeated use of one imported
+component. Its supported composition contains a `Page` that uses `Header` and `Hero`, with one
+intrinsic `h1` in each child. The expected links, finding ownership, exact locations, and repeated-use
+multiplicity are versioned before implementation.
+
+Boundary cases include a component cycle, a missing relative module, a package import, namespace
+syntax, a barrel or reexport, a TypeScript path alias, an ambiguous relative candidate, a shadowed
+binding, and a target-code execution sentinel. Cycles must terminate with deterministic results;
+unsupported or unresolved cases must remain unknown and must not acquire speculative links.
+Reversing analyzed-file input order must preserve the same sorted links and findings.
+
+Every intercomponent behavior described as supported in requirements, architecture, rule metadata,
+or user documentation must appear as a supported positive, negative, or boundary instance. It must
+not be excluded from precision or recall as an unsupported case. Only behavior explicitly outside
+the bounded contract may be counted separately as unsupported.
+
 ## Rule testing
 
 Every rule needs:

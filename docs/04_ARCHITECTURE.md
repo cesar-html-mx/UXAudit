@@ -13,7 +13,7 @@ project path
   -> path validation
   -> discovery and inventory
   -> source classification and bounded reading
-  -> parsing and normalized analysis model
+  -> parsing, component links, and normalized analysis model
   -> rule loading and isolated evaluation
   -> normalized audit result
   -> terminal / JSON / HTML reporters
@@ -24,19 +24,19 @@ rerunning analysis.
 
 ## Module boundaries
 
-| Area                  | Location             | Responsibility                                                                         |
-| --------------------- | -------------------- | -------------------------------------------------------------------------------------- |
-| Executable and CLI    | `src/cli/`           | Commander commands, safe output, option sources, and exit-code mapping.                |
-| Application           | `src/application/`   | Orchestrate scan, analysis, audit, timing, and report persistence.                     |
-| Project processing    | `src/project/`       | Validate roots, discover entries, build inventory, and classify source candidates.     |
-| Parsing               | `src/parsing/`       | Bounded source reads, Babel adapter, extraction, and per-file failure isolation.       |
-| Analysis domain       | `src/domain/models/` | Parser-independent files, components, JSX nodes, values, relationships, and locations. |
-| Audit domain          | `src/domain/audit/`  | Normalized processing errors, counters, timing, findings, and result invariants.       |
-| Rule domain           | `src/domain/rules/`  | Rule metadata, evaluation contracts, categories, severity, confidence, and status.     |
-| Rules                 | `src/rules/`         | Registry, selection, isolated evaluator, and category-organized checks.                |
-| Configuration         | `src/configuration/` | Inert JSON reading, strict validation, defaults, and explicit CLI override merging.    |
-| Reporting             | `src/reporting/`     | Pure terminal, JSON, and HTML rendering plus exclusive safe file writes.               |
-| Shared safety helpers | `src/shared/`        | Context-neutral normalization used across public output boundaries.                    |
+| Area                  | Location             | Responsibility                                                                      |
+| --------------------- | -------------------- | ----------------------------------------------------------------------------------- |
+| Executable and CLI    | `src/cli/`           | Commander commands, safe output, option sources, and exit-code mapping.             |
+| Application           | `src/application/`   | Orchestrate scan, analysis, audit, timing, and report persistence.                  |
+| Project processing    | `src/project/`       | Validate roots, discover entries, build inventory, and classify source candidates.  |
+| Parsing               | `src/parsing/`       | Bounded reads, Babel adapter, normalized component facts, and per-file isolation.   |
+| Analysis domain       | `src/domain/models/` | Parser-independent files, components, JSX, values, links, cycles, and locations.    |
+| Audit domain          | `src/domain/audit/`  | Normalized processing errors, counters, timing, findings, and result invariants.    |
+| Rule domain           | `src/domain/rules/`  | Rule metadata, evaluation contracts, categories, severity, confidence, and status.  |
+| Rules                 | `src/rules/`         | Registry, selection, isolated evaluator, and category-organized checks.             |
+| Configuration         | `src/configuration/` | Inert JSON reading, strict validation, defaults, and explicit CLI override merging. |
+| Reporting             | `src/reporting/`     | Pure terminal, JSON, and HTML rendering plus exclusive safe file writes.            |
+| Shared safety helpers | `src/shared/`        | Context-neutral normalization used across public output boundaries.                 |
 
 Dependencies point inward toward explicit contracts. Domain modules do not import CLI or reporter
 adapters.
@@ -70,13 +70,28 @@ The parser boundary accepts bounded source text plus an explicit source kind and
 normalized success or a typed safe failure. Babel syntax trees and source text remain internal.
 
 `AnalysisModel` is a flat, serializable representation of files, recognized component ownership, JSX
-nodes, effective attributes, retained static values, and half-open source locations. Lines are
-one-based; stored columns and UTF-16 offsets are zero-based. IDs and arrays use deterministic
-ordering, and the completed model is recursively immutable.
+nodes, effective attributes, retained static values, `ComponentLink` relationships, and half-open
+source locations. Lines are one-based; stored columns and UTF-16 offsets are zero-based. IDs and
+arrays use deterministic ordering, and the completed model is recursively immutable.
 
-Component recognition is syntactic and conservative. It recognizes supported function, arrow, and
-class patterns but does not resolve imports, runtime aliases, higher-order components, routing, or
-rendered composition.
+Component recognition is syntactic and conservative. The parser uses lexical binding identity to
+emit parser-independent `AnalyzedComponentExport` and `AnalyzedComponentUse` facts for recognized
+function, arrow, and class components. It records direct component exports, local custom JSX uses,
+and direct relative `default` or named imports, including named import aliases. It does not resolve a
+target file and does not expose Babel bindings or syntax nodes.
+
+The project-model boundary resolves a use into a `ComponentLink` only when a relative specifier and
+exported binding identify exactly one analyzed target. Explicit supported extensions,
+extensionless `.ts`, `.tsx`, `.js`, or `.jsx` files, and supported `index` files are eligible.
+Package imports, barrels and reexports, namespace syntax, TypeScript path aliases, runtime aliases,
+higher-order components, routing, and ambiguous or missing candidates remain unknown. Local lexical
+bindings may link directly; shadowed bindings must not link by text alone.
+
+Links form a graph and are never recursively expanded during model construction. Cycles are valid
+graph facts. A composition-aware rule traverses them with a path-local visited set, a documented
+depth bound, and deterministic ordering. This supports bounded source composition without claiming
+runtime rendering, conditional reachability, or general propagation of props, JSX spreads, and
+`children`.
 
 ### Rules and findings
 

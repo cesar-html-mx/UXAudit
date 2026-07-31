@@ -149,6 +149,8 @@ const createModelFixture = (filePath: string): ModelFixture => {
 
   return {
     analyzedFile: {
+      componentExports: [],
+      componentUses: [],
       components: [component],
       file: {
         componentIds: [componentId],
@@ -168,6 +170,8 @@ const createModelFixture = (filePath: string): ModelFixture => {
 };
 
 const createEmptyFile = (filePath = 'src/empty.ts'): AnalyzedSourceFile => ({
+  componentExports: [],
+  componentUses: [],
   components: [],
   file: {
     componentIds: [],
@@ -179,6 +183,18 @@ const createEmptyFile = (filePath = 'src/empty.ts'): AnalyzedSourceFile => ({
   },
   jsxNodes: [],
 });
+
+const createRelationshipFixture = (filePath: string): ModelFixture => {
+  const fixture = createModelFixture(filePath);
+  const customNode = fixture.analyzedFile.jsxNodes.find((node) => node.id === fixture.customNodeId);
+
+  if (customNode?.kind !== JSX_NODE_KINDS.element) {
+    throw new TypeError('Expected the relationship fixture custom element.');
+  }
+
+  Reflect.set(customNode, 'name', 'Panel');
+  return fixture;
+};
 
 const cloneFile = (analyzedFile: AnalyzedSourceFile): AnalyzedSourceFile =>
   structuredClone(analyzedFile);
@@ -272,10 +288,118 @@ const expectedInvariantSignature = {
 describe('buildAnalysisModel', () => {
   it('builds the canonical empty project model', () => {
     expect(buildAnalysisModel([])).toEqual({
+      componentLinks: [],
       components: [],
       files: [],
       jsxNodes: [],
     });
+  });
+
+  it('validates normalized component exports and creates local component links', () => {
+    const fixture = createRelationshipFixture('src/local-link.tsx');
+    const analyzedFile: AnalyzedSourceFile = {
+      ...fixture.analyzedFile,
+      componentExports: [
+        {
+          componentId: fixture.componentId,
+          exportedName: 'default',
+        },
+      ],
+      componentUses: [
+        {
+          jsxNodeId: fixture.customNodeId,
+          kind: 'local',
+          targetComponentId: fixture.componentId,
+        },
+      ],
+    };
+
+    expect(buildAnalysisModel([analyzedFile])).toMatchObject({
+      componentLinks: [
+        {
+          jsxNodeId: fixture.customNodeId,
+          targetComponentId: fixture.componentId,
+        },
+      ],
+    });
+  });
+
+  it('keeps imported component uses unresolved until project-level module resolution', () => {
+    const fixture = createRelationshipFixture('src/imported-link.tsx');
+    const analyzedFile: AnalyzedSourceFile = {
+      ...fixture.analyzedFile,
+      componentUses: [
+        {
+          importedName: 'default',
+          jsxNodeId: fixture.customNodeId,
+          kind: 'imported',
+          moduleSpecifier: './Button',
+        },
+      ],
+    };
+
+    expect(buildAnalysisModel([analyzedFile]).componentLinks).toEqual([]);
+  });
+
+  it('rejects malformed, duplicate, or mismatched component relationship facts', () => {
+    const fixture = createRelationshipFixture('src/invalid-links.tsx');
+    const cases: readonly AnalyzedSourceFile[] = [
+      {
+        ...fixture.analyzedFile,
+        componentExports: [
+          { componentId: fixture.componentId, exportedName: 'Panel' },
+          { componentId: fixture.componentId, exportedName: 'Panel' },
+        ],
+      },
+      {
+        ...fixture.analyzedFile,
+        componentExports: [{ componentId: 'component:missing:0', exportedName: 'Panel' }],
+      },
+      {
+        ...fixture.analyzedFile,
+        componentUses: [
+          {
+            importedName: 'default',
+            jsxNodeId: fixture.customNodeId,
+            kind: 'imported',
+            moduleSpecifier: './Button',
+          },
+          {
+            importedName: 'Button',
+            jsxNodeId: fixture.customNodeId,
+            kind: 'imported',
+            moduleSpecifier: './Button',
+          },
+        ],
+      },
+      {
+        ...fixture.analyzedFile,
+        componentUses: [
+          {
+            importedName: 'default',
+            jsxNodeId: fixture.buttonNodeId,
+            kind: 'imported',
+            moduleSpecifier: './Button',
+          },
+        ],
+      },
+      {
+        ...fixture.analyzedFile,
+        componentUses: [
+          {
+            jsxNodeId: fixture.customNodeId,
+            kind: 'local',
+            targetComponentId: 'component:missing:0',
+          },
+        ],
+      },
+    ];
+
+    for (const analyzedFile of cases) {
+      expect(invariantSignature(captureInvariant([analyzedFile]))).toEqual(
+        expectedInvariantSignature,
+      );
+    }
   });
 
   it('orders reverse multi-file input and every global entity deterministically', () => {
@@ -316,6 +440,8 @@ describe('buildAnalysisModel', () => {
     const childNodeIds = [...requireNode(fixture.analyzedFile, fixture.rootNodeId).childNodeIds];
     const unsafeInput = {
       ast: { type: 'File' },
+      componentExports: fixture.analyzedFile.componentExports,
+      componentUses: fixture.analyzedFile.componentUses,
       components: fixture.analyzedFile.components.map((component) => ({
         ...component,
         ast: { type: 'Function' },
@@ -402,6 +528,8 @@ describe('buildAnalysisModel', () => {
     const model = buildAnalysisModel([fixture.analyzedFile]);
     const projectedStyle = requireStyleValue(
       {
+        componentExports: [],
+        componentUses: [],
         components: model.components,
         file: model.files[0] ?? fixture.analyzedFile.file,
         jsxNodes: model.jsxNodes,

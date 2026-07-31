@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "counts": {
+    "components": 7,
+    "jsxNodes": 17,
+    "resolvedComponentUses": 8,
+    "unresolvedComponentUses": 2
+  },
+  "links": [
+    ["App", "SiteHeader"],
+    ["App", "Hero"],
+    ["App", "default"],
+    ["App", "default"],
+    ["App", "CycleA"],
+    ["App", "UnresolvedPanel"],
+    ["CycleA", "CycleB"],
+    ["CycleB", "CycleA"]
+  ],
+  "findings": [
+    {
+      "filePath": "src/components/Button.tsx",
+      "line": 2,
+      "ruleId": "accessibility/button-name"
+    },
+    {
+      "filePath": "src/App.tsx",
+      "line": 9,
+      "ruleId": "seo/multiple-h1"
+    }
+  ],
+  "unresolvedUses": [
+    ["UnresolvedPanel", "ExternalHeading"],
+    ["UnresolvedPanel", "MissingWidget"]
+  ]
+}

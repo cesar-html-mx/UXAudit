@@ -67,6 +67,7 @@ const createAnalyzeResult = (
 ): AnalyzeProjectResult => ({
   ...createScanResult(projectPath, summaryOverrides),
   model: {
+    componentLinks: [],
     components: [],
     files: [],
     jsxNodes: [],

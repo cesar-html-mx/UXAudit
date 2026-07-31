@@ -163,7 +163,8 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
 - [x] 2026-07-31 09:38 - Recorded rollback anchors and created the isolated M07 branch from `main`.
 - [x] 2026-07-31 09:36 - Baseline `npm run verify` passed on Node.js 24.18.0 with 621 tests.
 - [x] 2026-07-31 09:38 - Restored the internal harness only on the isolated milestone branch.
-- [ ] M07-T01 contract and corpus.
+- [x] 2026-07-31 10:04 - M07-T01 contract and corpus; 31 model tests, strict types, paired
+      documentation, and harness validation passed.
 - [ ] M07-T02 normalized parser facts.
 - [ ] M07-T03 deterministic component links.
 - [ ] M07-T04 bounded composed H1 behavior.
@@ -180,10 +181,15 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
   at every use.
 - The first local verification used unsupported Node.js 22 and failed only the tests relying on
   Node.js 24 `import.meta.main`; the pinned environment passed the complete gate.
+- A six-file controlled corpus fixes the gate at 7 components, 17 JSX nodes, 10 custom uses, 8
+  resolved uses, 2 unresolved uses, and exactly 2 expected findings without executing its sentinel.
+- Keeping per-file component-use facts separate from project-level `ComponentLink` records lets the
+  parser retain binding identity without leaking Babel values or guessing target files.
 
 ## Decision log
 
 - D-043 isolates M07 from public and historical baselines and fixes the six-hour deadline.
+- D-044 fixes parser-independent export/use/link contracts and the exact reviewed acceptance corpus.
 - Direct relative one-candidate resolution is the maximum M07 module surface; unsupported cases
   remain unresolved rather than guessed.
 - M07 proves the graph with `seo/multiple-h1`; transparent props/children wrappers remain M08 work.

@@ -82,6 +82,7 @@ describe('rule and finding contracts', () => {
 
     const findings = rule.evaluate({
       model: {
+        componentLinks: [],
         components: [],
         files: [],
         jsxNodes: [

@@ -1,16 +1,20 @@
 import { createComponentId, createJsxNodeId } from './analysis-model-ids.js';
 import {
   ANALYZED_SOURCE_LANGUAGES,
+  COMPONENT_USE_KINDS,
   COMPONENT_KINDS,
   JSX_ATTRIBUTE_KINDS,
   JSX_ELEMENT_KINDS,
   JSX_NODE_KINDS,
   type AnalysisModel,
   type AnalyzedComponent,
+  type AnalyzedComponentExport,
+  type AnalyzedComponentUse,
   type AnalyzedFile,
   type AnalyzedSourceLanguage,
   type AnalyzedSourceFile,
   type ComponentKind,
+  type ComponentLink,
   type JsxAttribute,
   type JsxElement,
   type JsxElementKind,
@@ -39,6 +43,8 @@ export class AnalysisModelInvariantError extends Error {
 }
 
 interface ProjectedAnalyzedSourceFile {
+  readonly componentExports: readonly AnalyzedComponentExport[];
+  readonly componentUses: readonly AnalyzedComponentUse[];
   readonly components: readonly AnalyzedComponent[];
   readonly file: AnalyzedFile;
   readonly jsxNodes: readonly JsxNode[];
@@ -504,6 +510,62 @@ const projectJsxNode = (
   return element;
 };
 
+const projectComponentExport = (
+  value: unknown,
+  componentsById: ReadonlyMap<string, AnalyzedComponent>,
+): AnalyzedComponentExport => {
+  const componentExport = requireRecord(value);
+  const componentId = requireNonEmptyString(componentExport['componentId']);
+
+  requireDefined(componentsById.get(componentId));
+
+  return {
+    componentId,
+    exportedName: requireNonEmptyString(componentExport['exportedName']),
+  };
+};
+
+const projectComponentUse = (
+  value: unknown,
+  componentsById: ReadonlyMap<string, AnalyzedComponent>,
+  nodesById: ReadonlyMap<string, JsxNode>,
+): AnalyzedComponentUse => {
+  const componentUse = requireRecord(value);
+  const jsxNodeId = requireNonEmptyString(componentUse['jsxNodeId']);
+  const jsxNode = requireDefined(nodesById.get(jsxNodeId));
+
+  if (
+    jsxNode.kind !== JSX_NODE_KINDS.element ||
+    jsxNode.elementKind !== JSX_ELEMENT_KINDS.custom ||
+    jsxNode.name.includes('.') ||
+    jsxNode.name.includes(':')
+  ) {
+    failInvariant();
+  }
+
+  if (componentUse['kind'] === COMPONENT_USE_KINDS.local) {
+    const targetComponentId = requireNonEmptyString(componentUse['targetComponentId']);
+    requireDefined(componentsById.get(targetComponentId));
+
+    return {
+      jsxNodeId,
+      kind: COMPONENT_USE_KINDS.local,
+      targetComponentId,
+    };
+  }
+
+  if (componentUse['kind'] !== COMPONENT_USE_KINDS.imported) {
+    return failInvariant();
+  }
+
+  return {
+    importedName: requireNonEmptyString(componentUse['importedName']),
+    jsxNodeId,
+    kind: COMPONENT_USE_KINDS.imported,
+    moduleSpecifier: requireNonEmptyString(componentUse['moduleSpecifier']),
+  };
+};
+
 const assertUniqueEntities = (entities: readonly { readonly id: string }[]): void => {
   if (new Set(entities.map((entity) => entity.id)).size !== entities.length) {
     failInvariant();
@@ -643,11 +705,34 @@ const projectAnalyzedSourceFile = (value: unknown): ProjectedAnalyzedSourceFile 
 
   const componentsById = new Map(components.map((component) => [component.id, component] as const));
   const nodesById = new Map(jsxNodes.map((node) => [node.id, node] as const));
+  const componentExports = requireArray(analyzedSourceFile['componentExports'])
+    .map((componentExport) => projectComponentExport(componentExport, componentsById))
+    .toSorted((left, right) => {
+      const nameComparison = compareOrdinal(left.exportedName, right.exportedName);
+      return nameComparison === 0
+        ? compareOrdinal(left.componentId, right.componentId)
+        : nameComparison;
+    });
+  const componentUses = requireArray(analyzedSourceFile['componentUses'])
+    .map((componentUse) => projectComponentUse(componentUse, componentsById, nodesById))
+    .toSorted((left, right) => {
+      const leftNode = requireDefined(nodesById.get(left.jsxNodeId));
+      const rightNode = requireDefined(nodesById.get(right.jsxNodeId));
+      return compareEntities(leftNode, rightNode);
+    });
   const ownedNodesByComponent = new Map<string, JsxNode[]>();
   const childNodesByParent = new Map<string, JsxNode[]>();
 
   for (const component of components) {
     ownedNodesByComponent.set(component.id, []);
+  }
+
+  if (
+    new Set(componentExports.map(({ exportedName }) => exportedName)).size !==
+      componentExports.length ||
+    new Set(componentUses.map(({ jsxNodeId }) => jsxNodeId)).size !== componentUses.length
+  ) {
+    failInvariant();
   }
 
   for (const node of jsxNodes) {
@@ -719,6 +804,8 @@ const projectAnalyzedSourceFile = (value: unknown): ProjectedAnalyzedSourceFile 
   assertCoordinateConsistency(file, components, jsxNodes);
 
   return {
+    componentExports,
+    componentUses,
     components,
     file,
     jsxNodes,
@@ -738,6 +825,18 @@ const buildAnalysisModelInternal = (value: unknown): AnalysisModel => {
   const files = analyzedFiles.map(({ file }) => file);
   const components = analyzedFiles.flatMap((file) => file.components);
   const jsxNodes = analyzedFiles.flatMap((file) => file.jsxNodes);
+  const componentLinks: ComponentLink[] = analyzedFiles.flatMap((file) =>
+    file.componentUses.flatMap((componentUse) =>
+      componentUse.kind === COMPONENT_USE_KINDS.local
+        ? [
+            {
+              jsxNodeId: componentUse.jsxNodeId,
+              targetComponentId: componentUse.targetComponentId,
+            },
+          ]
+        : [],
+    ),
+  );
 
   if (
     new Set(components.map((component) => component.id)).size !== components.length ||
@@ -747,6 +846,7 @@ const buildAnalysisModelInternal = (value: unknown): AnalysisModel => {
   }
 
   return {
+    componentLinks,
     components,
     files,
     jsxNodes,

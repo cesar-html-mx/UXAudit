@@ -62,6 +62,7 @@ const createAnalysis = (): AnalyzeProjectResult => ({
     projectRoot,
   },
   model: {
+    componentLinks: [],
     components: [],
     files: [],
     jsxNodes: [],

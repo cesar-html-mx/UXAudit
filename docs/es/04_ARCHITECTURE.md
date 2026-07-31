@@ -13,7 +13,7 @@ project path
   -> path validation
   -> discovery and inventory
   -> source classification and bounded reading
-  -> parsing and normalized analysis model
+  -> parsing, component links, and normalized analysis model
   -> rule loading and isolated evaluation
   -> normalized audit result
   -> terminal / JSON / HTML reporters
@@ -24,19 +24,19 @@ repitan el análisis.
 
 ## Límites de módulos
 
-| Área                       | Ubicación            | Responsabilidad                                                                     |
-| -------------------------- | -------------------- | ----------------------------------------------------------------------------------- |
-| Ejecutable y CLI           | `src/cli/`           | Comandos Commander, salida segura, origen de opciones y mapeo de códigos de salida. |
-| Aplicación                 | `src/application/`   | Orquestar escaneo, análisis, auditoría, tiempos y persistencia de informes.         |
-| Procesamiento del proyecto | `src/project/`       | Validar raíces, descubrir entradas, crear inventario y clasificar candidatos.       |
-| Parsing                    | `src/parsing/`       | Lecturas acotadas, adaptador Babel, extracción y aislamiento de fallos por archivo. |
-| Dominio de análisis        | `src/domain/models/` | Archivos, componentes, nodos JSX, valores, relaciones y ubicaciones independientes. |
-| Dominio de auditoría       | `src/domain/audit/`  | Errores normalizados, contadores, tiempos, hallazgos e invariantes del resultado.   |
-| Dominio de reglas          | `src/domain/rules/`  | Metadatos, evaluación, categorías, severidad, confianza y estado de reglas.         |
-| Reglas                     | `src/rules/`         | Registro, selección, evaluación aislada y verificaciones por categoría.             |
-| Configuración              | `src/configuration/` | Lectura JSON inerte, validación estricta, predeterminados y reemplazos explícitos.  |
-| Informes                   | `src/reporting/`     | Generación pura de terminal, JSON y HTML, y escritura exclusiva segura.             |
-| Utilidades de seguridad    | `src/shared/`        | Normalización neutral reutilizada en límites públicos de salida.                    |
+| Área                       | Ubicación            | Responsabilidad                                                                                   |
+| -------------------------- | -------------------- | ------------------------------------------------------------------------------------------------- |
+| Ejecutable y CLI           | `src/cli/`           | Comandos Commander, salida segura, origen de opciones y mapeo de códigos de salida.               |
+| Aplicación                 | `src/application/`   | Orquestar escaneo, análisis, auditoría, tiempos y persistencia de informes.                       |
+| Procesamiento del proyecto | `src/project/`       | Validar raíces, descubrir entradas, crear inventario y clasificar candidatos.                     |
+| Parsing                    | `src/parsing/`       | Lecturas acotadas, adaptador Babel, hechos normalizados de componentes y aislamiento por archivo. |
+| Dominio de análisis        | `src/domain/models/` | Archivos, componentes, JSX, valores, enlaces, ciclos y ubicaciones independientes del parser.     |
+| Dominio de auditoría       | `src/domain/audit/`  | Errores normalizados, contadores, tiempos, hallazgos e invariantes del resultado.                 |
+| Dominio de reglas          | `src/domain/rules/`  | Metadatos, evaluación, categorías, severidad, confianza y estado de reglas.                       |
+| Reglas                     | `src/rules/`         | Registro, selección, evaluación aislada y verificaciones por categoría.                           |
+| Configuración              | `src/configuration/` | Lectura JSON inerte, validación estricta, predeterminados y reemplazos explícitos.                |
+| Informes                   | `src/reporting/`     | Generación pura de terminal, JSON y HTML, y escritura exclusiva segura.                           |
+| Utilidades de seguridad    | `src/shared/`        | Normalización neutral reutilizada en límites públicos de salida.                                  |
 
 Las dependencias apuntan hacia contratos explícitos internos. Los módulos del dominio no importan
 adaptadores de la CLI ni de informes.
@@ -71,13 +71,31 @@ normalizado o un fallo seguro tipado. Los árboles de sintaxis de Babel y el tex
 dentro del límite.
 
 `AnalysisModel` es una representación plana y serializable de archivos, propiedad reconocida de
-componentes, nodos JSX, atributos efectivos, valores estáticos conservados y ubicaciones semiabiertas.
-Las líneas empiezan en uno; las columnas almacenadas y desplazamientos UTF-16 empiezan en cero. Los
-IDs y arreglos usan orden determinista, y el modelo terminado es inmutable de forma recursiva.
+componentes, nodos JSX, atributos efectivos, valores estáticos conservados, relaciones
+`ComponentLink` y ubicaciones semiabiertas. Las líneas empiezan en uno; las columnas almacenadas y
+desplazamientos UTF-16 empiezan en cero. Los IDs y arreglos usan orden determinista, y el modelo
+terminado es inmutable de forma recursiva.
 
-El reconocimiento de componentes es sintáctico y conservador. Reconoce patrones compatibles de
-funciones, flechas y clases, pero no resuelve importaciones, alias en ejecución, componentes de orden
-superior, rutas ni composición renderizada.
+El reconocimiento de componentes es sintáctico y conservador. El parser usa la identidad léxica del
+binding para emitir hechos `AnalyzedComponentExport` y `AnalyzedComponentUse` independientes del
+parser para componentes reconocidos de función, flecha y clase. Registra exports directos de
+componentes, usos JSX personalizados locales e imports relativos directos `default` o nombrados,
+incluidos los alias de imports nombrados. No resuelve un archivo objetivo ni expone bindings de Babel
+o nodos de sintaxis.
+
+El límite del modelo de proyecto convierte un uso en un `ComponentLink` solo cuando un especificador
+relativo y un binding exportado identifican exactamente un destino analizado. Son elegibles las
+extensiones compatibles explícitas, los archivos `.ts`, `.tsx`, `.js` o `.jsx` sin extensión en el
+import y los archivos `index` compatibles. Los imports de paquetes, barrels y reexports, sintaxis de
+namespace, alias de rutas de TypeScript, alias en ejecución, componentes de orden superior, rutas y
+candidatos ambiguos o faltantes permanecen desconocidos. Los bindings léxicos locales pueden
+enlazarse directamente; los bindings sombreados no deben enlazarse solo por texto.
+
+Los enlaces forman un grafo y nunca se expanden recursivamente durante la construcción del modelo.
+Los ciclos son hechos válidos del grafo. Una regla consciente de la composición los recorre con un
+conjunto visitado local a la ruta, un límite de profundidad documentado y orden determinista. Esto
+admite composición acotada del código fuente sin afirmar renderizado en ejecución, alcanzabilidad
+condicional o propagación general de props, spreads JSX y `children`.
 
 ### Reglas y hallazgos
 
