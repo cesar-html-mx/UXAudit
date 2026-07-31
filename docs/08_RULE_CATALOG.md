@@ -7,16 +7,16 @@
 UXAudit ships eight stable static-analysis rules. Each finding includes a rule ID, category, default
 severity, confidence, source location when available, explanation, recommendation, and limitations.
 
-| Rule ID                        | Category      | Severity | Static review                                                                |
-| ------------------------------ | ------------- | -------- | ---------------------------------------------------------------------------- |
-| `accessibility/button-name`    | accessibility | high     | Intrinsic button without supported static accessible-name evidence.          |
-| `accessibility/img-alt`        | accessibility | high     | Intrinsic image without an explicit, statically known alternative attribute. |
-| `accessibility/input-label`    | accessibility | high     | Supported intrinsic form control without supported static label evidence.    |
-| `performance/img-dimensions`   | performance   | medium   | Intrinsic image without valid positive width and height reservation.         |
-| `performance/img-lazy-loading` | performance   | low      | Intrinsic image not statically configured for lazy loading.                  |
-| `seo/ambiguous-link-text`      | seo           | medium   | Intrinsic link whose retained text exactly matches a generic phrase.         |
-| `seo/multiple-h1`              | seo           | medium   | Recognized component containing more than one intrinsic H1.                  |
-| `ux/small-inline-text`         | ux            | medium   | Retained text with a literal inline pixel size below the threshold.          |
+| Rule ID                        | Category      | Severity | Static review                                                                 |
+| ------------------------------ | ------------- | -------- | ----------------------------------------------------------------------------- |
+| `accessibility/button-name`    | accessibility | high     | Intrinsic button without supported static accessible-name evidence.           |
+| `accessibility/img-alt`        | accessibility | high     | Intrinsic image without an explicit, statically known alternative attribute.  |
+| `accessibility/input-label`    | accessibility | high     | Supported intrinsic form control without supported static label evidence.     |
+| `performance/img-dimensions`   | performance   | medium   | Intrinsic image without valid positive width and height reservation.          |
+| `performance/img-lazy-loading` | performance   | low      | Intrinsic image not statically configured for lazy loading.                   |
+| `seo/ambiguous-link-text`      | seo           | medium   | Intrinsic link whose retained text exactly matches a generic phrase.          |
+| `seo/multiple-h1`              | seo           | medium   | Multiple intrinsic `h1` contributions owned or exactly linked by a component. |
+| `ux/small-inline-text`         | ux            | medium   | Retained text with a literal inline pixel size below the threshold.           |
 
 ## Interpret findings
 
@@ -121,17 +121,29 @@ Limitations:
 
 ### `seo/multiple-h1`
 
-Reports the second intrinsic `h1` owned by each syntactically recognized component that contains more
-than one.
+Reports at most one finding for each syntactically recognized component. When a component owns more
+than one intrinsic `h1`, the rule preserves its source-local behavior and reports the second local
+`h1`, even if a linked contribution appears earlier. Otherwise, the rule also evaluates composition
+in JSX source order through exact direct local `ComponentLink` relationships. Each JSX use of a
+linked child definition contributes at most one `h1` to its parent, so multiple headings inside that
+child do not multiply the same cause in the parent. Repeated uses are evaluated separately and each
+use can contribute once. When a child use supplies the second contribution, the finding is located at
+that JSX use in the owning component.
 
 Review the rendered page context and keep one primary heading when appropriate, using lower levels
 for subordinate sections.
 
 Limitations:
 
-- counting occurs within each recognized component, not across the rendered page;
-- conditional rendering, routes, and whether headings appear together are not evaluated;
-- custom heading components, composition, and heading roles are not inferred.
+- only exact direct local relationships represented by `ComponentLink` are traversed; unresolved or
+  ambiguous references, package imports, and paths that depend on cyclic edges are handled
+  conservatively and do not supply inferred `h1` contributions;
+- conditional rendering, routes, and whether headings appear together at runtime are not evaluated;
+- exactly `64` `ComponentLink` hops from each evaluated root are supported; paths with more than `64`
+  hops remain unknown and are not inferred;
+- each root component receives an independent `100000`-step traversal budget; work requiring more
+  than `100000` steps for that root remains unknown and is not inferred;
+- custom heading syntax and heading roles are not inferred.
 
 ## UX
 

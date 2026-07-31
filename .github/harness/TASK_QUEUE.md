@@ -53,7 +53,7 @@
 - [x] M07-T01 Define the bounded component-graph contract and acceptance corpus.
 - [x] M07-T02 Extract normalized component import, export, and use facts.
 - [x] M07-T03 Resolve direct relative component links deterministically.
-- [ ] M07-T04 Evaluate multiple H1 headings across bounded component composition.
+- [x] M07-T04 Evaluate multiple H1 headings across bounded component composition.
 - [ ] M07-T05 Execute the six-hour viability gate and retain evidence.
 
 ## M08 — Bounded contextual component analysis and realistic validation

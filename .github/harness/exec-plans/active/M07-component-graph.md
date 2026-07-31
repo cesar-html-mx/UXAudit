@@ -169,7 +169,9 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
       strict types, and harness validation passed.
 - [x] 2026-07-31 10:13 - M07-T03 deterministic component links; 44 focused resolver/model/project
       tests and all 643 repository tests passed.
-- [ ] M07-T04 bounded composed H1 behavior.
+- [x] 2026-07-31 10:36 - M07-T04 bounded composed H1 behavior; 21 focused rule, catalog,
+      forward/reverse project, and audit tests plus docs, lint, strict types, and two independent
+      reviews passed.
 - [ ] M07-T05 viability evidence and decision.
 
 ## Discoveries
@@ -191,6 +193,14 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
   references before only normalized strings and IDs cross the parser boundary.
 - The committed multi-file project produces 8 exact links and 2 unresolved uses in stable source
   order; reversing input and repeating the complete analysis produces byte-identical model JSON.
+- Preserving the second direct local `h1` location avoids changing v0.1 behavior, while each linked
+  child definition contributes at most one heading per JSX use and repeated uses remain distinct.
+- A global traversal budget allowed one unrelated root to suppress later analysis. Independent
+  review caught the defect before closure; the rule now gives each root its own 100000-step budget,
+  supports exactly 64 link hops, and treats cycles, hop 65, and exhausted paths as unknown.
+- The complete reviewed manifest is now executable evidence: schema version, counts, exact links,
+  source-ordered unresolved uses, findings, forward/reverse models, and forward/reverse findings are
+  all asserted without deriving expectations from current output.
 
 ## Decision log
 
@@ -200,6 +210,8 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
   the project resolver instead of filtering them by filesystem or package syntax in the parser.
 - D-046 resolves supported relative modules only when one analyzed candidate and one named export
   exist; cycles are stored as ordinary links and never expanded during model construction.
+- D-047 preserves direct local heading ownership, counts linked definitions once per JSX use, and
+  uses path-local cycle state with independent 64-hop/100000-step bounds for each evaluated root.
 - Direct relative one-candidate resolution is the maximum M07 module surface; unsupported cases
   remain unresolved rather than guessed.
 - M07 proves the graph with `seo/multiple-h1`; transparent props/children wrappers remain M08 work.
@@ -214,6 +226,8 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
   the two safeguard tags; no change is made to `main`, npm, or the demo.
 - R-029: the timebox could consume delivery capacity without proof. Recovery is an explicit NO-GO
   report at the deadline and immediate return to the v0.1.0 academic delivery.
+- Independent review found and closed a pre-T04 budget-coupling risk: exhaustion by one root no
+  longer changes the analysis of unrelated roots, and executable regression tests exceed the bound.
 
 ## Outcomes and retrospective
 

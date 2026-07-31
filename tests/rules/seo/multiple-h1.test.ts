@@ -107,7 +107,7 @@ describe('seo/multiple-h1', () => {
     expect(multipleH1Rule.metadata.limitations).toEqual([
       expect.stringContaining('recognized component'),
       expect.stringContaining('Conditional rendering'),
-      expect.stringContaining('Custom heading'),
+      expect.stringContaining('cyclic edges'),
     ]);
   });
 });

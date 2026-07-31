@@ -8,16 +8,16 @@ UXAudit incluye ocho reglas estables de análisis estático. Cada hallazgo conti
 categoría, severidad predeterminada, confianza, ubicación cuando está disponible, explicación,
 recomendación y limitaciones.
 
-| ID de regla                    | Categoría     | Severidad | Revisión estática                                                                |
-| ------------------------------ | ------------- | --------- | -------------------------------------------------------------------------------- |
-| `accessibility/button-name`    | accessibility | high      | Botón nativo sin evidencia estática compatible de nombre accesible.              |
-| `accessibility/img-alt`        | accessibility | high      | Imagen nativa sin atributo alternativo explícito y conocido estáticamente.       |
-| `accessibility/input-label`    | accessibility | high      | Control nativo compatible sin evidencia estática de etiqueta.                    |
-| `performance/img-dimensions`   | performance   | medium    | Imagen nativa sin reserva válida de ancho y alto positivos.                      |
-| `performance/img-lazy-loading` | performance   | low       | Imagen nativa sin configuración estática de carga diferida.                      |
-| `seo/ambiguous-link-text`      | seo           | medium    | Enlace nativo cuyo texto conservado coincide exactamente con una frase genérica. |
-| `seo/multiple-h1`              | seo           | medium    | Componente reconocido con más de un H1 nativo.                                   |
-| `ux/small-inline-text`         | ux            | medium    | Texto conservado con tamaño literal en línea inferior al umbral.                 |
+| ID de regla                    | Categoría     | Severidad | Revisión estática                                                                 |
+| ------------------------------ | ------------- | --------- | --------------------------------------------------------------------------------- |
+| `accessibility/button-name`    | accessibility | high      | Botón nativo sin evidencia estática compatible de nombre accesible.               |
+| `accessibility/img-alt`        | accessibility | high      | Imagen nativa sin atributo alternativo explícito y conocido estáticamente.        |
+| `accessibility/input-label`    | accessibility | high      | Control nativo compatible sin evidencia estática de etiqueta.                     |
+| `performance/img-dimensions`   | performance   | medium    | Imagen nativa sin reserva válida de ancho y alto positivos.                       |
+| `performance/img-lazy-loading` | performance   | low       | Imagen nativa sin configuración estática de carga diferida.                       |
+| `seo/ambiguous-link-text`      | seo           | medium    | Enlace nativo cuyo texto conservado coincide exactamente con una frase genérica.  |
+| `seo/multiple-h1`              | seo           | medium    | Varios aportes de `h1` nativos propios o enlazados exactamente por un componente. |
+| `ux/small-inline-text`         | ux            | medium    | Texto conservado con tamaño literal en línea inferior al umbral.                  |
 
 ## Interpretar hallazgos
 
@@ -121,16 +121,29 @@ Limitaciones:
 
 ### `seo/multiple-h1`
 
-Reporta el segundo `h1` nativo de cada componente reconocido sintácticamente que contiene más de uno.
+Reporta como máximo un hallazgo por cada componente reconocido sintácticamente. Cuando un componente
+posee más de un `h1` nativo, la regla conserva su comportamiento local al archivo y reporta el segundo
+`h1` local, incluso si antes aparece un aporte enlazado. En los demás casos, la regla también evalúa la
+composición en orden del código fuente JSX mediante relaciones `ComponentLink` locales directas y
+exactas. Cada uso JSX de una definición hija enlazada aporta como máximo un `h1` a su componente padre,
+por lo que varios encabezados dentro de ese hijo no multiplican la misma causa en el padre. Los usos
+repetidos se evalúan por separado y cada uso puede aportar una vez. Cuando el uso de un hijo aporta la
+segunda contribución, el hallazgo se ubica en ese uso JSX del componente propietario.
 
 Revisa el contexto de la página renderizada y conserva un encabezado principal cuando corresponda,
 usando niveles inferiores para secciones subordinadas.
 
 Limitaciones:
 
-- el conteo ocurre dentro de cada componente reconocido, no en toda la página renderizada;
-- no evalúa renderizado condicional, rutas ni si los encabezados aparecen juntos;
-- no infiere componentes personalizados, composición ni roles de encabezado.
+- solo recorre relaciones locales directas y exactas representadas por `ComponentLink`; las
+  referencias no resueltas o ambiguas, los imports de paquetes y los recorridos que dependen de
+  aristas cíclicas se tratan de forma conservadora y no aportan contribuciones `h1` inferidas;
+- no evalúa renderizado condicional, rutas ni si los encabezados aparecen juntos en ejecución;
+- se admiten exactamente `64` saltos `ComponentLink` desde cada componente raíz evaluado; los
+  recorridos con más de `64` saltos permanecen desconocidos y no se infieren;
+- cada componente raíz dispone de un presupuesto independiente de `100000` pasos de recorrido; el
+  trabajo que requiere más de `100000` pasos para esa raíz permanece desconocido y no se infiere;
+- no infiere sintaxis de encabezado personalizada ni roles de encabezado.
 
 ## UX
 

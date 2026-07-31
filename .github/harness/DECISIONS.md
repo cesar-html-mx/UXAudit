@@ -1065,3 +1065,29 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Requirements/contracts affected: RF-08, RF-10, RNF-04, RNF-07, R-026, and R-027.
 - Evidence: resolver/model tests and the six-file project integration with 8 links, 2 unresolved
   uses, a retained cycle, deterministic rerun, and untouched execution sentinel.
+
+## D-047 — Conservative composed-heading ownership and independent traversal bounds
+
+- Date: 2026-07-31
+- Status: accepted
+- Context: `seo/multiple-h1` must detect two headings supplied by supported sibling components while
+  preserving the published source-local finding location. Repeated uses, invalid child definitions,
+  cycles, deep graphs, and unrelated roots make naive recursive counting duplicate causes or couple
+  results to project size and ordering.
+- Decision: Preserve the second direct intrinsic `h1` location whenever a component owns two or
+  more. Otherwise inspect JSX source order through exact `ComponentLink` records, treating each
+  linked definition as at most one heading contribution per JSX use and counting repeated uses
+  separately. Traverse with a path-local active set, support exactly 64 link hops from each root,
+  and give every root an independent 100000-step budget. Treat a cyclic edge, hop 65, or exhausted
+  path as unknown rather than inventing a contribution.
+- Alternatives considered: flattening every child's internal heading count into every parent;
+  reporting each parent use of an already invalid child; sharing one project-wide budget; global
+  memoization despite path-dependent cycle state; or executing/importing target modules.
+- Consequences: Supported Header-plus-Hero composition is detected at the second contributing JSX
+  use, repeated uses have explicit multiplicity, existing direct findings remain stable, and one
+  complex component cannot suppress unrelated later roots. Dynamic runtime structure and unsupported
+  module relationships remain conservative false-negative territory by design.
+- Requirements/contracts affected: RF-10, RF-12, RNF-03, RNF-04, RNF-05, R-002, R-011, and R-027.
+- Evidence: focused `seo/multiple-h1` tests, complete forward/reverse corpus assertions, exact static
+  manifest, non-execution sentinel, public bilingual rule documentation, and two independent
+  read-only GO reviews.

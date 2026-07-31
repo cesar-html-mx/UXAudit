@@ -29,7 +29,7 @@
     }
   ],
   "unresolvedUses": [
-    ["UnresolvedPanel", "ExternalHeading"],
-    ["UnresolvedPanel", "MissingWidget"]
+    ["UnresolvedPanel", "MissingWidget"],
+    ["UnresolvedPanel", "ExternalHeading"]
   ]
 }

@@ -682,3 +682,15 @@
   construction. Default, named alias, parent-relative, explicit extension, index, missing, package,
   root escape, malformed separator, unsupported extension, ambiguity, cycle, reversed input, and
   non-execution cases pass; the complete suite now passes 643 tests across 59 files.
+- Completed M07-T04 by extending `seo/multiple-h1` over exact model-only `ComponentLink` composition
+  without changing the second direct local `h1` location. Linked child definitions contribute at
+  most once per JSX use, repeated uses count separately, and child-local causes are not multiplied
+  automatically at a sole parent use.
+- Focused tests cover Header plus Hero composition, repeated use, local-location precedence,
+  child-cause ownership, cycles, unresolved imports, exact 64/65-hop behavior, independent
+  100000-step exhaustion, the reviewed audit manifest, sentinel non-execution, and byte-identical
+  forward/reverse models, links, and findings.
+- Two independent read-only reviews initially found a shared-budget defect and incomplete
+  forward/reverse manifest proof. Both were corrected and re-reviewed to GO. The final T04 gate
+  passed 21 focused tests, bilingual docs, formatting, lint, and strict type checking on Node.js
+  24.18.0.

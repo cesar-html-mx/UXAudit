@@ -173,8 +173,18 @@ ser absolutas, salir de la raíz, atravesar enlaces simbólicos ni reemplazar ar
 | `performance/img-dimensions`   | performance   | medium                   | Dimensiones intrínsecas de imágenes     |
 | `performance/img-lazy-loading` | performance   | low                      | Oportunidad revisable de carga diferida |
 | `seo/ambiguous-link-text`      | seo           | medium                   | Texto estático ambiguo de enlaces       |
-| `seo/multiple-h1`              | seo           | medium                   | Varios encabezados en un componente     |
+| `seo/multiple-h1`              | seo           | medium                   | Varios encabezados propios o enlazados  |
 | `ux/small-inline-text`         | ux            | medium                   | Texto literal en línea muy pequeño      |
+
+`seo/multiple-h1` conserva su hallazgo local en el segundo `h1` nativo. También evalúa composición
+acotada mediante registros `ComponentLink` locales directos y exactos: una definición hija aporta
+como máximo un `h1` en cada uso JSX, los usos repetidos cuentan por separado y, cuando un hijo aporta
+la segunda contribución, el hallazgo se ubica en ese uso JSX. Las referencias no resueltas o
+ambiguas, los imports de paquetes, los ciclos, el renderizado condicional y las rutas se tratan de
+forma conservadora y no se infieren. Se admiten exactamente `64` saltos `ComponentLink` desde cada
+componente raíz evaluado; los recorridos con más de `64` saltos permanecen desconocidos. Cada componente
+raíz dispone de un presupuesto independiente de `100000` pasos de recorrido, y el trabajo que supera
+ese presupuesto permanece desconocido.
 
 Consulta el
 [catálogo de reglas](https://github.com/cesar-html-mx/UXAudit/blob/main/docs/es/08_RULE_CATALOG.md)
@@ -211,8 +221,9 @@ modelo de amenazas y cómo informar problemas.
 
 - El análisis estático no puede observar el diseño renderizado, rutas, estado, cascada CSS,
   comportamiento de red ni interacción de las personas.
-- El reconocimiento de componentes es conservador y sintáctico. Los componentes personalizados,
-  alias, abstracciones de orden superior y comportamientos entre módulos pueden permanecer
+- El reconocimiento y la composición de componentes son conservadores y sintácticos. Solo se siguen
+  relaciones locales directas y exactas representadas por `ComponentLink`; los alias no
+  compatibles, las abstracciones de orden superior y las relaciones entre módulos permanecen
   desconocidos.
 - Las reglas no implementan un algoritmo completo de nombre accesible ni afirman cumplimiento total
   de WCAG, SEO, UX o rendimiento.

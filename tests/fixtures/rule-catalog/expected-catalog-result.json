@@ -206,11 +206,11 @@
       {
         "category": "seo",
         "confidence": "medium",
-        "explanation": "Multiple intrinsic h1 elements owned by one component can make the rendered page hierarchy unclear.",
+        "explanation": "Multiple intrinsic h1 elements owned or statically composed by one component can make the rendered page hierarchy unclear.",
         "limitations": [
-          "The initial scope counts intrinsic h1 elements only within each syntactically recognized component.",
+          "The supported scope counts intrinsic h1 elements owned by a recognized component or reached through exact direct local component links.",
           "Conditional rendering, routes, and whether owned headings appear together at runtime are not evaluated.",
-          "Custom heading components, component composition, and heading roles are not inferred."
+          "Unresolved or ambiguous modules, cyclic edges, paths beyond 64 ComponentLink hops from a root, paths requiring more than that root's independent 100000-step traversal budget, custom heading syntax, and heading roles are not inferred."
         ],
         "location": {
           "end": {

@@ -169,8 +169,17 @@ escape the root, traverse symbolic links, or replace existing files.
 | `performance/img-dimensions`   | performance   | medium           | Intrinsic image dimensions            |
 | `performance/img-lazy-loading` | performance   | low              | Reviewable lazy-loading opportunity   |
 | `seo/ambiguous-link-text`      | seo           | medium           | Ambiguous static link text            |
-| `seo/multiple-h1`              | seo           | medium           | Multiple headings in one component    |
+| `seo/multiple-h1`              | seo           | medium           | Multiple owned or linked headings     |
 | `ux/small-inline-text`         | ux            | medium           | Very small literal inline text        |
+
+`seo/multiple-h1` preserves its source-local finding at the second intrinsic `h1`. It also evaluates
+bounded composition through exact direct local `ComponentLink` records: a linked child definition
+contributes at most one `h1` at each JSX use, repeated uses count separately, and a child that
+supplies the second contribution is reported at that JSX use. Unresolved or ambiguous references,
+package imports, cycles, conditional rendering, and routes are handled conservatively and are not
+inferred. Exactly `64` `ComponentLink` hops from each evaluated root are supported; paths with more
+than `64` hops remain unknown. Each root component receives an independent `100000`-step traversal
+budget, and work beyond that budget remains unknown.
 
 See the
 [rule catalog](https://github.com/cesar-html-mx/UXAudit/blob/main/docs/08_RULE_CATALOG.md) for
@@ -205,8 +214,9 @@ model and reporting guidance.
 
 - Static analysis cannot observe rendered layout, routes, state, CSS cascade, network behavior, or
   user interaction.
-- Component recognition is conservative and syntactic. Custom components, aliases, higher-order
-  abstractions, and behavior across module boundaries may remain unknown.
+- Component recognition and composition are conservative and syntactic. Only exact direct local
+  relationships represented by `ComponentLink` are followed; unsupported aliases, higher-order
+  abstractions, and module relationships remain unknown.
 - The rules do not implement a complete accessible-name algorithm or claim full WCAG, SEO, UX, or
   performance compliance.
 - Dynamic JSX values and unresolved spreads are often classified as unknown to avoid unsupported

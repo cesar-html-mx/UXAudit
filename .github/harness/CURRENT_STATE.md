@@ -5,11 +5,11 @@
 - Project: UXAudit
 - Harness status: ready
 - Active milestone: **M07 — Bounded module and component graph**
-- Active task: **M07-T04 — Evaluate multiple H1 headings across bounded component composition**
+- Active task: **M07-T05 — Execute the six-hour viability gate and retain evidence**
 - Completed milestones: M01, M02, M03, M04, M05, M06
 - Current branch: milestone/m07-component-graph
 - Last verification: PASS
-- Last verified at: 2026-07-31T16:14:02.694Z
+- Last verified at: 2026-07-31T16:37:00.331Z
 - Last commit: de540f0ec3d3a7d198905eccd06eae46bc3ac3e7
 
 ## Blockers
