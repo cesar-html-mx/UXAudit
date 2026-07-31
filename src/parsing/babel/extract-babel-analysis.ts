@@ -6,10 +6,13 @@ import { createComponentId, createJsxNodeId } from '../../domain/models/analysis
 import {
   ANALYZED_SOURCE_LANGUAGES,
   COMPONENT_KINDS,
+  COMPONENT_USE_KINDS,
   JSX_ATTRIBUTE_KINDS,
   JSX_ELEMENT_KINDS,
   JSX_NODE_KINDS,
   type AnalyzedComponent,
+  type AnalyzedComponentExport,
+  type AnalyzedComponentUse,
   type AnalyzedSourceFile,
   type ComponentKind,
   type JsxAttribute,
@@ -58,9 +61,29 @@ export interface ExtractBabelAnalysisFailure {
 export type ExtractBabelAnalysisResult = ExtractBabelAnalysisFailure | ExtractBabelAnalysisSuccess;
 
 interface ComponentCandidate {
+  readonly bindingIdentifier: null | t.Identifier;
+  readonly directExportedNames: readonly string[];
   readonly kind: ComponentKind;
   readonly locationNode: t.Node;
   readonly name: null | string;
+}
+
+interface ImportedComponentBinding {
+  readonly importedName: string;
+  readonly kind: typeof COMPONENT_USE_KINDS.imported;
+  readonly moduleSpecifier: string;
+}
+
+interface LocalComponentBinding {
+  readonly bindingIdentifier: t.Identifier;
+  readonly kind: typeof COMPONENT_USE_KINDS.local;
+}
+
+type ComponentUseBinding = ImportedComponentBinding | LocalComponentBinding;
+
+interface PendingComponentExport {
+  readonly bindingIdentifier: t.Identifier;
+  readonly exportedName: string;
 }
 
 interface TextState {
@@ -70,6 +93,7 @@ interface TextState {
 
 interface ExtractedJsxRecord {
   readonly astNode: t.JSXElement | t.JSXFragment;
+  readonly componentUseBinding?: ComponentUseBinding;
   readonly owner: ComponentCandidate | null;
   readonly parent: ExtractedJsxRecord | null;
   textState?: TextState;
@@ -209,7 +233,13 @@ const isPresent = <Value>(value: Value | null): value is Value => value !== null
 
 const getVariableComponentName = (
   path: NodePath<t.ArrowFunctionExpression> | NodePath<t.FunctionExpression>,
-): { readonly locationNode: t.VariableDeclarator; readonly name: string } | undefined => {
+):
+  | {
+      readonly bindingIdentifier: t.Identifier;
+      readonly locationNode: t.VariableDeclarator;
+      readonly name: string;
+    }
+  | undefined => {
   const parentPath = path.parentPath as NodePath | null;
 
   if (
@@ -224,11 +254,129 @@ const getVariableComponentName = (
 
   return isPascalCaseComponentName(name)
     ? {
+        bindingIdentifier: parentPath.node.id,
         locationNode: parentPath.node,
         name,
       }
     : undefined;
 };
+
+const getVariableDeclarationPath = (path: NodePath): NodePath | null => {
+  const declaratorPath = path.parentPath;
+
+  if (!declaratorPath.isVariableDeclarator()) {
+    return null;
+  }
+
+  const declarationPath = declaratorPath.parentPath;
+  return declarationPath.isVariableDeclaration() ? declarationPath : null;
+};
+
+const isDirectNamedExport = (path: NodePath): boolean => {
+  const declarationPath = getVariableDeclarationPath(path);
+  const exportPath = declarationPath?.parentPath ?? path.parentPath;
+
+  return exportPath.isExportNamedDeclaration() && exportPath.node.exportKind !== 'type';
+};
+
+const getDirectExportedNames = (path: NodePath, exportedName: null | string): readonly string[] => {
+  if (isDirectDefaultExport(path)) {
+    return ['default'];
+  }
+
+  return exportedName !== null && isDirectNamedExport(path) ? [exportedName] : [];
+};
+
+const getClassBindingIdentifier = (
+  node: t.ClassDeclaration | t.ClassExpression,
+  path: NodePath<t.ClassDeclaration> | NodePath<t.ClassExpression>,
+): null | t.Identifier => {
+  const parentPath = path.parentPath;
+
+  if (
+    path.isClassExpression() &&
+    parentPath.isVariableDeclarator() &&
+    t.isIdentifier(parentPath.node.id)
+  ) {
+    return parentPath.node.id;
+  }
+
+  return node.id ?? null;
+};
+
+const getClassExportedName = (
+  node: t.ClassDeclaration | t.ClassExpression,
+  path: NodePath<t.ClassDeclaration> | NodePath<t.ClassExpression>,
+): null | string => {
+  const bindingIdentifier = getClassBindingIdentifier(node, path);
+  return bindingIdentifier?.name ?? null;
+};
+
+const getImportDeclaration = (path: NodePath): t.ImportDeclaration | undefined => {
+  const parentPath = path.parentPath;
+  return parentPath.isImportDeclaration() ? parentPath.node : undefined;
+};
+
+const getComponentUseBinding = (path: NodePath<t.JSXElement>): ComponentUseBinding | undefined => {
+  const jsxName = path.node.openingElement.name;
+
+  if (!t.isJSXIdentifier(jsxName) || !isCustomJsxName(jsxName)) {
+    return undefined;
+  }
+
+  const binding = path.scope.getBinding(jsxName.name);
+
+  if (binding === undefined) {
+    return undefined;
+  }
+
+  if (binding.path.isImportDefaultSpecifier()) {
+    const declaration = getImportDeclaration(binding.path);
+
+    if (declaration === undefined || declaration.importKind === 'type') {
+      return undefined;
+    }
+
+    return {
+      importedName: 'default',
+      kind: COMPONENT_USE_KINDS.imported,
+      moduleSpecifier: declaration.source.value,
+    };
+  }
+
+  if (binding.path.isImportSpecifier()) {
+    const declaration = getImportDeclaration(binding.path);
+
+    if (
+      declaration === undefined ||
+      declaration.importKind === 'type' ||
+      binding.path.node.importKind === 'type'
+    ) {
+      return undefined;
+    }
+
+    const imported = binding.path.node.imported;
+    return {
+      importedName: t.isIdentifier(imported) ? imported.name : imported.value,
+      kind: COMPONENT_USE_KINDS.imported,
+      moduleSpecifier: declaration.source.value,
+    };
+  }
+
+  if (binding.path.isImportNamespaceSpecifier()) {
+    return undefined;
+  }
+
+  return {
+    bindingIdentifier: binding.identifier,
+    kind: COMPONENT_USE_KINDS.local,
+  };
+};
+
+const getExportedName = (node: t.ExportSpecifier): string =>
+  t.isIdentifier(node.exported) ? node.exported.name : node.exported.value;
+
+const getLocalExportName = (node: t.ExportSpecifier): string => node.local.name;
 
 const isSupportedReactSuperclass = (node: t.Expression | null | undefined): boolean => {
   if (node === null || node === undefined) {
@@ -630,6 +778,7 @@ export const extractBabelAnalysis = ({
 
     const candidates: ComponentCandidate[] = [];
     const jsxRecords: ExtractedJsxRecord[] = [];
+    const pendingComponentExports: PendingComponentExport[] = [];
     const recordsByNode = new Map<t.Node, ExtractedJsxRecord>();
     const ownershipContextByBoundary = new Map<t.Node, ComponentCandidate | null>();
     const jsxParentByOwnershipBoundary = new Map<t.Node, ExtractedJsxRecord | null>();
@@ -655,6 +804,36 @@ export const extractBabelAnalysis = ({
           );
         }
 
+        if (path.isExportDefaultDeclaration() && t.isIdentifier(path.node.declaration)) {
+          const binding = path.scope.getBinding(path.node.declaration.name);
+
+          if (binding !== undefined) {
+            pendingComponentExports.push({
+              bindingIdentifier: binding.identifier,
+              exportedName: 'default',
+            });
+          }
+        } else if (
+          path.isExportNamedDeclaration() &&
+          path.node.exportKind !== 'type' &&
+          path.node.source === null
+        ) {
+          for (const specifier of path.node.specifiers) {
+            if (!t.isExportSpecifier(specifier) || specifier.exportKind === 'type') {
+              continue;
+            }
+
+            const binding = path.scope.getBinding(getLocalExportName(specifier));
+
+            if (binding !== undefined) {
+              pendingComponentExports.push({
+                bindingIdentifier: binding.identifier,
+                exportedName: getExportedName(specifier),
+              });
+            }
+          }
+        }
+
         let enteredCandidate: ComponentCandidate | undefined;
 
         if (path.isFunctionDeclaration()) {
@@ -662,6 +841,8 @@ export const extractBabelAnalysis = ({
 
           if (isDirectDefaultExport(path) || (name !== null && isPascalCaseComponentName(name))) {
             enteredCandidate = registerCandidate({
+              bindingIdentifier: path.node.id ?? null,
+              directExportedNames: getDirectExportedNames(path, name),
               kind: COMPONENT_KINDS.function,
               locationNode: path.node,
               name,
@@ -672,6 +853,8 @@ export const extractBabelAnalysis = ({
 
           if (variableComponent !== undefined) {
             enteredCandidate = registerCandidate({
+              bindingIdentifier: variableComponent.bindingIdentifier,
+              directExportedNames: getDirectExportedNames(path, variableComponent.name),
               kind: path.isArrowFunctionExpression()
                 ? COMPONENT_KINDS.arrowFunction
                 : COMPONENT_KINDS.function,
@@ -680,6 +863,8 @@ export const extractBabelAnalysis = ({
             });
           } else if (isDirectDefaultExport(path)) {
             enteredCandidate = registerCandidate({
+              bindingIdentifier: path.isFunctionExpression() ? (path.node.id ?? null) : null,
+              directExportedNames: ['default'],
               kind: path.isArrowFunctionExpression()
                 ? COMPONENT_KINDS.arrowFunction
                 : COMPONENT_KINDS.function,
@@ -695,6 +880,11 @@ export const extractBabelAnalysis = ({
 
           if (name !== undefined) {
             enteredCandidate = registerCandidate({
+              bindingIdentifier: getClassBindingIdentifier(path.node, path),
+              directExportedNames: getDirectExportedNames(
+                path,
+                getClassExportedName(path.node, path),
+              ),
               kind: COMPONENT_KINDS.class,
               locationNode: path.node,
               name,
@@ -726,11 +916,21 @@ export const extractBabelAnalysis = ({
         }
 
         if (path.isJSXElement() || path.isJSXFragment()) {
-          const record: ExtractedJsxRecord = {
+          const baseRecord = {
             astNode: path.node,
             owner: activeComponent,
             parent: activeJsxParent,
           };
+          const componentUseBinding = path.isJSXElement()
+            ? getComponentUseBinding(path)
+            : undefined;
+          const record: ExtractedJsxRecord =
+            componentUseBinding === undefined
+              ? baseRecord
+              : {
+                  ...baseRecord,
+                  componentUseBinding,
+                };
           jsxRecords.push(record);
           recordsByNode.set(path.node, record);
           activeJsxParent = record;
@@ -951,12 +1151,74 @@ export const extractBabelAnalysis = ({
           .map(requireJsxId),
       };
     });
+    const activeCandidateByBindingIdentifier = new Map<t.Identifier, ComponentCandidate>();
+
+    for (const candidate of activeCandidates) {
+      if (candidate.bindingIdentifier !== null) {
+        activeCandidateByBindingIdentifier.set(candidate.bindingIdentifier, candidate);
+      }
+    }
+
+    const componentExports: AnalyzedComponentExport[] = activeCandidates.flatMap((candidate) =>
+      candidate.directExportedNames.map((exportedName) => ({
+        componentId: requireComponentId(candidate),
+        exportedName,
+      })),
+    );
+
+    for (const pendingExport of pendingComponentExports) {
+      const candidate = activeCandidateByBindingIdentifier.get(pendingExport.bindingIdentifier);
+
+      if (candidate !== undefined) {
+        componentExports.push({
+          componentId: requireComponentId(candidate),
+          exportedName: pendingExport.exportedName,
+        });
+      }
+    }
+
+    componentExports.sort((left, right) => {
+      const nameComparison = compareOrdinal(left.exportedName, right.exportedName);
+      return nameComparison === 0
+        ? compareOrdinal(left.componentId, right.componentId)
+        : nameComparison;
+    });
+
+    const componentUses: AnalyzedComponentUse[] = [];
+
+    for (const record of sortedJsxRecords) {
+      const binding = record.componentUseBinding;
+
+      if (binding === undefined) {
+        continue;
+      }
+
+      if (binding.kind === COMPONENT_USE_KINDS.imported) {
+        componentUses.push({
+          importedName: binding.importedName,
+          jsxNodeId: requireJsxId(record),
+          kind: COMPONENT_USE_KINDS.imported,
+          moduleSpecifier: binding.moduleSpecifier,
+        });
+        continue;
+      }
+
+      const targetCandidate = activeCandidateByBindingIdentifier.get(binding.bindingIdentifier);
+
+      if (targetCandidate !== undefined) {
+        componentUses.push({
+          jsxNodeId: requireJsxId(record),
+          kind: COMPONENT_USE_KINDS.local,
+          targetComponentId: requireComponentId(targetCandidate),
+        });
+      }
+    }
     const jsxNodeIds = jsxNodes.map((node) => node.id);
 
     return {
       analyzedFile: {
-        componentExports: [],
-        componentUses: [],
+        componentExports,
+        componentUses,
         components,
         file: {
           componentIds: components.map((component) => component.id),

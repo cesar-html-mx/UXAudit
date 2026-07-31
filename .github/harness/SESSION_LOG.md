@@ -675,3 +675,6 @@
   invariants, a reviewed six-file composition corpus, and paired English/Latin American Spanish
   requirements, architecture, test, acceptance, and traceability updates. Focused model tests,
   strict type checking, bilingual documentation, and harness validation passed on Node.js 24.18.0.
+- Completed M07-T02 by extracting direct component exports and imported/local custom JSX uses from
+  Babel binding identity. Default, named, aliased, shadowed, package, missing, namespace, type-only,
+  reexport, HOC, and confinement cases pass 26 focused tests without exposing parser objects.

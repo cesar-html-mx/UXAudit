@@ -5,9 +5,11 @@ import { describe, expect, it } from 'vitest';
 
 import {
   COMPONENT_KINDS,
+  COMPONENT_USE_KINDS,
   JSX_ATTRIBUTE_KINDS,
   JSX_ELEMENT_KINDS,
   JSX_NODE_KINDS,
+  type AnalyzedComponent,
   type AnalyzedSourceFile,
   type JsxElement,
   type JsxNamedAttribute,
@@ -104,6 +106,25 @@ const requireElement = (node: JsxNode | undefined): JsxElement => {
   return node;
 };
 
+const requireComponent = (analyzedFile: AnalyzedSourceFile, name: string): AnalyzedComponent => {
+  const component = analyzedFile.components.find((candidate) => candidate.name === name);
+
+  expect(component).toBeDefined();
+
+  if (component === undefined) {
+    throw new TypeError(`Expected the ${name} component.`);
+  }
+
+  return component;
+};
+
+const requireElementByName = (analyzedFile: AnalyzedSourceFile, name: string): JsxElement =>
+  requireElement(
+    analyzedFile.jsxNodes.find(
+      (node) => node.kind === JSX_NODE_KINDS.element && node.name === name,
+    ),
+  );
+
 const requireNamedAttribute = (element: JsxElement, name: string): JsxNamedAttribute => {
   const attribute = element.attributes.find(
     (candidate): candidate is JsxNamedAttribute =>
@@ -151,6 +172,155 @@ const collectKeys = (value: unknown, keys = new Set<string>()): ReadonlySet<stri
 };
 
 describe('extractBabelAnalysis', () => {
+  it('extracts normalized facts for direct default and named component exports', () => {
+    const filePath = 'src/exported-components.tsx';
+    const sourceText = [
+      'export default function DefaultPanel() { return <main />; }',
+      'export const NamedPanel = () => <section />;',
+      'const InternalPanel = () => <aside />;',
+    ].join('\n');
+    const analyzedFile = extractSource(sourceText, filePath, SOURCE_KINDS.typescriptJsx);
+    const defaultPanel = requireComponent(analyzedFile, 'DefaultPanel');
+    const namedPanel = requireComponent(analyzedFile, 'NamedPanel');
+
+    expect(analyzedFile.componentExports).toEqual([
+      {
+        componentId: namedPanel.id,
+        exportedName: 'NamedPanel',
+      },
+      {
+        componentId: defaultPanel.id,
+        exportedName: 'default',
+      },
+    ]);
+    expect(analyzedFile.componentExports).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          componentId: requireComponent(analyzedFile, 'InternalPanel').id,
+        }),
+      ]),
+    );
+  });
+
+  it('extracts imported and local component uses by binding identity', () => {
+    const filePath = 'src/component-uses.tsx';
+    const sourceText = [
+      "import DefaultButton from './DefaultButton';",
+      "import { NamedButton, Button as AliasedButton } from './buttons';",
+      "import PackageButton from '@scope/ui';",
+      "import MissingButton from './missing';",
+      "import * as UI from './ui';",
+      "import type { TypeOnlyButton } from './types';",
+      'const LocalButton = () => <button>Local</button>;',
+      'export const Page = () => (',
+      '  <>',
+      '    <DefaultButton />',
+      '    <NamedButton />',
+      '    <AliasedButton />',
+      '    <LocalButton />',
+      '    <PackageButton />',
+      '    <MissingButton />',
+      '    <UI.Button />',
+      '    <TypeOnlyButton />',
+      '  </>',
+      ');',
+    ].join('\n');
+    const analyzedFile = extractSource(sourceText, filePath, SOURCE_KINDS.typescriptJsx);
+    const defaultButton = requireElementByName(analyzedFile, 'DefaultButton');
+    const namedButton = requireElementByName(analyzedFile, 'NamedButton');
+    const aliasedButton = requireElementByName(analyzedFile, 'AliasedButton');
+    const localButtonUse = requireElementByName(analyzedFile, 'LocalButton');
+    const packageButton = requireElementByName(analyzedFile, 'PackageButton');
+    const missingButton = requireElementByName(analyzedFile, 'MissingButton');
+    const namespaceMember = requireElementByName(analyzedFile, 'UI.Button');
+    const typeOnlyButton = requireElementByName(analyzedFile, 'TypeOnlyButton');
+    const localButton = requireComponent(analyzedFile, 'LocalButton');
+
+    expect(analyzedFile.componentUses).toEqual([
+      {
+        importedName: 'default',
+        jsxNodeId: defaultButton.id,
+        kind: COMPONENT_USE_KINDS.imported,
+        moduleSpecifier: './DefaultButton',
+      },
+      {
+        importedName: 'NamedButton',
+        jsxNodeId: namedButton.id,
+        kind: COMPONENT_USE_KINDS.imported,
+        moduleSpecifier: './buttons',
+      },
+      {
+        importedName: 'Button',
+        jsxNodeId: aliasedButton.id,
+        kind: COMPONENT_USE_KINDS.imported,
+        moduleSpecifier: './buttons',
+      },
+      {
+        jsxNodeId: localButtonUse.id,
+        kind: COMPONENT_USE_KINDS.local,
+        targetComponentId: localButton.id,
+      },
+      {
+        importedName: 'default',
+        jsxNodeId: packageButton.id,
+        kind: COMPONENT_USE_KINDS.imported,
+        moduleSpecifier: '@scope/ui',
+      },
+      {
+        importedName: 'default',
+        jsxNodeId: missingButton.id,
+        kind: COMPONENT_USE_KINDS.imported,
+        moduleSpecifier: './missing',
+      },
+    ]);
+    expect(namespaceMember.elementKind).toBe(JSX_ELEMENT_KINDS.custom);
+    expect(typeOnlyButton.elementKind).toBe(JSX_ELEMENT_KINDS.custom);
+    expect(analyzedFile.componentUses.map((use) => use.jsxNodeId)).not.toEqual(
+      expect.arrayContaining([namespaceMember.id, typeOnlyButton.id]),
+    );
+  });
+
+  it('does not emit uses for bindings shadowed at the JSX reference', () => {
+    const filePath = 'src/shadowed-component-uses.tsx';
+    const sourceText = [
+      "import { Button } from './Button';",
+      'const LocalCard = () => <article />;',
+      'export const Page = (Button: unknown, LocalCard: unknown) => (',
+      '  <>',
+      '    <Button />',
+      '    <LocalCard />',
+      '  </>',
+      ');',
+    ].join('\n');
+    const analyzedFile = extractSource(sourceText, filePath, SOURCE_KINDS.typescriptJsx);
+
+    expect(
+      analyzedFile.jsxNodes
+        .filter(
+          (node): node is JsxElement =>
+            node.kind === JSX_NODE_KINDS.element &&
+            (node.name === 'Button' || node.name === 'LocalCard'),
+        )
+        .map((node) => node.name),
+    ).toEqual(['Button', 'LocalCard']);
+    expect(analyzedFile.componentUses).toEqual([]);
+  });
+
+  it('keeps barrels, re-exports, and higher-order wrappers outside direct component facts', () => {
+    const filePath = 'src/unsupported-component-indirection.tsx';
+    const sourceText = [
+      "export { RemoteCard } from './RemoteCard';",
+      "export * from './barrel';",
+      'const BaseCard = () => <article />;',
+      'export const WrappedCard = memo(BaseCard);',
+    ].join('\n');
+    const analyzedFile = extractSource(sourceText, filePath, SOURCE_KINDS.typescriptJsx);
+
+    expect(analyzedFile.components.map((component) => component.name)).toEqual(['BaseCard']);
+    expect(analyzedFile.componentExports).toEqual([]);
+    expect(analyzedFile.componentUses).toEqual([]);
+  });
+
   it('discovers supported component styles while keeping lowercase JSX unowned', async () => {
     const filePath = 'src/component-styles.tsx';
     const { analyzedFile } = await extractFixture(
@@ -501,12 +671,18 @@ describe('extractBabelAnalysis', () => {
         'ast',
         'comments',
         'extra',
+        'hub',
+        'node',
+        'parentPath',
+        'path',
+        'scope',
         'source',
         'sourceText',
         'tokens',
         'type',
       ]),
     );
+    expect(serialized).not.toContain('NodePath');
     expect(serialized).not.toContain(fixturesPath);
     expect(serialized).not.toContain(sourceText);
     expect(serialized).not.toContain('dangerous()');

@@ -1026,3 +1026,22 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Requirements/contracts affected: RF-07, RF-08, RF-10, RNF-03, RNF-04, R-002, R-026, and R-027.
 - Evidence: paired contract documentation, model invariant tests, and
   `tests/fixtures/intercomponent/static-composition/expected.json`.
+
+## D-045 — Binding-identity extraction with deferred module resolution
+
+- Date: 2026-07-31
+- Status: accepted
+- Context: A JSX identifier can be imported with an alias, refer to a local component, or shadow a
+  same-named module binding. File existence and supported module syntax are project-level concerns,
+  while Babel binding objects must stay confined to the parser adapter.
+- Decision: Resolve each simple custom JSX identifier to its Babel scope binding during extraction.
+  Emit only normalized local target IDs or imported exported-name/module-specifier facts. Preserve
+  package and missing-relative facts for conservative project resolution, but emit no use for
+  namespace members, type-only bindings, runtime wrappers, or shadowed non-component values.
+- Alternatives considered: matching JSX and component names as strings; accessing the filesystem
+  from the parser; dropping every currently unresolved import; or retaining Babel `NodePath` values.
+- Consequences: Default, named, aliased, local, and shadowed identities are exact within a file;
+  target-file choice remains centralized and testable. The normalized result contains no AST,
+  binding, scope, source text, or parser path.
+- Requirements/contracts affected: RF-07, RF-08, RNF-03, RNF-04, R-003, and R-026.
+- Evidence: 26 focused Babel extraction tests, lint, strict type checking, and harness validation.

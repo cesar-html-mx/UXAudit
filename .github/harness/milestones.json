@@ -289,7 +289,9 @@
         {
           "id": "M07-T02",
           "title": "Extract normalized component import, export, and use facts",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: 26 Babel extraction tests, lint, typecheck, harness validation PASS",
+          "completedAt": "2026-07-31T16:08:38.798Z"
         },
         {
           "id": "M07-T03",

@@ -165,7 +165,8 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
 - [x] 2026-07-31 09:38 - Restored the internal harness only on the isolated milestone branch.
 - [x] 2026-07-31 10:04 - M07-T01 contract and corpus; 31 model tests, strict types, paired
       documentation, and harness validation passed.
-- [ ] M07-T02 normalized parser facts.
+- [x] 2026-07-31 10:07 - M07-T02 normalized parser facts; 26 focused extraction tests, lint,
+      strict types, and harness validation passed.
 - [ ] M07-T03 deterministic component links.
 - [ ] M07-T04 bounded composed H1 behavior.
 - [ ] M07-T05 viability evidence and decision.
@@ -185,11 +186,15 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
   resolved uses, 2 unresolved uses, and exactly 2 expected findings without executing its sentinel.
 - Keeping per-file component-use facts separate from project-level `ComponentLink` records lets the
   parser retain binding identity without leaking Babel values or guessing target files.
+- Babel scope bindings distinguish imported, local, aliased, shadowed, namespace, and type-only JSX
+  references before only normalized strings and IDs cross the parser boundary.
 
 ## Decision log
 
 - D-043 isolates M07 from public and historical baselines and fixes the six-hour deadline.
 - D-044 fixes parser-independent export/use/link contracts and the exact reviewed acceptance corpus.
+- D-045 uses Babel binding identity only inside extraction and records unresolved import facts for
+  the project resolver instead of filtering them by filesystem or package syntax in the parser.
 - Direct relative one-candidate resolution is the maximum M07 module surface; unsupported cases
   remain unresolved rather than guessed.
 - M07 proves the graph with `seo/multiple-h1`; transparent props/children wrappers remain M08 work.
