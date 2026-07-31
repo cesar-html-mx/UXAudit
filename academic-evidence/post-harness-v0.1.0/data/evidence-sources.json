@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 1,
+  "recordType": "uxaudit-post-harness-release-evidence",
+  "project": "UXAudit",
+  "recordCutoff": {
+    "date": "2026-07-30",
+    "timezone": "America/Mexico_City"
+  },
+  "evidenceClasses": {
+    "A": "reproducible public evidence",
+    "B": "Git-verifiable evidence",
+    "C": "maintainer confirmation not reproducible through a public API",
+    "D": "temporary session observation"
+  },
+  "harnessBoundary": {
+    "status": "complete",
+    "completedMilestones": ["M01", "M02", "M03", "M04", "M05", "M06"],
+    "activeMilestone": null,
+    "activeTask": null,
+    "blockers": [],
+    "finalTestSummary": "619/619 tests",
+    "historicalBranch": "milestone/m06-integration-validation",
+    "historicalTip": "2fa29c72ba37ce19ab0ddef27a6da0d679bb5f47",
+    "validationRerun": {
+      "validateHarness": "PASS",
+      "reportedStatus": "complete",
+      "reportedActiveMilestone": null,
+      "reportedActiveTask": null
+    },
+    "archiveTag": {
+      "name": "harness-complete-v1",
+      "type": "annotated",
+      "tagObject": "26478b29c57e7e798a7f120fb8e42c3c7af54eb1",
+      "targetCommit": "f9fb70c3cf84145d925bd5f1e3ee617a70946279",
+      "createdAt": "2026-07-30T17:07:48Z",
+      "url": "https://github.com/cesar-html-mx/UXAudit/tree/harness-complete-v1"
+    }
+  },
+  "pullRequests": [
+    {
+      "number": 9,
+      "title": "Milestone/m06 integration validation",
+      "head": "milestone/m06-integration-validation",
+      "mergeCommit": "8e0e3279a92ebb3a98c0bb05ad6ba694fc6475f6",
+      "mergedAt": "2026-07-30T15:04:47Z",
+      "url": "https://github.com/cesar-html-mx/UXAudit/pull/9"
+    },
+    {
+      "number": 10,
+      "title": "docs(i18n): add bilingual public documentation",
+      "head": "docs/bilingual-documentation",
+      "mergeCommit": "f9fb70c3cf84145d925bd5f1e3ee617a70946279",
+      "mergedAt": "2026-07-30T16:30:14Z",
+      "url": "https://github.com/cesar-html-mx/UXAudit/pull/10"
+    },
+    {
+      "number": 11,
+      "title": "chore(release): prepare public npm distribution",
+      "head": "release/public-v0.1.0",
+      "headCommit": "cf8e4d69d86d08e2905d79002d2a3194dd87d024",
+      "mergeCommit": "6668d8f980359be32e2850a3da9ac11c63e56363",
+      "mergedAt": "2026-07-30T18:33:48Z",
+      "url": "https://github.com/cesar-html-mx/UXAudit/pull/11"
+    },
+    {
+      "number": 12,
+      "title": "chore(release): migrate npm publishing to OIDC",
+      "head": "chore/npm-trusted-publishing",
+      "headCommit": "f3d4355ab6cf100d83f569aae06501d72b7c4729",
+      "mergeCommit": "de540f0ec3d3a7d198905eccd06eae46bc3ac3e7",
+      "mergedAt": "2026-07-30T23:33:37Z",
+      "url": "https://github.com/cesar-html-mx/UXAudit/pull/12"
+    }
+  ],
+  "repository": {
+    "fullName": "cesar-html-mx/UXAudit",
+    "visibility": "public",
+    "defaultBranch": "main",
+    "mainCommitAtCutoff": "de540f0ec3d3a7d198905eccd06eae46bc3ac3e7",
+    "license": "MIT",
+    "descriptionAtCutoff": "UXAudit is a planned command-line static-analysis tool for React and TypeScript projects. It will identify selected UX, accessibility, SEO, and performance findings and produce terminal, JSON, and HTML reports.",
+    "descriptionFollowUp": "Update the administrative GitHub description to describe the published CLI instead of a planned tool.",
+    "protected": true,
+    "requiredStatusChecks": [
+      "Node 24 / ubuntu-24.04",
+      "Node 24 / windows-2025",
+      "Node 24 / macos-15",
+      "Analyze JavaScript and TypeScript",
+      "Review dependency changes"
+    ],
+    "url": "https://github.com/cesar-html-mx/UXAudit",
+    "apiUrl": "https://api.github.com/repos/cesar-html-mx/UXAudit",
+    "branchApiUrl": "https://api.github.com/repos/cesar-html-mx/UXAudit/branches/main"
+  },
+  "qualityRuns": {
+    "initialPortableFailure": {
+      "id": 30569151477,
+      "event": "pull_request",
+      "headCommit": "befc4105bf48c3b3112a4858d3094743c4e8ef04",
+      "conclusion": "failure",
+      "url": "https://github.com/cesar-html-mx/UXAudit/actions/runs/30569151477"
+    },
+    "correctedPortableRun": {
+      "id": 30570680109,
+      "event": "pull_request",
+      "headCommit": "cf8e4d69d86d08e2905d79002d2a3194dd87d024",
+      "conclusion": "success",
+      "url": "https://github.com/cesar-html-mx/UXAudit/actions/runs/30570680109"
+    },
+    "oidcPullRequest": {
+      "productQuality": {
+        "id": 30590618128,
+        "conclusion": "success",
+        "url": "https://github.com/cesar-html-mx/UXAudit/actions/runs/30590618128"
+      },
+      "codeql": {
+        "id": 30590618131,
+        "conclusion": "success",
+        "url": "https://github.com/cesar-html-mx/UXAudit/actions/runs/30590618131"
+      },
+      "dependencyReview": {
+        "id": 30590618120,
+        "conclusion": "success",
+        "url": "https://github.com/cesar-html-mx/UXAudit/actions/runs/30590618120"
+      }
+    }
+  },
+  "initialRelease": {
+    "tag": {
+      "name": "v0.1.0",
+      "type": "annotated",
+      "signed": false,
+      "tagObject": "ccb13bae1ea479a92221cf6ccb5c31bf8fc187a6",
+      "targetCommit": "6668d8f980359be32e2850a3da9ac11c63e56363",
+      "createdAt": "2026-07-30T22:58:39Z",
+      "url": "https://github.com/cesar-html-mx/UXAudit/tree/v0.1.0"
+    },
+    "githubReleaseObject": false,
+    "actionRun": {
+      "id": 30589077315,
+      "jobId": 91027158681,
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-07-30T23:00:10Z",
+      "completedAt": "2026-07-30T23:01:42Z",
+      "authentication": {
+        "publiclyVerified": "NODE_AUTH_TOKEN supplied from the GitHub environment secret NPM_TOKEN",
+        "maintainerConfirmed": "short-lived granular npm token",
+        "maintainerConfirmationClass": "C"
+      },
+      "provenance": true,
+      "url": "https://github.com/cesar-html-mx/UXAudit/actions/runs/30589077315",
+      "jobUrl": "https://github.com/cesar-html-mx/UXAudit/actions/runs/30589077315/job/91027158681"
+    }
+  },
+  "npmPackage": {
+    "name": "@cesar-html-mx/uxaudit",
+    "version": "0.1.0",
+    "distTag": "latest",
+    "publishedAt": "2026-07-30T23:01:38.023Z",
+    "access": "public",
+    "license": "MIT",
+    "binary": {
+      "ux-audit": "dist/cli/index.js"
+    },
+    "engines": {
+      "node": ">=24.18.0 <25",
+      "npm": ">=11.16.0 <12"
+    },
+    "shasumSha1": "58d2ccd0ef52434b1c37ab91cdf3a8982e368f9f",
+    "integrity": "sha512-vNwtKIENlAVXIFuyXP+sbOXjp0znrkLjKyZwd3zjdmobreni31GNlyF5tA7kEk4f1oKVovL8SasyiEjwdf2DDQ==",
+    "sha512Hex": "bcdc2d28810d940557205bb25cffac6ce5e3a74ce7ae42e32b2670777ce3766a1bade9e2df518d972179b40ee4124e1fd68295a2f2fc49ab328848f075fd830d",
+    "pageUrl": "https://www.npmjs.com/package/@cesar-html-mx/uxaudit/v/0.1.0",
+    "metadataUrl": "https://registry.npmjs.org/%40cesar-html-mx%2Fuxaudit/0.1.0",
+    "tarballUrl": "https://registry.npmjs.org/@cesar-html-mx/uxaudit/-/uxaudit-0.1.0.tgz",
+    "attestationUrl": "https://registry.npmjs.org/-/npm/v1/attestations/%40cesar-html-mx%2Fuxaudit@0.1.0",
+    "attestations": [
+      "https://github.com/npm/attestation/tree/main/specs/publish/v0.1",
+      "https://slsa.dev/provenance/v1"
+    ],
+    "provenance": {
+      "ref": "refs/tags/v0.1.0",
+      "workflow": ".github/workflows/release.yml",
+      "commit": "6668d8f980359be32e2850a3da9ac11c63e56363",
+      "invocation": "https://github.com/cesar-html-mx/UXAudit/actions/runs/30589077315/attempts/1"
+    }
+  },
+  "currentPublishingConfiguration": {
+    "sourceCommit": "de540f0ec3d3a7d198905eccd06eae46bc3ac3e7",
+    "workflow": ".github/workflows/release.yml",
+    "permissions": {
+      "contents": "read",
+      "id-token": "write"
+    },
+    "environment": "npm",
+    "publishCommand": "npm publish --access public --ignore-scripts --provenance --tag \"$NPM_DIST_TAG\"",
+    "usesNpmToken": false,
+    "usesNodeAuthToken": false,
+    "regressionTest": "tests/release-workflow.test.ts",
+    "operationalOidcPublicationObserved": false
+  },
+  "publicEnvironment": {
+    "name": "npm",
+    "customDeploymentBranchPolicy": true,
+    "deploymentTagPattern": "v*.*.*",
+    "deploymentTagPatternClass": "A",
+    "requiredReviewersObservedAtCutoff": 0,
+    "url": "https://api.github.com/repos/cesar-html-mx/UXAudit/environments",
+    "environmentUrl": "https://api.github.com/repos/cesar-html-mx/UXAudit/environments/npm",
+    "deploymentPoliciesUrl": "https://api.github.com/repos/cesar-html-mx/UXAudit/environments/npm/deployment-branch-policies"
+  },
+  "maintainerConfirmations": [
+    {
+      "class": "C",
+      "control": "detailed main branch protection",
+      "confirmed": true
+    },
+    {
+      "class": "C",
+      "control": "initial npm bootstrap secret held a short-lived granular npm token",
+      "confirmed": true
+    },
+    {
+      "class": "C",
+      "control": "npm account two-factor authentication enabled and required for write actions",
+      "confirmed": true
+    },
+    {
+      "class": "C",
+      "control": "npm Trusted Publisher for cesar-html-mx/UXAudit, release.yml, environment npm",
+      "confirmed": true
+    },
+    {
+      "class": "C",
+      "control": "GitHub NPM_TOKEN environment secret deleted",
+      "confirmed": true
+    },
+    {
+      "class": "C",
+      "control": "temporary npm granular token revoked and access-token count zero",
+      "confirmed": true
+    },
+    {
+      "class": "C",
+      "control": "package access requires two-factor authentication and disallows bypass tokens",
+      "confirmed": true
+    }
+  ],
+  "realConsumerValidation": {
+    "class": "D",
+    "temporary": true,
+    "artifactsCommitted": false,
+    "lockfileRetained": false,
+    "exactDependencyResolutionReproducible": false,
+    "cleanup": "moved to trash",
+    "environment": {
+      "os": "Linux",
+      "node": "24.18.0",
+      "npm": "11.16.0",
+      "createVite": "9.1.2",
+      "vite": "8.2.0",
+      "react": "19.2.8",
+      "typescript": "6.0.2"
+    },
+    "recordedScaffoldCommand": "npm create vite@9.1.2 uxaudit-real-consumer -- --template react-ts",
+    "installedPackage": "@cesar-html-mx/uxaudit@0.1.0",
+    "reportedVersion": "0.1.0",
+    "scan": {
+      "discovered": 18,
+      "selected": 2,
+      "parsed": 2,
+      "failedFiles": 0,
+      "availableRules": 8,
+      "executedRules": 8,
+      "failedRules": 0,
+      "findings": 9,
+      "processingErrors": 0,
+      "exitCode": 0
+    },
+    "findingsByRule": {
+      "performance/img-dimensions": 4,
+      "performance/img-lazy-loading": 5
+    },
+    "reports": {
+      "json": {
+        "path": "uxaudit-reports/audit-report.json",
+        "sha256": "50eeb169e12d70c0369011163294fd26d73f9626a54c084ca2f1a96ba7f149a3"
+      },
+      "html": {
+        "path": "uxaudit-reports/audit-report.html",
+        "sha256": "bacb1dba5dd7e13aa82cf72c4903114c6ca8dd7ecc461c05258bb48afa7038cf"
+      }
+    },
+    "npmScriptValidation": {
+      "command": "npm run audit:ux",
+      "findings": 9,
+      "success": true
+    },
+    "consumerBuild": {
+      "command": "tsc -b && vite build",
+      "transformedModules": 20,
+      "success": true
+    },
+    "dependencyAudit": {
+      "packageCount": 54,
+      "knownVulnerabilities": 0
+    }
+  },
+  "security": {
+    "containsSecretValues": false,
+    "containsTokenValues": false,
+    "containsRecoveryCodeValues": false,
+    "containsCredentialValues": false,
+    "containsNonSecretOperationalConfiguration": true,
+    "archiveBranchPubliclyDiscoverableWhenPushed": true,
+    "repositoryRulesetsObservedAtCutoff": 0,
+    "repositoryRulesetsUrl": "https://api.github.com/repos/cesar-html-mx/UXAudit/rulesets",
+    "interactive2faPublishRemainsPossible": true,
+    "automatedOidcPathIsNotExclusive": true
+  }
+}
