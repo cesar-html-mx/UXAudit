@@ -324,7 +324,7 @@ describe('buildAnalysisModel', () => {
     });
   });
 
-  it('keeps imported component uses unresolved until project-level module resolution', () => {
+  it('keeps imported component uses unresolved without an exact project target', () => {
     const fixture = createRelationshipFixture('src/imported-link.tsx');
     const analyzedFile: AnalyzedSourceFile = {
       ...fixture.analyzedFile,
@@ -339,6 +339,81 @@ describe('buildAnalysisModel', () => {
     };
 
     expect(buildAnalysisModel([analyzedFile]).componentLinks).toEqual([]);
+  });
+
+  it('resolves an exact relative import and preserves links for reversed file input', () => {
+    const app = createRelationshipFixture('src/App.tsx');
+    const button = createModelFixture('src/Button.tsx');
+    const appFile: AnalyzedSourceFile = {
+      ...app.analyzedFile,
+      componentUses: [
+        {
+          importedName: 'default',
+          jsxNodeId: app.customNodeId,
+          kind: 'imported',
+          moduleSpecifier: './Button',
+        },
+      ],
+    };
+    const buttonFile: AnalyzedSourceFile = {
+      ...button.analyzedFile,
+      componentExports: [
+        {
+          componentId: button.componentId,
+          exportedName: 'default',
+        },
+      ],
+    };
+    const forward = buildAnalysisModel([appFile, buttonFile]);
+    const reverse = buildAnalysisModel([buttonFile, appFile]);
+
+    expect(reverse).toEqual(forward);
+    expect(forward.componentLinks).toEqual([
+      {
+        jsxNodeId: app.customNodeId,
+        targetComponentId: button.componentId,
+      },
+    ]);
+  });
+
+  it('stores cyclic imported component links without recursive expansion', () => {
+    const first = createRelationshipFixture('src/First.tsx');
+    const second = createRelationshipFixture('src/Second.tsx');
+    const firstFile: AnalyzedSourceFile = {
+      ...first.analyzedFile,
+      componentExports: [{ componentId: first.componentId, exportedName: 'First' }],
+      componentUses: [
+        {
+          importedName: 'Second',
+          jsxNodeId: first.customNodeId,
+          kind: 'imported',
+          moduleSpecifier: './Second',
+        },
+      ],
+    };
+    const secondFile: AnalyzedSourceFile = {
+      ...second.analyzedFile,
+      componentExports: [{ componentId: second.componentId, exportedName: 'Second' }],
+      componentUses: [
+        {
+          importedName: 'First',
+          jsxNodeId: second.customNodeId,
+          kind: 'imported',
+          moduleSpecifier: './First',
+        },
+      ],
+    };
+
+    expect(buildAnalysisModel([secondFile, firstFile]).componentLinks).toEqual([
+      {
+        jsxNodeId: first.customNodeId,
+        targetComponentId: second.componentId,
+      },
+      {
+        jsxNodeId: second.customNodeId,
+        targetComponentId: first.componentId,
+      },
+    ]);
   });
 
   it('rejects malformed, duplicate, or mismatched component relationship facts', () => {

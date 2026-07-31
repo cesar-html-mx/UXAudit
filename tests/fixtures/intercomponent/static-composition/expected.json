@@ -9,8 +9,8 @@
   "links": [
     ["App", "SiteHeader"],
     ["App", "Hero"],
-    ["App", "default"],
-    ["App", "default"],
+    ["App", "Button"],
+    ["App", "Button"],
     ["App", "CycleA"],
     ["App", "UnresolvedPanel"],
     ["CycleA", "CycleB"],

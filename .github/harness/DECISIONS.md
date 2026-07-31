@@ -1045,3 +1045,23 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
   binding, scope, source text, or parser path.
 - Requirements/contracts affected: RF-07, RF-08, RNF-03, RNF-04, R-003, and R-026.
 - Evidence: 26 focused Babel extraction tests, lint, strict type checking, and harness validation.
+
+## D-046 — Exact-one-candidate relative component resolution
+
+- Date: 2026-07-31
+- Status: accepted
+- Context: TypeScript and bundlers support broad configurable module semantics, but guessing among
+  multiple analyzed files would create false composition edges and undermine rule confidence.
+- Decision: Resolve only `./` and `../` specifiers to an explicit supported extension or an
+  extensionless supported file/index candidate. Link only when exactly one analyzed candidate file
+  exists and exactly one component export matches the normalized imported name. Reject packages,
+  backslashes, NUL, query/hash suffixes, unsupported extensions, root escape, duplicate paths,
+  ambiguous candidates, and missing exports as unresolved. Store cycles as ordinary links without
+  recursive model expansion.
+- Alternatives considered: TypeScript/Vite alias loading; extension priority; global name matching;
+  package resolution; or treating a missing/ambiguous target as a parser error.
+- Consequences: Project links are portable, deterministic, conservative, and independent of target
+  execution. More complex real-world module layouts remain explicitly unsupported for this gate.
+- Requirements/contracts affected: RF-08, RF-10, RNF-04, RNF-07, R-026, and R-027.
+- Evidence: resolver/model tests and the six-file project integration with 8 links, 2 unresolved
+  uses, a retained cycle, deterministic rerun, and untouched execution sentinel.

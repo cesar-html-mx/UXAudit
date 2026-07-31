@@ -678,3 +678,7 @@
 - Completed M07-T02 by extracting direct component exports and imported/local custom JSX uses from
   Babel binding identity. Default, named, aliased, shadowed, package, missing, namespace, type-only,
   reexport, HOC, and confinement cases pass 26 focused tests without exposing parser objects.
+- Completed M07-T03 with a pure exact-one-candidate relative module resolver integrated at model
+  construction. Default, named alias, parent-relative, explicit extension, index, missing, package,
+  root escape, malformed separator, unsupported extension, ambiguity, cycle, reversed input, and
+  non-execution cases pass; the complete suite now passes 643 tests across 59 files.

@@ -296,7 +296,9 @@
         {
           "id": "M07-T03",
           "title": "Resolve direct relative component links deterministically",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: 44 focused resolver/model/project tests, 643 full tests, lint, typecheck, harness validation PASS",
+          "completedAt": "2026-07-31T16:14:02.694Z"
         },
         {
           "id": "M07-T04",

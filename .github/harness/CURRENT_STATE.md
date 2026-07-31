@@ -5,11 +5,11 @@
 - Project: UXAudit
 - Harness status: ready
 - Active milestone: **M07 — Bounded module and component graph**
-- Active task: **M07-T03 — Resolve direct relative component links deterministically**
+- Active task: **M07-T04 — Evaluate multiple H1 headings across bounded component composition**
 - Completed milestones: M01, M02, M03, M04, M05, M06
 - Current branch: milestone/m07-component-graph
 - Last verification: PASS
-- Last verified at: 2026-07-31T16:08:38.798Z
+- Last verified at: 2026-07-31T16:14:02.694Z
 - Last commit: de540f0ec3d3a7d198905eccd06eae46bc3ac3e7
 
 ## Blockers

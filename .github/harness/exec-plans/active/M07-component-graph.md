@@ -167,7 +167,8 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
       documentation, and harness validation passed.
 - [x] 2026-07-31 10:07 - M07-T02 normalized parser facts; 26 focused extraction tests, lint,
       strict types, and harness validation passed.
-- [ ] M07-T03 deterministic component links.
+- [x] 2026-07-31 10:13 - M07-T03 deterministic component links; 44 focused resolver/model/project
+      tests and all 643 repository tests passed.
 - [ ] M07-T04 bounded composed H1 behavior.
 - [ ] M07-T05 viability evidence and decision.
 
@@ -188,6 +189,8 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
   parser retain binding identity without leaking Babel values or guessing target files.
 - Babel scope bindings distinguish imported, local, aliased, shadowed, namespace, and type-only JSX
   references before only normalized strings and IDs cross the parser boundary.
+- The committed multi-file project produces 8 exact links and 2 unresolved uses in stable source
+  order; reversing input and repeating the complete analysis produces byte-identical model JSON.
 
 ## Decision log
 
@@ -195,6 +198,8 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
 - D-044 fixes parser-independent export/use/link contracts and the exact reviewed acceptance corpus.
 - D-045 uses Babel binding identity only inside extraction and records unresolved import facts for
   the project resolver instead of filtering them by filesystem or package syntax in the parser.
+- D-046 resolves supported relative modules only when one analyzed candidate and one named export
+  exist; cycles are stored as ordinary links and never expanded during model construction.
 - Direct relative one-candidate resolution is the maximum M07 module surface; unsupported cases
   remain unresolved rather than guessed.
 - M07 proves the graph with `seo/multiple-h1`; transparent props/children wrappers remain M08 work.

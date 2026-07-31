@@ -27,6 +27,7 @@ import {
   type JsxTextContent,
   type JsxValueConfidence,
 } from './jsx-value.js';
+import { resolveComponentLinks } from './resolve-component-links.js';
 import type { SourceLocation, SourcePosition } from './source-location.js';
 
 export const ANALYSIS_MODEL_ERROR_CODES = Object.freeze({
@@ -825,7 +826,7 @@ const buildAnalysisModelInternal = (value: unknown): AnalysisModel => {
   const files = analyzedFiles.map(({ file }) => file);
   const components = analyzedFiles.flatMap((file) => file.components);
   const jsxNodes = analyzedFiles.flatMap((file) => file.jsxNodes);
-  const componentLinks: ComponentLink[] = analyzedFiles.flatMap((file) =>
+  const localComponentLinks: ComponentLink[] = analyzedFiles.flatMap((file) =>
     file.componentUses.flatMap((componentUse) =>
       componentUse.kind === COMPONENT_USE_KINDS.local
         ? [
@@ -844,6 +845,40 @@ const buildAnalysisModelInternal = (value: unknown): AnalysisModel => {
   ) {
     failInvariant();
   }
+
+  const importedComponentLinks = resolveComponentLinks(
+    analyzedFiles.map((analyzedFile) => ({
+      componentExports: analyzedFile.componentExports,
+      componentUses: analyzedFile.componentUses,
+      filePath: analyzedFile.file.filePath,
+    })),
+  );
+  const unresolvedOrderLinks = [...localComponentLinks, ...importedComponentLinks];
+  const linksByJsxNodeId = new Map<string, ComponentLink>();
+  const componentsById = new Map(components.map((component) => [component.id, component] as const));
+  const nodesById = new Map(jsxNodes.map((node) => [node.id, node] as const));
+
+  for (const link of unresolvedOrderLinks) {
+    const node = requireDefined(nodesById.get(link.jsxNodeId));
+    requireDefined(componentsById.get(link.targetComponentId));
+
+    if (
+      linksByJsxNodeId.has(link.jsxNodeId) ||
+      node.kind !== JSX_NODE_KINDS.element ||
+      node.elementKind !== JSX_ELEMENT_KINDS.custom ||
+      node.name.includes('.') ||
+      node.name.includes(':')
+    ) {
+      failInvariant();
+    }
+
+    linksByJsxNodeId.set(link.jsxNodeId, link);
+  }
+
+  const componentLinks = jsxNodes.flatMap((node) => {
+    const link = linksByJsxNodeId.get(node.id);
+    return link === undefined ? [] : [link];
+  });
 
   return {
     componentLinks,
