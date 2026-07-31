@@ -11,8 +11,8 @@ actually executed.
 | M04       | `evidence/m04-rules/`                 | Complete: 344 tests, coverage, 8-rule scenario, isolation, audit, SHA-256 report                 |
 | M05       | `evidence/m05-reporting/`             | Complete: 512 tests, 3 reporters, config/XSS/write scenario, audit, SHA-256 report               |
 | M06       | `evidence/m06-validation/`            | Complete: 619 tests, controlled/accuracy/robustness/usability evidence, audit, SHA-256 report    |
-| M07       | `evidence/m07-component-graph/`       | Pending: exact six-hour viability gate for direct component links and bounded H1 composition     |
-| M08       | `evidence/m08-contextual-analysis/`   | Queued: transparent wrappers, prioritized contextual rules, and realistic consumer validation    |
+| M07       | `evidence/m07-component-graph/`       | Complete GO: 654 tests, coverage, exact graph/H1 scenario, package, reviews, SHA-256 manifest    |
+| M08       | `evidence/m08-contextual-analysis/`   | Active: transparent wrappers, prioritized contextual rules, and realistic consumer validation    |
 | Usability | `evidence/m06-validation/usability/`  | Complete expert review; participant testing and SUS explicitly unexecuted/N/A                    |
 | Security  | `evidence/m06-validation/robustness/` | Complete local robustness/security checks; hosted CodeQL explicitly unexecuted                   |
 

@@ -694,3 +694,18 @@
   forward/reverse manifest proof. Both were corrected and re-reviewed to GO. The final T04 gate
   passed 21 focused tests, bilingual docs, formatting, lint, and strict type checking on Node.js
   24.18.0.
+- Completed the M07-T05 release gate on Node.js 24.18.0: 654 tests across 61 files; coverage 95.27%
+  statements, 90.26% branches, 99.50% functions, and 95.24% lines; all compiled scenarios; 15
+  robustness cases; six expert tasks; clean package installation; and zero dependency
+  vulnerabilities passed.
+- Ran the built CLI twice over the committed intercomponent corpus. Both runs exited 0, reported
+  exactly two findings at `src/components/Button.tsx:2:10` and `src/App.tsx:9:5`, produced
+  byte-identical terminal output with SHA-256
+  `4a0c5baacc718e9487a604552e3801ea1026fdbb966a08d9763ee5d20bca5514`, and left the execution
+  sentinel absent.
+- Final independent acceptance, architecture, and bilingual-documentation reviews returned GO with
+  no blocker while preserving the explicit boundary that M07 is bounded static reasoning for one
+  rule, not complete React interpretation.
+- Finalized `evidence/m07-component-graph/` with baseline safeguards, focused/full gates, coverage,
+  package-consumer results, exact expected/actual scenario, determinism, 10/10 self-review, explicit
+  GO report, and an eight-entry SHA-256 manifest. M07 finished before its 15:38:04-06:00 deadline.

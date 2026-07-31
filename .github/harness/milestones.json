@@ -275,8 +275,8 @@
       "id": "M07",
       "slug": "component-graph",
       "title": "Bounded module and component graph",
-      "status": "active",
-      "plan": ".github/harness/exec-plans/active/M07-component-graph.md",
+      "status": "completed",
+      "plan": ".github/harness/exec-plans/completed/M07-component-graph.md",
       "branch": "milestone/m07-component-graph",
       "tasks": [
         {
@@ -310,7 +310,9 @@
         {
           "id": "M07-T05",
           "title": "Execute the six-hour viability gate and retain evidence",
-          "status": "pending"
+          "status": "completed",
+          "verification": "Node.js 24.18.0: release:check, 654 tests, 95.27/90.26/99.50/95.24 coverage, compiled scenarios, package consumer, dependency audit, deterministic CLI, evidence manifest, harness, and independent reviews PASS",
+          "completedAt": "2026-07-31T16:47:09.074Z"
         }
       ]
     },
@@ -318,8 +320,8 @@
       "id": "M08",
       "slug": "contextual-component-analysis",
       "title": "Bounded contextual component analysis and realistic validation",
-      "status": "pending",
-      "plan": ".github/harness/exec-plans/queued/M08-contextual-component-analysis.md",
+      "status": "active",
+      "plan": ".github/harness/exec-plans/active/M08-contextual-component-analysis.md",
       "branch": "milestone/m08-contextual-component-analysis",
       "tasks": [
         {

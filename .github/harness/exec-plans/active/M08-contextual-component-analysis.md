@@ -63,15 +63,19 @@ coverage, package consumer run, deterministic comparison, limitations, and miles
 
 ## Progress
 
-- [ ] Waiting for M07 GO.
+- [x] 2026-07-31 10:47 - M07 closed with evidenced GO and activated M08.
+- [ ] Start the next harness session by creating `milestone/m08-contextual-component-analysis` from
+      the accepted M07 closure; no M08 product work has started on the M07 branch.
 
 ## Discoveries
 
-None yet.
+- M07 proved exact direct local component links and bounded `seo/multiple-h1` composition. It did not
+  implement the props/children projections or realistic consumer required here.
 
 ## Decision log
 
-M08 cannot activate from partial M07 work.
+M08 activated only after the M07 release gate, evidence manifest, and independent reviews returned
+GO. D-048 keeps this milestone behind a new branch and a separate merge/release decision.
 
 ## Risks and recovery
 
@@ -80,4 +84,4 @@ affected rule promotion and retain it as unsupported. Do not merge or publish a 
 
 ## Outcomes and retrospective
 
-Pending M07.
+Pending M08 implementation.

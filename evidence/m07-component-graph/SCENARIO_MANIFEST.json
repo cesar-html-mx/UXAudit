@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "M07-STATIC-COMPONENT-COMPOSITION",
+  "fixture": "tests/fixtures/intercomponent/static-composition",
+  "expected": {
+    "counts": {
+      "components": 7,
+      "jsxNodes": 17,
+      "resolvedComponentUses": 8,
+      "unresolvedComponentUses": 2
+    },
+    "links": [
+      ["App", "SiteHeader"],
+      ["App", "Hero"],
+      ["App", "Button"],
+      ["App", "Button"],
+      ["App", "CycleA"],
+      ["App", "UnresolvedPanel"],
+      ["CycleA", "CycleB"],
+      ["CycleB", "CycleA"]
+    ],
+    "unresolvedUses": [
+      ["UnresolvedPanel", "MissingWidget"],
+      ["UnresolvedPanel", "ExternalHeading"]
+    ],
+    "findings": [
+      {
+        "ruleId": "accessibility/button-name",
+        "filePath": "src/components/Button.tsx",
+        "line": 2,
+        "terminalColumn": 10
+      },
+      {
+        "ruleId": "seo/multiple-h1",
+        "filePath": "src/App.tsx",
+        "line": 9,
+        "terminalColumn": 5
+      }
+    ]
+  },
+  "actual": {
+    "counts": {
+      "components": 7,
+      "jsxNodes": 17,
+      "resolvedComponentUses": 8,
+      "unresolvedComponentUses": 2
+    },
+    "linksMatched": true,
+    "unresolvedUsesMatched": true,
+    "findingsMatched": true,
+    "parserErrors": 0,
+    "ruleErrors": 0,
+    "targetCodeExecuted": false
+  },
+  "determinism": {
+    "forwardReverseModelByteIdentical": true,
+    "forwardReverseLinksEqual": true,
+    "forwardReverseFindingsEqual": true,
+    "cliRuns": 2,
+    "cliExitCodes": [0, 0],
+    "terminalOutputByteIdentical": true,
+    "terminalOutputSha256": "4a0c5baacc718e9487a604552e3801ea1026fdbb966a08d9763ee5d20bca5514"
+  }
+}

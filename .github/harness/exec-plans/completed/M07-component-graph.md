@@ -172,7 +172,9 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
 - [x] 2026-07-31 10:36 - M07-T04 bounded composed H1 behavior; 21 focused rule, catalog,
       forward/reverse project, and audit tests plus docs, lint, strict types, and two independent
       reviews passed.
-- [ ] M07-T05 viability evidence and decision.
+- [x] 2026-07-31 10:41 - M07-T05 viability evidence and GO decision; release gate, 654 tests,
+      coverage, compiled scenarios, package consumer, dependency audit, deterministic built CLI,
+      harness, manifest integrity, and three independent reviews passed before the deadline.
 
 ## Discoveries
 
@@ -201,6 +203,14 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
 - The complete reviewed manifest is now executable evidence: schema version, counts, exact links,
   source-ordered unresolved uses, findings, forward/reverse models, and forward/reverse findings are
   all asserted without deriving expectations from current output.
+- The full `release:check` passed 654 tests across 61 files, all compiled scenarios, the clean
+  package consumer, and a zero-vulnerability dependency audit. Global V8 coverage remained above
+  90% in every required dimension.
+- Two built CLI executions over the M07 corpus produced byte-identical terminal output with SHA-256
+  `4a0c5baacc718e9487a604552e3801ea1026fdbb966a08d9763ee5d20bca5514`, two exact findings,
+  zero processing errors, and no execution sentinel.
+- Final independent acceptance, architecture, and bilingual-documentation reviews found no M07
+  blocker and explicitly rejected any claim of complete runtime React interpretation.
 
 ## Decision log
 
@@ -212,6 +222,8 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
   exist; cycles are stored as ordinary links and never expanded during model construction.
 - D-047 preserves direct local heading ownership, counts linked definitions once per JSX use, and
   uses path-local cycle state with independent 64-hop/100000-step bounds for each evaluated root.
+- D-048 records M07 as GO for bounded technical feasibility and activates M08 as separate work; it
+  does not authorize a merge, npm release, demo modification, or broader React capability claim.
 - Direct relative one-candidate resolution is the maximum M07 module surface; unsupported cases
   remain unresolved rather than guessed.
 - M07 proves the graph with `seo/multiple-h1`; transparent props/children wrappers remain M08 work.
@@ -231,4 +243,18 @@ No prior evidence directory may be changed or copied into M07 as if freshly exec
 
 ## Outcomes and retrospective
 
-Pending. This section must state GO or NO-GO and may not describe partial implementation as viable.
+**GO.** Before the six-hour deadline, M07 proved exact conservative component linking and one
+composition-aware rule without regressing v0.1.0. The complete Node.js 24.18.0 release gate passed
+654 tests across 61 files; global coverage measured 95.27% statements, 90.26% branches, 99.50%
+functions, and 95.24% lines. Package installation, compiled scenarios, dependency audit, exact
+forward/reverse graph and finding comparisons, two byte-identical built CLI runs, non-execution
+sentinels, harness validation, evidence integrity, and independent reviews all passed.
+
+The spike also demonstrated the value of the fail-closed review loop: independent review caught a
+project-wide budget coupling and an incomplete reversed-input assertion before closure. Independent
+per-root budgets and a complete static manifest resolved both defects.
+
+M07 is a feasibility GO, not a statement that UXAudit now interprets arbitrary React applications.
+Props, `children`, unsupported module resolution, contextual propagation to prioritized rules, and
+a realistic consumer remain the separately bounded M08 milestone. Public `main`, npm 0.1.0,
+historical evidence, and the external demo remain unchanged and recoverable.

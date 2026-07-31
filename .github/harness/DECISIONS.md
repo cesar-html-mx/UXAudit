@@ -1091,3 +1091,26 @@ skills under `.agents/skills`, and durable product knowledge under `docs/`.
 - Evidence: focused `seo/multiple-h1` tests, complete forward/reverse corpus assertions, exact static
   manifest, non-execution sentinel, public bilingual rule documentation, and two independent
   read-only GO reviews.
+
+## D-048 — M07 feasibility GO with M08 kept as a separate release boundary
+
+- Date: 2026-07-31
+- Status: accepted
+- Context: The six-hour experiment had to establish whether parser-independent intercomponent
+  analysis was technically viable without risking the academic v0.1.0 fallback. A passing spike
+  must not be misrepresented as broad React runtime understanding or silently merged/published.
+- Decision: Record M07 as GO because all ten acceptance criteria, the complete release gate,
+  coverage thresholds, package consumer, exact deterministic CLI scenario, evidence integrity, and
+  independent reviews passed before the deadline. Activate M08 only as a separate bounded milestone
+  for transparent props/children projections, prioritized contextual rules, and a realistic
+  consumer. Do not merge, publish, or modify the frozen demo as part of M07 closure.
+- Alternatives considered: declaring the whole desired capability complete after one rule; merging
+  the spike directly to `main`; modifying the existing demo for evidence; continuing without a
+  formal checkpoint; or reverting to v0.1.0 despite every feasibility criterion passing.
+- Consequences: The architecture has executable proof that the missing component graph is solvable,
+  while delivery risk stays contained. M08 may proceed from the isolated branch, and the existing
+  public package remains the immediate fallback until later release-quality validation is complete.
+- Requirements/contracts affected: M07 acceptance criteria 1 through 10, RNF-03, RNF-04, RNF-09,
+  R-028, and R-029.
+- Evidence: `evidence/m07-component-graph/`, its eight-entry `MANIFEST.sha256`, 654-test release
+  gate, deterministic CLI hash, and final acceptance/architecture/documentation reviews.
